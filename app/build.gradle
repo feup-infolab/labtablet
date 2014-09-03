@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion '20.0.0'
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
+    defaultConfig {
+        applicationId "pt.up.fe.labtablet"
+        minSdkVersion 17
+        targetSdkVersion 19
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.android.support:support-v13:20.0.0'
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'org.jdom:jdom:2.0.2'
+    compile files('libs/httpcore-4.3.2.jar')
+    compile files('libs/httpclient-4.3.4.jar')
+    compile files('libs/httpclient-cache-4.3.4.jar')
+    compile files('libs/httpmime-4.3.4.jar')
+    compile files('libs/acra-4.3.0.jar')
+}

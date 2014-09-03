@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="pt.up.fe.labtablet.activities.FieldModeActivity" >
+
+    <item android:id="@+id/action_field_mode_end"
+        android:title="@string/action_end_field_mode"
+        android:orderInCategory="100"
+        android:showAsAction="always|withText"
+        android:icon="@android:drawable/ic_menu_send"
+        />
+
+</menu>

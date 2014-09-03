@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LabTablet</string>
+    <string name="action_settings">Definições</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
+    <string name="search_hint">Pesquisa</string>
+    <string name="form_ok">OK</string>
+    <string name="form_cancel">Cancelar</string>
+    <string name="new_dataset_item">Criar favorito</string>
+    <string name="title_section1">Informações adicionais</string>
+    <string name="title_section2">Ficheiros</string>
+    <string name="title_section3">Opções</string>
+    <string name="file_select">Um perfil de aplicação define um conjunto de descritores que são usados para descrever os seus dados. Selecione um perfil para utilizar em conjunto com a aplicação.</string>
+    <string name="bt_file_select">Selecionar ficheiro</string>
+    <string name="give_favorite_name">Indique o nome da pasta (obrigatório)</string>
+    <string name="new_dataset_submit">Novo favorito</string>
+    <string name="auto_data_collection">O LabTablet pode monitorizar continuamente as coordenadas do GPS e guarda-las num formato standard que pode ser interpretado, por exemplo, pelo Google Earth. Depois de terminar e desligar esta opção, um ficheiro KML será gerado e pode ser posteriormente adicionado aos registos de metadados.</string>
+    <string name="give_dataset_description">Indique uma descrição para o conjunto de dados. (opcional)</string>
+
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item>Início</item>
+        <item>Pesquisar</item>
+        <item>Novo favorito</item>
+        <item>Os meus favoritos</item>
+        <item>Eventos</item>
+        <item>Configurações</item>
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_ic_search</item>
+        <item>@android:drawable/ic_input_add</item>
+        <item>@android:drawable/btn_star_big_on</item>
+        <item>@drawable/ic_whats_hot</item>
+        <item>@drawable/ic_pages</item>
+    </array>
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+    <string name="new_favorite_instructions">Ao sincronizar o LabTablet com o repositório, os metadados que forem recolhidos durante cada experiência podem ser associados com os respetivos dados na pasta destino.</string>
+    <string name="configuration_header">A seguinte lista apresenta os formatos que o LabTablet pode gerar atualmente e os descritores correspondentes. Para criar uma associação ou editar uma existente, selecione clique no item.</string>
+    <string name="jpg_description">Um método utilizado frequentemente para compressão de imagens em formato digital (com perdas), particularmente para as fotografias. O LabTablet recorre a este formato para guardar as fotografias e as notas escritas à mão.</string>
+    <string name="mp3_description">Um formato de codificação para áudio digital que recorre a compressão de dados com perda. Ete formato é utilizado para representar gravações de voz.</string>
+    <string name="gps_description">Keyhole Markup Language – uma representação em XML de coordenadas geográficas para visualização das mesmas em mapas a duas e três dimensões, assim como ferramentas de edição de mapas.</string>
+    <string name="title_activity_descriptor_picker">Escolha de um descritor</string>
+    <string name="recommended">Recomendados</string>
+    <string name="all">Todos</string>
+    <string name="base_configuration_not_found">Ficheiro de configurações base não encontrado. Por favor selecione um a partir do menu de configurações.</string>
+    <string name="check_connectivity">Verifique a sua ligação à Internet</string>
+    <string name="title_activity_main_activity2a">MainActivity2a</string>
+    <string name="edit">Editar</string>
+    <string name="title_activity_field_mode">Modo de campo</string>
+    <string name="title_activity_activity_validate_metadata">ActivityValidateMetadata</string>
+    <string name="title_activity_finger_paint">Esboço</string>
+    <string name="title_activity_color_picker_dialog">ColorPickerDialog</string>
+    <string name="title_activity_validate_metadata">ValidateMetadataActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cancel">Cancelar</string>
+    <string name="select_descriptor_new">Selecione o descritor a adicionar. Depois deste passo, poderá atribuir-lhe um valor</string>
+    <string name="select_descriptor_return">Selecione um descritor da lista em baixo</string>
+    <string name="edit_metadata_item_title">Editar registo</string>
+    <string name="edit_metadata_item_delete">Eliminar registo?</string>
+    <string name="favorite_view_no_description">Sem descrição disponível</string>
+    <string name="successful_delete">Registo removido com sucesso</string>
+    <string name="select_descriptor_association">Selecione um descritor da lista em baixo. Este descritor será recomendado sempre que este formato fôr usado para um registo.</string>
+    <string name="field_must_not_empty">Campo obrigatório</string>
+    <string name="unchanged">Alterações ignoradas</string>
+    <string name="title_activity_submission_validation">SubmissionValidationActivity</string>
+    <string name="next">Seguinte</string>
+    <string name="back">Anterior</string>
+    <string name="submission_metadata_confirm">Em baixo pode consultar os registos recolhidos até ao momento. Confirme estes campos e depois passe para a fase de upload.</string>
+    <string name="submission_loading">O LabTablet está a enviar os dados para o repositório, o que pode demorar algum tempo. Por favor aguarde.</string>
+    <string name="submission_effect">Depois deste processo, os registos recolhidos ficarão disponíveis no repositório e associados com os dados da pasta selecionada. Terminada esta etapa, o favorito deixará de estar disponível para edição.</string>
+    <string name="start_proccess">Iniciar upload</string>
+    <string name="cancel_proccess">Cancelar</string>
+    <string name="submission_instructions">Enviar os metadados para o repositório fará com que fiquem associados à pasta destino e aos seus conteúdos. Antes de avançar, verifique que tem bateria suficiente e que o disposititvo se encontra ligado à Internet.</string>
+    <string name="submission_initial_instructions">Verificar conectividade e nível de bateria\n\nValidar metadados antes de submeter\n\nAvançar para a fase de upload.</string>
+    <string name="size">Tamanho</string>
+    <string name="modified">Alterado</string>
+    <string name="wait">Em espera</string>
+    <string name="progress_update_dir_exists">A verificar projeto...</string>
+    <string name="title_get_project_name">Indique o nome do projeto ao qual este favorito está associado.</string>
+    <string name="title_section4">Section4</string>
+    <string name="form_check">Verificar</string>
+    <string name="select_dendro_folder">Indique a pasta onde os metadados serão depositados</string>
+    <string name="root_impossible_to_select">A raíz do projeto está reservada. Indique outra pasta ou crie uma nova para o efeito.</string>
+    <string name="already_in_root_folder">Já se encontra na raíz do projeto.</string>
+    <string name="action_save">Gravar</string>
+    <string name="action_upload">Enviar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="form_really_delete">Remover este registo?</string>
+    <string name="action_delete">Apagar</string>
+    <string name="form_really_delete_favorite">Tem a certeza de que pretende remover este favorito? Depois disto, todos os (meta)dados dentro deste favorito serão apagados.</string>
+    <string name="no_projects">Não existem projetos em aberto. Para criar um e começar a recolher metadados clique no botão em baixo.</string>
+    <string name="new_project">Nova recolha</string>
+    <string name="open_configurations">Abrir configurações</string>
+    <string name="no_profile">Nenhum perfil de aplicação encontrado. Pode definir um a partir do menu de configurações</string>
+    <string name="my_projects">Abrir os meus projetos</string>
+    <string name="metadata_good">Ótimo! Não existem descritores genéricos em uso!</string>
+    <string name="metadata_meh">Tem %1$d descritor(es) genéricos em utilização. Apesar de serem uma resposta rápida para documentar os dados, os descritores genéricos não são recomendados uma vez que não especificam qualquer contexto.</string>
+    <string name="profile_already_loaded">O perfil da aplicação já se encontra carregado</string>
+    <string name="you_have_x_projects">Tem atualmente %1$d projeto(s) em aberto.</string>
+    <string name="this_is_a_file">Isto é um ficheiro. Não pode ser selecionado para depósito.</string>
+    <string name="place_files_here">Enviar para esta pasta</string>
+    <string name="select_project_above">Selecione o projeto</string>
+    <string name="action_select_project">Projeto</string>
+    <string name="really_cancel_upload">Tem a certeza de que pretende saír da fase de upload? Pode lançar esta faze em qualquer altura.</string>
+    <string name="cancel_submission">Cancela submissão</string>
+    <string name="no_recommended_descriptors">Não há descritores recomendados para este registo</string>
+    <string name="exit">Sair</string>
+    <string name="really_exit">Tem a certeza de que pretende sair da aplicação?</string>
+    <string name="clear_associations">Apagar associações existentes</string>
+    <string name="descriptor_not_set">Descritor não definido</string>
+    <string name="welcome">Bem vindo ao LabTablet</string>
+    <string name="collect_metadata_available_sensors">Recolha de registos a partir dos sensores disponíveis</string>
+    <string name="easily_manage">Gestão facilitada de projetos metadados associados</string>
+    <string name="swipe_to_menu">Deslize para a direita para abrir o menu</string>
+    <string name="launch_field_mode">Abrir sessão de campo</string>
+    <string name="add_metadata">Adicionar um registo</string>
+    <string name="edit_metadata_records">Editar registos recolhidos</string>
+    <string name="metadata_validated">Metadados validados</string>
+    <string name="swipe_to_next">Deslize para o próximo passo</string>
+    <string name="upload_and_make_accessible">Envio e partilha de metadados em ambiente colaborativo</string>
+    <string name="stop">Stop</string>
+    <string name="record">Record</string>
+    <string name="new_text_record">New text record</string>
+    <string name="network_temp">ºC (Internet)</string>
+    <string name="not_available">Indisponível</string>
+    <string name="battery_temp">ºC (Bateria)</string>
+    <string name="net_temp_saved">Temperatura guardada</string>
+    <string name="temp_saved">Temperatura guardada</string>
+    <string name="mag_saved">Campo magnético guardado</string>
+    <string name="lum_saved">Luminosidade guardada</string>
+    <string name="photo">Fotografia</string>
+    <string name="sketch">Esboço</string>
+    <string name="note">Nota</string>
+    <string name="position">Posição</string>
+    <string name="refresh">Atualizar</string>
+    <string name="luminosity">Luminosidade</string>
+    <string name="magnetic">Campo magnético</string>
+    <string name="continuous_gps">GPS Contínuo</string>
+    <string name="end_session">Terminar sessão</string>
+    <string name="uploaded_successfully">Metadados enviados com sucesso</string>
+    <string name="goUp">Pasta anterior</string>
+    <string name="empty_folder">Esta pasta não contém ficheiros, contudo pode depositar aqui os metadados.</string>
+    <string name="loading">Loading</string>
+    <string name="action_end_field_mode">Terminar</string>
+    <string name="cant_end_is_collecting">O GPS está a ser monitorizado, termine este processo antes de prosseguir</string>
+    <string name="cant_end_is_recording">Páre o gravador de som antes de prosseguir</string>
+    <string name="dendro_configurations">Configurações do Dendro</string>
+    <string name="dendro_configurations_description">Estas são as configurações que serão usadas para aceder à sua área pessoal do Dendro. As credenciais são necessárias para submeter os metadados para este repositório.</string>
+    <string name="required">Campo obrigatório</string>
+    <string name="saved">Gravado com sucesso</string>
+    <string name="action_test">Testar</string>
+    <string name="dendro_confs_not_found_title">Definições do Dendro</string>
+    <string name="dendro_confs_not_found_message">As configurações do Dendro (username, password e endereço do repositório) estão em falta. Por favor defina as credenciais no menu de configurações.</string>
+    <string name="action_test_save"><![CDATA[Testar e Gravar]]></string>
+    <string name="log_favorite_removed">Favorito removido: </string>
+    <string name="log_removed">Apagado</string>
+    <string name="proje_name_load">Selecionar projeto</string>
+    <string name="loading_recommendations">A carregar recomendações. Por favor aguarde...</string>
+    <string name="recommendations_error">Verifique se tem uma ligação ativa à internet.</string>
+    <string name="successul_imported_recommendations">Recomendações carregadas com sucesso!</string>
+    <string name="log_loaded">Carregadas recomendações para o projecto: </string>
+    <string name="from_dendro">Dendro</string>
+    <string name="metadata_validation_title">Validar metadados</string>
+    <string name="no_dendro_recommended_descriptors">Não existem sugestões disponíveis. Por favor selecione um descritor das restantes categorias.</string>
+    <string name="no_extension_recommended_descriptors">Em baixo estão os descritores recomendados, considerando o valor do registo. Selecione o descritor que melhor define o contexto deste valor.</string>
+    <string name="picker_dendro_suggestions">Em baixo são apresentados os descritores recomendados pelo Dendro. Estes têm em consideração a sua utilização do repositório para o projeto que selecionou ao criar este favorito.</string>
+    <string name="pick_recommended_descriptors">Em baixo são apresentados os descritores recomendados para este tipo de valor.</string>
+    <string name="picker_all">Em baixo estão todos os descritores carregados no perfil da aplicação. Selecione um para contextualizar este valor.</string>
+    <string name="field_sensors_instructions">Os sensores disponíveis estão listados em baixo. Quando selecionar um sensor, o LabTablet guardará uma amostra do valor para associar posteriormente com um contexto. Para começar, clique no botão no centro para atualizar os valores.</string>
+    <string name="log_added">Adicionado</string>
+    <string name="action_clear">Limpar</string>
+    <string name="new_favorite_recommendations">Se especificar o nome do projeto, descritores recomendados também serão importados. Esta associação pode ser alterada em qualquer altura.</string>
+    <string name="new_favorite_proj_name_opt">Importar recomendações de um projeto (opcional)</string>
+    <string name="new_favorite_folder_name_desc">Este campo especifica a pasta onde serão depositados os metadados recolhidos durante esta utilização. Nesta latura, não é necessário que esta pasta exista no repositório.</string>
+    <string name="retry">Tentar de novo…</string>
+    <string name="cancelled">Cancelado</string>
+    <string name="metadata_added_success">Metadados adicionados com sucesso</string>
+    <string name="at_least_undefined_descriptor">Existe pelo menos um registo sem descritor associado.</string>
+    <string name="created_folder">Pasta criada</string>
+    <string name="dest_folder_undefined">A pasta destino ainda não está definida. Selectione uma no passo anterior antes de prosseguir</string>
+    <string name="creating_package">Creating upload package</string>
+    <string name="authenticating">A autenticar credenciais</string>
+    <string name="uploading">A enviar…</string>
+    <string name="creating_metadata_package">A construir pacote de metadados</string>
+    <string name="sending_metadata">A enviar metadados…</string>
+    <string name="deleting_temp_files">A apagar ficheiros temporários</string>
+    <string name="finished">Upload terminado!</string>
+    <string name="selected_folder">Pasta selecionada</string>
+</resources>

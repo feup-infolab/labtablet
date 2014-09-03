@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="pt.up.fe.labtablet.activities.FingerPaintActivity" >
+    <item
+        android:id="@+id/action_changelog_clear"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:orderInCategory="20"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/action_clear"/>
+
+</menu>

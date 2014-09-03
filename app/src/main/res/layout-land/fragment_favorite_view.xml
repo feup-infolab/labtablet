@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/light_gray">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_weight=".5"
+        android:layout_height="fill_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <RelativeLayout
+                android:id="@+id/title_rl"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/card"
+                android:padding="12sp"
+                android:layout_alignParentTop="true"
+                >
+
+                <ImageButton
+                    android:id="@+id/favorite_view_edit_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:contentDescription="@string/desc_list_item_icon"
+                    android:layout_margin="5dp"
+                    style="@style/btnStyleBeige"
+                    android:src="@android:drawable/ic_menu_edit" />
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/favorite_view_edit_title"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:text="Title"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textStyle="bold"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/desc_rl"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card"
+                android:padding="12sp"
+                android:layout_below="@id/title_rl"
+                >
+
+
+
+                <ImageButton
+                    android:id="@+id/favorite_view_edit_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:contentDescription="@string/desc_list_item_icon"
+                    android:layout_margin="5dp"
+                    style="@style/btnStyleBeige"
+                    android:layout_centerVertical="true"
+                    android:src="@android:drawable/ic_menu_edit" />
+
+                <TextView
+                    android:id="@+id/tv_description"
+                    android:layout_toLeftOf="@id/favorite_view_edit_description"
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:layout_centerVertical="true"
+                    android:text="@string/favorite_view_no_description"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/bt_field_mode"
+                android:layout_below="@id/desc_rl"
+                android:layout_width="fill_parent"
+                style="@style/btnStyleBeige"
+                android:drawableRight="@android:drawable/ic_menu_mapmode"
+                android:layout_height="wrap_content"
+                android:text="Launch field mode"
+                android:layout_marginTop="5dp"
+                />
+
+
+
+            <Button
+                android:id="@+id/bt_new_metadata"
+                android:layout_below="@id/bt_field_mode"
+                android:layout_width="fill_parent"
+                android:text="Additional Metadata"
+                android:drawableRight="@android:drawable/ic_menu_add"
+                style="@style/btnStyleBeige"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                />
+
+            <Button
+                android:layout_below="@id/bt_new_metadata"
+                android:layout_width="fill_parent"
+                android:text="Edit metadata records"
+                android:drawableRight="@android:drawable/ic_menu_edit"
+                style="@style/btnStyleBeige"
+                android:id="@+id/bt_edit_metadata"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </ScrollView>
+    <View
+        android:layout_width="1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="fill_parent"
+        android:background="@android:color/darker_gray" />
+
+    <ListView
+        android:id="@+id/lv_favorite_metadata"
+        android:layout_width="0dp"
+        android:layout_weight=".5"
+        android:layout_height="fill_parent"/>
+</LinearLayout>

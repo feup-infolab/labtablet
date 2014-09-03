@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray"
+    >
+
+    <TextView
+        android:text="Below is the metadata gathered during this session. Select which records you want to keep and confirm the best descriptor."
+        android:background="@drawable/card"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:padding="20dp"
+        android:layout_width="fill_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_step1_header"
+        />
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_step1_header"
+        android:id="@+id/lv_unvalidated_metadata"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        >
+    </ListView>
+
+
+
+</RelativeLayout>

@@ -1,0 +1,101 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pt.up.fe.labtablet.fragments.SubmissionStep1">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card"
+        android:padding="20dp"
+        >
+
+        <TextView
+            android:id="@+id/step1_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Favorite title"
+            />
+
+        <TextView
+            android:id="@+id/step1_instructions"
+            android:layout_below="@id/step1_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/submission_instructions"
+            />
+
+        <RelativeLayout
+            android:id="@+id/submission_hardware_status_rl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/step1_instructions"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            >
+
+            <TextView
+                android:id="@+id/step1_wifi_tv"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="WiFi"
+                android:layout_marginTop="20dp"
+                android:drawableRight="@drawable/ic_check"/>
+
+            <TextView
+                android:id="@+id/step1_battery_tv"
+                android:layout_below="@id/step1_wifi_tv"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="Battery"
+                android:layout_marginTop="20dp"
+                android:drawableRight="@drawable/ic_check"/>
+
+            <TextView
+                android:layout_below="@id/step1_battery_tv"
+                android:id="@+id/step1_metadata_state"
+                android:gravity="center"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawableRight="@drawable/ic_check"
+                android:text="@string/metadata_validated"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/step1_step_by_step"
+            android:layout_below="@id/submission_hardware_status_rl"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceButton"
+            android:text="@string/submission_initial_instructions"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:drawableLeft="@drawable/ic_swipe_right"
+            android:text="@string/swipe_to_next"
+            android:textColor="@color/second_grey"
+            />
+    </RelativeLayout>
+
+</FrameLayout>

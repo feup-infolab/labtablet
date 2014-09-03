@@ -1,0 +1,80 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pt.up.fe.labtablet.fragments.SubmissionStep3">
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/step3_instructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_project_above"
+            android:drawableTop="@drawable/ic_arrow_up"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/second_grey"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/step3_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_folder"
+            android:drawableTop="@drawable/ic_folder"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/second_grey"
+            android:layout_centerInParent="true"/>
+
+        <ProgressBar
+            android:id="@+id/dendro_folders_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+
+        <ListView
+            android:id="@+id/dendro_folders_list"
+            android:layout_alignParentTop="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/dendro_folders_buttons" />
+
+        <RelativeLayout
+            android:id="@+id/dendro_folders_buttons"
+            android:layout_alignParentBottom="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_alignParentTop="true"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_margin="10dp"
+                android:id="@+id/dendro_separator"
+                />
+            <LinearLayout
+                android:id="@+id/ll_buttons"
+                android:layout_below="@id/dendro_separator"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/light_gray"
+                >
+                <Button
+                    android:id="@+id/dendro_folders_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/place_files_here"
+                    android:enabled="false"
+                    android:width="0dp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</FrameLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeightLarge"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="1dip"
+    android:background="@drawable/card">
+
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="6sp"
+        android:layout_marginLeft="12sp"
+        android:layout_marginRight="12sp"
+        android:layout_marginTop="6sp"
+        android:padding="10dp"
+        android:columnCount="3"
+        android:rowCount="3">
+
+        <ImageView
+            android:id="@+id/changelog_item_type"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="6dip"
+            android:layout_row="0"
+            android:layout_rowSpan="3"
+            android:contentDescription="Closed or Open"
+            android:src="@drawable/ic_whats_hot" />
+
+        <TextView
+            android:id="@+id/changelog_item_title"
+            android:layout_width="wrap_content"
+            android:layout_column="1"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="0"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="Log title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="6sp" />
+
+        <TextView
+            android:id="@+id/changelog_item_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="1"
+            android:gravity="center_vertical"
+            android:text="Log description"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/changelog_item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_gravity="right"
+            android:layout_row="0"
+            android:gravity="center_vertical"
+            android:text="#1"
+            android:layout_marginRight="6sp"
+            android:textSize="16sp" />
+    </GridLayout>
+
+</RelativeLayout>

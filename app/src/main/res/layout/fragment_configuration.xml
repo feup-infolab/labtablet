@@ -1,0 +1,415 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray"
+    tools:context="pt.up.fe.labtablet.fragments.ConfigurationFragment">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <RelativeLayout
+                android:id="@+id/gv_file"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/card"
+
+                >
+
+                <TextView
+                    android:id="@+id/conf_pick_file_instructions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="@string/file_select"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    />
+                <View
+                    android:id="@+id/conf_pick_file_separator"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/conf_pick_file_instructions"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@android:color/darker_gray"
+                    />
+                <Button
+                    android:id="@+id/bt_file_path"
+                    android:textAllCaps="true"
+                    android:drawableLeft="@android:drawable/ic_menu_agenda"
+                    android:layout_below="@id/conf_pick_file_separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:ems="10"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/bt_file_select" />
+
+            </RelativeLayout>
+
+            <GridLayout
+                android:id="@+id/gv_clear"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card"
+                android:columnCount="3"
+                android:layout_below="@id/gv_file"
+                android:layout_marginTop="15dp"
+                android:rowCount="3">
+
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_columnSpan="3"
+                    android:layout_row="0"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/configuration_instructions"
+                    android:text="@string/configuration_header"
+                    />
+
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textAllCaps="true"
+                    android:text="@string/clear_associations"
+                    style="@style/btnStyleOrange"
+                    android:id="@+id/bt_clear_associations"
+                    />
+            </GridLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card"
+                android:id="@+id/gl_gps"
+                android:layout_below="@id/gv_clear"
+                >
+
+
+                <TextView
+                    android:id="@+id/conf_kml_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="10dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center"
+                    android:layout_alignParentTop="true"
+                    android:text="KML"
+                    />
+
+                <TextView
+                    android:id="@+id/conf_kml_instructions"
+                    android:layout_below="@id/conf_kml_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:gravity="center"
+                    android:text="@string/gps_description"
+                    />
+
+                <TextView
+                    android:id="@+id/kml_extension_descriptor"
+                    android:layout_below="@id/conf_kml_instructions"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center"
+                    android:text="Descriptor not set"
+                    />
+
+                <TextView
+                    android:id="@+id/kml_extension_description"
+                    android:layout_below="@id/kml_extension_descriptor"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="20dp"
+                    android:paddingLeft="20dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:gravity="center"
+                    android:text=""
+                    />
+
+                <View
+                    android:id="@+id/conf_kml_separator"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/kml_extension_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@android:color/darker_gray"
+                    />
+
+                <Button
+                    android:id="@+id/bt_kml_edit"
+                    android:layout_below="@id/conf_kml_separator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:text="@string/edit"
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card"
+                android:id="@+id/gl_jpg"
+                android:layout_below="@id/gl_gps"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/conf_jpeg_title"
+                    android:layout_alignParentTop="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="10dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center"
+                    android:text="JPEG"
+                    />
+
+                <TextView
+                    android:id="@+id/conf_jpeg_description"
+                    android:layout_below="@id/conf_jpeg_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:gravity="center"
+                    android:text="@string/jpg_description"
+                    />
+
+                <TextView
+                    android:id="@+id/jpg_extension_descriptor"
+                    android:layout_below="@id/conf_jpeg_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center"
+                    android:text="@string/descriptor_not_set"
+                    />
+
+                <TextView
+                    android:layout_below="@id/jpg_extension_descriptor"
+                    android:id="@+id/jpg_extension_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="20dp"
+                    android:paddingLeft="20dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:gravity="center"
+                    android:text=""
+                    />
+                <View
+                    android:id="@+id/conf_jpeg_separator"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/jpg_extension_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@android:color/darker_gray"
+                    />
+
+                <Button
+                    android:layout_below="@id/conf_jpeg_separator"
+                    android:id="@+id/bt_jpg_edit"
+                    android:textAllCaps="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:text="@string/edit"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card"
+                android:id="@+id/rl_mp3"
+                android:layout_below="@id/gl_jpg"
+                >
+
+                <TextView
+                    android:id="@+id/conf_mp3_title"
+                    android:layout_alignParentTop="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="10dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center"
+                    android:text="MP3"
+                    />
+
+                <TextView
+                    android:id="@+id/conf_mp3_description"
+                    android:layout_below="@id/conf_mp3_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:gravity="center"
+                    android:text="@string/mp3_description"
+                    />
+
+                <TextView
+                    android:id="@+id/mp3_extension_descriptor"
+                    android:layout_below="@id/conf_mp3_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center"
+                    android:text="Descriptor not set"
+                    />
+
+                <TextView
+                    android:id="@+id/mp3_extension_description"
+                    android:layout_below="@id/mp3_extension_descriptor"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="20dp"
+                    android:paddingLeft="20dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:gravity="center"
+                    android:text=""
+                    />
+
+                <View
+                    android:id="@+id/conf_mp3_separator"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/mp3_extension_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@android:color/darker_gray"
+                    />
+
+                <Button
+                    android:id="@+id/bt_mp3_edit"
+                    android:layout_below="@id/conf_mp3_separator"
+                    android:textAllCaps="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:text="Edit"
+                    />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/dendro_configurations"
+                android:layout_below="@id/rl_mp3"
+                android:layout_width="fill_parent"
+                android:padding="20dp"
+                android:background="@drawable/card"
+                android:layout_height="wrap_content"
+                >
+
+                <Button
+                    android:id="@+id/dendro_configurations_save"
+                    android:layout_weight=".5"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/action_test_save"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:drawableTop="@drawable/ic_warning"
+                    />
+
+
+                <TextView
+                    android:id="@+id/dendro_configurations_title"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@id/dendro_configurations_save"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dendro_configurations"
+                    />
+
+                <TextView
+                    android:id="@+id/dendro_configurations_description"
+                    android:layout_below="@id/dendro_configurations_title"
+                    android:layout_toLeftOf="@id/dendro_configurations_save"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dendro_configurations_description"
+                    />
+
+                <EditText
+                    android:id="@+id/dendro_configurations_address"
+                    android:layout_below="@id/dendro_configurations_description"
+                    android:inputType="textUri"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Dendro URL"
+                    android:drawableLeft="@android:drawable/ic_menu_directions"
+                    />
+
+                <EditText
+                    android:id="@+id/dendro_configurations_username"
+                    android:layout_below="@id/dendro_configurations_address"
+                    android:drawableLeft="@android:drawable/ic_menu_myplaces"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Username"
+                    />
+
+                <EditText
+                    android:id="@+id/dendro_configurations_password"
+                    android:layout_below="@id/dendro_configurations_username"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:hint="Password"
+                    />
+
+
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+</FrameLayout>

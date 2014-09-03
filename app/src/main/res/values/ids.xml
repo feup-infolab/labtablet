@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="kml_description" type="id">These files are used to represent geographical
+        coordinates, both isolated or in shapes
+    </item>
+</resources>

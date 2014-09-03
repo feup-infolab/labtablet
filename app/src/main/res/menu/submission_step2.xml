@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/dendro_metadata_edit"
+        android:title="Edit"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:orderInCategory="100"
+        android:showAsAction="always|withText"
+        />
+
+    <item android:id="@+id/action_dendro_metadata_confirm"
+        android:title="Confirm"
+        android:icon="@drawable/ic_menu_forward"
+        android:orderInCategory="100"
+        android:showAsAction="always|withText" />
+</menu>
