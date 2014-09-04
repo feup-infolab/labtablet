@@ -116,7 +116,7 @@
     <string name="really_exit">Are you sure you want to close the application?</string>
     <string name="clear_associations">Clear associations</string>
     <string name="descriptor_not_set">Descriptor not set</string>
-    <string name="welcome">Welcome to Labtablet</string>
+    <string name="welcome">Labtablet</string>
     <string name="collect_metadata_available_sensors">Collect metadata from the available sensors and take notes about the research</string>
     <string name="easily_manage">Easily manage opened projects and metadata</string>
     <string name="upload_and_make_accessible">Upload metadata to the repository and make it available to your team</string>
