@@ -28,11 +28,9 @@
                 android:id="@+id/favorite_view_edit_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:contentDescription="@string/desc_list_item_icon"
-                android:background="@android:color/transparent"
-                android:layout_margin="5dp"
-                android:layout_centerVertical="true"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                 android:src="@android:drawable/ic_menu_edit" />
 
             <TextView
@@ -48,6 +46,8 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold"
                 />
+
+
         </RelativeLayout>
 
         <RelativeLayout
