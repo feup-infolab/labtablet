@@ -100,7 +100,7 @@
     <string name="no_projects">You have no active projects. To create a new one and start collecting metadata, press the button below</string>
     <string name="new_project">Create project</string>
     <string name="open_configurations">Open configurations</string>
-    <string name="no_profile">No application profile was found. You can load the profile in the configurations menu</string>
+    <string name="no_profile">No application profile was found. Please start by loading a profile in the configurations menu</string>
     <string name="my_projects">Open my projects</string>
     <string name="metadata_good">Great! You have no generic descriptors associated with your datasets!</string>
     <string name="metadata_meh">You have %1$d generic descriptor(s) in use. Altough they may be a quick answer to specifying the context, generic descriptors are bad for your dataset as they provide no context for the metadata.</string>
@@ -116,7 +116,7 @@
     <string name="really_exit">Are you sure you want to close the application?</string>
     <string name="clear_associations">Clear associations</string>
     <string name="descriptor_not_set">Descriptor not set</string>
-    <string name="welcome">Welcome to Labtablet</string>
+    <string name="welcome">Labtablet</string>
     <string name="collect_metadata_available_sensors">Collect metadata from the available sensors and take notes about the research</string>
     <string name="easily_manage">Easily manage opened projects and metadata</string>
     <string name="upload_and_make_accessible">Upload metadata to the repository and make it available to your team</string>

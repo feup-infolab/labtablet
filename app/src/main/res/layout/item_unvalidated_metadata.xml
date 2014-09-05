@@ -100,9 +100,6 @@
         android:layout_below="@id/unvalidated_meta_separator"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         >
 
         <Button
@@ -111,20 +108,25 @@
             android:layout_weight="1"
             style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
             android:text="Edit Descriptor"
-            android:layout_width="0dp" />
+            android:layout_marginStart="10dp"
+            android:layout_width="0dp"
+            android:layout_marginBottom="10dp"/>
         <View
             android:layout_width="1dp"
             android:layout_height="fill_parent"
+            android:layout_marginBottom="10dp"
             android:background="@android:color/darker_gray" />
         <Button
             android:id="@+id/bt_edit_unvalidated_metadata_value"
+            android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-            android:layout_marginLeft="10dp"
             android:text="Edit Value"
             android:width="0dp"
-            android:layout_weight="1"/>
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            />
         </LinearLayout>
 
 
