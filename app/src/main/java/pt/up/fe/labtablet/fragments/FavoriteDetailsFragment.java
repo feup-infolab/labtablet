@@ -46,7 +46,6 @@ public class FavoriteDetailsFragment extends Fragment {
     TextView tv_description;
     Button bt_fieldMode;
     Button bt_new_metadata;
-    Button bt_edit_metadata;
     ImageButton bt_edit_title;
     ImageButton bt_edit_description;
     ListView lv_metadata;
@@ -67,7 +66,6 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_fieldMode = (Button) rootView.findViewById(R.id.bt_field_mode);
         lv_metadata = (ListView) rootView.findViewById(R.id.lv_favorite_metadata);
         bt_new_metadata = (Button) rootView.findViewById(R.id.bt_new_metadata);
-        bt_edit_metadata = (Button) rootView.findViewById(R.id.bt_edit_metadata);
         bt_edit_description = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_description);
         bt_edit_title = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_title);
 
@@ -107,16 +105,6 @@ public class FavoriteDetailsFragment extends Fragment {
         dcClickListener mClickListener = new dcClickListener();
         bt_edit_title.setOnClickListener(mClickListener);
         bt_edit_description.setOnClickListener(mClickListener);
-
-        bt_edit_metadata.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(getActivity(), ValidateMetadataActivity.class);
-                myIntent.putExtra("favorite_name", favoriteName);
-                myIntent.putExtra("descriptors", new Gson().toJson(itemDescriptors, Utils.ARRAY_DESCRIPTORS));
-                startActivityForResult(myIntent, Utils.METADATA_VALIDATION);
-            }
-        });
 
         bt_fieldMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -323,6 +311,11 @@ public class FavoriteDetailsFragment extends Fragment {
                     .setNegativeButton(R.string.cancel, null)
                     .show();
 
+        } else if (item.getItemId() == R.id.action_favorite_edit) {
+            Intent myIntent = new Intent(getActivity(), ValidateMetadataActivity.class);
+            myIntent.putExtra("favorite_name", favoriteName);
+            myIntent.putExtra("descriptors", new Gson().toJson(itemDescriptors, Utils.ARRAY_DESCRIPTORS));
+            startActivityForResult(myIntent, Utils.METADATA_VALIDATION);
         }
         return super.onOptionsItemSelected(item);
 

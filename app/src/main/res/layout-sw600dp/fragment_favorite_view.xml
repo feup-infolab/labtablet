@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:paddingLeft="12sp"
         android:paddingRight="12sp"
-        android:rowCount="6">
+        android:rowCount="5">
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -104,17 +104,6 @@
             android:drawableRight="@android:drawable/ic_menu_add"
             style="@style/btnStyleBeige"
             android:id="@+id/bt_new_metadata"
-            android:layout_marginTop="10dp"
-            />
-
-        <Button
-            android:layout_column="0"
-            android:layout_row="4"
-            android:layout_width="fill_parent"
-            android:text="@string/edit_metadata_records"
-            android:drawableRight="@android:drawable/ic_menu_edit"
-            style="@style/btnStyleBeige"
-            android:id="@+id/bt_edit_metadata"
             android:layout_marginTop="10dp"
             />
     </GridLayout>
