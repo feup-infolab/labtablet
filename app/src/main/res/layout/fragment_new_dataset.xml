@@ -52,7 +52,6 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/new_favorite_folder_name_desc"
                 />
-
             <EditText
                 android:id="@+id/et_dataset_name"
                 android:layout_below="@+id/new_favorite_tv_folder_name_description"
@@ -64,9 +63,9 @@
                 android:inputType="text" >
             <requestFocus />
             </EditText>
-
-
         </RelativeLayout>
+
+
 
         <GridLayout
             android:id="@+id/gv_new_dataset_description"
@@ -155,15 +154,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/rl_proj_name"
-            style="@style/btnStyleBeige"
+            style="@style/btnStyleTransparent"
             android:layout_marginTop="24dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:drawableEnd="@drawable/ic_menu_forward"
             android:text="@string/new_dataset_submit" />
-
     </RelativeLayout>
-
-
 
 </ScrollView>
