@@ -30,7 +30,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -65,7 +64,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     private Button bt_network_temperature_sample;
     private Button bt_luminosity_sample;
     private Button bt_magnetic_sample;
-    private ImageButton ib_refresh_samples;
 
     private TextView tv_title;
     private Switch sw_gps;
@@ -78,6 +76,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
 
     private String favorite_name;
     private String temperature_value;
+    private String network_temperature_value;
     private String luminosity_value;
     private String magnetic_value;
     private String real_magnetic_value;
@@ -88,7 +87,10 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     private Uri capturedImageUri;
     private String path;
     private boolean isCollecting;
-    private long lastUpdateMillis;
+    private long lastUpdateNetworkTemperature;
+    private long lastUpdateSensorTemperature;
+    private long lastUpdateSensorMagnetic;
+    private long lastUpdateSensorLuminosity;
 
     private ArrayList<Descriptor> metadata;
     private ProgressBar pb_update;
@@ -180,7 +182,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 builder.setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(input.getText().toString() == "") {
+                        if(input.getText().toString().equals("")) {
                             return;
                         }
                         Descriptor desc = new Descriptor();
@@ -277,54 +279,20 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             }
         });
 
-
-        ib_refresh_samples.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if((System.currentTimeMillis() - lastUpdateMillis) < Utils.SAMPLE_MILLIS) {
-                    return;
-                }
-                bt_network_temperature_sample.setText(getResources().getString(R.string.loading));
-                lastUpdateMillis = System.currentTimeMillis();
-                new AsyncWeatherFetcher(new AsyncTaskHandler<Integer>() {
-                    @Override
-                    public void onSuccess(Integer result) {
-                        bt_network_temperature_sample.setEnabled(true);
-                        bt_network_temperature_sample.setText(result + getResources().getString(R.string.network_temp));
-                        lastUpdateMillis = System.currentTimeMillis();
-                    }
-
-                    @Override
-                    public void onFailure(Exception error) {
-                        bt_network_temperature_sample.setEnabled(false);
-                        bt_network_temperature_sample.setText(getResources().getString(R.string.not_available));
-                    }
-
-                    @Override
-                    public void onProgressUpdate(int value) {
-
-                    }
-                }).execute(getApplication());
-
-                bt_temperature_sample.setText(temperature_value + getResources().getString(R.string.battery_temp));
-                bt_temperature_sample.setEnabled(true);
-
-                bt_luminosity_sample.setText(luminosity_value + " (Lx)");
-                bt_luminosity_sample.setEnabled(true);
-
-                bt_magnetic_sample.setText(magnetic_value + " (uT)");
-                bt_magnetic_sample.setEnabled(true);
-            }
-        });
     }
 
     private void registerBatInforReceiver() {
         mBatInfoReceiver = new BroadcastReceiver(){
             @Override
             public void onReceive(Context arg0, Intent intent) {
+                if((System.currentTimeMillis() - lastUpdateSensorTemperature) < Utils.SAMPLE_MILLIS) {
+                    return;
+                }
                 int temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) / 10;
                 temperature_value = "" + temperature;
+                bt_temperature_sample.setEnabled(true);
+                bt_temperature_sample.setText(temperature_value + getResources().getString(R.string.battery_temp));
+                lastUpdateSensorTemperature = System.currentTimeMillis();
             }
         };
         registerReceiver(mBatInfoReceiver,
@@ -342,7 +310,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         bt_luminosity_sample = (Button) findViewById(R.id.bt_luminosity);
         bt_magnetic_sample = (Button) findViewById(R.id.bt_magnetic);
         bt_network_temperature_sample = (Button) findViewById(R.id.bt_network_temperature_sample);
-        ib_refresh_samples = (ImageButton) findViewById(R.id.ib_refresh_samples);
 
         bt_network_temperature_sample.setOnClickListener(sensorClickListener);
         bt_temperature_sample.setOnClickListener(sensorClickListener);
@@ -352,8 +319,31 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         sw_gps = (Switch) findViewById(R.id.sw_gps);
         pb_update = (ProgressBar) findViewById(R.id.pb_recording);
         pb_location = (ProgressBar) findViewById(R.id.pb_location);
-    }
 
+        if((System.currentTimeMillis() - lastUpdateNetworkTemperature) > Utils.SAMPLE_MILLIS) {
+            bt_network_temperature_sample.setText(getResources().getString(R.string.loading));
+            new AsyncWeatherFetcher(new AsyncTaskHandler<Integer>() {
+                @Override
+                public void onSuccess(Integer result) {
+                    bt_network_temperature_sample.setEnabled(true);
+                    network_temperature_value = result + getResources().getString(R.string.network_temp);
+                    bt_network_temperature_sample.setText(network_temperature_value);
+                    lastUpdateNetworkTemperature = System.currentTimeMillis();
+                }
+
+                @Override
+                public void onFailure(Exception error) {
+                    bt_network_temperature_sample.setEnabled(false);
+                    bt_network_temperature_sample.setText(getResources().getString(R.string.not_available));
+                }
+
+                @Override
+                public void onProgressUpdate(int value) {
+
+                }
+            }).execute(getApplication());
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -367,11 +357,24 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         int type = event.sensor.getType();
         switch (type) {
             case Sensor.TYPE_MAGNETIC_FIELD:
+                if((System.currentTimeMillis() - lastUpdateSensorMagnetic) < Utils.SAMPLE_MILLIS) {
+                    break;
+                }
                 magnetic_value =  Math.round(event.values[0]) + ", " + Math.round(event.values[1]) + ", " + Math.round(event.values[2]);
                 real_magnetic_value = event.values[0] + ", " + event.values[1] + ", " + event.values[2];
+                bt_magnetic_sample.setText(magnetic_value + " (uT)");
+                bt_magnetic_sample.setEnabled(true);
+                lastUpdateSensorMagnetic = System.currentTimeMillis();
                 break;
+
             case Sensor.TYPE_LIGHT:
+                if((System.currentTimeMillis() - lastUpdateSensorLuminosity) < Utils.SAMPLE_MILLIS) {
+                    break;
+                }
                 luminosity_value = "" + event.values[0];
+                bt_luminosity_sample.setText(luminosity_value + " (Lx)");
+                bt_luminosity_sample.setEnabled(true);
+                lastUpdateSensorLuminosity = System.currentTimeMillis();
                 break;
             default:
                 break;

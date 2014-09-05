@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,7 +53,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
         returnMode = mBundle.getInt("returnMode");
         favoriteName = mBundle.getString("favoriteName");
 
-        if(favoriteName == "") {
+        if(favoriteName.equals("")) {
             Toast.makeText(this, "Empty fav name", Toast.LENGTH_SHORT).show();
         }
 
@@ -167,7 +166,6 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                         public void onClick(DialogInterface dialog, int which) {
                             if(input.getText().toString().equals("")) {
                                 input.setError("The value shall not be empty.");
-                                return;
                             } else {
                                 selectedDescriptor.setValue(input.getText().toString());
                                 Intent returnIntent = new Intent();

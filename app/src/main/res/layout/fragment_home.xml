@@ -2,16 +2,17 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/light_gray"
     android:layout_height="wrap_content"
     android:fillViewport="false">
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp">
         <TextView
             android:id="@+id/tv_home"
-            android:typeface="sans"
+            android:typeface="serif"
             android:textSize="40sp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -19,7 +20,7 @@
             android:text="@string/welcome"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginTop="30dp"
             />
 
@@ -29,177 +30,166 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_home"
             android:background="@drawable/card"
-            android:padding="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             >
-
 
             <TextView
                 android:id="@+id/home_feature_1"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="25dp"
+                android:padding="20dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/collect_metadata_available_sensors"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:drawableLeft="@drawable/ic_people"
-                android:gravity="center"
+                android:drawableStart="@drawable/ic_people"
+                android:drawablePadding="15dp"
                 />
 
             <TextView
                 android:id="@+id/home_feature_2"
                 android:layout_below="@id/home_feature_1"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
+                android:padding="20dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/easily_manage"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:drawableLeft="@drawable/ic_communities"
-                android:gravity="center"
+                android:drawableStart="@drawable/ic_communities"
+                android:drawablePadding="15dp"
                 />
 
             <TextView
                 android:id="@+id/home_feature_3"
                 android:layout_below="@id/home_feature_2"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="25dp"
+                android:padding="20dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/upload_and_make_accessible"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:drawableLeft="@drawable/ic_home"
-                android:gravity="center"
+                android:drawableStart="@drawable/ic_home"
+                android:drawablePadding="15dp"
                 />
 
-        </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/rl_home_status_cards"
-            android:layout_below="@id/rl_home_features"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
-            android:layout_centerInParent="true"
-            >
 
-            <RelativeLayout
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:background="@drawable/card"
-                android:layout_weight=".5"
-
+            <LinearLayout
+                android:id="@+id/ll_feedback"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/home_feature_3"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 >
+
                 <TextView
                     android:id="@+id/tv_profile_state"
+                    android:padding="10dp"
+                    android:layout_marginStart="10dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/no_profile"
-                    android:layout_width="fill_parent"
-                    android:layout_margin="14dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="fill_parent"
                     android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     />
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"
-                    android:id="@+id/configuration_separator"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_below="@+id/tv_profile_state"
-                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:id="@+id/tv_project_state"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/no_projects"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    />
+
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/active_projects_separator"
+                android:layout_width="fill_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@+id/ll_feedback"
+                />
+
+            <LinearLayout
+                android:layout_below="@+id/active_projects_separator"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                >
 
                 <Button
                     android:id="@+id/home_bt_configurations"
-                    android:layout_below="@id/configuration_separator"
-                    android:layout_width="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
                     android:layout_height="fill_parent"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_centerInParent="true"
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:text="@string/open_configurations"
+                    android:drawableStart="@android:drawable/ic_menu_agenda"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/second_grey"
                     />
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:background="@drawable/card"
-                android:layout_weight=".5"
-                >
-                <TextView
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/tv_project_state"
-                    android:text="@string/no_projects"
-                    android:layout_width="fill_parent"
-                    android:layout_margin="14dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    />
+
                 <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"
-                    android:id="@+id/active_projects_separator"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/tv_project_state"
-                    android:layout_alignParentEnd="true" />
+                    android:background="@color/second_grey"
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"/>
 
-                <LinearLayout
-                    android:layout_below="@id/active_projects_separator"
-                    android:layout_width="fill_parent"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/home_bt_create_project"
+                    android:layout_weight="0.3"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:text="@string/new_project"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:drawableStart="@android:drawable/ic_menu_add"
+                    android:textColor="@color/second_grey"
+                    />
 
-                    <Button
-                        android:id="@+id/home_bt_create_project"
-                        android:layout_weight="0.5"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                        android:text="@string/new_project"
-                        android:layout_width="match_parent" />
+                <View
+                    android:background="@color/second_grey"
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"/>
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="fill_parent"
-                        android:background="@android:color/darker_gray" />
+                <Button
+                    android:id="@+id/bt_home_list_projects"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:text="@string/my_projects"
+                    android:drawableStart="@android:drawable/ic_menu_set_as"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/second_grey"
+                     />
 
-                    <Button
-                        android:id="@+id/bt_home_list_projects"
-                        android:layout_weight="0.5"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                        android:text="@string/my_projects"
-                        android:width="0dp"
-                        android:layout_width="match_parent" />
-                </LinearLayout>
+            </LinearLayout>
 
 
-            </RelativeLayout>
-        </LinearLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_metadata_quality"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@id/rl_home_status_cards"
+            android:layout_below="@id/rl_home_features"
             android:background="@drawable/card"
             android:padding="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+
             android:visibility="visible"
             >
             <ProgressBar
@@ -232,7 +222,6 @@
         </RelativeLayout>
 
         <TextView
-            android:layout_centerHorizontal="true"
             android:text="@string/swipe_to_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
