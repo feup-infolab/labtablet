@@ -129,9 +129,9 @@
     <string name="stop">Stop</string>
     <string name="record">Record</string>
     <string name="new_text_record">New text record</string>
-    <string name="network_temp">C (Network)</string>
+    <string name="network_temp">ºC (Network)</string>
     <string name="not_available">Not available</string>
-    <string name="battery_temp">C (Battery)</string>
+    <string name="battery_temp">ºC (Battery)</string>
     <string name="net_temp_saved">Network temperature saved</string>
     <string name="temp_saved">Temperature saved</string>
     <string name="mag_saved">Magnetic field saved</string>
