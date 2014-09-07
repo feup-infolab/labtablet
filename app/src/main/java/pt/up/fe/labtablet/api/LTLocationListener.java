@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
@@ -77,7 +78,7 @@ public class LTLocationListener implements LocationListener {
             @Override
             public void onSuccess(String result) {
                 ChangelogItem log = new ChangelogItem();
-                log.setTitle("Saved file");
+                log.setTitle(mContext.getString(R.string.log_added));
                 log.setMessage("Geo localization file added");
                 ChangelogManager.addLog(log, mContext);
                 Toast.makeText(mContext, "Successfuly saved location file.", Toast.LENGTH_SHORT).show();

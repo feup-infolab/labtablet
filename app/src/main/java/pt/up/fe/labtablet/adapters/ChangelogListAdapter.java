@@ -53,15 +53,15 @@ public class ChangelogListAdapter  extends ArrayAdapter<ChangelogItem> {
 		holder.date.setText(logs.get(position).getDate());
         holder.description.setText(logs.get(position).getMessage());
 
-		if(!(Math.random() < 0.5)) {
-            if(Math.random() > 0.5) {
-                holder.type.setImageResource(R.drawable.ic_pages);
-            } else {
-                holder.type.setImageResource(R.drawable.ic_people);
-            }
-		} else {
-			holder.type.setImageResource(R.drawable.ic_whats_hot);
-		}
+        if (logs.get(position).getTitle().equals(context.getResources().getString(R.string.log_added))) {
+            holder.type.setImageResource(R.drawable.ab_plus);
+        } else if (logs.get(position).getTitle().equals(context.getResources().getString(R.string.log_removed))) {
+            holder.type.setImageResource(R.drawable.ab_cross);
+        } else if (logs.get(position).getTitle().equals(context.getResources().getString(R.string.log_loaded))) {
+            holder.type.setImageResource(R.drawable.ab_save);
+        } else if (logs.get(position).getTitle().equals(context.getResources().getString(R.string.log_favorite_removed))) {
+            holder.type.setImageResource(R.drawable.ab_cross);
+        }
 
 		return rowView;
 	}

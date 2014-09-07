@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Dendro.DendroDescriptor;
 import pt.up.fe.labtablet.models.Descriptor;
@@ -84,6 +86,12 @@ public class AsyncRecommendationsLoader extends AsyncTask<Object, Integer, Array
 
                 recommendedDescriptors.add(desc);
             }
+
+            ChangelogItem log = new ChangelogItem();
+            log.setMessage(mContext.getResources().getString(R.string.log_loaded) + " " + projectName + " (" + recommendedDendroDescriptors.size() + ").");
+            log.setDate(Utils.getDate());
+            log.setTitle(mContext.getResources().getString(R.string.log_loaded));
+            ChangelogManager.addLog(log, mContext);
 
             return recommendedDescriptors;
 
