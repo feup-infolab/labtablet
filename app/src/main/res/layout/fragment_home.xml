@@ -133,7 +133,7 @@
                     android:layout_height="fill_parent"
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:text="@string/open_configurations"
-                    android:drawableStart="@android:drawable/ic_menu_agenda"
+                    android:drawableStart="@drawable/ab_pulse"
                     android:textAllCaps="true"
                     android:textStyle="bold"
                     android:textColor="@color/second_grey"
@@ -154,7 +154,7 @@
                     android:textAllCaps="true"
                     android:textStyle="bold"
                     android:layout_width="0dp"
-                    android:drawableStart="@android:drawable/ic_menu_add"
+                    android:drawableStart="@drawable/ab_plus"
                     android:textColor="@color/second_grey"
                     />
 
@@ -171,7 +171,7 @@
                     android:layout_gravity="center"
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:text="@string/my_projects"
-                    android:drawableStart="@android:drawable/ic_menu_set_as"
+                    android:drawableStart="@drawable/ab_box"
                     android:textAllCaps="true"
                     android:textStyle="bold"
                     android:textColor="@color/second_grey"

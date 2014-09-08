@@ -29,7 +29,9 @@ import pt.up.fe.labtablet.activities.DescriptorPickerActivity;
 import pt.up.fe.labtablet.api.AsyncAuthenticator;
 import pt.up.fe.labtablet.api.AsyncProfileLoader;
 import pt.up.fe.labtablet.api.AsyncTaskHandler;
+import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.AssociationItem;
+import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
@@ -318,6 +320,12 @@ public class ConfigurationFragment extends Fragment {
                     editor.commit();
                     bt_file.setText(getResources().getString(R.string.edit));
                     progress.dismiss();
+
+                    ChangelogItem log = new ChangelogItem();
+                    log.setMessage("Application profile");
+                    log.setDate(Utils.getDate());
+                    log.setTitle(getResources().getString(R.string.log_loaded));
+                    ChangelogManager.addLog(log, getActivity());
                     Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
                 }
 

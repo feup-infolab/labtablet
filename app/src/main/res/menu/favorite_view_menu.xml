@@ -6,12 +6,19 @@
         android:title="@string/action_upload"
         android:orderInCategory="100"
         android:showAsAction="always|withText"
-        android:icon="@android:drawable/ic_menu_upload"
+        android:icon="@drawable/ab_up"
         />
     <item android:id="@+id/action_favorite_delete"
         android:title="@string/action_delete"
         android:orderInCategory="100"
         android:showAsAction="always|withText"
-        android:icon="@android:drawable/ic_menu_delete"
+        android:icon="@drawable/ab_cross"
+        />
+
+    <item android:id="@+id/action_favorite_edit"
+        android:title="@string/edit"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ab_edit"
         />
 </menu>
