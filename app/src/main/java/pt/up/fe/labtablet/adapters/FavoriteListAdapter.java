@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +30,7 @@ public class FavoriteListAdapter extends ArrayAdapter<FavoriteItem>{
         public TextView mFavoriteDate;
 		public ImageView mFavoriteType;
         public TextView mFavoriteSize;
+        public TextView mFavoriteDescription;
 	}
 
 	public FavoriteListAdapter(Activity context, List<FavoriteItem> srcItems) {
@@ -49,6 +52,7 @@ public class FavoriteListAdapter extends ArrayAdapter<FavoriteItem>{
 			viewHolder.mFavoriteType = (ImageView) rowView.findViewById(R.id.folder_item_type);
             viewHolder.mFavoriteSize = (TextView) rowView.findViewById(R.id.folder_item_size);
             viewHolder.mFavoriteDate = (TextView) rowView.findViewById(R.id.folder_item_date);
+            viewHolder.mFavoriteDescription = (TextView) rowView.findViewById(R.id.folder_item_description);
 			rowView.setTag(viewHolder);
 		}
 
@@ -59,6 +63,11 @@ public class FavoriteListAdapter extends ArrayAdapter<FavoriteItem>{
 		holder.mFavoriteName.setText(item.getTitle());
         holder.mFavoriteSize.setText(item.getSize());
         holder.mFavoriteDate.setText(item.getDate_modified());
+        holder.mFavoriteDescription.setText(item.getDescription());
+
+        Animation animation = AnimationUtils.makeInAnimation(getContext(), false);
+        rowView.startAnimation(animation);
+
 		return rowView;
 	}
 }

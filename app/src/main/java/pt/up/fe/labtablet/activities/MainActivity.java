@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -291,6 +292,7 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
         Fragment displayedFragment = getFragmentManager().findFragmentByTag("HOME");
+
         if (displayedFragment.isVisible()) {
             new AlertDialog.Builder(this)
                     .setIcon(R.drawable.ic_warning)
@@ -305,11 +307,12 @@ public class MainActivity extends Activity {
                     .setNegativeButton(R.string.cancel, null)
                     .show();
         } else {
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frame_container, displayedFragment)
-                    .addToBackStack("HOME")
-                    .commit();
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+            transaction.replace(R.id.frame_container, displayedFragment);
+            transaction.addToBackStack("HOME");
+            transaction.commit();
         }
     }
 }
