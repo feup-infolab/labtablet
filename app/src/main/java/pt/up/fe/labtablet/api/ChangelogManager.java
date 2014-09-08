@@ -31,7 +31,7 @@ public class ChangelogManager {
             editor.putString(
                     Utils.CHANGELOG_CONFIG_ENTRY,
                     new Gson().toJson(items, Utils.ARRAY_CHANGELOG_ITEM));
-            editor.commit();
+            editor.apply();
             Toast.makeText(mContext, "Created", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -46,7 +46,7 @@ public class ChangelogManager {
                 updateLogs(items),
                 Utils.ARRAY_CHANGELOG_ITEM));
 
-        editor.commit();
+        editor.apply();
         return;
     }
 
@@ -63,7 +63,7 @@ public class ChangelogManager {
             editor.putString(
                     Utils.CHANGELOG_CONFIG_ENTRY,
                     new Gson().toJson(items, Utils.ARRAY_CHANGELOG_ITEM));
-            editor.commit();
+            editor.apply();
             Toast.makeText(mContext, "Created", Toast.LENGTH_SHORT).show();
             return items;
         }
@@ -95,7 +95,7 @@ public class ChangelogManager {
         }
 
         editor.remove(Utils.CHANGELOG_CONFIG_ENTRY);
-        editor.commit();
+        editor.apply();
     }
 
     public static void remove(Context mContext, ChangelogItem upItem) {
@@ -119,8 +119,7 @@ public class ChangelogManager {
                 updateLogs(storedItems),
                 Utils.ARRAY_CHANGELOG_ITEM));
 
-        editor.commit();
-        return;
+        editor.apply();
     }
 
     public static void addItems(ArrayList<ChangelogItem> items, Context mContext) {
@@ -134,7 +133,7 @@ public class ChangelogManager {
             editor.putString(
                     Utils.CHANGELOG_CONFIG_ENTRY,
                     new Gson().toJson(items, Utils.ARRAY_CHANGELOG_ITEM));
-            editor.commit();
+            editor.apply();
             Toast.makeText(mContext, "Created", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -148,7 +147,7 @@ public class ChangelogManager {
         editor.putString(
                 Utils.CHANGELOG_CONFIG_ENTRY,
                 new Gson().toJson(storedItems, Utils.ARRAY_CHANGELOG_ITEM));
-        editor.commit();
+        editor.apply();
     }
 
     public static String addedLog(String descriptor, String value) {

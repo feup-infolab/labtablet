@@ -6,7 +6,7 @@
         android:title="@string/action_upload"
         android:orderInCategory="100"
         android:showAsAction="always|withText"
-        android:icon="@drawable/ab_up"
+        android:icon="@drawable/ab_upload"
         />
     <item android:id="@+id/action_favorite_delete"
         android:title="@string/action_delete"

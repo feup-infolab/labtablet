@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/select_project_above"
-            android:drawableTop="@drawable/ic_arrow_up"
+            android:drawableTop="@drawable/ab_up"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/second_grey"
             android:layout_centerInParent="true"/>
@@ -66,13 +66,12 @@
                 >
                 <Button
                     android:id="@+id/dendro_folders_select"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:text="@string/place_files_here"
                     android:enabled="false"
-                    android:width="0dp"
                     android:layout_weight="1"/>
             </LinearLayout>
         </RelativeLayout>

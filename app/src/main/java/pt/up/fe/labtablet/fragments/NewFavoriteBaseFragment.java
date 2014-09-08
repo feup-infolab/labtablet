@@ -276,7 +276,7 @@ public class NewFavoriteBaseFragment extends Fragment {
                     logs.add(log);
                 }
 
-                editor.commit();
+                editor.apply();
 
                 ChangelogManager.addItems(logs, getActivity());
                 if(mDialog != null) {

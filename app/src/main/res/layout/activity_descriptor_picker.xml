@@ -1,33 +1,26 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:background="@color/light_gray"
-    android:layout_height="match_parent"
     tools:context="pt.up.fe.labtablet.activities.DescriptorPickerActivity"
-    tools:ignore="MergeRootFrame">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/tv_select"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/card"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="@string/select_descriptor_return"
+        />
 
-        <TextView
-            android:id="@+id/tv_select"
-            android:layout_width="fill_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/card"
-            android:gravity="center"
-            android:padding="20dp"
-            android:text="@string/select_descriptor_return"
-          />
-
-        <ListView
-            android:id="@+id/lv_descriptors"
-            android:layout_below="@id/tv_select"
-            android:layout_marginTop="15dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-        </RelativeLayout>
-    </FrameLayout>
+    <ListView
+        android:id="@+id/lv_descriptors"
+        android:layout_below="@id/tv_select"
+        android:layout_marginTop="15dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

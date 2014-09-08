@@ -68,11 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        android:background="@android:color/holo_red_light"
-        android:textColor="@android:color/white"
         android:textSize="20sp"
-        style="@android:style/Holo.ButtonBar"
-        android:drawableRight="@android:drawable/stat_sys_upload"
+        style="@style/btnStyleBeige"
+        android:drawableEnd="@drawable/ab_upload"
         android:text="@string/start_proccess"
         android:padding="20dp"
         />

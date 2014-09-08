@@ -117,7 +117,7 @@ public class FileMgr {
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(settingsEntry);
         editor.putString(settingsEntry, new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
-        editor.commit();
+        editor.apply();
     }
 
     public static ArrayList<AssociationItem> getAssociations(Context mContext) {
@@ -197,7 +197,7 @@ public class FileMgr {
 
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(favoriteName);
-        editor.commit();
+        editor.apply();
         dialog.dismiss();
     }
 
@@ -228,9 +228,9 @@ public class FileMgr {
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(src);
 
-        editor.commit();
+        editor.apply();
         editor.putString(dst, new Gson().toJson(previousRecords, Utils.ARRAY_DESCRIPTORS));
-        editor.commit();
+        editor.apply();
 
         return file.renameTo(file2);
     }

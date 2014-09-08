@@ -58,6 +58,11 @@ public class SubmissionStep3 extends Fragment {
     private ArrayList<DendroFolderItem> folders;
     private ArrayList<Project> availableProjects;
 
+    MenuItem actionRefresh;
+    MenuItem actionUp;
+
+
+
 
     public static SubmissionStep3 newInstance(String projectName, SubmissionStepHandler handler) {
         SubmissionStep3 fragment = new SubmissionStep3();
@@ -205,6 +210,11 @@ public class SubmissionStep3 extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.submission_step3, menu);
+        actionRefresh = menu.findItem(R.id.action_dendro_refresh);
+        actionUp = menu.findItem(R.id.action_dendro_go_up);
+        actionRefresh.setVisible(false);
+        actionUp.setVisible(false);
+
     }
 
     @Override
@@ -249,6 +259,8 @@ public class SubmissionStep3 extends Fragment {
                 }
                 dendroDirList.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
+                actionUp.setVisible(true);
+                actionRefresh.setVisible(true);
                 progressBar.setVisibility(View.INVISIBLE);
             }
 

@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray"
     tools:context="pt.up.fe.labtablet.fragments.ConfigurationFragment">
 
     <ScrollView
@@ -346,13 +345,12 @@
 
                 <Button
                     android:id="@+id/dendro_configurations_save"
-                    android:layout_weight=".5"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:text="@string/action_test_save"
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:drawableTop="@drawable/ic_warning"
                     />
@@ -362,7 +360,7 @@
                     android:id="@+id/dendro_configurations_title"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:layout_alignParentTop="true"
-                    android:layout_toLeftOf="@id/dendro_configurations_save"
+                    android:layout_toStartOf="@id/dendro_configurations_save"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/dendro_configurations"
@@ -371,7 +369,7 @@
                 <TextView
                     android:id="@+id/dendro_configurations_description"
                     android:layout_below="@id/dendro_configurations_title"
-                    android:layout_toLeftOf="@id/dendro_configurations_save"
+                    android:layout_toStartOf="@id/dendro_configurations_save"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/dendro_configurations_description"
@@ -384,13 +382,13 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:hint="Dendro URL"
-                    android:drawableLeft="@android:drawable/ic_menu_directions"
+                    android:drawableStart="@android:drawable/ic_menu_directions"
                     />
 
                 <EditText
                     android:id="@+id/dendro_configurations_username"
                     android:layout_below="@id/dendro_configurations_address"
-                    android:drawableLeft="@android:drawable/ic_menu_myplaces"
+                    android:drawableStart="@android:drawable/ic_menu_myplaces"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:hint="Username"

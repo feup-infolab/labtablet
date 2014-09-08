@@ -96,7 +96,7 @@ public class ConfigurationFragment extends Fragment {
                 getActivity().getSharedPreferences(getResources()
                         .getString(R.string.app_name),Context.MODE_PRIVATE).edit()
                         .remove("associations")
-                        .commit();
+                        .apply();
 
                 loadAssociations();
                 Toast.makeText(getActivity(), "Configuration successfully removed", Toast.LENGTH_SHORT).show();
@@ -227,7 +227,7 @@ public class ConfigurationFragment extends Fragment {
                 conf.setPassword(et_conf_password.getText().toString());
 
                 editor.putString(Utils.DENDRO_CONFS_ENTRY, new Gson().toJson(conf, DendroConfiguration.class));
-                editor.commit();
+                editor.apply();
 
                 bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                         null, getResources().getDrawable(R.drawable.ic_wait), null, null);
@@ -253,7 +253,7 @@ public class ConfigurationFragment extends Fragment {
                         conf.setValidated(true);
 
                         editor.putString(Utils.DENDRO_CONFS_ENTRY, new Gson().toJson(conf, DendroConfiguration.class));
-                        editor.commit();
+                        editor.apply();
 
                         bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null, getResources().getDrawable(R.drawable.ic_check), null, null);
@@ -317,7 +317,7 @@ public class ConfigurationFragment extends Fragment {
                                 .remove(Utils.DESCRIPTORS_CONFIG_ENTRY);
                     }
                     editor.putString(Utils.DESCRIPTORS_CONFIG_ENTRY, new Gson().toJson(result,type));
-                    editor.commit();
+                    editor.apply();
                     bt_file.setText(getResources().getString(R.string.edit));
                     progress.dismiss();
 

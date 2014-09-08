@@ -90,9 +90,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
             android:gravity="center"
-            android:drawableLeft="@drawable/ic_swipe_right"
+            android:drawableStart="@android:drawable/ic_media_rew"
             android:text="@string/swipe_to_next"
             android:textColor="@color/second_grey"
             />

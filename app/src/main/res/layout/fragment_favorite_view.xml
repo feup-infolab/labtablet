@@ -105,17 +105,6 @@
             android:id="@+id/bt_new_metadata"
             android:layout_marginTop="2dp"
             />
-
-        <Button
-            android:layout_column="0"
-            android:layout_row="4"
-            android:layout_width="fill_parent"
-            android:text="@string/edit_metadata_records"
-            android:drawableEnd="@drawable/ab_edit"
-            style="@style/btnStyleBeige"
-            android:id="@+id/bt_edit_metadata"
-            android:layout_marginTop="2dp"
-            />
     </GridLayout>
 
 

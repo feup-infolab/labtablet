@@ -143,7 +143,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                     SharedPreferences.Editor editor = settings.edit();
                     editor.remove(Utils.ASSOCIATIONS_CONFIG_ENTRY);
                     editor.putString(Utils.ASSOCIATIONS_CONFIG_ENTRY, new Gson().toJson(mAssociations));
-                    editor.commit();
+                    editor.apply();
                     Intent returnIntent = new Intent();
                     setResult(RESULT_OK, returnIntent);
                     finish();

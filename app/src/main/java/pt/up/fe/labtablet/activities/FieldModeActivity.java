@@ -516,14 +516,14 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
 
             if (baseDescriptorsJson.equals("")) {
                 editor.putString(favorite_name, new Gson().toJson(metadata, Utils.ARRAY_DESCRIPTORS));
-                editor.commit();
+                editor.apply();
             } else {
                 ArrayList<Descriptor> baseDescriptors =
                         new Gson().fromJson(baseDescriptorsJson, Utils.ARRAY_DESCRIPTORS);
                 baseDescriptors.addAll(metadata);
                 editor.remove(favorite_name);
                 editor.putString(favorite_name, new Gson().toJson(baseDescriptors, Utils.ARRAY_DESCRIPTORS));
-                editor.commit();
+                editor.apply();
             }
 
             //Proceed to validate collected metadata
