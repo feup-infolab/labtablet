@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -82,6 +84,10 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
         holder.mDescriptorType.setTag(item.getFilePath());
 
         new LoadImage(holder.mDescriptorType).execute();
+
+        Animation animation = AnimationUtils.makeInAnimation(getContext(), false);
+        //Animation animation = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
+        rowView.startAnimation(animation);
 
         return rowView;
     }

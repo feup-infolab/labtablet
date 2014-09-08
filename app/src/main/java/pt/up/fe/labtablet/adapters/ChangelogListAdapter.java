@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ public class ChangelogListAdapter  extends ArrayAdapter<ChangelogItem> {
  
 	private final Activity context;
 	private final ArrayList<ChangelogItem> logs;
+    int lastPosition = -1;
     
 	static class ViewHolder {  
 		public TextView log; 
@@ -61,8 +65,13 @@ public class ChangelogListAdapter  extends ArrayAdapter<ChangelogItem> {
             holder.type.setImageResource(R.drawable.ab_save);
         } else if (logs.get(position).getTitle().equals(context.getResources().getString(R.string.log_favorite_removed))) {
             holder.type.setImageResource(R.drawable.ab_cross);
+        } else {
+            holder.type.setImageResource(R.drawable.ic_wait);
         }
 
-		return rowView;
+        Animation animation = AnimationUtils.makeInAnimation(getContext(), false);
+        rowView.startAnimation(animation);
+
+        return rowView;
 	}
 }

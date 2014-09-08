@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,7 +141,13 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 int pos = (Integer) view.getTag();
+
+                                if(items.get(pos).hasFile()) {
+                                    Log.e("FILE_DELETION", "" + new File((items.get(pos).getFilePath())).delete());
+                                }
+
                                 items.remove(pos);
+
                                 notifyDataSetChanged();
                             }
                         })

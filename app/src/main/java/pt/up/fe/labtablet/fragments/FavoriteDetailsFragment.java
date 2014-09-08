@@ -115,8 +115,6 @@ public class FavoriteDetailsFragment extends Fragment {
             }
         });
 
-
-
         bt_new_metadata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -9,111 +9,109 @@
         android:layout_weight=".5"
         android:layout_height="fill_parent">
 
-        <RelativeLayout
+        <GridLayout
+            android:id="@+id/gv_dataset_view_base"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:orientation="vertical"
+            android:rowCount="6">
 
-
-            <RelativeLayout
-                android:id="@+id/title_rl"
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_row="0"
+                android:padding="10dp"
                 android:background="@drawable/card"
-                android:padding="12sp"
-                android:layout_alignParentTop="true"
-                >
+                android:layout_column="0">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:maxLength="20"
+                    android:layout_width="0dp"
+                    android:gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:maxHeight="30dp"
+                    android:layout_weight=".9"
+                    android:ellipsize="end"
+                    android:layout_marginStart="5dp"
+                    android:text="Title"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textStyle="bold"
+                    />
+
+                <View
+                    android:background="@color/light_gray"
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"/>
 
                 <ImageButton
                     android:id="@+id/favorite_view_edit_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:contentDescription="@string/desc_list_item_icon"
-                    android:layout_margin="5dp"
-                    style="@style/btnStyleBeige"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:src="@android:drawable/ic_menu_edit" />
+            </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_toLeftOf="@id/favorite_view_edit_title"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:text="Title"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textStyle="bold"
-                    />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/desc_rl"
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_row="1"
                 android:background="@drawable/card"
-                android:padding="12sp"
-                android:layout_below="@id/title_rl"
-                >
+                android:layout_column="0">
 
+                <TextView
+                    android:id="@+id/tv_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:maxHeight="200dp"
+                    android:layout_weight=".9"
+                    android:text="@string/favorite_view_no_description"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    />
 
+                <View
+                    android:background="@color/light_gray"
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"/>
 
                 <ImageButton
                     android:id="@+id/favorite_view_edit_description"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_height="fill_parent"
                     android:contentDescription="@string/desc_list_item_icon"
-                    android:layout_margin="5dp"
-                    style="@style/btnStyleBeige"
-                    android:layout_centerVertical="true"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:src="@android:drawable/ic_menu_edit" />
-
-                <TextView
-                    android:id="@+id/tv_description"
-                    android:layout_toStartOf="@id/favorite_view_edit_description"
-                    android:layout_alignParentStart="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:layout_centerVertical="true"
-                    android:text="@string/favorite_view_no_description"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-            </RelativeLayout>
+            </LinearLayout>
 
             <Button
-                android:id="@+id/bt_field_mode"
-                android:layout_below="@id/desc_rl"
                 android:layout_width="fill_parent"
                 style="@style/btnStyleBeige"
-                android:drawableEnd="@android:drawable/ic_menu_mapmode"
                 android:layout_height="wrap_content"
-                android:text="Launch field mode"
+                android:text="@string/launch_field_mode"
                 android:layout_marginTop="5dp"
-                />
-
-
+                android:id="@+id/bt_field_mode"
+                android:drawableEnd="@android:drawable/ic_menu_mapmode"
+                android:layout_row="2"
+                android:layout_column="0" />
 
             <Button
-                android:id="@+id/bt_new_metadata"
-                android:layout_below="@id/bt_field_mode"
+                android:layout_column="0"
+                android:layout_row="3"
                 android:layout_width="fill_parent"
-                android:text="Additional Metadata"
-                android:drawableEnd="@android:drawable/ic_menu_add"
+                android:text="@string/add_metadata"
+                android:drawableEnd="@drawable/ab_plus"
                 style="@style/btnStyleBeige"
+                android:id="@+id/bt_new_metadata"
                 android:layout_marginTop="10dp"
-                android:layout_height="wrap_content"
                 />
-            </RelativeLayout>
-        </ScrollView>
-    <View
-        android:layout_width="1dp"
-        android:layout_marginStart="5dp"
-        android:layout_height="fill_parent"
-        android:background="@android:color/darker_gray" />
+        </GridLayout>
+    </ScrollView>
 
     <ListView
         android:id="@+id/lv_favorite_metadata"

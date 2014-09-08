@@ -96,22 +96,12 @@
             android:drawableRight="@android:drawable/ic_menu_mapmode"
             android:layout_row="2"
             android:layout_column="0" />
-
-        <Button
-            android:layout_column="0"
-            android:layout_row="3"
-            android:layout_width="fill_parent"
-            android:text="@string/add_metadata"
-            android:drawableRight="@drawable/ab_plus"
-            style="@style/btnStyleBeige"
-            android:id="@+id/bt_new_metadata"
-            android:layout_marginTop="10dp"
-            />
     </GridLayout>
 
 
     <ListView
         android:id="@+id/lv_favorite_metadata"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -119,4 +109,21 @@
         android:layout_below="@+id/gv_dataset_view_base" />
 
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:text="+"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@drawable/round_button"
+        android:id="@+id/bt_new_metadata"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:paddingBottom="16dp"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end|bottom" />
 </RelativeLayout>

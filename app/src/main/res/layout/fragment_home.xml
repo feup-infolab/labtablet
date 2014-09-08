@@ -29,7 +29,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_home"
-            android:background="@drawable/card"
             >
 
             <TextView
@@ -69,119 +68,115 @@
                 />
 
 
-
-            <LinearLayout
-                android:id="@+id/ll_feedback"
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_below="@id/home_feature_3"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                >
+                android:background="@drawable/card">
 
-                <TextView
-                    android:id="@+id/tv_profile_state"
-                    android:padding="10dp"
+                <LinearLayout
+                    android:id="@+id/ll_feedback"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_profile_state"
+                        android:padding="10dp"
+                        android:layout_marginStart="10dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/no_profile"
+                        android:layout_height="fill_parent"
+                        android:gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_project_state"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/no_projects"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_height="fill_parent"
+                        android:gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:padding="10dp"
+                        />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/active_projects_separator"
+                    android:layout_width="fill_parent"
                     android:layout_marginStart="10dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/no_profile"
-                    android:layout_height="fill_parent"
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_project_state"
                     android:layout_marginEnd="10dp"
-                    android:text="@string/no_projects"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:layout_height="fill_parent"
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:padding="10dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_below="@+id/ll_feedback"
                     />
 
+                <LinearLayout
+                    android:layout_below="@+id/active_projects_separator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="10dp"
+                    >
 
-            </LinearLayout>
+                    <Button
+                        android:id="@+id/home_bt_configurations"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.3"
+                        android:layout_height="fill_parent"
+                        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                        android:text="@string/open_configurations"
+                        android:drawableStart="@drawable/ab_pulse"
+                        android:textAllCaps="true"
+                        />
 
-            <View
-                android:id="@+id/active_projects_separator"
-                android:layout_width="fill_parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="30dp"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"
-                android:layout_below="@+id/ll_feedback"
-                />
+                    <View
+                        android:background="@color/second_grey"
+                        android:layout_width="1dp"
+                        android:layout_height="fill_parent"/>
 
-            <LinearLayout
-                android:layout_below="@+id/active_projects_separator"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginBottom="10dp"
-                >
+                    <Button
+                        android:id="@+id/home_bt_create_project"
+                        android:layout_weight="0.3"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                        android:text="@string/new_project"
+                        android:textAllCaps="true"
+                        android:layout_width="0dp"
+                        android:drawableStart="@drawable/ab_plus"
+                        />
 
-                <Button
-                    android:id="@+id/home_bt_configurations"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.3"
-                    android:layout_height="fill_parent"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:text="@string/open_configurations"
-                    android:drawableStart="@drawable/ab_pulse"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/second_grey"
-                    />
+                    <View
+                        android:background="@color/second_grey"
+                        android:layout_width="1dp"
+                        android:layout_height="fill_parent"/>
 
-                <View
-                    android:background="@color/second_grey"
-                    android:layout_width="1dp"
-                    android:layout_height="fill_parent"/>
+                    <Button
+                        android:id="@+id/bt_home_list_projects"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.3"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                        android:text="@string/my_projects"
+                        android:drawableStart="@drawable/ab_box"
+                        android:textAllCaps="true"
+                        />
 
-                <Button
-                    android:id="@+id/home_bt_create_project"
-                    android:layout_weight="0.3"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="center"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:text="@string/new_project"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:layout_width="0dp"
-                    android:drawableStart="@drawable/ab_plus"
-                    android:textColor="@color/second_grey"
-                    />
-
-                <View
-                    android:background="@color/second_grey"
-                    android:layout_width="1dp"
-                    android:layout_height="fill_parent"/>
-
-                <Button
-                    android:id="@+id/bt_home_list_projects"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.3"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="center"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:text="@string/my_projects"
-                    android:drawableStart="@drawable/ab_box"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/second_grey"
-                     />
-
-            </LinearLayout>
-
+                </LinearLayout>
+            </RelativeLayout>
 
         </RelativeLayout>
-
         <RelativeLayout
             android:id="@+id/rl_metadata_quality"
             android:layout_width="fill_parent"
@@ -196,7 +191,7 @@
                 android:id="@+id/pb_generic_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:visibility="invisible"
                 />
