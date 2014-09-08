@@ -97,8 +97,9 @@
                     />
             </GridLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="fill_parent"
+                android:orientation="vertical"
                 android:layout_height="wrap_content"
                 android:background="@drawable/card"
                 android:id="@+id/gl_gps"
@@ -114,13 +115,11 @@
                     android:paddingBottom="10dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:gravity="center"
-                    android:layout_alignParentTop="true"
                     android:text="KML"
                     />
 
                 <TextView
                     android:id="@+id/conf_kml_instructions"
-                    android:layout_below="@id/conf_kml_title"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
@@ -132,7 +131,6 @@
 
                 <TextView
                     android:id="@+id/kml_extension_descriptor"
-                    android:layout_below="@id/conf_kml_instructions"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
@@ -142,7 +140,6 @@
 
                 <TextView
                     android:id="@+id/kml_extension_description"
-                    android:layout_below="@id/kml_extension_descriptor"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
@@ -155,7 +152,6 @@
                 <View
                     android:id="@+id/conf_kml_separator"
                     android:layout_marginTop="5dp"
-                    android:layout_below="@id/kml_extension_description"
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="10dp"
@@ -165,7 +161,6 @@
 
                 <Button
                     android:id="@+id/bt_kml_edit"
-                    android:layout_below="@id/conf_kml_separator"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
@@ -175,9 +170,9 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
                     />
-            </RelativeLayout>
+            </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/card"
@@ -188,7 +183,6 @@
 
                 <TextView
                     android:id="@+id/conf_jpeg_title"
-                    android:layout_alignParentTop="true"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="20dp"
@@ -200,7 +194,6 @@
 
                 <TextView
                     android:id="@+id/conf_jpeg_description"
-                    android:layout_below="@id/conf_jpeg_title"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
@@ -211,7 +204,6 @@
 
                 <TextView
                     android:id="@+id/jpg_extension_descriptor"
-                    android:layout_below="@id/conf_jpeg_description"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
@@ -233,7 +225,6 @@
                 <View
                     android:id="@+id/conf_jpeg_separator"
                     android:layout_marginTop="5dp"
-                    android:layout_below="@id/jpg_extension_description"
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="10dp"
@@ -242,7 +233,6 @@
                     />
 
                 <Button
-                    android:layout_below="@id/conf_jpeg_separator"
                     android:id="@+id/bt_jpg_edit"
                     android:textAllCaps="true"
                     android:layout_width="fill_parent"
@@ -253,19 +243,19 @@
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:text="@string/edit"
                     />
-            </RelativeLayout>
+            </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/card"
                 android:id="@+id/rl_mp3"
+                android:orientation="vertical"
                 android:layout_below="@id/gl_jpg"
                 >
 
                 <TextView
                     android:id="@+id/conf_mp3_title"
-                    android:layout_alignParentTop="true"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="20dp"
@@ -277,7 +267,6 @@
 
                 <TextView
                     android:id="@+id/conf_mp3_description"
-                    android:layout_below="@id/conf_mp3_title"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
@@ -288,7 +277,6 @@
 
                 <TextView
                     android:id="@+id/mp3_extension_descriptor"
-                    android:layout_below="@id/conf_mp3_description"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
@@ -298,7 +286,6 @@
 
                 <TextView
                     android:id="@+id/mp3_extension_description"
-                    android:layout_below="@id/mp3_extension_descriptor"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
@@ -311,7 +298,6 @@
                 <View
                     android:id="@+id/conf_mp3_separator"
                     android:layout_marginTop="5dp"
-                    android:layout_below="@id/mp3_extension_description"
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="10dp"
@@ -321,7 +307,6 @@
 
                 <Button
                     android:id="@+id/bt_mp3_edit"
-                    android:layout_below="@id/conf_mp3_separator"
                     android:textAllCaps="true"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -331,7 +316,7 @@
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:text="Edit"
                     />
-            </RelativeLayout>
+            </LinearLayout>
 
 
             <RelativeLayout
