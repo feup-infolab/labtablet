@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+    private boolean atHome;
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -119,7 +120,7 @@ public class MainActivity extends Activity {
         if (savedInstanceState == null) {
             displayView(0);
         }
-mDrawerLayout.openDrawer(mDrawerList);
+        mDrawerLayout.openDrawer(mDrawerList);
     }
 
     @Override
@@ -184,24 +185,31 @@ mDrawerLayout.openDrawer(mDrawerList);
     private void displayView(int position) {
         // remove the main content by replacing fragments
         Fragment fragment = null;
+        String tag = "";
         switch (position) {
             case 0:
                 fragment = new HomeFragment();
+                tag = "HOME";
                 break;
             case 1:
                 fragment = new SearchFragment();
+                tag = "SEARCH";
                 break;
             case 2:
                 fragment = new NewFavoriteBaseFragment();
+                tag = "NEWFAV";
                 break;
             case 3:
                 fragment = new ListFavoritesFragment();
+                tag = "LISTFAV";
                 break;
             case 4:
                 fragment = new ListChangelogFragment();
+                tag = "LOG";
                 break;
             case 5:
                 fragment = new ConfigurationFragment();
+                tag = "CONF";
                 break;
             default:
                 break;
@@ -210,7 +218,9 @@ mDrawerLayout.openDrawer(mDrawerList);
         if (fragment != null) {
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.frame_container, fragment).commit();
+                    .replace(R.id.frame_container, fragment, tag)
+                    .addToBackStack(tag)
+                    .commit();
 
             // remove selected item and title, then close the drawer
             mDrawerList.setItemChecked(position, true);
@@ -280,18 +290,27 @@ mDrawerLayout.openDrawer(mDrawerList);
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_warning)
-                .setTitle(R.string.exit)
-                .setMessage(R.string.really_exit)
-                .setPositiveButton(R.string.form_ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+        Fragment displayedFragment = getFragmentManager().findFragmentByTag("HOME");
+        if (displayedFragment.isVisible()) {
+            new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_warning)
+                    .setTitle(R.string.exit)
+                    .setMessage(R.string.really_exit)
+                    .setPositiveButton(R.string.form_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        } else {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame_container, displayedFragment)
+                    .addToBackStack("HOME")
+                    .commit();
+        }
     }
 }
 

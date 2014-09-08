@@ -1,12 +1,9 @@
 package pt.up.fe.labtablet.adapters;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +12,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,7 +30,6 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
     private final Activity context;
     private final String favoriteName;
     private final ArrayList<Descriptor> items;
-
 
 
     static class ViewHolder {
@@ -86,7 +81,6 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
         new LoadImage(holder.mDescriptorType).execute();
 
         Animation animation = AnimationUtils.makeInAnimation(getContext(), false);
-        //Animation animation = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
         rowView.startAnimation(animation);
 
         return rowView;

@@ -24,31 +24,18 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.AsyncTaskHandler;
-import pt.up.fe.labtablet.api.MainActivityHandler;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class HomeFragment extends Fragment {
 
-    private TextView tvProjectCount;
-    private TextView tvProfileState;
     private TextView tvMetadataQuality;
-    private Button btConfigurations;
-    private Button btNewProject;
-    private Button btMyProjects;
     private ImageView ivMetadataQuality;
     private ProgressBar pbMetadataLoading;
     private RelativeLayout rlMetadataQuality;
-    private static MainActivityHandler mHandler;
 
     private boolean projects;
-    private boolean profileLoaded;
-
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
 
     public HomeFragment(){}
 
@@ -58,15 +45,15 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        btConfigurations = (Button) rootView.findViewById(R.id.home_bt_configurations);
-        btNewProject = (Button) rootView.findViewById(R.id.home_bt_create_project);
-        tvProjectCount = (TextView) rootView.findViewById(R.id.tv_project_state);
-        tvProfileState = (TextView) rootView.findViewById(R.id.tv_profile_state);
+        Button btConfigurations = (Button) rootView.findViewById(R.id.home_bt_configurations);
+        Button btNewProject = (Button) rootView.findViewById(R.id.home_bt_create_project);
+        Button btMyProjects = (Button) rootView.findViewById(R.id.bt_home_list_projects);
+        TextView tvProjectCount = (TextView) rootView.findViewById(R.id.tv_project_state);
+        TextView tvProfileState = (TextView) rootView.findViewById(R.id.tv_profile_state);
         tvMetadataQuality = (TextView) rootView.findViewById(R.id.tv_metadata_state);
         ivMetadataQuality = (ImageView) rootView.findViewById(R.id.iv_metadata_state);
         pbMetadataLoading = (ProgressBar) rootView.findViewById(R.id.pb_generic_progress);
         rlMetadataQuality = (RelativeLayout) rootView.findViewById(R.id.rl_metadata_quality);
-        btMyProjects = (Button) rootView.findViewById(R.id.bt_home_list_projects);
 
         final Drawable yes = getResources().getDrawable(R.drawable.ic_check);
         final Drawable no = getResources().getDrawable(R.drawable.ic_error);
@@ -94,13 +81,11 @@ public class HomeFragment extends Fragment {
             tvProfileState.setText(getResources().getString(R.string.profile_already_loaded));
             tvProfileState.setCompoundDrawablesRelativeWithIntrinsicBounds(null,
                     yes, null, null);
-            profileLoaded = true;
         } else {
             tvProfileState.setText(getResources().getString(R.string.no_profile));
             tvProfileState.setCompoundDrawablesRelativeWithIntrinsicBounds(null,
                     no, null, null);
             btConfigurations.setText(getResources().getString(R.string.open_configurations));
-            profileLoaded = false;
         }
 
         if (!projects) {
