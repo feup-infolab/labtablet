@@ -220,6 +220,10 @@ public class FileMgr {
             if(desc.getTag().equals(Utils.TITLE_TAG)) {
                 desc.setValue(dst);
             }
+            if(!desc.getFilePath().equals("")) {
+                //Update the file path
+                desc.setFilePath(basePath + dst + "/meta/" + desc.getValue());
+            }
         }
 
         SharedPreferences.Editor editor = settings.edit();
