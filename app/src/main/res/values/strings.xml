@@ -9,7 +9,7 @@
     <string name="search_hint">Search</string>
     <string name="form_ok">OK</string>
     <string name="form_cancel">Cancel</string>
-    <string name="new_dataset_item">New dataset</string>
+    <string name="new_dataset_item">New favorite</string>
     <string name="title_section1">Dataset Info</string>
     <string name="title_section2">Files</string>
     <string name="title_section3">Options</string>
@@ -84,7 +84,7 @@
     <string name="size">Size</string>
     <string name="modified">Modified</string>
     <string name="wait">Waiting</string>
-    <string name="progress_update_dir_exists">Checking if the project exists...</string>
+    <string name="progress_update_dir_exists">Checking if the project exists&#8230;</string>
     <string name="title_get_project_name">Please provide the name of the project where this favorite will be deposited.</string>
     <string name="title_section4">Section4</string>
     <string name="form_check">Check</string>
@@ -103,7 +103,7 @@
     <string name="no_profile">No application profile was found. Please start by loading a profile in the configurations menu</string>
     <string name="my_projects">Open my projects</string>
     <string name="metadata_good">Great! You have no generic descriptors associated with your datasets!</string>
-    <string name="metadata_meh">You have %1$d generic descriptor(s) in use. Altough they may be a quick answer to specifying the context, generic descriptors are bad for your dataset as they provide no context for the metadata.</string>
+    <string name="metadata_meh">You have %1$d generic descriptor(s) in use. Although they may be a quick answer to specifying the context, generic descriptors are bad for your dataset as they provide no context for the metadata.</string>
     <string name="profile_already_loaded">The application profile is already loaded</string>
     <string name="you_have_x_projects">You have %1$d opened projects</string>
     <string name="this_is_a_file">This is a file. It cannot be selected</string>
@@ -164,7 +164,7 @@
     <string name="log_favorite_removed" />
     <string name="log_removed">Deleted</string>
     <string name="proje_name_load">Select Project</string>
-    <string name="loading_recommendations">Loading project recommendations. Please stand by...</string>
+    <string name="loading_recommendations">Loading project recommendations. Please stand by&#8230;</string>
     <string name="recommendations_error">Please check the project name as no record was found.</string>
     <string name="successul_imported_recommendations">Recomendations loaded successfully!</string>
     <string name="log_loaded">Loaded recommendations for project</string>
@@ -181,7 +181,7 @@
     <string name="new_favorite_recommendations">If you specify the name of the project, additional descriptors will be suggested depending on your usage. You can change the associated project at any time.</string>
     <string name="new_favorite_proj_name_opt">Project name (optional)</string>
     <string name="new_favorite_folder_name_desc">This field specifies the folder to store the metadata records collected in this project. It is not required that this folder exists in the repository.</string>
-    <string name="retry">Retry...</string>
+    <string name="retry">Retry&#8230;</string>
     <string name="cancelled">Cancelled</string>
     <string name="metadata_added_success">Successfully added metadata records</string>
     <string name="at_least_undefined_descriptor">There is at least one record without an associated descriptor.</string>
@@ -189,9 +189,9 @@
     <string name="dest_folder_undefined">The destination folder is not defined yet. Please select it in the previous step</string>
     <string name="creating_package">Creating upload package</string>
     <string name="authenticating">Authenticating</string>
-    <string name="uploading">Uploading...</string>
+    <string name="uploading">Uploading&#8230;</string>
     <string name="creating_metadata_package">Building metadata package</string>
-    <string name="sending_metadata">Sending metadata...</string>
+    <string name="sending_metadata">Sending metadata&#8230;</string>
     <string name="deleting_temp_files">Deleting temporary files</string>
     <string name="finished">Upload completed!</string>
     <string name="selected_folder">Folder selected</string>

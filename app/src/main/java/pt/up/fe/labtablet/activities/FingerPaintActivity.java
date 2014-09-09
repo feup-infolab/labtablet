@@ -11,7 +11,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,7 +21,10 @@ import android.widget.Toast;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.AsyncBitmapExporter;
 import pt.up.fe.labtablet.api.AsyncTaskHandler;
+import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.utils.ColorPickerDialog;
+import pt.up.fe.labtablet.utils.Utils;
 
 public class FingerPaintActivity extends Activity implements ColorPickerDialog.OnColorChangedListener {
 
@@ -187,7 +189,7 @@ public class FingerPaintActivity extends Activity implements ColorPickerDialog.O
                 new AsyncBitmapExporter(new AsyncTaskHandler<Void>() {
                     @Override
                     public void onSuccess(Void result) {
-                        Toast.makeText(getApplication(),"DONE",Toast.LENGTH_SHORT).show();
+
                         mDrawingView.invalidate();
                         mDrawingView.setDrawingCacheEnabled(false);
                         Intent returnIntent = new Intent();
@@ -198,7 +200,13 @@ public class FingerPaintActivity extends Activity implements ColorPickerDialog.O
 
                     @Override
                     public void onFailure(Exception error) {
-                        Log.e("BITMAP", error.getMessage());
+
+                        Toast.makeText(FingerPaintActivity.this, ".", Toast.LENGTH_SHORT);
+                        ChangelogItem item = new ChangelogItem();
+                        item.setMessage("Sketch: " + error.toString() + "When exporting the sketch to a bitmap. Possible causes involve permissions and lack of storage space.");
+                        item.setTitle(getResources().getString(R.string.developer_error));
+                        item.setDate(Utils.getDate());
+                        ChangelogManager.addLog(item, FingerPaintActivity.this);
                     }
 
                     @Override

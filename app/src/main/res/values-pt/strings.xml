@@ -84,7 +84,7 @@
     <string name="size">Tamanho</string>
     <string name="modified">Alterado</string>
     <string name="wait">Em espera</string>
-    <string name="progress_update_dir_exists">A verificar projeto...</string>
+    <string name="progress_update_dir_exists">A verificar projeto&#8230;</string>
     <string name="title_get_project_name">Indique o nome do projeto ao qual este favorito está associado.</string>
     <string name="title_section4">Section4</string>
     <string name="form_check">Verificar</string>
@@ -117,7 +117,7 @@
     <string name="really_exit">Tem a certeza de que pretende sair da aplicação?</string>
     <string name="clear_associations">Apagar associações existentes</string>
     <string name="descriptor_not_set">Descritor não definido</string>
-    <string name="welcome">Bem vindo ao LabTablet</string>
+    <string name="welcome">Bem-vindo ao LabTablet</string>
     <string name="collect_metadata_available_sensors">Recolha de registos a partir dos sensores disponíveis</string>
     <string name="easily_manage">Gestão facilitada de projetos metadados associados</string>
     <string name="swipe_to_menu">Deslize para a direita para abrir o menu</string>
@@ -130,9 +130,9 @@
     <string name="stop">Stop</string>
     <string name="record">Record</string>
     <string name="new_text_record">New text record</string>
-    <string name="network_temp">ºC (Internet)</string>
+    <string name="network_temp">°C (Internet)</string>
     <string name="not_available">Indisponível</string>
-    <string name="battery_temp">ºC (Bateria)</string>
+    <string name="battery_temp">°C (Bateria)</string>
     <string name="net_temp_saved">Temperatura guardada</string>
     <string name="temp_saved">Temperatura guardada</string>
     <string name="mag_saved">Campo magnético guardado</string>
@@ -164,7 +164,7 @@
     <string name="log_favorite_removed">Favorito removido: </string>
     <string name="log_removed">Apagado</string>
     <string name="proje_name_load">Selecionar projeto</string>
-    <string name="loading_recommendations">A carregar recomendações. Por favor aguarde...</string>
+    <string name="loading_recommendations">A carregar recomendações. Por favor aguarde&#8230;</string>
     <string name="recommendations_error">Verifique se tem uma ligação ativa à internet.</string>
     <string name="successul_imported_recommendations">Recomendações carregadas com sucesso!</string>
     <string name="log_loaded">Carregadas recomendações para o projecto: </string>
