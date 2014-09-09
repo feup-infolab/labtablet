@@ -1,6 +1,9 @@
 package pt.up.fe.labtablet.api;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -69,10 +72,10 @@ public class LTLocationListener implements LocationListener {
     public void notifyCollectStopped() {
 
         locationManager.removeUpdates(this);
-        /*
+
         if(mLocations.size() == 0)
             return;
-        */
+
         new AsyncKMLCreator(new AsyncTaskHandler<String>() {
 
             @Override
@@ -92,6 +95,13 @@ public class LTLocationListener implements LocationListener {
 
             @Override
             public void onFailure(Exception error) {
+
+                ChangelogItem item = new ChangelogItem();
+                item.setMessage("KML creation: " + error.toString() + "Creating KML files. Is there any storage space left on the device?");
+                item.setTitle(mContext.getString(R.string.developer_error));
+                item.setDate(Utils.getDate());
+                ChangelogManager.addLog(item, mContext);
+
                 Log.e("ERR", error.getMessage());
             }
 
@@ -102,11 +112,37 @@ public class LTLocationListener implements LocationListener {
 
     }
 
-    public void notifyCollectStarted () {
+    public boolean notifyCollectStarted () {
 
         locationManager = (LocationManager)mContext.getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+            alertDialogBuilder
+                    .setMessage(mContext.getResources().getString(R.string.gps_disabled))
+                    .setCancelable(false)
+                    .setPositiveButton(mContext.getResources().getString(R.string.form_ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int id) {
+                                    Intent callGPSSettingIntent = new Intent(
+                                            android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                    mContext.startActivity(callGPSSettingIntent);
+                                }
+                            });
+            alertDialogBuilder.setNegativeButton(mContext.getResources().getString(R.string.action_cancel),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = alertDialogBuilder.create();
+            alert.show();
+            return false;
+        }
+
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, 5000, 10, this);
+        return true;
     }
 
     public interface kmlCreatedInterface {

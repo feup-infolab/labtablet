@@ -151,7 +151,12 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
 
                 if(!isCollecting) {
                     isCollecting = true;
-                    if(sw_gps.isChecked()) {locationListener.notifyCollectStarted();}
+                    if(sw_gps.isChecked()) {
+                        if(!locationListener.notifyCollectStarted()) {
+                         isCollecting = false;
+                            sw_gps.setChecked(false);
+                        }
+                    }
                 } else {
                     isCollecting = false;
                     if(!sw_gps.isChecked()) { locationListener.notifyCollectStopped(); }
@@ -223,7 +228,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         metadata.add(mDesc);
                     }  catch (Exception e) {
                         ChangelogItem item = new ChangelogItem();
-                        item.setMessage("FieldMode audio recorder: " + e.toString());
+                        item.setMessage("FieldMode audio recorder: " + e.toString() + "When stopping the recorder. Device stopped woorking.");
                         item.setTitle(getResources().getString(R.string.developer_error));
                         item.setDate(Utils.getDate());
                         ChangelogManager.addLog(item, FieldModeActivity.this);
@@ -248,7 +253,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         recorder.start();
                     } catch (Exception e) {
                         ChangelogItem item = new ChangelogItem();
-                        item.setMessage("FieldMode audio recorder: " + e.toString());
+                        item.setMessage("FieldMode audio recorder: " + e.toString() + "After preparing the recorder. Devise is being used by another application.");
                         item.setTitle(getResources().getString(R.string.developer_error));
                         item.setDate(Utils.getDate());
                         ChangelogManager.addLog(item, FieldModeActivity.this);
@@ -271,6 +276,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             public void onClick(View view) {
                 if (!startService()) {
                     Log.e("LOCATIONListener", "error staring service");
+
                 }
             }
         });
@@ -572,6 +578,11 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             new FetchCordinates().execute();
             return true;
         } catch (Exception error) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("Location Listener: " + error.toString() + "When starting the service. Device may not have any GPS devices or the resources may be in use by another application.");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, FieldModeActivity.this);
             return false;
         }
     }
