@@ -189,6 +189,7 @@ public class FavoriteDetailsFragment extends Fragment {
             // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
             input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
             builder.setView(input);
+            builder.setMessage(getResources().getString(R.string.update_name_instructions));
 
             // Set up the buttons
             builder.setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {

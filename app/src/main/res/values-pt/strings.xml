@@ -199,4 +199,5 @@
     <string name="developer_error">Developer error</string>
     <string name="gps_disabled">O GPS está atualmente desligado. Pretende ativa-lo?</string>
     <string name="dismiss">Apagar</string>
+    <string name="update_name_instructions">Please provide the new name for this favorite. All the associated metadata will be migrated to match the given name.</string>
 </resources>
