@@ -3,22 +3,16 @@
     tools:context="pt.up.fe.labtablet.activities.FingerPaintActivity" >
     <item
         android:id="@+id/sketch_pick_color"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@drawable/ab_edit"
         android:orderInCategory="20"
-        android:showAsAction="ifRoom"
-        android:title="Color"/>
-    <item
-        android:id="@+id/stetch_clear"
-        android:icon="@android:drawable/ic_menu_revert"
-        android:orderInCategory="20"
-        android:showAsAction="never"
+        android:showAsAction="always|withText"
+        android:title="@string/pick_color"/>
 
-        android:title="Clear"/>
         <item
             android:id="@+id/sketch_save"
-            android:icon="@android:drawable/ic_menu_save"
+            android:icon="@drawable/ab_save"
             android:orderInCategory="20"
-            android:showAsAction="ifRoom"
-            android:title="Save"/>
+            android:showAsAction="always|withText"
+            android:title="@string/action_save"/>
 
 </menu>

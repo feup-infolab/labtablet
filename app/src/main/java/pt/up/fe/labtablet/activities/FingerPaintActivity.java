@@ -17,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import pt.up.fe.labtablet.R;
@@ -49,11 +48,12 @@ public class FingerPaintActivity extends Activity implements ColorPickerDialog.O
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(20);
+        mPaint.setStrokeWidth(15);
     }
 
-    private Paint       mPaint;
+    private Paint  mPaint;
 
+    @Override
     public void colorChanged(int color) {
         mPaint.setColor(color);
     }
@@ -174,12 +174,7 @@ public class FingerPaintActivity extends Activity implements ColorPickerDialog.O
         switch (item.getItemId()) {
             case R.id.sketch_pick_color:
                 new ColorPickerDialog(this, this, mPaint.getColor()).show();
-                return true;
-            case R.id.stetch_clear:
-                Button bt_color =  (Button) mDrawingView.findViewById(R.id.sketch_pick_color);
-                bt_color.setBackgroundColor(getResources().getColor(R.color.list_background_pressed));
-                mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-                mPaint.setAlpha(0x80);
+                //new ColorPicker(this, this, "KEY", mPaint.getColor(), mPaint.getColor()).show();
                 return true;
             case R.id.sketch_save:
                 final String name = "" + System.currentTimeMillis() + ".png";

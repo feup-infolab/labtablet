@@ -46,7 +46,9 @@ import java.util.Date;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.AsyncWeatherFetcher;
+import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.api.LTLocationListener;
+import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
@@ -206,18 +208,27 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 if(recording) {
-                    pb_update.setIndeterminate(false);
-                    bt_audio.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_voice, 0, 0, 0);
-                    recording = false;
-                    bt_audio.setText(getResources().getString(R.string.record));
-                    recorder.stop();
-                    recorder.release();
-                    recorder = null;
-                    Descriptor mDesc = new Descriptor();
-                    mDesc.setTag(Utils.AUDIO_TAGS);
-                    mDesc.setValue(Uri.parse(audio_filename).getLastPathSegment());
-                    mDesc.setFilePath(audio_filename);
-                    metadata.add(mDesc);
+                    try {
+                        pb_update.setIndeterminate(false);
+                        bt_audio.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_voice, 0, 0, 0);
+                        recording = false;
+                        bt_audio.setText(getResources().getString(R.string.record));
+                        recorder.stop();
+                        recorder.release();
+                        recorder = null;
+                        Descriptor mDesc = new Descriptor();
+                        mDesc.setTag(Utils.AUDIO_TAGS);
+                        mDesc.setValue(Uri.parse(audio_filename).getLastPathSegment());
+                        mDesc.setFilePath(audio_filename);
+                        metadata.add(mDesc);
+                    }  catch (Exception e) {
+                        ChangelogItem item = new ChangelogItem();
+                        item.setMessage("FieldMode audio recorder: " + e.toString());
+                        item.setTitle(getResources().getString(R.string.developer_error));
+                        item.setDate(Utils.getDate());
+                        ChangelogManager.addLog(item, FieldModeActivity.this);
+                    }
+
 
                 } else {
                     recording = true;
@@ -235,8 +246,20 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         recorder.setOutputFile(audio_filename);
                         recorder.prepare();
                         recorder.start();
-                    } catch (IOException e) {
-                        Log.e("audio", e.getMessage());
+                    } catch (Exception e) {
+                        ChangelogItem item = new ChangelogItem();
+                        item.setMessage("FieldMode audio recorder: " + e.toString());
+                        item.setTitle(getResources().getString(R.string.developer_error));
+                        item.setDate(Utils.getDate());
+                        ChangelogManager.addLog(item, FieldModeActivity.this);
+
+                        Toast.makeText(FieldModeActivity.this, "Device is busy. Close other applications in the background.", Toast.LENGTH_SHORT).show();
+
+                        pb_update.setIndeterminate(false);
+                        bt_audio.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_voice, 0, 0, 0);
+                        recording = false;
+                        bt_audio.setText(getResources().getString(R.string.record));
+                        recorder = null;
                     }
 
                 }

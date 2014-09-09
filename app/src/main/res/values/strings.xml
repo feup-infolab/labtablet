@@ -195,4 +195,6 @@
     <string name="deleting_temp_files">Deleting temporary files</string>
     <string name="finished">Upload completed!</string>
     <string name="selected_folder">Folder selected</string>
+    <string name="pick_color">Color</string>
+    <string name="developer_error">Developer error</string>
 </resources>

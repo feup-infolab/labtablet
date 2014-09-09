@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +40,7 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
     private final Context mContext;
     private final List<AssociationItem> associations;
     private final String favoriteName;
+    private unvalidatedMetadataInterface mInterface;
 
     static class ViewHolder {
         public TextView mItemValue;
@@ -53,13 +53,14 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
         public Button bt_edit_value;
     }
 
-    public UnvalidatedMetadataListAdapter(Activity context, List<Descriptor> srcItems, List<AssociationItem> associations, String favoriteName) {
+    public UnvalidatedMetadataListAdapter(Activity context, List<Descriptor> srcItems, List<AssociationItem> associations, String favoriteName, unvalidatedMetadataInterface actInterface) {
         super(context, R.layout.item_unvalidated_metadata, srcItems);
         this.context = context;
         this.items = srcItems;
         this.mContext = context;
         this.associations = associations;
         this.favoriteName = favoriteName;
+        this.mInterface = actInterface;
     }
 
     @Override
@@ -79,7 +80,6 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
             viewHolder.bt_edit = (Button) rowView.findViewById(R.id.bt_edit_unvalidated_metadata);
             viewHolder.mMetadataPreview = (ImageView) rowView.findViewById(R.id.iv_metadata_preview);
             viewHolder.bt_edit_value = (Button) rowView.findViewById(R.id.bt_edit_unvalidated_metadata_value);
-
 
             rowView.setTag(viewHolder);
         }
@@ -141,11 +141,11 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 int pos = (Integer) view.getTag();
-
                                 if(items.get(pos).hasFile()) {
-                                    Log.e("FILE_DELETION", "" + new File((items.get(pos).getFilePath())).delete());
+                                    //Add file for deletion
+                                    mInterface.onFileDeletion(items.get(pos));
                                 }
-
+                                //remove the descriptor
                                 items.remove(pos);
 
                                 notifyDataSetChanged();
@@ -252,5 +252,9 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
             }
         }
 
+    }
+
+    public interface unvalidatedMetadataInterface {
+        public void onFileDeletion(Descriptor desc);
     }
 }

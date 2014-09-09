@@ -62,8 +62,8 @@ public class ChangelogListAdapter  extends ArrayAdapter<ChangelogItem> {
             holder.type.setImageResource(R.drawable.ab_cross);
         } else if (logs.get(position).getTitle().equals(context.getResources().getString(R.string.log_loaded))) {
             holder.type.setImageResource(R.drawable.ab_save);
-        } else if (logs.get(position).getTitle().equals(context.getResources().getString(R.string.log_favorite_removed))) {
-            holder.type.setImageResource(R.drawable.ab_cross);
+        } else if (logs.get(position).getTitle().equals(context.getResources().getString(R.string.developer_error))) {
+            holder.type.setImageResource(R.drawable.ab_pulse);
         } else {
             holder.type.setImageResource(R.drawable.ic_wait);
         }

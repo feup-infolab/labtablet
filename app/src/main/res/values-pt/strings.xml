@@ -195,4 +195,6 @@
     <string name="deleting_temp_files">A apagar ficheiros temporários</string>
     <string name="finished">Upload terminado!</string>
     <string name="selected_folder">Pasta selecionada</string>
+    <string name="pick_color">Color</string>
+    <string name="developer_error">Developer error</string>
 </resources>
