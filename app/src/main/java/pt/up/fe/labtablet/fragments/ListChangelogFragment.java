@@ -46,13 +46,18 @@ public class ListChangelogFragment extends ListFragment {
         alertDialogBuilder
                 .setMessage(item.getMessage())
                 .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNeutralButton(getResources().getString(R.string.dismiss), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         //remove item from the logs and remove the view
                         ChangelogManager.remove(getActivity(), items.get(position));
                         items.remove(items.get(position));
                         mAdapter.notifyDataSetChanged();
-                        dialog.dismiss();
                     }
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();

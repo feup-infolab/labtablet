@@ -80,7 +80,7 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
 
         new LoadImage(holder.mDescriptorType).execute();
 
-        Animation animation = AnimationUtils.makeInAnimation(getContext(), false);
+        Animation animation = AnimationUtils.makeInAnimation(context, false);
         rowView.startAnimation(animation);
 
         return rowView;

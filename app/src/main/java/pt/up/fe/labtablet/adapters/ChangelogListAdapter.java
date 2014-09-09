@@ -68,7 +68,7 @@ public class ChangelogListAdapter  extends ArrayAdapter<ChangelogItem> {
             holder.type.setImageResource(R.drawable.ic_wait);
         }
 
-        Animation animation = AnimationUtils.makeInAnimation(getContext(), false);
+        Animation animation = AnimationUtils.makeInChildBottomAnimation(context);
         rowView.startAnimation(animation);
 
         return rowView;

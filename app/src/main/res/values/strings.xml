@@ -198,4 +198,5 @@
     <string name="pick_color">Color</string>
     <string name="developer_error">Developer error</string>
     <string name="gps_disabled">Your device\'s GPS is turned off. Do you like to turn it back on?</string>
+    <string name="dismiss">Dismiss</string>
 </resources>

@@ -193,9 +193,10 @@
     <string name="creating_metadata_package">A construir pacote de metadados</string>
     <string name="sending_metadata">A enviar metadados…</string>
     <string name="deleting_temp_files">A apagar ficheiros temporários</string>
-    <string name="finished">Upload terminado!</string>
+    <string name="finished">Envio terminado!</string>
     <string name="selected_folder">Pasta selecionada</string>
-    <string name="pick_color">Color</string>
+    <string name="pick_color">Cor</string>
     <string name="developer_error">Developer error</string>
-    <string name="gps_disabled">Your device\'s GPS is turned off. Do you like to turn it back on?</string>
+    <string name="gps_disabled">O GPS está atualmente desligado. Pretende ativa-lo?</string>
+    <string name="dismiss">Apagar</string>
 </resources>
