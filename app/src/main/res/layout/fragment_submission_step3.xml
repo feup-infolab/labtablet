@@ -44,36 +44,29 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/dendro_folders_buttons" />
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/dendro_folders_buttons"
             android:layout_alignParentBottom="true"
             android:layout_width="fill_parent"
+            android:orientation="vertical"
             android:layout_height="wrap_content">
             <View
-                android:layout_alignParentTop="true"
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"
-                android:layout_margin="10dp"
                 android:id="@+id/dendro_separator"
                 />
-            <LinearLayout
-                android:id="@+id/ll_buttons"
-                android:layout_below="@id/dendro_separator"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/light_gray"
-                >
+
                 <Button
+                    android:drawableEnd="@drawable/ab_forward"
                     android:id="@+id/dendro_folders_select"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_marginStart="10dp"
                     android:text="@string/place_files_here"
                     android:enabled="false"
                     android:layout_weight="1"/>
-            </LinearLayout>
-        </RelativeLayout>
+
+        </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

@@ -1,12 +1,8 @@
 package pt.up.fe.labtablet.utils;
 
-import android.location.Location;
-
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -17,9 +13,6 @@ import pt.up.fe.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
 
-/**
- * Created by ricardo on 21-03-2014.
- */
 public class Utils {
 
     public static Type ARRAY_ASSOCIATION_ITEM = new TypeToken<ArrayList<AssociationItem>>() {}.getType();
@@ -29,6 +22,8 @@ public class Utils {
     public static Type ARRAY_DENDRO_METADATA_RECORD = new TypeToken<ArrayList<DendroMetadataRecord>>() {}.getType();
     public static Type ARRAY_DENDRO_DESCRIPTORS = new TypeToken<ArrayList<DendroDescriptor>>() {}.getType();
 
+    //Contextual tags that will make the associated descriptor to be suggested
+    //when the context applies
     public static final String AUDIO_TAGS = "audio";
     public static final String PICTURE_TAGS = "image";
     public static final String GEO_TAGS = "position";
@@ -45,6 +40,8 @@ public class Utils {
     public static final String DENDRO_RESPONSE_ERROR_2 = "Error";
     public static final String DENDRO_CONFS_ENTRY = "dendro_configurations";
 
+    //Configuration entries. If updated, the application must be completely reinstalled
+    //can't use previous instances
     public static String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
     public static String ASSOCIATIONS_CONFIG_ENTRY = "associations";
     public static String DESCRIPTORS_CONFIG_ENTRY = "base_descriptors";

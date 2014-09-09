@@ -30,6 +30,7 @@ public class ValidateMetadataActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validate_metadata);
         getActionBar().setTitle(getResources().getString(R.string.metadata_validation_title));
+        getActionBar().setDisplayHomeAsUpEnabled(false);
 
         if (savedInstanceState == null) {
             String descriptorsJson = getIntent().getStringExtra("descriptors");

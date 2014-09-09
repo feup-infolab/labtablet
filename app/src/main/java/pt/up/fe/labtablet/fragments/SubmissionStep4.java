@@ -79,7 +79,6 @@ public class SubmissionStep4 extends Fragment {
                 }
 
                 pbStatus.setVisibility(View.VISIBLE);
-                btStartUpload.setBackgroundColor(getResources().getColor(R.color.second_grey));
                 btStartUpload.setText(getString(R.string.cancel_proccess));
                 pbStatus.setIndeterminate(false);
                 pbStatus.setProgress(0);

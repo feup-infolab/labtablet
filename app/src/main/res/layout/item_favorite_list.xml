@@ -36,19 +36,6 @@
             android:layout_height="wrap_content"
             />
 
-        <TextView
-            android:id="@+id/folder_item_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/folder_item_title"
-            android:layout_toEndOf="@id/folder_item_type"
-            android:padding="2dp"
-            android:maxLines="4"
-            android:maxLength="150"
-            android:ellipsize="end"
-            android:text="@string/dendro_configurations_description"
-            />
-
 
         <TextView
             android:id="@+id/folder_item_size"
@@ -59,7 +46,7 @@
             android:layout_gravity="center"
             android:gravity="center_vertical"
             android:layout_toEndOf="@id/folder_item_type"
-            android:layout_below="@id/folder_item_description"
+            android:layout_below="@id/folder_item_title"
             android:textColor="@color/second_grey"
             android:text="12MB"
             />
