@@ -2,72 +2,83 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:divider="@android:color/transparent"
-    android:background="@drawable/card">
+    android:background="@drawable/card"
+    android:divider="@android:color/transparent">
 
 
     <ImageView
         android:id="@+id/iv_metadata_preview"
         android:layout_width="90dp"
         android:layout_height="90dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/ic_metadata"
-        android:layout_alignParentTop="true"
-        />
+        android:src="@drawable/ic_metadata" />
 
     <ImageButton
         android:id="@+id/bt_delete_unvalidated_metadata"
+        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        style="@style/btnStyleOrange"
-        android:padding="10dp"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="10dp"
-        android:src="@android:drawable/ic_menu_delete" />
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_recycle" />
+
+    <ImageButton
+        android:id="@+id/bt_make_it_data"
+        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/bt_delete_unvalidated_metadata"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_database" />
 
     <TextView
         android:id="@+id/unvalidated_meta_value"
-        android:layout_height="wrap_content"
         android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/iv_metadata_preview"
+        android:layout_toStartOf="@id/bt_delete_unvalidated_metadata"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textAppearance="@android:style/TextAppearance.Medium"
         android:text="Value"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@id/bt_delete_unvalidated_metadata"
-        android:layout_toEndOf="@id/iv_metadata_preview"/>
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/unvalidated_meta_extension"
-        android:textAppearance="@android:style/TextAppearance.Medium"
         android:layout_width="450dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="fill_horizontal"
-        android:layout_toLeftOf="@id/bt_delete_unvalidated_metadata"
         android:layout_below="@id/unvalidated_meta_value"
-        android:text="Extension"
+        android:layout_gravity="fill_horizontal"
+        android:layout_toEndOf="@id/iv_metadata_preview"
+        android:layout_toStartOf="@id/bt_delete_unvalidated_metadata"
         android:ellipsize="end"
-        android:textSize="16sp"
-        android:layout_toRightOf="@id/iv_metadata_preview"
-        />
+        android:text="Extension"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/unvalidated_meta_descriptor_name"
         android:layout_width="450dp"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/bt_delete_unvalidated_metadata"
-        android:text="Coverage"
-        android:ellipsize="start"
-        android:textAppearance="@android:style/TextAppearance.Medium"
         android:layout_below="@id/unvalidated_meta_extension"
-        android:layout_toRightOf="@id/iv_metadata_preview"
+        android:layout_toEndOf="@id/iv_metadata_preview"
+        android:layout_toStartOf="@id/bt_delete_unvalidated_metadata"
+        android:ellipsize="start"
+        android:text="Coverage"
+        android:textAppearance="@android:style/TextAppearance.Medium"
 
         />
 
@@ -75,60 +86,57 @@
         android:id="@+id/unvalidated_meta_descriptor_uri"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@id/bt_delete_unvalidated_metadata"
-        android:text="http://www.google.com/this/that.xpto"
-        android:ellipsize="start"
-        android:singleLine="true"
-        android:textAppearance="@android:style/TextAppearance.Medium"
         android:layout_alignParentStart="true"
         android:layout_below="@id/iv_metadata_preview"
         android:layout_marginStart="20dp"
-        />
+        android:layout_toStartOf="@id/bt_make_it_data"
+        android:ellipsize="start"
+        android:singleLine="true"
+        android:text="http://www.google.com/this/that.xpto"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
 
     <View
-        android:layout_below="@id/unvalidated_meta_descriptor_uri"
+        android:id="@+id/unvalidated_meta_separator"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="10dp"
+        android:layout_below="@id/bt_make_it_data"
         android:layout_marginEnd="10dp"
-        android:id="@+id/unvalidated_meta_separator"
-        />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/darker_gray" />
 
     <LinearLayout
-        android:layout_below="@id/unvalidated_meta_separator"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        >
+        android:layout_below="@id/unvalidated_meta_separator">
 
         <Button
             android:id="@+id/bt_edit_unvalidated_metadata"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-            android:text="Edit Descriptor"
-            android:layout_marginStart="10dp"
             android:layout_width="0dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:text="Edit Descriptor" />
+
         <View
             android:layout_width="1dp"
             android:layout_height="fill_parent"
             android:layout_marginBottom="10dp"
             android:background="@android:color/darker_gray" />
+
         <Button
             android:id="@+id/bt_edit_unvalidated_metadata_value"
-            android:layout_marginBottom="10dp"
+            style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-            android:text="Edit Value"
-            android:width="0dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            />
-        </LinearLayout>
-
+            android:width="0dp"
+            android:text="Edit Value" />
+    </LinearLayout>
 
 
 </RelativeLayout>

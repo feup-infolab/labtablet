@@ -42,17 +42,6 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
     private final String favoriteName;
     private unvalidatedMetadataInterface mInterface;
 
-    static class ViewHolder {
-        public TextView mItemValue;
-        public TextView mExtension;
-        public TextView mDescriptorUri;
-        public TextView mDescriptorName;
-        public ImageButton bt_remove;
-        public ImageView mMetadataPreview;
-        public Button bt_edit;
-        public Button bt_edit_value;
-    }
-
     public UnvalidatedMetadataListAdapter(Activity context, List<Descriptor> srcItems, List<AssociationItem> associations, String favoriteName, unvalidatedMetadataInterface actInterface) {
         super(context, R.layout.item_unvalidated_metadata, srcItems);
         this.context = context;
@@ -80,6 +69,7 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
             viewHolder.bt_edit = (Button) rowView.findViewById(R.id.bt_edit_unvalidated_metadata);
             viewHolder.mMetadataPreview = (ImageView) rowView.findViewById(R.id.iv_metadata_preview);
             viewHolder.bt_edit_value = (Button) rowView.findViewById(R.id.bt_edit_unvalidated_metadata_value);
+            viewHolder.bt_make_it_data = (ImageButton) rowView.findViewById(R.id.bt_make_it_data);
 
             rowView.setTag(viewHolder);
         }
@@ -87,9 +77,10 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
         // fill data
         final ViewHolder holder = (ViewHolder) rowView.getTag();
 
-        holder.bt_remove.setTag(Integer.valueOf(position));
-        holder.bt_edit.setTag(Integer.valueOf(position));
-        holder.bt_edit_value.setTag(Integer.valueOf(position));
+        holder.bt_remove.setTag(position);
+        holder.bt_edit.setTag(position);
+        holder.bt_edit_value.setTag(position);
+        holder.bt_make_it_data.setTag(position);
 
         final Descriptor item = items.get(position);
         holder.mExtension.setText(item.getTag());
@@ -101,14 +92,14 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
 
         new LoadImage(holder.mMetadataPreview).execute();
 
-        for(AssociationItem association : associations) {
+        for (AssociationItem association : associations) {
             Descriptor chosenOne = association.getDescriptor();
 
             //there is no context associated
-            if(chosenOne.getTag() == null) {
+            if (chosenOne.getTag() == null) {
                 break;
             }
-            if(chosenOne.getTag().equals(item.getTag())) {
+            if (chosenOne.getTag().equals(item.getTag())) {
                 holder.mDescriptorName.setText(chosenOne.getName());
                 holder.mDescriptorUri.setText(chosenOne.getDescriptor());
                 item.setState(Utils.DESCRIPTOR_STATE_VALIDATED);
@@ -117,18 +108,41 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
             }
         }
 
-        if(item.getTag().equals(Utils.TITLE_TAG) || item.getTag().equals(Utils.DESCRIPTION_TAG)) {
-            holder.bt_edit.setEnabled(false);
-            holder.bt_remove.setEnabled(false);
-        } else if ( item.hasFile() ){
-            holder.bt_edit_value.setEnabled(false);
-            holder.bt_edit.setEnabled(true);
-            holder.bt_remove.setEnabled(true);
+        if (item.getTag().equals(Utils.TITLE_TAG) || item.getTag().equals(Utils.DESCRIPTION_TAG)) {
+            holder.bt_remove.setVisibility(View.INVISIBLE);
+            holder.bt_make_it_data.setVisibility(View.INVISIBLE);
+        } else if (item.hasFile()) {
+            holder.bt_remove.setVisibility(View.VISIBLE);
+            holder.bt_make_it_data.setVisibility(View.VISIBLE);
         } else {
-            holder.bt_edit_value.setEnabled(true);
-            holder.bt_edit.setEnabled(true);
-            holder.bt_remove.setEnabled(true);
+            holder.bt_remove.setVisibility(View.VISIBLE);
+            holder.bt_make_it_data.setVisibility(View.INVISIBLE);
         }
+
+        holder.bt_make_it_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                new AlertDialog.Builder(mContext)
+                        .setIcon(R.drawable.ab_box)
+                        .setTitle(R.string.form_convert_data_title)
+                        .setMessage(R.string.form_convert_data)
+                        .setPositiveButton(R.string.form_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int pos = (Integer) view.getTag();
+                                if (items.get(pos).hasFile()) {
+                                    //Add file for deletion
+                                    mInterface.onDataConvertion(items.get(pos));
+                                }
+                                //remove the descriptor
+                                items.remove(pos);
+                                notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
+            }
+        });
 
         holder.bt_remove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +155,7 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 int pos = (Integer) view.getTag();
-                                if(items.get(pos).hasFile()) {
+                                if (items.get(pos).hasFile()) {
                                     //Add file for deletion
                                     mInterface.onFileDeletion(items.get(pos));
                                 }
@@ -187,7 +201,7 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
                 builder.setPositiveButton(mContext.getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(input.getText().toString().equals("")) {
+                        if (input.getText().toString().equals("")) {
                             Toast.makeText(mContext, mContext.getResources().getString(R.string.unchanged), Toast.LENGTH_SHORT).show();
                             return;
                         } else {
@@ -206,6 +220,27 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
             }
         });
         return rowView;
+    }
+
+    //Queue to process items as soon as the changes are applied
+    public interface unvalidatedMetadataInterface {
+        //called whenever a file is selected for removal
+        public void onFileDeletion(Descriptor desc);
+
+        //When a metadata record is migrated to the data folder
+        public void onDataConvertion(Descriptor desc);
+    }
+
+    static class ViewHolder {
+        public TextView mItemValue;
+        public TextView mExtension;
+        public TextView mDescriptorUri;
+        public TextView mDescriptorName;
+        public ImageButton bt_remove;
+        public ImageView mMetadataPreview;
+        public Button bt_edit;
+        public Button bt_edit_value;
+        public ImageButton bt_make_it_data;
     }
 
     class LoadImage extends AsyncTask<Object, Void, Bitmap> {
@@ -229,12 +264,13 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
             Bitmap bitmap = null;
             File file = new File(path);
 
-            if(file.exists()){
+            if (file.exists()) {
                 bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
             }
 
             return bitmap;
         }
+
         @Override
         protected void onPostExecute(Bitmap result) {
             if (!imv.getTag().toString().equals(path)) {
@@ -244,7 +280,7 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
                 return;
             }
 
-            if(result != null && imv != null){
+            if (result != null && imv != null) {
                 imv.setVisibility(View.VISIBLE);
                 imv.setImageBitmap(result);
             } else {
@@ -252,9 +288,5 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
             }
         }
 
-    }
-
-    public interface unvalidatedMetadataInterface {
-        public void onFileDeletion(Descriptor desc);
     }
 }

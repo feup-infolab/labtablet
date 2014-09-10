@@ -55,7 +55,7 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
 
     @Override
     protected void onCancelled() {
-        Log.e("","cancelled");
+        Log.e("", "cancelled");
         super.onCancelled();
     }
 
@@ -99,7 +99,7 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
             return null;
         }
 
-        if(new File(from + "/meta").exists() && new File(from + "/meta").listFiles().length > 0) {
+        if (new File(from + "/meta").exists() && new File(from + "/meta").listFiles().length > 0) {
             Zipper mZipper = new Zipper();
             String to = Environment.getExternalStorageDirectory() + "/" + favoriteName + ".zip";
             Log.i("ZIP_FROM", from);
@@ -143,7 +143,7 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
                     return null;
                 }
                 publishProgress(30);
-                if(!file.delete()) {
+                if (!file.delete()) {
                     Toast.makeText(mContext, mContext.getResources().getString(R.string.deleting_temp_files), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
@@ -167,7 +167,7 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
                 metadataRecords.add(new DendroMetadataRecord(
                         descriptor.getDescriptor(),
                         destUri + File.separator + "meta"
-                                + File.separator +  descriptor.getValue()
+                                + File.separator + descriptor.getValue()
                 ));
             } else {
                 metadataRecords.add(new DendroMetadataRecord(descriptor.getDescriptor(), descriptor.getValue()));
@@ -196,6 +196,7 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
             }
             publishProgress(90);
 
+            //any post processing goes here
 
             publishProgress(100);
 

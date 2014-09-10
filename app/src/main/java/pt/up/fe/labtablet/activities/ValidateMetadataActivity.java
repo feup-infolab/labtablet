@@ -1,6 +1,7 @@
 package pt.up.fe.labtablet.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,11 +11,12 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.UnvalidatedMetadataListAdapter;
+import pt.up.fe.labtablet.api.AsyncQueueProcessor;
+import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
@@ -23,8 +25,10 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class ValidateMetadataActivity extends Activity {
 
+    ProgressDialog mProgressDialog;
     private ArrayList<Descriptor> descriptors;
     private ArrayList<Descriptor> deletionQueue;
+    private ArrayList<Descriptor> convertionQueue;
     private ListView lv_unvalidated_metadata;
     private UnvalidatedMetadataListAdapter mAdapter;
     private String favoriteName;
@@ -42,9 +46,11 @@ public class ValidateMetadataActivity extends Activity {
             favoriteName = getIntent().getStringExtra("favorite_name");
             descriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
             deletionQueue = new ArrayList<Descriptor>();
+            convertionQueue = new ArrayList<Descriptor>();
         } else {
             descriptors = new Gson().fromJson(savedInstanceState.getString("descriptors"), Utils.ARRAY_DESCRIPTORS);
             deletionQueue = new Gson().fromJson(savedInstanceState.getString("deletionQueue"), Utils.ARRAY_DESCRIPTORS);
+            convertionQueue = new Gson().fromJson(savedInstanceState.getString("convertionQueue"), Utils.ARRAY_DESCRIPTORS);
             favoriteName = savedInstanceState.getString("favorite_name");
         }
 
@@ -55,6 +61,11 @@ public class ValidateMetadataActivity extends Activity {
             @Override
             public void onFileDeletion(Descriptor desc) {
                 deletionQueue.add(desc);
+            }
+
+            @Override
+            public void onDataConvertion(Descriptor desc) {
+                convertionQueue.add(desc);
             }
         };
 
@@ -88,22 +99,32 @@ public class ValidateMetadataActivity extends Activity {
                 }
             }
 
-            //delete files in waiting queue
-            if(deletionQueue != null && deletionQueue.size() > 0) {
-                int count = 0;
-                for (Descriptor desc : deletionQueue) {
-                    if (!desc.getFilePath().equals("")) {
-                        new File(desc.getFilePath()).delete();
-                        count++;
-                    }
-                }
-            }
+            mProgressDialog = ProgressDialog.show(ValidateMetadataActivity.this,
+                    getResources().getString(R.string.wait_queue_processing_title),
+                    getResources().getString(R.string.wait_queue_processing), true);
+            mProgressDialog.show();
 
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra("descriptors", new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
-            setResult(RESULT_OK, returnIntent);
-            finish();
-            return  true;
+            new AsyncQueueProcessor(new AsyncTaskHandler<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    mProgressDialog.dismiss();
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("descriptors", new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
+                    setResult(RESULT_OK, returnIntent);
+                    finish();
+                }
+
+                @Override
+                public void onFailure(Exception error) {
+                    mProgressDialog.dismiss();
+                }
+
+                @Override
+                public void onProgressUpdate(int value) {
+
+                }
+            }).execute(favoriteName, ValidateMetadataActivity.this, deletionQueue, convertionQueue);
+
         } else if (item.getItemId() == R.id.action_metadata_cancel) {
             deletionQueue.clear();
             Intent returnIntent = new Intent();
@@ -145,6 +166,8 @@ public class ValidateMetadataActivity extends Activity {
         outState.putString("favorite_name", favoriteName);
         outState.putString("descriptors", new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
         outState.putString("deletionQueue", new Gson().toJson(deletionQueue, Utils.ARRAY_DESCRIPTORS));
+        outState.putString("convertionQueue", new Gson().toJson(convertionQueue, Utils.ARRAY_DESCRIPTORS));
+
         super.onSaveInstanceState(outState);
     }
 

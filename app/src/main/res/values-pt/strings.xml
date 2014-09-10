@@ -200,4 +200,8 @@
     <string name="gps_disabled">O GPS está atualmente desligado. Pretende ativa-lo?</string>
     <string name="dismiss">Apagar</string>
     <string name="update_name_instructions">Please provide the new name for this favorite. All the associated metadata will be migrated to match the given name.</string>
+    <string name="form_convert_data">After accepting the migration, this file will be included in the dataset and visible ouside the metadata folder.</string>
+    <string name="form_convert_data_title">Migrate record to data?</string>
+    <string name="wait_queue_processing">Please stand by, while LabTablet is updating your favorite.</string>
+    <string name="wait_queue_processing_title">Processing updates</string>
 </resources>

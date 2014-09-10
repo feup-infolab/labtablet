@@ -27,7 +27,7 @@ public class FileMgr {
 
     public static void copy(File src, File dst) throws IOException {
 
-        if(!dst.exists()) {
+        if (!dst.exists()) {
             Log.i("New File", "" + dst.createNewFile());
         }
 
@@ -41,11 +41,26 @@ public class FileMgr {
 
     }
 
+    public static void moveFile(File src, File dst) throws IOException {
+        if (!dst.exists()) {
+            Log.i("New File", "" + dst.createNewFile());
+        }
+
+        FileInputStream inStream = new FileInputStream(src);
+        FileOutputStream outStream = new FileOutputStream(dst);
+        FileChannel inChannel = inStream.getChannel();
+        FileChannel outChannel = outStream.getChannel();
+        inChannel.transferTo(0, inChannel.size(), outChannel);
+        src.delete();
+        inStream.close();
+        outStream.close();
+    }
+
     public static String humanReadableByteCount(long bytes, boolean si) {
         int unit = si ? 1000 : 1024;
         if (bytes < unit) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
@@ -76,9 +91,9 @@ public class FileMgr {
                 Context.MODE_PRIVATE);
 
         String jsonData = settings.getString(settingsEntry, "");
-        if(!jsonData.equals("") && !jsonData.equals("[]")) {
+        if (!jsonData.equals("") && !jsonData.equals("[]")) {
             ArrayList<Descriptor> descriptors = new Gson().fromJson(jsonData, Utils.ARRAY_DESCRIPTORS);
-            return  descriptors;
+            return descriptors;
         }
 
         Toast.makeText(mContext, "No metadata was found. Default configuration loaded.", Toast.LENGTH_SHORT).show();
@@ -89,7 +104,7 @@ public class FileMgr {
         ArrayList<Descriptor> folderMetadata = new ArrayList<Descriptor>();
 
         String descName;
-        for(Descriptor desc : baseCfg) {
+        for (Descriptor desc : baseCfg) {
             descName = desc.getName().toLowerCase();
             if (descName.contains("title")) {
                 desc.setValue(settingsEntry);
@@ -107,7 +122,7 @@ public class FileMgr {
                 mContext.getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
-        if(!settings.contains(settingsEntry)) {
+        if (!settings.contains(settingsEntry)) {
             Log.e("OVERWRITE", "Entry was not found for folder " + settingsEntry);
         }
 
@@ -128,7 +143,7 @@ public class FileMgr {
         }
 
         return new Gson().fromJson(
-                settings.getString(Utils.ASSOCIATIONS_CONFIG_ENTRY,""),
+                settings.getString(Utils.ASSOCIATIONS_CONFIG_ENTRY, ""),
                 Utils.ARRAY_ASSOCIATION_ITEM);
     }
 
@@ -137,7 +152,7 @@ public class FileMgr {
                 mContext.getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
-        if(!settings.contains(favoriteName)) {
+        if (!settings.contains(favoriteName)) {
             Log.e("Add descriptors", "Entry was not found for folder " + favoriteName);
         } else {
             ArrayList<Descriptor> previousDescriptors = getDescriptors(favoriteName, mContext);
@@ -148,14 +163,13 @@ public class FileMgr {
 
     public static boolean deleteDirectory(File file) {
         boolean result = false;
-        if( file.exists() ) {
+        if (file.exists()) {
             if (file.isDirectory()) {
                 File[] files = file.listFiles();
-                for(int i=0; i<files.length; i++) {
-                    if(files[i].isDirectory()) {
+                for (int i = 0; i < files.length; i++) {
+                    if (files[i].isDirectory()) {
                         deleteDirectory(files[i]);
-                    }
-                    else {
+                    } else {
                         files[i].delete();
                     }
                 }
@@ -186,7 +200,7 @@ public class FileMgr {
                 mContext.getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
-        if(!settings.contains(favoriteName)) {
+        if (!settings.contains(favoriteName)) {
             Log.e("REMOVE", "Entry was not found for folder");
             dialog.dismiss();
             return;
@@ -200,7 +214,7 @@ public class FileMgr {
 
     //Update both favorite and its metadata (location + value)
     public static boolean renameFavorite(String src, String dst, Context mContext) {
-        String basePath =  Environment.getExternalStorageDirectory().getAbsolutePath()
+        String basePath = Environment.getExternalStorageDirectory().getAbsolutePath()
                 + "/" + mContext.getResources().getString(R.string.app_name)
                 + "/";
         File file = new File(basePath + src);
@@ -210,17 +224,17 @@ public class FileMgr {
                 mContext.getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
-        if(!settings.contains(src)) {
+        if (!settings.contains(src)) {
             Log.e("RenameDir", "Entry was not found for folder");
             return false;
         }
 
         ArrayList<Descriptor> previousRecords = getDescriptors(src, mContext);
         for (Descriptor desc : previousRecords) {
-            if(desc.getTag().equals(Utils.TITLE_TAG)) {
+            if (desc.getTag().equals(Utils.TITLE_TAG)) {
                 desc.setValue(dst);
             }
-            if(!desc.getFilePath().equals("")) {
+            if (!desc.getFilePath().equals("")) {
                 //Update the file path
                 desc.setFilePath(basePath + dst + "/meta/" + desc.getValue());
             }
@@ -235,6 +249,7 @@ public class FileMgr {
 
         return file.renameTo(file2);
     }
+
 
     public static DendroConfiguration getDendroConf(Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(mContext.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);

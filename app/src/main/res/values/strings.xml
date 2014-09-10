@@ -75,7 +75,7 @@
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="submission_metadata_confirm">Below is the metadata associated with this favorite. Confirm the records and proceed to the upload stage.</string>
-    <string name="submission_loading">LabTablet is now uploading data to the repository and this can take some time. Please stand by.</string>
+    <string name="submission_loading">LabTablet is now uploading data to the repository and this <b>can take some time</b>. Please stand by.</string>
     <string name="submission_effect">After this process, the gathered metadata will be available at your repository and associated with the data inside the folder. This favorite will no longer be available for edition after this proccess is completed.</string>
     <string name="start_proccess">Start upload</string>
     <string name="cancel_proccess">Cancel</string>
@@ -200,4 +200,8 @@
     <string name="gps_disabled">Your device\'s GPS is turned off. Do you like to turn it back on?</string>
     <string name="dismiss">Dismiss</string>
     <string name="update_name_instructions">Please provide the new value for this record. All the associated metadata will be migrated to match the given name.</string>
+    <string name="form_convert_data">After accepting the migration, this file will be included in the dataset and visible ouside the metadata folder.</string>
+    <string name="form_convert_data_title">Migrate record to data?</string>
+    <string name="wait_queue_processing">Please stand by, while LabTablet is updating your favorite.</string>
+    <string name="wait_queue_processing_title">Processing updates</string>
 </resources>
