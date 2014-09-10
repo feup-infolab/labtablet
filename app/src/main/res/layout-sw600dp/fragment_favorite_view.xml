@@ -123,7 +123,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="fill_parent"
-            android:background="@color/second_grey" />
+            android:background="@color/white" />
 
         <Button
             android:id="@+id/tab_data"
