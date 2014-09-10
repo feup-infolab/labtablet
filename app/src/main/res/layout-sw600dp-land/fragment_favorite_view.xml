@@ -6,8 +6,8 @@
 
     <ScrollView
         android:layout_width="0dp"
-        android:layout_weight=".5"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:layout_weight=".5">
 
         <GridLayout
             android:id="@+id/gv_dataset_view_base"
@@ -20,102 +20,141 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_column="0"
                 android:layout_row="0"
-                android:padding="10dp"
                 android:background="@drawable/card"
-                android:layout_column="0">
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/tv_title"
-                    android:maxLength="20"
                     android:layout_width="0dp"
-                    android:gravity="center_vertical"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:maxHeight="30dp"
+                    android:layout_marginStart="5dp"
                     android:layout_weight=".9"
                     android:ellipsize="end"
-                    android:layout_marginStart="5dp"
+                    android:gravity="center_vertical"
+                    android:maxHeight="30dp"
+                    android:maxLength="20"
                     android:text="Title"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textStyle="bold"
                     />
 
                 <View
-                    android:background="@color/light_gray"
                     android:layout_width="1dp"
-                    android:layout_height="fill_parent"/>
+                    android:layout_height="fill_parent"
+                    android:background="@color/light_gray" />
 
                 <ImageButton
                     android:id="@+id/favorite_view_edit_title"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/desc_list_item_icon"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:src="@android:drawable/ic_menu_edit" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:layout_column="0"
                 android:layout_row="1"
                 android:background="@drawable/card"
-                android:layout_column="0">
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/tv_description"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:maxHeight="200dp"
                     android:layout_weight=".9"
+                    android:maxHeight="200dp"
+                    android:padding="10dp"
                     android:text="@string/favorite_view_no_description"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     />
 
                 <View
-                    android:background="@color/light_gray"
                     android:layout_width="1dp"
-                    android:layout_height="fill_parent"/>
+                    android:layout_height="fill_parent"
+                    android:background="@color/light_gray" />
 
                 <ImageButton
                     android:id="@+id/favorite_view_edit_description"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:contentDescription="@string/desc_list_item_icon"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:src="@android:drawable/ic_menu_edit" />
             </LinearLayout>
 
             <Button
-                android:layout_width="fill_parent"
-                style="@style/btnStyleBeige"
-                android:layout_height="wrap_content"
-                android:text="@string/launch_field_mode"
-                android:layout_marginTop="5dp"
                 android:id="@+id/bt_field_mode"
-                android:drawableEnd="@android:drawable/ic_menu_mapmode"
+                style="@style/btnStyleBeige"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_marginTop="5dp"
                 android:layout_row="2"
-                android:layout_column="0" />
+                android:drawableEnd="@android:drawable/ic_menu_mapmode"
+                android:text="@string/launch_field_mode" />
 
             <Button
-                android:layout_column="0"
-                android:layout_row="3"
-                android:layout_width="fill_parent"
-                android:text="@string/add_metadata"
-                android:drawableEnd="@drawable/ab_plus"
-                style="@style/btnStyleBeige"
                 android:id="@+id/bt_new_metadata"
+                style="@style/btnStyleBeige"
+                android:layout_width="fill_parent"
+                android:layout_column="0"
                 android:layout_marginTop="10dp"
+                android:layout_row="3"
+                android:drawableEnd="@drawable/ab_plus"
+                android:text="@string/add_metadata"
                 />
+
+            <LinearLayout
+                android:id="@+id/ll_view_tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/gv_dataset_view_base"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/tab_metadata"
+                    style="@style/btnStyleOrangeLeft"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="Metadata"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"
+                    android:background="@color/second_grey" />
+
+                <Button
+                    android:id="@+id/tab_data"
+                    style="@style/btnStyleOrangeRight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="Data"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </GridLayout>
+
     </ScrollView>
 
     <ListView
         android:id="@+id/lv_favorite_metadata"
         android:layout_width="0dp"
-        android:layout_weight=".5"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent"
+        android:layout_weight=".5" />
 </LinearLayout>

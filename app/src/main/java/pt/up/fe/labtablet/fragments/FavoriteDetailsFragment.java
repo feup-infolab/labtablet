@@ -9,7 +9,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +27,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
@@ -46,10 +50,14 @@ public class FavoriteDetailsFragment extends Fragment {
     TextView tv_description;
     Button bt_fieldMode;
     Button bt_new_metadata;
+    //Buttons to switch between data and metadata views
+    Button bt_meta_view;
+    Button bt_data_view;
     ImageButton bt_edit_title;
     ImageButton bt_edit_description;
     ListView lv_metadata;
     MetadataListAdapter mAdapter;
+    private boolean isMetadataVisible;
     private ArrayList<Descriptor> itemDescriptors;
     private String favoriteName;
 
@@ -68,11 +76,14 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_new_metadata = (Button) rootView.findViewById(R.id.bt_new_metadata);
         bt_edit_description = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_description);
         bt_edit_title = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_title);
+        bt_meta_view = (Button) rootView.findViewById(R.id.tab_metadata);
+        bt_data_view = (Button) rootView.findViewById(R.id.tab_data);
 
         bt_edit_title.setTag(Utils.TITLE_TAG);
         bt_edit_description.setTag(Utils.DESCRIPTION_TAG);
 
-        if(savedInstanceState != null) {
+
+        if (savedInstanceState != null) {
             favoriteName = savedInstanceState.getString("favorite_name");
         } else {
             favoriteName = this.getArguments().getString("favorite_name");
@@ -80,16 +91,13 @@ public class FavoriteDetailsFragment extends Fragment {
 
         tv_title.setText(favoriteName);
 
-        mActionBar= getActivity().getActionBar();
+        mActionBar = getActivity().getActionBar();
         mActionBar.setSubtitle(favoriteName);
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
         itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
 
-        for(Descriptor desc : itemDescriptors) {
-            /*if(!desc.getValue().equals("")) {
-                definedDescriptors.add(desc);
-            }*/
+        for (Descriptor desc : itemDescriptors) {
             if (desc.getDescriptor().contains("description")) {
                 tv_description.setText(desc.getValue());
             }
@@ -98,9 +106,7 @@ public class FavoriteDetailsFragment extends Fragment {
             }
         }
 
-        lv_metadata.setDividerHeight(0);
-        mAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
-        lv_metadata.setAdapter(mAdapter);
+        loadMetadataView();
 
         dcClickListener mClickListener = new dcClickListener();
         bt_edit_title.setOnClickListener(mClickListener);
@@ -118,45 +124,101 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_new_metadata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(getActivity(), DescriptorPickerActivity.class);
-                myIntent.putExtra("file_extension", "");
-                myIntent.putExtra("favoriteName", favoriteName);
-                myIntent.putExtra("returnMode", Utils.DESCRIPTOR_DEFINE);
-                startActivityForResult(myIntent, Utils.DESCRIPTOR_DEFINE);
+
+                if (!isMetadataVisible) {
+                    Toast.makeText(getActivity(), "Choose the file", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("file/*");
+                    startActivityForResult(intent, Utils.PICK_FILE_INTENT);
+                } else {
+                    Intent myIntent = new Intent(getActivity(), DescriptorPickerActivity.class);
+                    myIntent.putExtra("file_extension", "");
+                    myIntent.putExtra("favoriteName", favoriteName);
+                    myIntent.putExtra("returnMode", Utils.DESCRIPTOR_DEFINE);
+                    startActivityForResult(myIntent, Utils.DESCRIPTOR_DEFINE);
+                }
             }
         });
 
+        bt_data_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadDataView();
+            }
+        });
+
+        bt_meta_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadMetadataView();
+            }
+        });
         return rootView;
+    }
+
+    public void loadMetadataView() {
+        bt_data_view.setEnabled(true);
+        bt_meta_view.setEnabled(false);
+        isMetadataVisible = true;
+
+        lv_metadata.setDividerHeight(0);
+        itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
+        mAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
+        lv_metadata.setAdapter(mAdapter);
+        isMetadataVisible = true;
+    }
+
+    public void loadDataView() {
+        bt_data_view.setEnabled(false);
+        bt_meta_view.setEnabled(true);
+        isMetadataVisible = false;
+
+        itemDescriptors = new ArrayList<Descriptor>();
+        mAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
+
+        String path = Environment.getExternalStorageDirectory().toString() + "/"
+                + getResources().getString(R.string.app_name) + "/"
+                + favoriteName;
+
+        File f = new File(path);
+        File[] files = f.listFiles();
+        itemDescriptors.clear();
+
+        for (File inFile : files) {
+            if (inFile.isFile()) {
+                Descriptor newItem = new Descriptor();
+                newItem.setDescriptor("");
+                newItem.setFilePath(inFile.getAbsolutePath());
+                newItem.setDateModified("");
+                newItem.setName(inFile.getName());
+                newItem.setValue("");
+                itemDescriptors.add(newItem);
+            }
+        }
+
+        mAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
+        lv_metadata.setAdapter(mAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //Should work with simply notifyDatasetChanged() but this is not the case
-        itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
-        mAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
-
-        //Update interface title and description
-        //IMPRVMT - do this only if they have changed
-        for(Descriptor desc : itemDescriptors) {
-            if(desc.getTag().equals(Utils.TITLE_TAG)) {
-                tv_title.setText(desc.getValue());
-            } else if(desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
-                tv_description.setText(desc.getValue());
-            }
+        if (isMetadataVisible) {
+            loadMetadataView();
+        } else {
+            loadDataView();
         }
-        lv_metadata.setAdapter(mAdapter);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(data == null)
+        if (data == null)
             return;
 
         //Add single descriptor
-        if(requestCode == Utils.DESCRIPTOR_DEFINE || requestCode == Utils.DESCRIPTOR_GET) {
+        if (requestCode == Utils.DESCRIPTOR_DEFINE || requestCode == Utils.DESCRIPTOR_GET) {
             if (!data.getExtras().containsKey("descriptor"))
                 return;
 
@@ -165,79 +227,34 @@ public class FavoriteDetailsFragment extends Fragment {
             itemDescriptors.add(newDescriptor);
             FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
         } else if (requestCode == Utils.METADATA_VALIDATION) {
-            if(!data.getExtras().containsKey("descriptors"))
+            if (!data.getExtras().containsKey("descriptors"))
                 return;
 
             String descriptorsJson = data.getStringExtra("descriptors");
             itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
 
             FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+        } else if (requestCode == Utils.PICK_FILE_INTENT) {
+            Log.e("EXTRA", "PICK FILE");
+            File importFile = new File(data.getData().getEncodedPath());
+            if (!importFile.exists()) {
+                //TODO deal with this
+                return;
+            }
+
+            String destPath = Environment.getExternalStorageDirectory() + "/"
+                    + getResources().getString(R.string.app_name) + "/"
+                    + favoriteName + "/" + importFile.getName();
+
+            File destFile = new File(destPath);
+            try {
+                FileMgr.copy(importFile, destFile);
+            } catch (IOException e) {
+                Log.e("COPY", "ERROR " + e.toString());
+            }
         }
         this.onResume();
     }
-
-    private class dcClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("New value");
-            final View mView = view;
-
-            // Set up the input
-            final EditText input = new EditText(getActivity());
-            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            builder.setView(input);
-            builder.setMessage(getResources().getString(R.string.update_name_instructions));
-
-            // Set up the buttons
-            builder.setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if(input.getText().toString().equals("")) {
-                        Toast.makeText(getActivity(), "Unchanged", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if(mView.getTag().equals(Utils.TITLE_TAG)) {
-                        if(!favoriteName.equals(input.getText().toString())) {
-                            if(FileMgr.renameFavorite(favoriteName,
-                                    input.getText().toString(),
-                                    getActivity())) {
-                                Toast.makeText(getActivity(), "Successfully updated name", Toast.LENGTH_LONG).show();
-                                favoriteName = input.getText().toString();
-                                tv_title.setText(favoriteName);
-                            }
-                        }
-
-                    } else if (mView.getTag().equals(Utils.DESCRIPTION_TAG)) {
-                        tv_description.setText(input.getText().toString());
-
-                        itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
-                        for(Descriptor desc : itemDescriptors) {
-                            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
-                                desc.setValue(input.getText().toString());
-                            }
-                        }
-                        FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
-                    }
-                    onResume();
-                    dialog.dismiss();
-                }
-            });
-
-            builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-
-            builder.show();
-        }
-    }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -269,8 +286,6 @@ public class FavoriteDetailsFragment extends Fragment {
                         .show();
                 return super.onOptionsItemSelected(item);
             }
-
-
 
             Intent mIntent = new Intent(getActivity(), SubmissionValidationActivity.class);
             mIntent.putExtra("favorite_name", favoriteName);
@@ -316,6 +331,68 @@ public class FavoriteDetailsFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    private class dcClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("New value");
+            final View mView = view;
+
+            // Set up the input
+            final EditText input = new EditText(getActivity());
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+            builder.setView(input);
+            builder.setMessage(getResources().getString(R.string.update_name_instructions));
+
+            // Set up the buttons
+            builder.setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (input.getText().toString().equals("")) {
+                        Toast.makeText(getActivity(), "Unchanged", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (mView.getTag().equals(Utils.TITLE_TAG)) {
+                        if (!favoriteName.equals(input.getText().toString())) {
+                            if (FileMgr.renameFavorite(favoriteName,
+                                    input.getText().toString(),
+                                    getActivity())) {
+                                Toast.makeText(getActivity(), "Successfully updated name", Toast.LENGTH_LONG).show();
+                                favoriteName = input.getText().toString();
+                                tv_title.setText(favoriteName);
+                            }
+                        }
+
+                    } else if (mView.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                        tv_description.setText(input.getText().toString());
+
+                        itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
+                        for (Descriptor desc : itemDescriptors) {
+                            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                                desc.setValue(input.getText().toString());
+                            }
+                        }
+                        FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+                    }
+                    onResume();
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+        }
     }
 
 }

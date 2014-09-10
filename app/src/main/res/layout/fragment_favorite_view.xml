@@ -17,31 +17,31 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_row="0"
+            android:layout_column="0"
             android:layout_marginTop="10dp"
+            android:layout_row="0"
             android:background="@drawable/card"
-            android:padding="10dp"
-            android:layout_column="0">
+            android:padding="10dp">
 
 
             <ImageButton
                 android:id="@+id/favorite_view_edit_title"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:contentDescription="@string/desc_list_item_icon"
-                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                 android:src="@drawable/ab_edit" />
 
             <TextView
                 android:id="@+id/tv_title"
-                android:layout_toLeftOf="@id/favorite_view_edit_title"
-                android:layout_alignParentLeft="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
+                android:layout_toLeftOf="@id/favorite_view_edit_title"
                 android:text="Title"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold"
@@ -53,11 +53,10 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_column="0"
             android:layout_row="1"
             android:background="@drawable/card"
-            android:padding="10dp"
-            android:layout_column="0">
-
+            android:padding="10dp">
 
 
             <ImageButton
@@ -65,57 +64,63 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:contentDescription="@string/desc_list_item_icon"
-                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/desc_list_item_icon"
                 android:src="@drawable/ab_edit" />
 
             <TextView
                 android:id="@+id/tv_description"
-                android:layout_marginStart="15dp"
-                android:maxHeight="150dp"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/favorite_view_edit_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:layout_toStartOf="@id/favorite_view_edit_description"
+                android:maxHeight="150dp"
                 android:text="@string/favorite_view_no_description"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 />
         </RelativeLayout>
 
         <Button
-            android:layout_width="fill_parent"
-            style="@style/btnStyleBeige"
-            android:layout_height="wrap_content"
-            android:text="@string/launch_field_mode"
             android:id="@+id/bt_field_mode"
-            android:drawableRight="@android:drawable/ic_menu_mapmode"
-            android:layout_row="2"
-            android:layout_column="0" />
-
-        <Button
-            android:layout_column="0"
-            android:layout_row="3"
-            android:layout_width="fill_parent"
-            android:text="@string/add_metadata"
-            android:drawableEnd="@drawable/ab_plus"
             style="@style/btnStyleBeige"
-            android:id="@+id/bt_new_metadata"
-            android:layout_marginTop="2dp"
-            />
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="2"
+            android:drawableRight="@android:drawable/ic_menu_mapmode"
+            android:text="@string/launch_field_mode" />
+        />
     </GridLayout>
 
 
     <ListView
         android:id="@+id/lv_favorite_metadata"
-        android:minHeight="30dp"
-        android:layout_gravity="center"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/gv_dataset_view_base" />
+        android:layout_below="@+id/gv_dataset_view_base"
+        android:layout_gravity="center"
+        android:minHeight="30dp" />
 
-
+    <Button
+        android:id="@+id/bt_new_metadata"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/round_button"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:paddingBottom="16dp"
+        android:text="+"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textStyle="bold" />
 </RelativeLayout>

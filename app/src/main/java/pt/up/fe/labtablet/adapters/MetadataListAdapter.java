@@ -32,13 +32,6 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
     private final ArrayList<Descriptor> items;
 
 
-    static class ViewHolder {
-        public TextView mDescriptorName;
-        public TextView mDescriptorValue;
-        public ImageView mDescriptorType;
-        public TextView mDescriptorDate;
-    }
-
     public MetadataListAdapter(Activity context, ArrayList<Descriptor> srcItems, String favoriteName) {
         super(context, R.layout.item_metadata_list, srcItems);
         this.context = context;
@@ -78,12 +71,20 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
         holder.mDescriptorName.setText(item.getName());
         holder.mDescriptorType.setTag(item.getFilePath());
 
+
         new LoadImage(holder.mDescriptorType).execute();
 
         Animation animation = AnimationUtils.makeInAnimation(context, false);
         rowView.startAnimation(animation);
 
         return rowView;
+    }
+
+    static class ViewHolder {
+        public TextView mDescriptorName;
+        public TextView mDescriptorValue;
+        public ImageView mDescriptorType;
+        public TextView mDescriptorDate;
     }
 
     class LoadImage extends AsyncTask<Object, Void, Bitmap> {
@@ -98,29 +99,37 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
 
         @Override
         protected Bitmap doInBackground(Object... params) {
+
+            if (path.equals(""))
+                return null;
+
             File file = new File(path);
+            if (!file.exists())
+                return null;
 
             try {
                 //Decode image size
                 BitmapFactory.Options o = new BitmapFactory.Options();
                 o.inJustDecodeBounds = true;
-                BitmapFactory.decodeStream(new FileInputStream(file),null,o);
+                BitmapFactory.decodeStream(new FileInputStream(file), null, o);
 
                 //The new size we want to scale to
-                final int REQUIRED_SIZE=70;
+                final int REQUIRED_SIZE = 70;
 
                 //Find the correct scale value. It should be the power of 2.
-                int scale=1;
-                while(o.outWidth/scale/2>=REQUIRED_SIZE && o.outHeight/scale/2>=REQUIRED_SIZE)
-                    scale*=2;
+                int scale = 1;
+                while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
+                    scale *= 2;
 
                 //Decode with inSampleSize
                 BitmapFactory.Options o2 = new BitmapFactory.Options();
-                o2.inSampleSize=scale;
+                o2.inSampleSize = scale;
                 return BitmapFactory.decodeStream(new FileInputStream(file), null, o2);
-            } catch (FileNotFoundException e) {}
+            } catch (FileNotFoundException e) {
+            }
             return null;
         }
+
         @Override
         protected void onPostExecute(Bitmap result) {
             if (!imv.getTag().toString().equals(path)) {
@@ -130,7 +139,7 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
                 return;
             }
 
-            if(result != null && imv != null){
+            if (result != null && imv != null) {
                 imv.setVisibility(View.VISIBLE);
                 imv.setImageBitmap(result);
             } else {
