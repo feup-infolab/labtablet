@@ -1,7 +1,9 @@
 package pt.up.fe.labtablet.models;
 
+import java.io.File;
 import java.util.Date;
 
+import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class Descriptor {
@@ -17,23 +19,35 @@ public class Descriptor {
     private String dateModified;
     private int state;
 
+    //when applicable
+    private String size;
+
     public Descriptor() {
         this.name = "Undefined";
         this.filePath = "";
         this.state = Utils.DESCRIPTOR_STATE_NOT_VALIDATED;
         this.dateModified = Utils.getDate();
         this.descriptor_id = new Date().getTime();
+        this.size = "";
+    }
+
+    public Descriptor(String name, String descriptor, String value, String tag) {
+        this.name = name;
+        this.descriptor = descriptor;
+        this.value = value;
+        this.tag = tag;
+        this.state = Utils.DESCRIPTOR_STATE_NOT_VALIDATED;
     }
 
     @Override
     public boolean equals(Object desc) {
-        if(! (desc instanceof Descriptor) )
+        if (!(desc instanceof Descriptor))
             return false;
 
         if (desc == null)
             return false;
 
-        return this.descriptor_id == ((Descriptor)desc).getID();
+        return this.descriptor_id == ((Descriptor) desc).getID();
     }
 
     public long getID() {
@@ -42,15 +56,6 @@ public class Descriptor {
 
     public boolean hasFile() {
         return !this.filePath.equals("");
-    }
-
-
-    public Descriptor(String name, String descriptor, String value, String tag) {
-        this.name = name;
-        this.descriptor = descriptor;
-        this.value = value;
-        this.tag = tag;
-        this.state = Utils.DESCRIPTOR_STATE_NOT_VALIDATED;
     }
 
     public String getTag() {return this.tag;}
@@ -103,5 +108,18 @@ public class Descriptor {
 
     public String getFilePath() {  return filePath; }
 
-    public void setFilePath(String filePath) {  this.filePath = filePath; }
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+        File f = new File(filePath);
+        this.size = FileMgr.humanReadableByteCount(f.length(), true);
+
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
 }

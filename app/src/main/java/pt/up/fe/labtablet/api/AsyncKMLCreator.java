@@ -37,12 +37,10 @@ public class AsyncKMLCreator  extends AsyncTask<Object, Integer, String> {
         Element kml = new Element("kml");
         kml.setNamespace(Namespace.getNamespace("http://earth.google.com/kml/2.1"));
 
-        //TODO uncomment
-/*
         if (locations.isEmpty()) {
             return null;
         }
-*/
+
         Element placemark = new Element("Placemark");
         Element name = new Element("name");
         name.setText(Utils.getDate());

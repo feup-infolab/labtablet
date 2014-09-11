@@ -4,16 +4,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
-import pt.up.fe.labtablet.utils.FileMgr;
-
 public class AsyncAuthenticator extends AsyncTask<Object, Integer, String> {
     //input, remove, output
     private AsyncTaskHandler<String> mHandler;
     private Exception error;
 
-    private Context mContext;
-    private String cookie;
 
     public AsyncAuthenticator(AsyncTaskHandler<String> mHandler) {
         this.mHandler = mHandler;
@@ -27,17 +22,20 @@ public class AsyncAuthenticator extends AsyncTask<Object, Integer, String> {
 
     @Override
     protected void onCancelled() {
-        Log.e("","cancelled");
+        Log.e("", "cancelled");
         super.onCancelled();
     }
 
     @Override
     protected String doInBackground(Object... params) {
 
-        if ( !(params[0] instanceof Context)) {
+        if (!(params[0] instanceof Context)) {
             error = new Exception("Type mismatch, (expected Context)");
             return null;
         }
+
+        Context mContext;
+        String cookie;
 
         mContext = (Context) params[0];
 

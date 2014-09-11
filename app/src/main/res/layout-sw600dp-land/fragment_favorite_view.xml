@@ -99,62 +99,88 @@
                 android:layout_row="2"
                 android:drawableEnd="@android:drawable/ic_menu_mapmode"
                 android:text="@string/launch_field_mode" />
-
-            <Button
-                android:id="@+id/bt_new_metadata"
-                style="@style/btnStyleBeige"
-                android:layout_width="fill_parent"
-                android:layout_column="0"
-                android:layout_marginTop="10dp"
-                android:layout_row="3"
-                android:drawableEnd="@drawable/ab_plus"
-                android:text="@string/add_metadata"
-                />
-
-            <LinearLayout
-                android:id="@+id/ll_view_tabs"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/gv_dataset_view_base"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/tab_metadata"
-                    style="@style/btnStyleOrangeLeft"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="Metadata"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="fill_parent"
-                    android:background="@color/second_grey" />
-
-                <Button
-                    android:id="@+id/tab_data"
-                    style="@style/btnStyleOrangeRight"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="Data"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-            </LinearLayout>
         </GridLayout>
 
     </ScrollView>
 
-    <ListView
-        android:id="@+id/lv_favorite_metadata"
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="fill_parent"
-        android:layout_weight=".5" />
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_view_tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/tab_metadata"
+                style="@style/btnStyleOrangeLeft"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Metadata"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="fill_parent"
+                android:background="@color/second_grey" />
+
+            <Button
+                android:id="@+id/tab_data"
+                style="@style/btnStyleOrangeRight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Data"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_favorite_metadata"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/ll_view_tabs" />
+
+        <Button
+            android:id="@+id/bt_new_metadata"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="10dp"
+            android:background="@drawable/round_button"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:text="+"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
+        <ImageButton
+            android:id="@+id/bt_edit_metadata"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_above="@id/bt_new_metadata"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/round_button"
+            android:src="@drawable/ab_edit_white" />
+    </RelativeLayout>
+
 </LinearLayout>

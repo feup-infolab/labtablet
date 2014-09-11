@@ -123,7 +123,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="fill_parent"
-            android:background="@color/white" />
+            android:background="@color/light_gray" />
 
         <Button
             android:id="@+id/tab_data"
@@ -161,6 +161,16 @@
         android:paddingBottom="16dp"
         android:text="+"
         android:textColor="@color/white"
-        android:textSize="40sp"
-        android:textStyle="bold" />
+        android:textSize="40sp" />
+
+    <ImageButton
+        android:id="@+id/bt_edit_metadata"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_above="@id/bt_new_metadata"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/round_button"
+        android:src="@drawable/ab_edit_white" />
 </RelativeLayout>

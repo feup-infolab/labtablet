@@ -30,12 +30,14 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.DescriptorPickerActivity;
 import pt.up.fe.labtablet.activities.FieldModeActivity;
 import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.labtablet.activities.ValidateMetadataActivity;
+import pt.up.fe.labtablet.adapters.DataListAdapter;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
@@ -50,13 +52,15 @@ public class FavoriteDetailsFragment extends Fragment {
     TextView tv_description;
     Button bt_fieldMode;
     Button bt_new_metadata;
+    ImageButton bt_edit_view;
     //Buttons to switch between data and metadata views
     Button bt_meta_view;
     Button bt_data_view;
     ImageButton bt_edit_title;
     ImageButton bt_edit_description;
     ListView lv_metadata;
-    MetadataListAdapter mAdapter;
+    MetadataListAdapter mMetadataAdapter;
+    DataListAdapter mDataAdapter;
     private boolean isMetadataVisible;
     private ArrayList<Descriptor> itemDescriptors;
     private String favoriteName;
@@ -78,6 +82,7 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_edit_title = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_title);
         bt_meta_view = (Button) rootView.findViewById(R.id.tab_metadata);
         bt_data_view = (Button) rootView.findViewById(R.id.tab_data);
+        bt_edit_view = (ImageButton) rootView.findViewById(R.id.bt_edit_metadata);
 
         bt_edit_title.setTag(Utils.TITLE_TAG);
         bt_edit_description.setTag(Utils.DESCRIPTION_TAG);
@@ -140,13 +145,26 @@ public class FavoriteDetailsFragment extends Fragment {
             }
         });
 
+        bt_edit_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isMetadataVisible) {
+                    Intent myIntent = new Intent(getActivity(), ValidateMetadataActivity.class);
+                    myIntent.putExtra("favorite_name", favoriteName);
+                    myIntent.putExtra("descriptors", new Gson().toJson(itemDescriptors, Utils.ARRAY_DESCRIPTORS));
+                    startActivityForResult(myIntent, Utils.METADATA_VALIDATION);
+                } else {
+                    //TODO Edit data
+                }
+            }
+        });
+
         bt_data_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loadDataView();
             }
         });
-
         bt_meta_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,18 +181,15 @@ public class FavoriteDetailsFragment extends Fragment {
 
         lv_metadata.setDividerHeight(0);
         itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
-        mAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
-        lv_metadata.setAdapter(mAdapter);
-        isMetadataVisible = true;
+        mMetadataAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
+        lv_metadata.setAdapter(mMetadataAdapter);
     }
 
     public void loadDataView() {
         bt_data_view.setEnabled(false);
         bt_meta_view.setEnabled(true);
         isMetadataVisible = false;
-
         itemDescriptors = new ArrayList<Descriptor>();
-        mAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
 
         String path = Environment.getExternalStorageDirectory().toString() + "/"
                 + getResources().getString(R.string.app_name) + "/"
@@ -189,15 +204,15 @@ public class FavoriteDetailsFragment extends Fragment {
                 Descriptor newItem = new Descriptor();
                 newItem.setDescriptor("");
                 newItem.setFilePath(inFile.getAbsolutePath());
-                newItem.setDateModified("");
+                newItem.setDateModified(new Date(inFile.lastModified()).toString());
                 newItem.setName(inFile.getName());
-                newItem.setValue("");
+                newItem.setValue(FileMgr.getMimeType(inFile.getAbsolutePath()));
                 itemDescriptors.add(newItem);
             }
         }
 
-        mAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
-        lv_metadata.setAdapter(mAdapter);
+        mDataAdapter = new DataListAdapter(getActivity(), itemDescriptors, favoriteName);
+        lv_metadata.setAdapter(mDataAdapter);
     }
 
     @Override
@@ -323,11 +338,6 @@ public class FavoriteDetailsFragment extends Fragment {
                     .setNegativeButton(R.string.cancel, null)
                     .show();
 
-        } else if (item.getItemId() == R.id.action_favorite_edit) {
-            Intent myIntent = new Intent(getActivity(), ValidateMetadataActivity.class);
-            myIntent.putExtra("favorite_name", favoriteName);
-            myIntent.putExtra("descriptors", new Gson().toJson(itemDescriptors, Utils.ARRAY_DESCRIPTORS));
-            startActivityForResult(myIntent, Utils.METADATA_VALIDATION);
         }
         return super.onOptionsItemSelected(item);
 
