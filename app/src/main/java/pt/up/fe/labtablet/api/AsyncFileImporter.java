@@ -16,6 +16,7 @@ import java.io.OutputStream;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.Utils;
 
 /**
  * Process metadata queues after editing or validating metadata records
@@ -74,17 +75,24 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, Void> {
             return null;
         }
 
-
         try {
             InputStream in = new FileInputStream(importFile);
             OutputStream out = new FileOutputStream(destFile);
 
-            onProgressUpdate(70);
+            publishProgress(0);
+
             // Transfer bytes from in to out
             byte[] buf = new byte[1024];
             int len;
+
+            long fileLength = in.available();
+            long total = 0;
+
             while ((len = in.read(buf)) > 0) {
                 out.write(buf, 0, len);
+                total += len;
+                long progress = (total * 100 / fileLength);
+                publishProgress(Utils.safeLongToInt(progress));
             }
             in.close();
             out.close();

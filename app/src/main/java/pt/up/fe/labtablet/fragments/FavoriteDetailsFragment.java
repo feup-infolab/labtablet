@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -257,22 +258,30 @@ public class FavoriteDetailsFragment extends Fragment {
 
         } else if (requestCode == Utils.PICK_FILE_INTENT) {
 
-
+            final ProgressDialog pd = new ProgressDialog(getActivity());
+            pd.setMessage(getString(R.string.loading));
+            pd.setIndeterminate(false);
+            pd.setProgress(20);
+            pd.setMax(100);
+            pd.show();
             new AsyncFileImporter(new AsyncTaskHandler<String>() {
                 @Override
                 public void onSuccess(String result) {
                     onResume();
+                    pd.dismiss();
                 }
 
                 @Override
                 public void onFailure(Exception error) {
                     Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
                     onResume();
+                    pd.dismiss();
                 }
 
                 @Override
                 public void onProgressUpdate(int value) {
-                    //TODO update dialog
+                    pd.setProgress(value);
+                    pd.setMessage("" + value + "%");
                 }
             }).execute(getActivity(), data, favoriteName);
         }
