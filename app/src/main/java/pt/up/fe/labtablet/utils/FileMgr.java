@@ -4,8 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -39,7 +41,14 @@ public class FileMgr {
         inChannel.transferTo(0, inChannel.size(), outChannel);
         inStream.close();
         outStream.close();
+    }
 
+    public static String getRealPathFromURI(Context context, Uri contentUri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 
     public static void moveFile(File src, File dst) throws IOException {
@@ -65,9 +74,6 @@ public class FileMgr {
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
-    // url = file path or whatever suitable URL you want.
-
-    //TODO dont forget me
     public static String getMimeType(String url) {
         String type = null;
         String extension = MimeTypeMap.getFileExtensionFromUrl(url);

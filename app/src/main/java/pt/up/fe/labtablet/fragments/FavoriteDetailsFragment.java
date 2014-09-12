@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +27,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -39,6 +37,8 @@ import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.labtablet.activities.ValidateMetadataActivity;
 import pt.up.fe.labtablet.adapters.DataListAdapter;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
+import pt.up.fe.labtablet.api.AsyncFileImporter;
+import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
@@ -171,6 +171,7 @@ public class FavoriteDetailsFragment extends Fragment {
                 loadMetadataView();
             }
         });
+
         return rootView;
     }
 
@@ -241,34 +242,40 @@ public class FavoriteDetailsFragment extends Fragment {
             Descriptor newDescriptor = new Gson().fromJson(descriptorJson, Descriptor.class);
             itemDescriptors.add(newDescriptor);
             FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+
+            this.onResume();
+
         } else if (requestCode == Utils.METADATA_VALIDATION) {
             if (!data.getExtras().containsKey("descriptors"))
                 return;
 
             String descriptorsJson = data.getStringExtra("descriptors");
             itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
-
             FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+
+            this.onResume();
+
         } else if (requestCode == Utils.PICK_FILE_INTENT) {
-            Log.e("EXTRA", "PICK FILE");
-            File importFile = new File(data.getData().getEncodedPath());
-            if (!importFile.exists()) {
-                //TODO deal with this
-                return;
-            }
 
-            String destPath = Environment.getExternalStorageDirectory() + "/"
-                    + getResources().getString(R.string.app_name) + "/"
-                    + favoriteName + "/" + importFile.getName();
 
-            File destFile = new File(destPath);
-            try {
-                FileMgr.copy(importFile, destFile);
-            } catch (IOException e) {
-                Log.e("COPY", "ERROR " + e.toString());
-            }
+            new AsyncFileImporter(new AsyncTaskHandler<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    onResume();
+                }
+
+                @Override
+                public void onFailure(Exception error) {
+                    Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
+                    onResume();
+                }
+
+                @Override
+                public void onProgressUpdate(int value) {
+                    //TODO update dialog
+                }
+            }).execute(getActivity(), data, favoriteName);
         }
-        this.onResume();
     }
 
     @Override

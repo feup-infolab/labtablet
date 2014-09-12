@@ -204,4 +204,7 @@
     <string name="form_convert_data_title">Migrate record to data?</string>
     <string name="wait_queue_processing">Please stand by, while LabTablet is updating your favorite.</string>
     <string name="wait_queue_processing_title">Processing updates</string>
+    <string name="load_file_failed">Failed to impor resource to this favorite. Please try again.</string>
+    <string name="importing_file">Importing file...</string>
+    <string name="no_apps_available">There is no application to open this kind of files.</string>
 </resources>

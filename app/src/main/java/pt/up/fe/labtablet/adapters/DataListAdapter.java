@@ -1,8 +1,10 @@
 package pt.up.fe.labtablet.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,7 +50,7 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
     }
 
     @Override
-    public View getView(int position, final View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         View rowView = convertView;
         // reuse views
         if (rowView == null) {
@@ -72,6 +75,25 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
         holder.mDescriptorName.setText(item.getName());
         holder.mDescriptorType.setTag(item.getFilePath());
         holder.mDescriptorSize.setText(item.getSize());
+
+        holder.mDescriptorType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File file = new File(items.get(position).getFilePath());
+                String mime = FileMgr.getMimeType(file.getAbsolutePath());
+
+                if (mime == null) {
+                    Toast.makeText(context,
+                            context.getResources().getString(R.string.no_apps_available),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent();
+                intent.setAction(android.content.Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(file), mime);
+                context.startActivity(intent);
+            }
+        });
 
         new LoadImage(holder.mDescriptorType).execute();
 
