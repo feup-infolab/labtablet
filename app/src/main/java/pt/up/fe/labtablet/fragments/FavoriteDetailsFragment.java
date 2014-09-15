@@ -57,6 +57,7 @@ public class FavoriteDetailsFragment extends Fragment {
     //Buttons to switch between data and metadata views
     Button bt_meta_view;
     Button bt_data_view;
+
     ImageButton bt_edit_title;
     ImageButton bt_edit_description;
     ListView lv_metadata;
@@ -180,6 +181,7 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_data_view.setEnabled(true);
         bt_meta_view.setEnabled(false);
         isMetadataVisible = true;
+        bt_edit_view.setVisibility(View.VISIBLE);
 
         lv_metadata.setDividerHeight(0);
         itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
@@ -190,6 +192,8 @@ public class FavoriteDetailsFragment extends Fragment {
     public void loadDataView() {
         bt_data_view.setEnabled(false);
         bt_meta_view.setEnabled(true);
+        bt_edit_view.setVisibility(View.INVISIBLE);
+
         isMetadataVisible = false;
         itemDescriptors = new ArrayList<Descriptor>();
 
@@ -259,7 +263,8 @@ public class FavoriteDetailsFragment extends Fragment {
         } else if (requestCode == Utils.PICK_FILE_INTENT) {
 
             final ProgressDialog pd = new ProgressDialog(getActivity());
-            pd.setMessage(getString(R.string.loading));
+            pd.setTitle(getString(R.string.loading));
+            pd.setCancelable(false);
             pd.setIndeterminate(false);
             pd.setProgress(20);
             pd.setMax(100);

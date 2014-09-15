@@ -43,13 +43,15 @@
         android:id="@+id/metadata_item_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_below="@id/metadata_item_value"
-        android:layout_toRightOf="@id/metadata_item_type"
+        android:layout_toEndOf="@id/metadata_item_type"
         android:ellipsize="end"
-        android:gravity="right"
+        android:gravity="end"
         android:maxWidth="200dp"
         android:text="2009/12/2"
         android:textColor="@color/second_grey" />
+
+
 
 </RelativeLayout>

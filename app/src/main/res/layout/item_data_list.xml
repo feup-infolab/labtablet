@@ -50,6 +50,17 @@
         android:text="16MB"
         android:textSize="16sp" />
 
+    <ImageButton
+        android:id="@+id/bt_remove_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+        android:src="@drawable/ic_recycle"
+        />
+
+
     <TextView
         android:id="@+id/metadata_item_date"
         android:layout_width="wrap_content"

@@ -1,17 +1,21 @@
 package pt.up.fe.labtablet.adapters;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.Descriptor;
@@ -44,8 +49,27 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
 
     @Override
     public void notifyDataSetChanged() {
+
+        String path = Environment.getExternalStorageDirectory().toString() + "/"
+                + context.getString(R.string.app_name) + "/"
+                + favoriteName;
+
+        File f = new File(path);
+        File[] files = f.listFiles();
         items.clear();
-        items.addAll(FileMgr.getDescriptors(favoriteName, context));
+
+        for (File inFile : files) {
+            if (inFile.isFile()) {
+                Descriptor newItem = new Descriptor();
+                newItem.setDescriptor("");
+                newItem.setFilePath(inFile.getAbsolutePath());
+                newItem.setDateModified(new Date(inFile.lastModified()).toString());
+                newItem.setName(inFile.getName());
+                newItem.setValue(FileMgr.getMimeType(inFile.getAbsolutePath()));
+                items.add(newItem);
+            }
+        }
+
         super.notifyDataSetChanged();
     }
 
@@ -63,6 +87,7 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
             viewHolder.mDescriptorDate = (TextView) rowView.findViewById(R.id.metadata_item_date);
             viewHolder.mDescriptorValue = (TextView) rowView.findViewById(R.id.metadata_item_value);
             viewHolder.mDescriptorSize = (TextView) rowView.findViewById(R.id.metadata_item_size);
+            viewHolder.mRemoveFile = (ImageButton) rowView.findViewById(R.id.bt_remove_file);
             rowView.setTag(viewHolder);
         }
 
@@ -75,6 +100,25 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
         holder.mDescriptorName.setText(item.getName());
         holder.mDescriptorType.setTag(item.getFilePath());
         holder.mDescriptorSize.setText(item.getSize());
+
+
+        holder.mRemoveFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new AlertDialog.Builder(context)
+                        .setTitle("Titel")
+                        .setMessage(context.getString(R.string.form_really_delete))
+                        .setIcon(R.drawable.ic_recycle)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(context, "Touché " + items.get(position).getFilePath(), Toast.LENGTH_SHORT).show();
+                                new File(items.get(position).getFilePath()).delete();
+                                notifyDataSetChanged();
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
+        });
 
         holder.mDescriptorType.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +153,7 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
         public ImageView mDescriptorType;
         public TextView mDescriptorDate;
         public TextView mDescriptorSize;
+        public ImageButton mRemoveFile;
     }
 
     class LoadImage extends AsyncTask<Object, Void, Bitmap> {
