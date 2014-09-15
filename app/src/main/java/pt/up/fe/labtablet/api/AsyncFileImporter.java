@@ -48,7 +48,6 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, Void> {
             return null;
         }
 
-
         Context mContext = (Context) params[0];
         Intent mIntent = (Intent) params[1];
         String favoriteName = (String) params[2];

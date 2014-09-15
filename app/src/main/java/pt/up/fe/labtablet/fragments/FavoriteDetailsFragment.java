@@ -266,9 +266,10 @@ public class FavoriteDetailsFragment extends Fragment {
             pd.setTitle(getString(R.string.loading));
             pd.setCancelable(false);
             pd.setIndeterminate(false);
-            pd.setProgress(20);
+            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pd.setMax(100);
             pd.show();
+
             new AsyncFileImporter(new AsyncTaskHandler<String>() {
                 @Override
                 public void onSuccess(String result) {

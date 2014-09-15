@@ -1,5 +1,6 @@
 package pt.up.fe.labtablet.api;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -23,6 +25,10 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.File;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
@@ -36,12 +42,6 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
     //input, remove, output
     private AsyncTaskHandler<Void> mHandler;
     private Exception error;
-    private Context mContext;
-
-    private String favoriteName;
-    private String projectName;
-    private String destUri;
-    private String cookie;
 
     public AsyncUploader(AsyncTaskHandler<Void> mHandler) {
         this.mHandler = mHandler;
@@ -61,6 +61,11 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
 
     @Override
     protected Void doInBackground(Object... params) {
+        String destUri;
+        String cookie;
+        Context mContext;
+        String favoriteName;
+
 
         if (params[0] instanceof String
                 && params[1] instanceof String
@@ -68,7 +73,7 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
                 && params[3] instanceof Context) {
 
             favoriteName = (String) params[0];
-            projectName = (String) params[1];
+            //projectName = (String) params[1];
             destUri = (String) params[2];
             mContext = (Context) params[3];
 
@@ -113,7 +118,6 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
             }
 
             publishProgress(25);
-
             httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
@@ -131,8 +135,13 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
 
             Log.d("[AsyncUploader]File Path", file.getAbsolutePath());
 
-            httppost.setEntity(builder.build());
+            long totalSize = file.length();
+            LabTabletUploadEntity mEntity = new LabTabletUploadEntity(builder.build(), totalSize);
+
+            httppost.setEntity(mEntity);
             Log.d("[AsyncUploader]POST", "" + httppost.getRequestLine());
+
+
             try {
                 HttpResponse httpResponse = httpclient.execute(httppost);
                 HttpEntity resEntity = httpResponse.getEntity();
@@ -222,6 +231,98 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
         public String result;
         public String message;
     }
+
+    //class to retrieve the upload progress for large files
+    class LabTabletUploadEntity implements HttpEntity {
+
+        private HttpEntity mEntity;
+        private long totalSize;
+
+        public LabTabletUploadEntity(HttpEntity mEntity, long size) {
+            this.totalSize = size;
+            this.mEntity = mEntity;
+        }
+
+        @Override
+        public void consumeContent() throws IOException {
+            mEntity.consumeContent();
+        }
+        @Override
+        public InputStream getContent() throws IOException,
+                IllegalStateException {
+            return mEntity.getContent();
+        }
+        @Override
+        public Header getContentEncoding() {
+            return mEntity.getContentEncoding();
+        }
+        @Override
+        public long getContentLength() {
+            return mEntity.getContentLength();
+        }
+        @Override
+        public Header getContentType() {
+            return mEntity.getContentType();
+        }
+        @Override
+        public boolean isChunked() {
+            return mEntity.isChunked();
+        }
+        @Override
+        public boolean isRepeatable() {
+            return mEntity.isRepeatable();
+        }
+        @Override
+        public boolean isStreaming() {
+            return mEntity.isStreaming();
+        } // CONSIDER put a _real_ delegator into here!
+
+        @Override
+        public void writeTo(OutputStream outstream) throws IOException {
+
+            class ProxyOutputStream extends FilterOutputStream {
+                /**
+                 * @author Stephen Colebourne
+                 */
+
+                public ProxyOutputStream(OutputStream proxy) {
+                    super(proxy);
+                }
+                public void write(int idx) throws IOException {
+                    out.write(idx);
+                }
+                public void write(byte[] bts) throws IOException {
+                    out.write(bts);
+                }
+                public void write(byte[] bts, int st, int end) throws IOException {
+                    out.write(bts, st, end);
+                }
+                public void flush() throws IOException {
+                    out.flush();
+                }
+                public void close() throws IOException {
+                    out.close();
+                }
+            } // CONSIDER import this class (and risk more Jar File Hell)
+
+            class ProgressiveOutputStream extends ProxyOutputStream {
+                long totalSent;
+
+                public ProgressiveOutputStream(OutputStream proxy) {
+                    super(proxy);
+                    totalSent = 0;
+                }
+                public void write(byte[] bts, int st, int end) throws IOException {
+                    totalSent += end;
+                    publishProgress((int) ((totalSent / (float) totalSize) * 100));
+                    out.write(bts, st, end);
+                }
+            }
+
+            mEntity.writeTo(new ProgressiveOutputStream(outstream));
+        }
+
+    };
 
 }
 

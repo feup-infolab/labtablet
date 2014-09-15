@@ -113,6 +113,13 @@ public class SubmissionStep4 extends Fragment {
                         if (getActivity() == null) {
                             return;
                         }
+
+                        if (value <= 1) {
+                            tv_progress_status.setText(getResources().getString(R.string.creating_package));
+                            pbStatus.setProgress(value*100);
+                            return;
+                        }
+
                         pbStatus.setProgress(value);
                         switch (value) {
                             case 10:
