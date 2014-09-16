@@ -91,33 +91,90 @@
                 style="@style/btnStyleBeige"
                 android:drawableEnd="@android:drawable/ic_menu_mapmode"
                 android:layout_height="wrap_content"
-                android:text="Launch field mode"
+                android:text="@string/launch_field_mode"
                 android:layout_marginTop="5dp"
-                />
-
-
-
-            <Button
-                android:id="@+id/bt_new_metadata"
-                android:layout_below="@id/bt_field_mode"
-                android:layout_width="fill_parent"
-                android:text="Additional Metadata"
-                android:drawableEnd="@android:drawable/ic_menu_add"
-                style="@style/btnStyleBeige"
-                android:layout_marginTop="10dp"
-                android:layout_height="wrap_content"
                 />
             </RelativeLayout>
         </ScrollView>
-    <View
-        android:layout_width="1dp"
-        android:layout_marginStart="5dp"
-        android:layout_height="fill_parent"
-        android:background="@android:color/darker_gray" />
-
-    <ListView
-        android:id="@+id/lv_favorite_metadata"
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_weight=".5"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_view_tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/tab_metadata"
+                style="@style/btnStyleOrangeLeft"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/metadata"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="fill_parent"
+                android:background="@color/second_grey" />
+
+            <Button
+                android:id="@+id/tab_data"
+                style="@style/btnStyleOrangeRight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/data"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_favorite_metadata"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/ll_view_tabs" />
+
+        <Button
+            android:id="@+id/bt_new_metadata"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="10dp"
+            android:background="@drawable/round_button"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:text="+"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
+
+        <ImageButton
+            android:id="@+id/bt_edit_metadata"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_above="@id/bt_new_metadata"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/round_button"
+            android:src="@drawable/ab_edit_white" />
+    </RelativeLayout>
+
+
 </LinearLayout>

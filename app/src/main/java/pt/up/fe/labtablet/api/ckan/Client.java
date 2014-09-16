@@ -73,7 +73,7 @@ public final class Client {
     * connection specified in the Client constructor.
     *
     * @param  name The name or ID of the dataset to fetch
-    * @returns The Dataset for the provided name.
+    * @return The Dataset for the provided name.
     * @throws CKANException if the request fails
     */
     public Dataset getDataset(String name)
@@ -112,7 +112,7 @@ public final class Client {
     * perform an create, and then returns the newly created dataset.
     *
     * @param  dataset A dataset instance
-    * @returns The Dataset as it now exists
+    * @return The Dataset as it now exists
     * @throws CKANException if the request fails
     */
     public Dataset createDataset(Dataset dataset)
@@ -139,8 +139,8 @@ public final class Client {
     * connection specified in the Client constructor.
     *
     * @param  name The name or ID of the group to fetch
-    * @returns The Group instance for the provided name.
-    * @throws A CKANException if the request fails
+    * @return The Group instance for the provided name.
+    * @throws CKANException if the request fails
     */
     public Group getGroup(String name)
             throws CKANException {
@@ -159,7 +159,7 @@ public final class Client {
     * Deletes the group specified with the provided name/id
     *
     * @param  name The name or ID of the group to delete
-    * @throws A CKANException if the request fails
+    * @throws CKANException if the request fails
     */
     public void deleteGroup(String name)
             throws CKANException {
@@ -178,7 +178,7 @@ public final class Client {
     * perform an create, and then returns the newly created Group.
     *
     * @param  group A Group instance
-    * @returns The Group as it now exists on the server
+    * @return The Group as it now exists on the server
     * @throws CKANException if the request fails
     */
     public Group createGroup(Group group)
@@ -202,7 +202,7 @@ public final class Client {
     * Takes the provided query and locates those datasets that match the query
     *
     * @param  query The search terms
-    * @returns A SearchResults object that contains a count and the objects
+    * @return SearchResults object that contains a count and the objects
     * @throws CKANException if the request fails
     */
     public Dataset.SearchResults findDatasets(String query)

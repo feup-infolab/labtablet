@@ -198,4 +198,7 @@
     <string name="load_file_failed">Failed to impor resource to this favorite. Please try again.</string>
     <string name="importing_file">Importing file&#8230;</string>
     <string name="no_apps_available">There is no application to open this kind of files.</string>
+    <string name="remove_file_title">Remove file</string>
+    <string name="metadata">Metadata</string>
+    <string name="data">Data</string>
 </resources>

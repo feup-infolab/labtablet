@@ -107,12 +107,11 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
             public void onClick(View view) {
 
                 new AlertDialog.Builder(context)
-                        .setTitle("Titel")
+                        .setTitle(context.getString(R.string.remove_file_title))
                         .setMessage(context.getString(R.string.form_really_delete))
                         .setIcon(R.drawable.ic_recycle)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                Toast.makeText(context, "Touché " + items.get(position).getFilePath(), Toast.LENGTH_SHORT).show();
                                 if (!(new File(items.get(position).getFilePath()).delete())) {
                                     ChangelogItem item = new ChangelogItem();
                                     item.setMessage("Queue Processor" + "Failed to delete file "

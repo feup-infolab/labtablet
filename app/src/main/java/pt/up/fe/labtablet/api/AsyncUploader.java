@@ -190,13 +190,15 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
             httppost.setHeader("Accept", "application/json");
             httppost.setHeader("Content-Type", "application/json");
             httppost.setHeader("Cookie", "connect.sid=" + cookie);
-            StringEntity se = new StringEntity(new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD), HTTP.UTF_8);
+            StringEntity se = new StringEntity(new Gson().toJson(
+                    metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD), HTTP.UTF_8);
             Log.e("metadata", new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD));
             httppost.setEntity(se);
 
             HttpResponse resp = httpclient.execute(httppost);
             HttpEntity ent = resp.getEntity();
-            DendroResponse metadataResponse = new Gson().fromJson(EntityUtils.toString(ent), DendroResponse.class);
+            DendroResponse metadataResponse = new Gson().fromJson(
+                    EntityUtils.toString(ent), DendroResponse.class);
             if (metadataResponse.result.equals(Utils.DENDRO_RESPONSE_ERROR) ||
                     metadataResponse.result.equals(Utils.DENDRO_RESPONSE_ERROR_2)) {
                 error = new Exception(metadataResponse.result + ": " + metadataResponse.message);
@@ -280,25 +282,13 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
         public void writeTo(OutputStream outstream) throws IOException {
 
             class ProxyOutputStream extends FilterOutputStream {
-                public ProxyOutputStream(OutputStream proxy) {
-                    super(proxy);
-                }
-                public void write(int idx) throws IOException {
-                    out.write(idx);
-                }
-                public void write(byte[] bts) throws IOException {
-                    out.write(bts);
-                }
-                public void write(byte[] bts, int st, int end) throws IOException {
-                    out.write(bts, st, end);
-                }
-                public void flush() throws IOException {
-                    out.flush();
-                }
-                public void close() throws IOException {
-                    out.close();
-                }
-            } // CONSIDER import this class (and risk more Jar File Hell)
+                public ProxyOutputStream(OutputStream proxy) { super(proxy); }
+                public void write(int idx) throws IOException { out.write(idx); }
+                public void write(byte[] bts) throws IOException { out.write(bts); }
+                public void write(byte[] bts, int st, int end) throws IOException { out.write(bts, st, end); }
+                public void flush() throws IOException { out.flush(); }
+                public void close() throws IOException { out.close(); }
+            }
 
             class ProgressiveOutputStream extends ProxyOutputStream {
                 long totalSent;
@@ -307,16 +297,16 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
                     super(proxy);
                     totalSent = 0;
                 }
+
                 public void write(byte[] bts, int st, int end) throws IOException {
                     totalSent += end;
-                    publishProgress(((int) ((totalSent / (float) totalSize) * 100))+100);
+                    publishProgress(
+                            ((int) ((totalSent / (float) totalSize) * 100))+100 );
                     out.write(bts, st, end);
                 }
             }
 
             mEntity.writeTo(new ProgressiveOutputStream(outstream));
         }
-
     }
-
 }

@@ -207,4 +207,7 @@
     <string name="load_file_failed">Não foi impossível importar o ficheiro. Tente novamente.</string>
     <string name="importing_file">A importar ficheiro&#8230;</string>
     <string name="no_apps_available">Não existem aplicações para abrir este tipo de ficheiros.</string>
+    <string name="remove_file_title">Remover ficheiro</string>
+    <string name="metadata">Metadata</string>
+    <string name="data">Data</string>
 </resources>
