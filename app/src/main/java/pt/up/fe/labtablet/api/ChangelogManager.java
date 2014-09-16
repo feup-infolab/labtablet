@@ -12,9 +12,6 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.utils.Utils;
 
-/**
- * Created by ricardo on 21-03-2014.
- */
 public class ChangelogManager {
 
     public static void addLog(ChangelogItem item, Context mContext) {
@@ -43,14 +40,13 @@ public class ChangelogManager {
         items.add(item);
 
         editor.putString(Utils.CHANGELOG_CONFIG_ENTRY, new Gson().toJson(
-                updateLogs(items),
+                items,
                 Utils.ARRAY_CHANGELOG_ITEM));
 
         editor.apply();
-        return;
     }
 
-    public static ArrayList<ChangelogItem> getItems (Context mContext) {
+    public static ArrayList<ChangelogItem> getItems(Context mContext) {
 
         ArrayList<ChangelogItem> items;
         SharedPreferences settings = mContext.getSharedPreferences(
@@ -72,17 +68,9 @@ public class ChangelogManager {
                         .getString(Utils.CHANGELOG_CONFIG_ENTRY, ""),
                 Utils.ARRAY_CHANGELOG_ITEM);
 
-        return updateLogs(items);
-    }
-
-    public static ArrayList<ChangelogItem> updateLogs(ArrayList<ChangelogItem> items) {
-        for(ChangelogItem item : items) {
-            if(item.isRead()) {
-                items.remove(item);
-            }
-        }
         return items;
     }
+
     public static void clearLogs(Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
@@ -116,7 +104,7 @@ public class ChangelogManager {
         storedItems.remove(upItem);
 
         editor.putString(Utils.CHANGELOG_CONFIG_ENTRY, new Gson().toJson(
-                updateLogs(storedItems),
+                storedItems,
                 Utils.ARRAY_CHANGELOG_ITEM));
 
         editor.apply();
@@ -142,7 +130,9 @@ public class ChangelogManager {
                 settings.getString(Utils.CHANGELOG_CONFIG_ENTRY, ""),
                 Utils.ARRAY_CHANGELOG_ITEM);
 
-        for(ChangelogItem item : items) { storedItems.add(item); }
+        for (ChangelogItem item : items) {
+            storedItems.add(item);
+        }
         editor.remove(Utils.CHANGELOG_CONFIG_ENTRY);
         editor.putString(
                 Utils.CHANGELOG_CONFIG_ENTRY,

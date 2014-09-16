@@ -17,9 +17,6 @@ import java.net.URI;
 
 import pt.up.fe.labtablet.utils.Utils;
 
-/**
- * Created by ricardo on 27-03-2014.
- */
 public class AsyncWeatherFetcher extends AsyncTask<Context, Void, Integer> {
     //input, remove, output
     private AsyncTaskHandler<Integer> mHandler;
@@ -34,7 +31,7 @@ public class AsyncWeatherFetcher extends AsyncTask<Context, Void, Integer> {
 
         HttpResponse response;
         try {
-            LocationManager lm = (LocationManager)params[0].getSystemService(Context.LOCATION_SERVICE);
+            LocationManager lm = (LocationManager) params[0].getSystemService(Context.LOCATION_SERVICE);
             Criteria crit = new Criteria();
             crit.setAccuracy(Criteria.ACCURACY_FINE);
             String provider = lm.getBestProvider(crit, true);
@@ -45,10 +42,10 @@ public class AsyncWeatherFetcher extends AsyncTask<Context, Void, Integer> {
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
 
-            request.setURI(new URI(Utils.WEATHER_URL+"lat=" +
+            request.setURI(new URI(Utils.WEATHER_URL + "lat=" +
                     loc.getLatitude() +
                     "&lon=" +
-                    + loc.getLongitude()
+                    +loc.getLongitude()
                     + "&units=metric"));
 
             response = client.execute(request);

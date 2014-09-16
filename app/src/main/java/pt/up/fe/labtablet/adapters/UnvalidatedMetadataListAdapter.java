@@ -31,10 +31,7 @@ import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
 
-/**
- * Created by ricardo on 07-04-2014.
- */
-public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
+public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
     private final Activity context;
     private final List<Descriptor> items;
     private final Context mContext;
@@ -203,7 +200,6 @@ public class UnvalidatedMetadataListAdapter  extends ArrayAdapter<Descriptor> {
                     public void onClick(DialogInterface dialog, int which) {
                         if (input.getText().toString().equals("")) {
                             Toast.makeText(mContext, mContext.getResources().getString(R.string.unchanged), Toast.LENGTH_SHORT).show();
-                            return;
                         } else {
                             item.setValue(input.getText().toString());
                             notifyDataSetChanged();

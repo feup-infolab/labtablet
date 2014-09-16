@@ -27,12 +27,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.Utils;
 
-/**
- * Created by ricardo on 9/11/14.
- */
 public class DataListAdapter extends ArrayAdapter<Descriptor> {
 
     private final Activity context;
@@ -113,9 +113,18 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Toast.makeText(context, "Touché " + items.get(position).getFilePath(), Toast.LENGTH_SHORT).show();
-                                new File(items.get(position).getFilePath()).delete();
+                                if (!(new File(items.get(position).getFilePath()).delete())) {
+                                    ChangelogItem item = new ChangelogItem();
+                                    item.setMessage("Queue Processor" + "Failed to delete file "
+                                            + items.get(position).getFilePath());
+
+                                    item.setTitle(context.getResources().getString(R.string.developer_error));
+                                    item.setDate(Utils.getDate());
+                                    ChangelogManager.addLog(item, context);
+                                }
                                 notifyDataSetChanged();
-                            }})
+                            }
+                        })
                         .setNegativeButton(android.R.string.no, null).show();
             }
         });

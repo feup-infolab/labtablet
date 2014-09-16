@@ -31,6 +31,9 @@ public class SubmissionStep4 extends Fragment {
 
     private AsyncUploader mUploadTask;
 
+    public SubmissionStep4() {
+    }
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -44,9 +47,6 @@ public class SubmissionStep4 extends Fragment {
 
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public SubmissionStep4() {
     }
 
     @Override
@@ -73,13 +73,13 @@ public class SubmissionStep4 extends Fragment {
 
                 btStartUpload.setEnabled(false);
                 destUri = SubmissionValidationActivity.getDestUri();
-                if(destUri.equals("")) {
+                if (destUri.equals("")) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.dest_folder_undefined), Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 pbStatus.setVisibility(View.VISIBLE);
-                btStartUpload.setText(getString(R.string.cancel_proccess));
+                btStartUpload.setText(getString(R.string.cancel_process));
                 pbStatus.setIndeterminate(false);
                 pbStatus.setProgress(0);
 
@@ -91,7 +91,7 @@ public class SubmissionStep4 extends Fragment {
                         }
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("favoriteName", getArguments().getString("favorite_name"));
-                        getActivity().setResult(Utils.SUBMISSION_VALIDATION,returnIntent);
+                        getActivity().setResult(Utils.SUBMISSION_VALIDATION, returnIntent);
                         getActivity().finish();
                         Toast.makeText(getActivity(),
                                 getResources().getString(R.string.uploaded_successfully), Toast.LENGTH_LONG).show();
@@ -117,7 +117,7 @@ public class SubmissionStep4 extends Fragment {
 
                         if (value > 100) {
                             tv_progress_status.setText(getResources().getString(R.string.uploading));
-                            pbStatus.setProgress(value -100);
+                            pbStatus.setProgress(value - 100);
                             return;
                         }
                         pbStatus.setProgress(value);

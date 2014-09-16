@@ -16,14 +16,12 @@ import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Dendro.ProjectListResponse;
 import pt.up.fe.labtablet.utils.FileMgr;
 
-/**
- * Created by ricardo on 08-05-2014.
- */
+
 public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, ProjectListResponse> {
+    HttpGet httpget;
     private AsyncTaskHandler<ProjectListResponse> mHandler;
     private Exception error;
     private Context mContext;
-    HttpGet httpget;
 
     public AsyncProjectListFetcher(AsyncTaskHandler<ProjectListResponse> mHandler) {
         this.mHandler = mHandler;
@@ -31,15 +29,15 @@ public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, Project
 
     @Override
     protected ProjectListResponse doInBackground(Context... params) {
-        if(params[0] == null) {
+        if (params[0] == null) {
             error = new Exception("Expected Context, got null");
             return null;
         }
-        if( !(params[0] instanceof Context)) {
+        if (!(params[0] instanceof Context)) {
             error = new Exception("Type mismatch (expected Context)");
             return null;
         }
-        mContext = (Context) params[0];
+        mContext = params[0];
 
         try {
             String cookie = DendroAPI.authenticate(mContext);
@@ -52,8 +50,7 @@ public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, Project
 
             HttpResponse resp = httpclient.execute(httpget);
             HttpEntity ent = resp.getEntity();
-            ProjectListResponse listResponse = new Gson().fromJson(EntityUtils.toString(ent), ProjectListResponse.class);
-            return listResponse;
+            return new Gson().fromJson(EntityUtils.toString(ent), ProjectListResponse.class);
 
         } catch (Exception e) {
             error = e;

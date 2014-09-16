@@ -41,28 +41,26 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class SubmissionStep3 extends Fragment {
 
+    static SubmissionStepHandler mHandler;
+    private static String projectName;
+    MenuItem actionRefresh;
+    MenuItem actionUp;
     private ListView dendroDirList;
     private DendroFolderAdapter mAdapter;
-
     private ProgressBar progressBar;
     private Button selectFolder;
     private String path;
-    private static String projectName;
     private TextView tv_instructions;
     private TextView tv_empty;
-
-    static SubmissionStepHandler mHandler;
-
     private AsyncProjectListFetcher mProjectFetcher;
     private AsyncDendroDirectoryFetcher mDirectoryFetcher;
     private ArrayList<DendroFolderItem> folders;
     private ArrayList<Project> availableProjects;
 
-    MenuItem actionRefresh;
-    MenuItem actionUp;
 
-
-
+    public SubmissionStep3() {
+        this.path = "/data";
+    }
 
     public static SubmissionStep3 newInstance(String projectName, SubmissionStepHandler handler) {
         SubmissionStep3 fragment = new SubmissionStep3();
@@ -71,11 +69,6 @@ public class SubmissionStep3 extends Fragment {
         mHandler = handler;
         return fragment;
     }
-
-    public SubmissionStep3() {
-        this.path = "/data";
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,7 +115,7 @@ public class SubmissionStep3 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 DendroFolderItem item = folders.get(position);
-                if(item.getDdr().getFileExtension().equals(Utils.DENDRO_FOLDER_EXTENSION)) {
+                if (item.getDdr().getFileExtension().equals(Utils.DENDRO_FOLDER_EXTENSION)) {
                     path += "/" + item.getNie().getTitle();
                     //items.get((Integer) view.getTag()).getNie().getTitle();
                     selectFolder.setEnabled(true);
@@ -147,56 +140,6 @@ public class SubmissionStep3 extends Fragment {
         initDirectoryFetcher();
         mDirectoryFetcher.execute(projectName + path, getActivity());
 
-    }
-
-
-    public class DendroFolderAdapter extends ArrayAdapter<DendroFolderItem> {
-        private final Activity context;
-        private final List<DendroFolderItem> items;
-
-        class ViewHolder {
-            public TextView mFolderName;
-            public TextView mFolderDate;
-            public TextView mFolderUri;
-            public ImageView mFolderType;
-        }
-
-        public DendroFolderAdapter(Activity context, List<DendroFolderItem> srcItems) {
-            super(context, R.layout.item_dendro_folder, srcItems);
-            this.context = context;
-            this.items = srcItems;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View rowView = convertView;
-            // reuse views
-            if (rowView == null) {
-                LayoutInflater inflater = context.getLayoutInflater();
-                rowView = inflater.inflate(R.layout.item_dendro_folder, null);
-                // configure view holder
-                ViewHolder viewHolder = new ViewHolder();
-                viewHolder.mFolderName = (TextView) rowView.findViewById(R.id.folder_item_title);
-                viewHolder.mFolderDate = (TextView) rowView.findViewById(R.id.folder_item_date);
-                viewHolder.mFolderUri = (TextView) rowView.findViewById(R.id.folder_item_size);
-                viewHolder.mFolderType = (ImageView) rowView.findViewById(R.id.folder_item_type);
-                rowView.setTag(viewHolder);
-            }
-
-            // fill data
-            ViewHolder holder = (ViewHolder) rowView.getTag();
-            final DendroFolderItem item = items.get(position);
-            holder.mFolderName.setText(item.getNie().getTitle());
-            holder.mFolderDate.setText(item.getDcterms().getModified());
-            holder.mFolderUri.setText(item.getUri());
-
-            if (item.getDdr().getFileExtension().equals("folder")) {
-                holder.mFolderType.setImageDrawable(getResources().getDrawable(R.drawable.ic_folder));
-            } else {
-                holder.mFolderType.setImageDrawable(getResources().getDrawable(R.drawable.ic_file));
-            }
-            return rowView;
-        }
     }
 
     @Override
@@ -224,12 +167,12 @@ public class SubmissionStep3 extends Fragment {
             initDialog();
             mProjectFetcher.execute(getActivity());
         } else if (item.getItemId() == R.id.action_dendro_refresh) {
-            if(!path.equals("/data")) {
+            if (!path.equals("/data")) {
                 initDirectoryFetcher();
                 mDirectoryFetcher.execute(projectName + path, getActivity());
             }
         } else if (item.getItemId() == R.id.action_dendro_go_up) {
-            if(path.equals("/data")) {
+            if (path.equals("/data")) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.already_in_root_folder), Toast.LENGTH_LONG).show();
             } else {
                 //remove a level from the path
@@ -242,7 +185,6 @@ public class SubmissionStep3 extends Fragment {
 
     }
 
-
     public void initDirectoryFetcher() {
         mDirectoryFetcher = new AsyncDendroDirectoryFetcher(new AsyncTaskHandler<ArrayList<DendroFolderItem>>() {
             @Override
@@ -252,7 +194,7 @@ public class SubmissionStep3 extends Fragment {
                 }
                 folders = result;
                 mAdapter = new DendroFolderAdapter(getActivity(), folders);
-                if(folders.size() == 0) {
+                if (folders.size() == 0) {
                     tv_empty.setVisibility(View.VISIBLE);
                 } else {
                     tv_empty.setVisibility(View.GONE);
@@ -267,9 +209,6 @@ public class SubmissionStep3 extends Fragment {
             @Override
             public void onFailure(Exception error) {
                 if (getActivity() == null) {
-                    return;
-                }
-                if(getActivity() == null) {
                     return;
                 }
 
@@ -342,5 +281,54 @@ public class SubmissionStep3 extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    public class DendroFolderAdapter extends ArrayAdapter<DendroFolderItem> {
+        private final Activity context;
+        private final List<DendroFolderItem> items;
+
+        public DendroFolderAdapter(Activity context, List<DendroFolderItem> srcItems) {
+            super(context, R.layout.item_dendro_folder, srcItems);
+            this.context = context;
+            this.items = srcItems;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View rowView = convertView;
+            // reuse views
+            if (rowView == null) {
+                LayoutInflater inflater = context.getLayoutInflater();
+                rowView = inflater.inflate(R.layout.item_dendro_folder, null);
+                // configure view holder
+                ViewHolder viewHolder = new ViewHolder();
+                viewHolder.mFolderName = (TextView) rowView.findViewById(R.id.folder_item_title);
+                viewHolder.mFolderDate = (TextView) rowView.findViewById(R.id.folder_item_date);
+                viewHolder.mFolderUri = (TextView) rowView.findViewById(R.id.folder_item_size);
+                viewHolder.mFolderType = (ImageView) rowView.findViewById(R.id.folder_item_type);
+                rowView.setTag(viewHolder);
+            }
+
+            // fill data
+            ViewHolder holder = (ViewHolder) rowView.getTag();
+            final DendroFolderItem item = items.get(position);
+            holder.mFolderName.setText(item.getNie().getTitle());
+            holder.mFolderDate.setText(item.getDcterms().getModified());
+            holder.mFolderUri.setText(item.getUri());
+
+            if (item.getDdr().getFileExtension().equals("folder")) {
+                holder.mFolderType.setImageDrawable(getResources().getDrawable(R.drawable.ic_folder));
+            } else {
+                holder.mFolderType.setImageDrawable(getResources().getDrawable(R.drawable.ic_file));
+            }
+            return rowView;
+        }
+
+        class ViewHolder {
+            public TextView mFolderName;
+            public TextView mFolderDate;
+            public TextView mFolderUri;
+            public ImageView mFolderType;
+        }
     }
 }

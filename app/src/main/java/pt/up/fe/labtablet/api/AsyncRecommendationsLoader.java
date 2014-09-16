@@ -22,16 +22,12 @@ import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
-/**
- * Created by ricardo on 20-05-2014.
- */
+
 public class AsyncRecommendationsLoader extends AsyncTask<Object, Integer, ArrayList<Descriptor>> {
 
     private AsyncTaskHandler<ArrayList<Descriptor>> mHandler;
     private Exception error;
-    private String projectName;
-    private Context mContext;
-    private HttpGet httpget;
+
 
     public AsyncRecommendationsLoader(AsyncTaskHandler<ArrayList<Descriptor>> mHandler) {
         this.mHandler = mHandler;
@@ -41,12 +37,12 @@ public class AsyncRecommendationsLoader extends AsyncTask<Object, Integer, Array
     @Override
     protected ArrayList<Descriptor> doInBackground(Object... params) {
 
-        if(params[0] == null || params[1] == null) {
+        if (params[0] == null || params[1] == null) {
             error = new Exception("Expected Context, String, String; Got nulls");
             return new ArrayList<Descriptor>();
         }
 
-        if( !(params[0] instanceof Context &&
+        if (!(params[0] instanceof Context &&
                 params[1] instanceof String)) {
             error = new Exception("Expected Context, String, String; Got "
                     + params[0].getClass() + ", " +
@@ -55,16 +51,15 @@ public class AsyncRecommendationsLoader extends AsyncTask<Object, Integer, Array
             return new ArrayList<Descriptor>();
         }
 
-        mContext = (Context) params[0];
-        projectName = (String) params[1];
-
+        Context mContext = (Context) params[0];
+        String projectName = (String) params[1];
 
         try {
             String cookie = DendroAPI.authenticate(mContext);
 
             DendroConfiguration conf = FileMgr.getDendroConf(mContext);
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            httpget = new HttpGet(conf.getAddress() + "/project/" + projectName + "?metadata_recommendations");
+            HttpGet httpget = new HttpGet(conf.getAddress() + "/project/" + projectName + "?metadata_recommendations");
             httpget.setHeader("Accept", "application/json");
             httpget.setHeader("Cookie", "connect.sid=" + cookie);
 
@@ -102,11 +97,10 @@ public class AsyncRecommendationsLoader extends AsyncTask<Object, Integer, Array
     }
 
 
-
     @Override
     protected void onPostExecute(ArrayList<Descriptor> result) {
         super.onPostExecute(result);
-        if(error != null) {
+        if (error != null) {
             mHandler.onFailure(error);
         } else {
             mHandler.onSuccess(result);

@@ -55,7 +55,7 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class FieldModeActivity extends Activity implements SensorEventListener {
 
-    private ActionBar mActionBar;
+
     private Button bt_photo;
     private Button bt_sketch;
     private Button bt_audio;
@@ -79,8 +79,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     private String favorite_name;
     private String temperature_value;
     private String network_temperature_value;
-    private String luminosity_value;
-    private String magnetic_value;
+
     private String real_magnetic_value;
     private String audio_filename;
     private String photo_filename;
@@ -98,13 +97,11 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     private ProgressBar pb_update;
     private ProgressBar pb_location;
 
-    Intent locatorService = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_field_mode);
-        capturedImageUri= null;
+        capturedImageUri = null;
         isCollecting = false;
         Intent intent = getIntent();
         favorite_name = intent.getStringExtra("favorite_name");
@@ -124,13 +121,22 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         tv_title = (TextView) findViewById(R.id.tv_title);
         tv_title.setText(favorite_name);
 
-        mActionBar = this.getActionBar();
-        mActionBar.setTitle(favorite_name);
-        mActionBar.setSubtitle(getResources().getString(R.string.title_activity_field_mode));
-        mActionBar.setDisplayHomeAsUpEnabled(false);
+        ActionBar mActionBar = getActionBar();
+        if (mActionBar == null) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("ValidateMetadata" + "Couldn't get actionbar. Compatibility mode layout");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, FieldModeActivity.this);
+        } else {
+            mActionBar.setTitle(favorite_name);
+            mActionBar.setSubtitle(getResources().getString(R.string.title_activity_field_mode));
+            mActionBar.setDisplayHomeAsUpEnabled(false);
+        }
+
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        if(mBatInfoReceiver!= null) {
+        if (mBatInfoReceiver != null) {
             registerBatInforReceiver();
         }
 
@@ -145,21 +151,23 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         sw_gps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(locationListener == null) {
+                if (locationListener == null) {
                     return;
                 }
 
-                if(!isCollecting) {
+                if (!isCollecting) {
                     isCollecting = true;
-                    if(sw_gps.isChecked()) {
-                        if(!locationListener.notifyCollectStarted()) {
-                         isCollecting = false;
+                    if (sw_gps.isChecked()) {
+                        if (!locationListener.notifyCollectStarted()) {
+                            isCollecting = false;
                             sw_gps.setChecked(false);
                         }
                     }
                 } else {
                     isCollecting = false;
-                    if(!sw_gps.isChecked()) { locationListener.notifyCollectStopped(); }
+                    if (!sw_gps.isChecked()) {
+                        locationListener.notifyCollectStopped();
+                    }
                 }
             }
         });
@@ -189,7 +197,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 builder.setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(input.getText().toString().equals("")) {
+                        if (input.getText().toString().equals("")) {
                             return;
                         }
                         Descriptor desc = new Descriptor();
@@ -212,10 +220,10 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         bt_audio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(recording) {
+                if (recording) {
                     try {
                         pb_update.setIndeterminate(false);
-                        bt_audio.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_voice, 0, 0, 0);
+                        bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_voice, 0, 0, 0);
                         recording = false;
                         bt_audio.setText(getResources().getString(R.string.record));
                         recorder.stop();
@@ -226,7 +234,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         mDesc.setValue(Uri.parse(audio_filename).getLastPathSegment());
                         mDesc.setFilePath(audio_filename);
                         metadata.add(mDesc);
-                    }  catch (Exception e) {
+                    } catch (Exception e) {
                         ChangelogItem item = new ChangelogItem();
                         item.setMessage("FieldMode audio recorder: " + e.toString() + "When stopping the recorder. Device stopped woorking.");
                         item.setTitle(getResources().getString(R.string.developer_error));
@@ -239,7 +247,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     recording = true;
                     pb_update.setIndeterminate(true);
                     pb_update.setVisibility(View.VISIBLE);
-                    bt_audio.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_voice_busy, 0, 0, 0);
+                    bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_voice_busy, 0, 0, 0);
                     bt_audio.setText(getResources().getString(R.string.stop));
 
                     try {
@@ -261,7 +269,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         Toast.makeText(FieldModeActivity.this, "Device is busy. Close other applications in the background.", Toast.LENGTH_SHORT).show();
 
                         pb_update.setIndeterminate(false);
-                        bt_audio.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_voice, 0, 0, 0);
+                        bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_voice, 0, 0, 0);
                         recording = false;
                         bt_audio.setText(getResources().getString(R.string.record));
                         recorder = null;
@@ -285,18 +293,37 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 Calendar cal = Calendar.getInstance();
-                photo_filename = cal.getTimeInMillis()+".jpg";
-                File file = new File(path,  photo_filename);
-                if(!file.exists()){
+                photo_filename = cal.getTimeInMillis() + ".jpg";
+                File file = new File(path, photo_filename);
+                if (!file.exists()) {
                     try {
-                        file.createNewFile();
+                        if (!file.createNewFile()) {
+                            ChangelogItem item = new ChangelogItem();
+                            item.setMessage("FieldMode" + "Couldn't create file " + file.getAbsolutePath());
+                            item.setTitle(getResources().getString(R.string.developer_error));
+                            item.setDate(Utils.getDate());
+                            ChangelogManager.addLog(item, FieldModeActivity.this);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
+
                     }
                 } else {
-                    file.delete();
+                    if (!file.delete()) {
+                        ChangelogItem item = new ChangelogItem();
+                        item.setMessage("FieldMode" + "Failed to delete file " + file.getAbsolutePath());
+                        item.setTitle(getResources().getString(R.string.developer_error));
+                        item.setDate(Utils.getDate());
+                        ChangelogManager.addLog(item, FieldModeActivity.this);
+                    }
                     try {
-                        file.createNewFile();
+                        if (!file.createNewFile()) {
+                            ChangelogItem item = new ChangelogItem();
+                            item.setMessage("FieldMode" + "Failed to create file " + file.getAbsolutePath());
+                            item.setTitle(getResources().getString(R.string.developer_error));
+                            item.setDate(Utils.getDate());
+                            ChangelogManager.addLog(item, FieldModeActivity.this);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -311,10 +338,10 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     }
 
     private void registerBatInforReceiver() {
-        mBatInfoReceiver = new BroadcastReceiver(){
+        mBatInfoReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context arg0, Intent intent) {
-                if((System.currentTimeMillis() - lastUpdateSensorTemperature) < Utils.SAMPLE_MILLIS) {
+                if ((System.currentTimeMillis() - lastUpdateSensorTemperature) < Utils.SAMPLE_MILLIS) {
                     return;
                 }
                 int temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) / 10;
@@ -349,7 +376,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         pb_update = (ProgressBar) findViewById(R.id.pb_recording);
         pb_location = (ProgressBar) findViewById(R.id.pb_location);
 
-        if((System.currentTimeMillis() - lastUpdateNetworkTemperature) > Utils.SAMPLE_MILLIS) {
+        if ((System.currentTimeMillis() - lastUpdateNetworkTemperature) > Utils.SAMPLE_MILLIS) {
             bt_network_temperature_sample.setText(getResources().getString(R.string.loading));
             new AsyncWeatherFetcher(new AsyncTaskHandler<Integer>() {
                 @Override
@@ -384,12 +411,15 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         int type = event.sensor.getType();
+        String luminosity_value;
+        String magnetic_value;
+
         switch (type) {
             case Sensor.TYPE_MAGNETIC_FIELD:
-                if((System.currentTimeMillis() - lastUpdateSensorMagnetic) < Utils.SAMPLE_MILLIS) {
+                if ((System.currentTimeMillis() - lastUpdateSensorMagnetic) < Utils.SAMPLE_MILLIS) {
                     break;
                 }
-                magnetic_value =  Math.round(event.values[0]) + ", " + Math.round(event.values[1]) + ", " + Math.round(event.values[2]);
+                magnetic_value = Math.round(event.values[0]) + ", " + Math.round(event.values[1]) + ", " + Math.round(event.values[2]);
                 real_magnetic_value = event.values[0] + ", " + event.values[1] + ", " + event.values[2];
                 bt_magnetic_sample.setText(magnetic_value + " (uT)");
                 bt_magnetic_sample.setEnabled(true);
@@ -397,7 +427,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 break;
 
             case Sensor.TYPE_LIGHT:
-                if((System.currentTimeMillis() - lastUpdateSensorLuminosity) < Utils.SAMPLE_MILLIS) {
+                if ((System.currentTimeMillis() - lastUpdateSensorLuminosity) < Utils.SAMPLE_MILLIS) {
                     break;
                 }
                 luminosity_value = "" + event.values[0];
@@ -432,13 +462,110 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     @Override
     protected void onPause() {
         super.onPause();
-        if(mBatInfoReceiver != null) {
+        if (mBatInfoReceiver != null) {
             unregisterReceiver(mBatInfoReceiver);
             mBatInfoReceiver = null;
         }
         sensorManager.unregisterListener(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //get the picture filename and update records
+        if (requestCode == Utils.SKETCH_INTENT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String filePath = data.getStringExtra("result");
+                Descriptor desc = new Descriptor();
+                desc.setValue(Uri.parse(filePath).getLastPathSegment());
+                desc.setFilePath(filePath);
+                desc.setTag(Utils.PICTURE_TAGS);
+                metadata.add(desc);
+            }
+            //other result different from OK shall not be added to the metadata
+        } else if (requestCode == Utils.CAMERA_INTENT_REQUEST) {
+            Descriptor desc = new Descriptor();
+            desc.setFilePath(capturedImageUri.getPath());
+            desc.setValue(capturedImageUri.getLastPathSegment());
+            desc.setTag(Utils.PICTURE_TAGS);
+            metadata.add(desc);
+        } else if (requestCode == Utils.METADATA_VALIDATION) {
+            //go back to field mode
+            if (data == null) {
+                return;
+            }
+            //save metadata
+            if (!data.getExtras().containsKey("descriptors")) {
+                Toast.makeText(this, "No descriptors received", Toast.LENGTH_SHORT).show();
+            } else {
+                String descriptorsJson = data.getStringExtra("descriptors");
+                ArrayList<Descriptor> itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
+                FileMgr.addDescriptors(favorite_name, itemDescriptors, this);
+                Toast.makeText(this, getResources().getString(R.string.metadata_added_success), Toast.LENGTH_SHORT).show();
+            }
+            finish();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() != R.id.action_field_mode_end) {
+            return super.onOptionsItemSelected(item);
+        }
+
+        if (isCollecting) {
+            Toast.makeText(this, getResources().getString(R.string.cant_end_is_collecting), Toast.LENGTH_LONG).show();
+            return super.onOptionsItemSelected(item);
+        }
+        if (recording) {
+            Toast.makeText(this, getResources().getString(R.string.cant_end_is_recording), Toast.LENGTH_LONG).show();
+            return super.onOptionsItemSelected(item);
+        }
+
+        if (metadata.size() == 0) {
+            finish();
+        } else {
+            SharedPreferences settings = getSharedPreferences(favorite_name, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            String baseDescriptorsJson = settings.getString(favorite_name, "");
+
+            if (baseDescriptorsJson.equals("")) {
+                editor.putString(favorite_name, new Gson().toJson(metadata, Utils.ARRAY_DESCRIPTORS));
+                editor.apply();
+            } else {
+                ArrayList<Descriptor> baseDescriptors =
+                        new Gson().fromJson(baseDescriptorsJson, Utils.ARRAY_DESCRIPTORS);
+                baseDescriptors.addAll(metadata);
+                editor.remove(favorite_name);
+                editor.putString(favorite_name, new Gson().toJson(baseDescriptors, Utils.ARRAY_DESCRIPTORS));
+                editor.apply();
+            }
+
+            //Proceed to validate collected metadata
+            Intent intent = new Intent(FieldModeActivity.this, ValidateMetadataActivity.class);
+            intent.putExtra("descriptors", new Gson().toJson(metadata, Utils.ARRAY_DESCRIPTORS));
+            intent.putExtra("favorite_name", favorite_name);
+            startActivityForResult(intent, Utils.METADATA_VALIDATION);
+        }
+
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    public boolean startService() {
+        try {
+            new FetchCordinates().execute();
+            return true;
+        } catch (Exception error) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("Location Listener: " + error.toString() + "When starting the service. Device may not have any GPS devices or the resources may be in use by another application.");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, FieldModeActivity.this);
+            return false;
+        }
+    }
 
     public class SensorsOnClickListener implements View.OnClickListener {
         @Override
@@ -483,111 +610,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        //get the picture filename and update records
-        if (requestCode == Utils.SKETCH_INTENT_REQUEST) {
-            if(resultCode == RESULT_OK){
-                String filePath = data.getStringExtra("result");
-                Descriptor desc = new Descriptor();
-                desc.setValue(Uri.parse(filePath).getLastPathSegment());
-                desc.setFilePath(filePath);
-                desc.setTag(Utils.PICTURE_TAGS);
-                metadata.add(desc);
-            }
-            //other result different from OK shall not be added to the metadata
-        } else if (requestCode == Utils.CAMERA_INTENT_REQUEST) {
-            Descriptor desc = new Descriptor();
-            desc.setFilePath(capturedImageUri.getPath());
-            desc.setValue(capturedImageUri.getLastPathSegment());
-            desc.setTag(Utils.PICTURE_TAGS);
-            metadata.add(desc);
-        } else if (requestCode == Utils.METADATA_VALIDATION) {
-            //go back to field mode
-            if(data == null) {
-                return;
-            }
-            //save metadata
-            if(!data.getExtras().containsKey("descriptors")) {
-                Toast.makeText(this, "No descriptors received", Toast.LENGTH_SHORT).show();
-            } else {
-                String descriptorsJson = data.getStringExtra("descriptors");
-                ArrayList<Descriptor> itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
-                FileMgr.addDescriptors(favorite_name, itemDescriptors, this);
-                Toast.makeText(this, getResources().getString(R.string.metadata_added_success), Toast.LENGTH_SHORT).show();
-            }
-            finish();
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (item.getItemId() != R.id.action_field_mode_end) {
-            return super.onOptionsItemSelected(item);
-        }
-
-        if(isCollecting) {
-            Toast.makeText(this, getResources().getString(R.string.cant_end_is_collecting), Toast.LENGTH_LONG).show();
-            return super.onOptionsItemSelected(item);
-        } if (recording) {
-            Toast.makeText(this, getResources().getString(R.string.cant_end_is_recording), Toast.LENGTH_LONG).show();
-            return super.onOptionsItemSelected(item);
-        }
-
-        if (metadata.size() == 0) {
-            finish();
-        } else {
-            SharedPreferences settings = getSharedPreferences(favorite_name, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = settings.edit();
-            String baseDescriptorsJson = settings.getString(favorite_name, "");
-
-            if (baseDescriptorsJson.equals("")) {
-                editor.putString(favorite_name, new Gson().toJson(metadata, Utils.ARRAY_DESCRIPTORS));
-                editor.apply();
-            } else {
-                ArrayList<Descriptor> baseDescriptors =
-                        new Gson().fromJson(baseDescriptorsJson, Utils.ARRAY_DESCRIPTORS);
-                baseDescriptors.addAll(metadata);
-                editor.remove(favorite_name);
-                editor.putString(favorite_name, new Gson().toJson(baseDescriptors, Utils.ARRAY_DESCRIPTORS));
-                editor.apply();
-            }
-
-            //Proceed to validate collected metadata
-            Intent intent = new Intent(FieldModeActivity.this, ValidateMetadataActivity.class);
-            intent.putExtra("descriptors", new Gson().toJson(metadata, Utils.ARRAY_DESCRIPTORS));
-            intent.putExtra("favorite_name", favorite_name);
-            startActivityForResult(intent, Utils.METADATA_VALIDATION);
-        }
-
-        return super.onOptionsItemSelected(item);
-
-    }
-
-    public boolean stopService() {
-        if (this.locatorService != null) {
-            this.locatorService = null;
-        }
-        return true;
-    }
-
-    public boolean startService() {
-        try {
-            new FetchCordinates().execute();
-            return true;
-        } catch (Exception error) {
-            ChangelogItem item = new ChangelogItem();
-            item.setMessage("Location Listener: " + error.toString() + "When starting the service. Device may not have any GPS devices or the resources may be in use by another application.");
-            item.setTitle(getResources().getString(R.string.developer_error));
-            item.setDate(Utils.getDate());
-            ChangelogManager.addLog(item, FieldModeActivity.this);
-            return false;
-        }
-    }
-
-
     public class FetchCordinates extends AsyncTask<String, Integer, String> {
         public double lati = 0.0;
         public double longi = 0.0;
@@ -611,7 +633,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         }
 
         @Override
-        protected void onCancelled(){
+        protected void onCancelled() {
             System.out.println("Cancelled by user!");
             pb_location.setIndeterminate(false);
             mLocationManager.removeUpdates(mLocationListener);
@@ -634,7 +656,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         @Override
         protected String doInBackground(String... params) {
             while (this.lati == 0.0) {
-
+                Log.d("GPS", "waiting for coordinates");
             }
             return null;
         }
@@ -649,7 +671,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     longi = location.getLongitude();
                 } catch (Exception e) {
                     pb_update.setIndeterminate(false);
-                    Toast.makeText(getApplicationContext(),"Unable to get Location"
+                    Toast.makeText(getApplicationContext(), "Unable to get Location"
                             , Toast.LENGTH_LONG).show();
                 }
 

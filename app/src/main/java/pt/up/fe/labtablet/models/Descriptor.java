@@ -1,7 +1,6 @@
 package pt.up.fe.labtablet.models;
 
 import java.io.File;
-import java.util.Date;
 
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
@@ -15,7 +14,6 @@ public class Descriptor {
     private String tag;
 
     private String filePath;
-    private long descriptor_id;
     private String dateModified;
     private int state;
 
@@ -27,7 +25,6 @@ public class Descriptor {
         this.filePath = "";
         this.state = Utils.DESCRIPTOR_STATE_NOT_VALIDATED;
         this.dateModified = Utils.getDate();
-        this.descriptor_id = new Date().getTime();
         this.size = "";
     }
 
@@ -39,28 +36,17 @@ public class Descriptor {
         this.state = Utils.DESCRIPTOR_STATE_NOT_VALIDATED;
     }
 
-    @Override
-    public boolean equals(Object desc) {
-        if (!(desc instanceof Descriptor))
-            return false;
-
-        if (desc == null)
-            return false;
-
-        return this.descriptor_id == ((Descriptor) desc).getID();
-    }
-
-    public long getID() {
-        return this.descriptor_id;
-    }
-
     public boolean hasFile() {
         return !this.filePath.equals("");
     }
 
-    public String getTag() {return this.tag;}
+    public String getTag() {
+        return this.tag;
+    }
 
-    public void setTag(String tag) {this.tag = tag;}
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public String getName() {
         return name;
@@ -78,13 +64,21 @@ public class Descriptor {
         this.value = value;
     }
 
-    public String getDescriptor() { return descriptor; }
+    public String getDescriptor() {
+        return descriptor;
+    }
 
-    public void setDescriptor(String descriptor) { this.descriptor = descriptor; }
+    public void setDescriptor(String descriptor) {
+        this.descriptor = descriptor;
+    }
 
-    public String getDescription() { return this.description; }
+    public String getDescription() {
+        return this.description;
+    }
 
-    public void setDescription(String description) {this.description = description; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public void validate() {
         this.state = Utils.DESCRIPTOR_STATE_VALIDATED;
@@ -106,7 +100,9 @@ public class Descriptor {
         this.dateModified = dateModified;
     }
 
-    public String getFilePath() {  return filePath; }
+    public String getFilePath() {
+        return filePath;
+    }
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;

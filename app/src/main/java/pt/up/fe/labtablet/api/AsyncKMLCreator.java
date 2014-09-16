@@ -16,10 +16,8 @@ import java.util.Date;
 
 import pt.up.fe.labtablet.utils.Utils;
 
-/**
- * Created by ricardo on 17-03-2014.
- */
-public class AsyncKMLCreator  extends AsyncTask<Object, Integer, String> {
+
+public class AsyncKMLCreator extends AsyncTask<Object, Integer, String> {
 
     private AsyncTaskHandler<String> mHandler;
     private Exception error;
@@ -30,6 +28,11 @@ public class AsyncKMLCreator  extends AsyncTask<Object, Integer, String> {
 
     @Override
     protected String doInBackground(Object... params) {
+
+        if (!(params[0] instanceof ArrayList) || params[1] instanceof String) {
+            Log.e("KML creator", "Wrong instances!");
+            return null;
+        }
 
         String folder = (String) params[1];
         ArrayList<Location> locations = (ArrayList<Location>) params[0];

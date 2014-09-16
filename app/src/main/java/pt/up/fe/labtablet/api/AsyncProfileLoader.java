@@ -3,7 +3,6 @@ package pt.up.fe.labtablet.api;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,7 +27,6 @@ public class AsyncProfileLoader extends AsyncTask<File, Integer, ArrayList<Descr
 
         publishProgress(1);
         ArrayList<Descriptor> mResult = new ArrayList<Descriptor>();
-        JsonParser jsonParser = new JsonParser();
 
         try {
             File inputFile = params[0];
@@ -36,7 +34,7 @@ public class AsyncProfileLoader extends AsyncTask<File, Integer, ArrayList<Descr
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
             StringBuilder sb = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 sb.append(line).append("\n");
             }
@@ -54,7 +52,7 @@ public class AsyncProfileLoader extends AsyncTask<File, Integer, ArrayList<Descr
     @Override
     protected void onPostExecute(ArrayList<Descriptor> result) {
         super.onPostExecute(result);
-        if(error != null) {
+        if (error != null) {
             mHandler.onFailure(error);
         } else {
             mHandler.onSuccess(result);

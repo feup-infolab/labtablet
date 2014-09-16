@@ -17,6 +17,8 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.FavoriteListAdapter;
+import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
@@ -25,7 +27,6 @@ public class ListFavoritesFragment extends ListFragment {
 
     private ArrayList<FavoriteItem> mFavoriteItems;
     private FavoriteListAdapter mFavoriteListAdapter;
-    private ActionBar mActionBar;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -33,15 +34,20 @@ public class ListFavoritesFragment extends ListFragment {
 
         getListView().setDividerHeight(0);
         setHasOptionsMenu(true);
-        mActionBar = getActivity().getActionBar();
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        ActionBar mActionBar = getActivity().getActionBar();
+        if (mActionBar == null) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("ListFavorites" + "Couldn't get actionbar. Compatibility mode layout");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, getActivity());
+        } else {
+            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            mActionBar.setDisplayHomeAsUpEnabled(false);
+            mActionBar.setSubtitle("");
+        }
 
-        mActionBar.setDisplayHomeAsUpEnabled(false);
-        //((MainActivity) getActivity()).getDrawerToggle().setDrawerIndicatorEnabled(true);
         mFavoriteItems = new ArrayList<FavoriteItem>();
-
-        ActionBar actionBar = getActivity().getActionBar();
-        actionBar.setSubtitle("");
         mFavoriteListAdapter = new FavoriteListAdapter(getActivity(), mFavoriteItems);
         setListAdapter(mFavoriteListAdapter);
 
@@ -69,7 +75,7 @@ public class ListFavoritesFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.list_dataset, menu);
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -96,7 +102,7 @@ public class ListFavoritesFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         String path = Environment.getExternalStorageDirectory().toString();
-        File f = new File(path + "/" +getResources().getString(R.string.app_name));
+        File f = new File(path + "/" + getResources().getString(R.string.app_name));
         File[] files = f.listFiles();
 
         mFavoriteItems.clear();

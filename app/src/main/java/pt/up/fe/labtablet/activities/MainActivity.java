@@ -1,6 +1,7 @@
 package pt.up.fe.labtablet.activities;
 
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -13,6 +14,7 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -28,12 +30,14 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.NavDrawerListAdapter;
+import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.fragments.ConfigurationFragment;
 import pt.up.fe.labtablet.fragments.HomeFragment;
 import pt.up.fe.labtablet.fragments.ListChangelogFragment;
 import pt.up.fe.labtablet.fragments.ListFavoritesFragment;
 import pt.up.fe.labtablet.fragments.NewFavoriteBaseFragment;
 import pt.up.fe.labtablet.fragments.SearchFragment;
+import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.NavDrawerItem;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -41,7 +45,6 @@ public class MainActivity extends Activity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-    private boolean atHome;
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -51,10 +54,7 @@ public class MainActivity extends Activity {
 
     // slide menu items
     private String[] navMenuTitles;
-    private TypedArray navMenuIcons;
 
-    private ArrayList<NavDrawerItem> navDrawerItems;
-    private NavDrawerListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +70,9 @@ public class MainActivity extends Activity {
 
         mTitle = mDrawerTitle = getTitle();
 
+        TypedArray navMenuIcons;
+        ArrayList<NavDrawerItem> navDrawerItems;
+        NavDrawerListAdapter adapter;
         // load slide menu items
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 
@@ -96,8 +99,17 @@ public class MainActivity extends Activity {
         mDrawerList.setAdapter(adapter);
 
         // enabling action bar app icon and behaving it as toggle button
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        ActionBar mActionBar = getActionBar();
+        if (mActionBar == null) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("MainActivity" + "Couldn't get actionbar. Compatibility mode layout");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, MainActivity.this);
+        } else {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeButtonEnabled(true);
+        }
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.drawable.ic_drawer, //nav menu toggle icon
@@ -132,19 +144,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    /**
-     * Slide menu item click listener
-     * */
-    private class SlideMenuClickListener implements
-            ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            // display view for selected nav drawer item
-            displayView(position);
-        }
     }
 
     @Override
@@ -182,7 +181,7 @@ public class MainActivity extends Activity {
 
     /**
      * Diplaying fragment view for selected nav drawer list item
-     * */
+     */
     private void displayView(int position) {
         // remove the main content by replacing fragments
         Fragment fragment = null;
@@ -234,11 +233,20 @@ public class MainActivity extends Activity {
         }
     }
 
-
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        getActionBar().setTitle(mTitle);
+        ActionBar mActionBar = getActionBar();
+        if (mActionBar == null) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("MainActivity" + "Couldn't get actionbar. Compatibility mode layout");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, MainActivity.this);
+        } else {
+            mActionBar.setTitle(mTitle);
+        }
+
     }
 
     /**
@@ -260,7 +268,6 @@ public class MainActivity extends Activity {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -268,7 +275,7 @@ public class MainActivity extends Activity {
         Log.i("", "REQ:" + requestCode + " RES:" + resultCode);
         if (requestCode == Utils.SUBMISSION_VALIDATION) {
 
-            if(data == null)
+            if (data == null)
                 return;
 
             Toast.makeText(this, getString(R.string.uploaded_successfully), Toast.LENGTH_SHORT).show();
@@ -285,7 +292,7 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
     }
 
@@ -313,6 +320,19 @@ public class MainActivity extends Activity {
             transaction.replace(R.id.frame_container, displayedFragment);
             transaction.addToBackStack("HOME");
             transaction.commit();
+        }
+    }
+
+    /**
+     * Slide menu item click listener
+     */
+    private class SlideMenuClickListener implements
+            ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            // display view for selected nav drawer item
+            displayView(position);
         }
     }
 }

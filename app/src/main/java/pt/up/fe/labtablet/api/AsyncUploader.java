@@ -1,6 +1,5 @@
 package pt.up.fe.labtablet.api;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -318,6 +317,6 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
             mEntity.writeTo(new ProgressiveOutputStream(outstream));
         }
 
-    };
+    }
 
 }

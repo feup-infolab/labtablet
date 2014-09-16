@@ -1,9 +1,11 @@
 package pt.up.fe.labtablet.activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -29,17 +31,25 @@ public class ValidateMetadataActivity extends Activity {
     private ArrayList<Descriptor> descriptors;
     private ArrayList<Descriptor> deletionQueue;
     private ArrayList<Descriptor> convertionQueue;
-    private ListView lv_unvalidated_metadata;
     private UnvalidatedMetadataListAdapter mAdapter;
     private String favoriteName;
-    private UnvalidatedMetadataListAdapter.unvalidatedMetadataInterface mInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validate_metadata);
-        getActionBar().setTitle(getResources().getString(R.string.metadata_validation_title));
-        getActionBar().setDisplayHomeAsUpEnabled(false);
+
+        ActionBar mActionBar = getActionBar();
+        if (mActionBar == null) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("ValidateMetadata" + "Couldn't get actionbar. Compatibility mode layout");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, ValidateMetadataActivity.this);
+        } else {
+            getActionBar().setTitle(getResources().getString(R.string.metadata_validation_title));
+            getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
 
         if (savedInstanceState == null) {
             String descriptorsJson = getIntent().getStringExtra("descriptors");
@@ -54,20 +64,21 @@ public class ValidateMetadataActivity extends Activity {
             favoriteName = savedInstanceState.getString("favorite_name");
         }
 
-        lv_unvalidated_metadata = (ListView) findViewById(R.id.lv_unvalidated_metadata);
+        ListView lv_unvalidated_metadata = (ListView) findViewById(R.id.lv_unvalidated_metadata);
         lv_unvalidated_metadata.setDividerHeight(0);
 
-        mInterface = new UnvalidatedMetadataListAdapter.unvalidatedMetadataInterface() {
-            @Override
-            public void onFileDeletion(Descriptor desc) {
-                deletionQueue.add(desc);
-            }
+        UnvalidatedMetadataListAdapter.unvalidatedMetadataInterface mInterface =
+                new UnvalidatedMetadataListAdapter.unvalidatedMetadataInterface() {
+                    @Override
+                    public void onFileDeletion(Descriptor desc) {
+                        deletionQueue.add(desc);
+                    }
 
-            @Override
-            public void onDataConvertion(Descriptor desc) {
-                convertionQueue.add(desc);
-            }
-        };
+                    @Override
+                    public void onDataConvertion(Descriptor desc) {
+                        convertionQueue.add(desc);
+                    }
+                };
 
         mAdapter = new UnvalidatedMetadataListAdapter(this,
                 descriptors, FileMgr.getAssociations(this), favoriteName, mInterface);
@@ -141,8 +152,8 @@ public class ValidateMetadataActivity extends Activity {
         try {
             String descriptorJson = data.getStringExtra("descriptor");
             Descriptor newMetadata = new Gson().fromJson(descriptorJson, Descriptor.class);
-            for(Descriptor desc : descriptors) {
-                if(desc.getValue().equals(newMetadata.getValue())) {
+            for (Descriptor desc : descriptors) {
+                if (desc.getValue().equals(newMetadata.getValue())) {
                     desc.setName(newMetadata.getName());
                     desc.setDescription(newMetadata.getDescription());
                     desc.setDescriptor(newMetadata.getDescriptor());
@@ -157,12 +168,11 @@ public class ValidateMetadataActivity extends Activity {
             item.setTitle(getResources().getString(R.string.developer_error));
             item.setDate(Utils.getDate());
             ChangelogManager.addLog(item, this);
-            return;
         }
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString("favorite_name", favoriteName);
         outState.putString("descriptors", new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
         outState.putString("deletionQueue", new Gson().toJson(deletionQueue, Utils.ARRAY_DESCRIPTORS));

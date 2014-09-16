@@ -48,7 +48,6 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class FavoriteDetailsFragment extends Fragment {
 
-    ActionBar mActionBar;
     TextView tv_title;
     TextView tv_description;
     Button bt_fieldMode;
@@ -98,9 +97,17 @@ public class FavoriteDetailsFragment extends Fragment {
 
         tv_title.setText(favoriteName);
 
-        mActionBar = getActivity().getActionBar();
-        mActionBar.setSubtitle(favoriteName);
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBar mActionBar = getActivity().getActionBar();
+        if (mActionBar == null) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("FavoriteDetails" + "Couldn't get actionbar. Compatibility mode layout");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, getActivity());
+        } else {
+            mActionBar.setSubtitle(favoriteName);
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
 
@@ -155,8 +162,6 @@ public class FavoriteDetailsFragment extends Fragment {
                     myIntent.putExtra("favorite_name", favoriteName);
                     myIntent.putExtra("descriptors", new Gson().toJson(itemDescriptors, Utils.ARRAY_DESCRIPTORS));
                     startActivityForResult(myIntent, Utils.METADATA_VALIDATION);
-                } else {
-                    //TODO Edit data
                 }
             }
         });
@@ -316,7 +321,6 @@ public class FavoriteDetailsFragment extends Fragment {
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                return;
                             }
                         })
                         .setIcon(getResources().getDrawable(R.drawable.ic_error))

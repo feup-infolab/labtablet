@@ -19,29 +19,19 @@ import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
 
-/**
- * Created by ricardo on 17-03-2014.
- */
 public class LTLocationListener implements LocationListener {
 
+    ArrayList<Location> mLocations;
     private Context mContext;
     private String path;
-    private String favoriteName;
     private LocationManager locationManager;
     private kmlCreatedInterface mKmlInterface;
-
-    ArrayList<Location> mLocations;
 
     public LTLocationListener(Context context, String path, String favoriteName, kmlCreatedInterface kmlInterface) {
         mLocations = new ArrayList<Location>();
         this.path = path;
         this.mContext = context;
-        this.favoriteName = favoriteName;
         this.mKmlInterface = kmlInterface;
-    }
-
-    public int getNumberCollectedLocations() {
-        return this.mLocations.size();
     }
 
     @Override
@@ -73,7 +63,7 @@ public class LTLocationListener implements LocationListener {
 
         locationManager.removeUpdates(this);
 
-        if(mLocations.size() == 0)
+        if (mLocations.size() == 0)
             return;
 
         new AsyncKMLCreator(new AsyncTaskHandler<String>() {
@@ -112,9 +102,9 @@ public class LTLocationListener implements LocationListener {
 
     }
 
-    public boolean notifyCollectStarted () {
+    public boolean notifyCollectStarted() {
 
-        locationManager = (LocationManager)mContext.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
             alertDialogBuilder

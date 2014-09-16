@@ -12,19 +12,11 @@ import java.util.List;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.Descriptor;
 
-/**
- * Created by ricardo on 20-03-2014.
- */
+
 public class DescriptorsListAdapter extends ArrayAdapter<Descriptor> {
 
     private final Activity context;
     private final List<Descriptor> items;
-
-    static class ViewHolder {
-        public TextView mDescriptorName;
-        public TextView mDescriptor;
-        public TextView mDescriptorDescription;
-    }
 
     public DescriptorsListAdapter(Activity context, List<Descriptor> srcItems) {
         super(context, R.layout.item_descriptor_list, srcItems);
@@ -55,5 +47,11 @@ public class DescriptorsListAdapter extends ArrayAdapter<Descriptor> {
         holder.mDescriptor.setText(item.getDescriptor());
         holder.mDescriptorDescription.setText(item.getDescription());
         return rowView;
+    }
+
+    static class ViewHolder {
+        public TextView mDescriptorName;
+        public TextView mDescriptor;
+        public TextView mDescriptorDescription;
     }
 }

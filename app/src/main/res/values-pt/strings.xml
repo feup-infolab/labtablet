@@ -77,8 +77,8 @@
     <string name="submission_metadata_confirm">Em baixo pode consultar os registos recolhidos até ao momento. Confirme estes campos e depois passe para a fase de upload.</string>
     <string name="submission_loading">O LabTablet está a enviar os dados para o repositório, o que pode demorar algum tempo. Por favor aguarde.</string>
     <string name="submission_effect">Depois deste processo, os registos recolhidos ficarão disponíveis no repositório e associados com os dados da pasta selecionada. Terminada esta etapa, o favorito deixará de estar disponível para edição.</string>
-    <string name="start_proccess">Iniciar upload</string>
-    <string name="cancel_proccess">Cancelar</string>
+    <string name="start_process">Iniciar upload</string>
+    <string name="cancel_process">Cancelar</string>
     <string name="submission_instructions">Enviar os metadados para o repositório fará com que fiquem associados à pasta destino e aos seus conteúdos. Antes de avançar, verifique que tem bateria suficiente e que o disposititvo se encontra ligado à Internet.</string>
     <string name="submission_initial_instructions">Verificar conectividade e nível de bateria\n\nValidar metadados antes de submeter\n\nAvançar para a fase de upload.</string>
     <string name="size">Tamanho</string>
@@ -199,12 +199,12 @@
     <string name="developer_error">Developer error</string>
     <string name="gps_disabled">O GPS está atualmente desligado. Pretende ativa-lo?</string>
     <string name="dismiss">Apagar</string>
-    <string name="update_name_instructions">Please provide the new name for this favorite. All the associated metadata will be migrated to match the given name.</string>
-    <string name="form_convert_data">After accepting the migration, this file will be included in the dataset and visible ouside the metadata folder.</string>
-    <string name="form_convert_data_title">Migrate record to data?</string>
-    <string name="wait_queue_processing">Please stand by, while LabTablet is updating your favorite.</string>
-    <string name="wait_queue_processing_title">Processing updates</string>
-    <string name="load_file_failed">Failed to impor resource to this favorite. Please try again.</string>
-    <string name="importing_file">Importing file...</string>
-    <string name="no_apps_available">There is no application to open this kind of files.</string>
+    <string name="update_name_instructions">Introduza o nome para o favorito. Todos os metadados associados serão transferidos para o novo favorito.</string>
+    <string name="form_convert_data">Depois de aprovar a migração, o ficheiro será incluído no pacote de dados e ficará visivel na sua raíz.</string>
+    <string name="form_convert_data_title">Migrar registo para dados?</string>
+    <string name="wait_queue_processing">Aguarde enquanto o LabTablet atualiza o favorito</string>
+    <string name="wait_queue_processing_title">A processar atualizações</string>
+    <string name="load_file_failed">Não foi impossível importar o ficheiro. Tente novamente.</string>
+    <string name="importing_file">A importar ficheiro&#8230;</string>
+    <string name="no_apps_available">Não existem aplicações para abrir este tipo de ficheiros.</string>
 </resources>

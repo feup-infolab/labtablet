@@ -22,7 +22,9 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.AssociationItem;
+import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Descriptor;
 
@@ -99,7 +101,13 @@ public class FileMgr {
 
         final File newFolder = new File(path);
         if (!newFolder.exists()) {
-            newFolder.mkdirs();
+            if (!newFolder.mkdirs()) {
+                ChangelogItem item = new ChangelogItem();
+                item.setMessage("FieldMode" + "Failed to delete file " + newFolder.getAbsolutePath());
+                item.setTitle(mContext.getResources().getString(R.string.developer_error));
+                item.setDate(Utils.getDate());
+                ChangelogManager.addLog(item, mContext);
+            }
             mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(newFolder)));
         }
     }
@@ -112,8 +120,7 @@ public class FileMgr {
 
         String jsonData = settings.getString(settingsEntry, "");
         if (!jsonData.equals("") && !jsonData.equals("[]")) {
-            ArrayList<Descriptor> descriptors = new Gson().fromJson(jsonData, Utils.ARRAY_DESCRIPTORS);
-            return descriptors;
+            return new Gson().fromJson(jsonData, Utils.ARRAY_DESCRIPTORS);
         }
 
         Toast.makeText(mContext, "No metadata was found. Default configuration loaded.", Toast.LENGTH_SHORT).show();
@@ -186,11 +193,11 @@ public class FileMgr {
         if (file.exists()) {
             if (file.isDirectory()) {
                 File[] files = file.listFiles();
-                for (int i = 0; i < files.length; i++) {
-                    if (files[i].isDirectory()) {
-                        deleteDirectory(files[i]);
+                for (File f : files) {
+                    if (f.isDirectory()) {
+                        deleteDirectory(f);
                     } else {
-                        files[i].delete();
+                        f.delete();
                     }
                 }
             }

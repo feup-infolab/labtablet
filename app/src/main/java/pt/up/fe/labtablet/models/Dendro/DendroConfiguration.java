@@ -1,8 +1,6 @@
 package pt.up.fe.labtablet.models.Dendro;
 
-/**
- * Created by ricardo on 14-05-2014.
- */
+
 public class DendroConfiguration {
     public String username;
     public String password;

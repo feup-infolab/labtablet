@@ -14,7 +14,8 @@ import java.util.zip.ZipOutputStream;
 
 
 public class Zipper {
-    public Zipper () {}
+    public Zipper() {
+    }
 
     public boolean zipFileAtPath(String sourcePath, String toLocation, Context context) {
         // ArrayList<String> contentList = new ArrayList<String>();
@@ -22,7 +23,7 @@ public class Zipper {
 
         File sourceFile = new File(sourcePath);
         try {
-            BufferedInputStream origin = null;
+            BufferedInputStream origin;
             FileOutputStream dest = new FileOutputStream(toLocation);
             ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
                     dest));
@@ -55,7 +56,7 @@ public class Zipper {
         final int BUFFER = 2048;
 
         File[] fileList = folder.listFiles();
-        BufferedInputStream origin = null;
+        BufferedInputStream origin;
         for (File file : fileList) {
             if (file.isDirectory()) {
                 zipSubFolder(out, file, basePathLength);

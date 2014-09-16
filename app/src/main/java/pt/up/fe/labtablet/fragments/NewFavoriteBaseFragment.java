@@ -1,5 +1,6 @@
 package pt.up.fe.labtablet.fragments;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -44,13 +45,12 @@ public class NewFavoriteBaseFragment extends Fragment {
 
     Button bt_load_suggestions;
     Button bt_submit;
+    ProgressDialog mDialog;
+    SharedPreferences.Editor editor;
     private SharedPreferences settings;
     private String projectName;
     private ArrayList<Project> availableProjects;
     private ArrayList<Descriptor> recommendations;
-
-    ProgressDialog mDialog;
-    SharedPreferences.Editor editor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
@@ -62,11 +62,21 @@ public class NewFavoriteBaseFragment extends Fragment {
         bt_submit = (Button) rootView.findViewById(R.id.bt_submit);
         bt_load_suggestions = (Button) rootView.findViewById(R.id.new_favorite_proj_load);
 
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar mActionBar = getActivity().getActionBar();
+        if (mActionBar == null) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("NewFavorite" + "Couldn't get actionbar. Compatibility mode layout");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, getActivity());
+        } else {
+            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         et_datasetName.requestFocus();
 
         if (savedInstanceState != null) {
-            if(savedInstanceState.containsKey("recommendations")) {
+            if (savedInstanceState.containsKey("recommendations")) {
                 recommendations = new Gson().fromJson(
                         savedInstanceState.get("recommendations").toString(),
                         Utils.ARRAY_DESCRIPTORS
@@ -98,7 +108,7 @@ public class NewFavoriteBaseFragment extends Fragment {
                         if (getActivity() == null) {
                             return;
                         }
-                        if(mDialog != null) {
+                        if (mDialog != null) {
                             mDialog.dismiss();
                         }
 
@@ -144,11 +154,11 @@ public class NewFavoriteBaseFragment extends Fragment {
                                                 null, getResources().getDrawable(R.drawable.ic_error), null, null
                                         );
 
-                                        if(error!=null) {
+                                        if (error != null) {
                                             bt_load_suggestions.setText(error.getMessage());
                                         }
 
-                                        if(mDialog != null) {
+                                        if (mDialog != null) {
                                             mDialog.dismiss();
                                         }
                                     }
@@ -190,13 +200,13 @@ public class NewFavoriteBaseFragment extends Fragment {
         bt_submit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(et_datasetName.getText().toString().equals("")) {
+                if (et_datasetName.getText().toString().equals("")) {
                     et_datasetName.setError("A name must be provided");
                     return;
                 }
 
                 //Base configuration already loaded?
-                if(!settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
+                if (!settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle("Application Profile not loaded")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -223,7 +233,7 @@ public class NewFavoriteBaseFragment extends Fragment {
                 }
 
                 editor = settings.edit();
-                if(settings.contains(itemName)) {
+                if (settings.contains(itemName)) {
                     editor.remove(itemName);
                     Toast.makeText(getActivity(), "Will overwrite...", Toast.LENGTH_LONG).show();
                 }
@@ -235,10 +245,10 @@ public class NewFavoriteBaseFragment extends Fragment {
                 ArrayList<ChangelogItem> logs = new ArrayList<ChangelogItem>();
                 ChangelogItem log;
                 String descName;
-                for(Descriptor desc : baseCfg) {
+                for (Descriptor desc : baseCfg) {
                     descName = desc.getName().toLowerCase();
                     log = new ChangelogItem();
-                    if(descName.contains("title")) {
+                    if (descName.contains("title")) {
                         log.setMessage(ChangelogManager.addedLog(descName, itemName));
                         log.setDate(Utils.getDate());
                         log.setTitle(getResources().getString(R.string.log_added));
@@ -247,7 +257,7 @@ public class NewFavoriteBaseFragment extends Fragment {
                         desc.validate();
                         folderMetadata.add(desc);
                     }
-                    if(descName.contains("description")) {
+                    if (descName.contains("description")) {
                         log.setMessage(ChangelogManager.addedLog(descName, itemName));
                         log.setDate(Utils.getDate());
                         log.setTitle(getResources().getString(R.string.log_added));
@@ -256,22 +266,22 @@ public class NewFavoriteBaseFragment extends Fragment {
                         desc.setValue(et_datasetDescription.getText().toString());
                         folderMetadata.add(desc);
                     }
-                    if(descName.contains("date")) {
+                    if (descName.contains("date")) {
                         log.setMessage(ChangelogManager.addedLog(descName, Utils.getDate()));
                         log.setDate(Utils.getDate());
                         log.setTitle(getResources().getString(R.string.log_added));
                         logs.add(log);
                         desc.validate();
-                        desc.setValue( Utils.getDate());
+                        desc.setValue(Utils.getDate());
                         folderMetadata.add(desc);
                     }
 
                 }
                 editor.putString(itemName, new Gson().toJson(folderMetadata));
-                if(recommendations!=null && recommendations.size()>0) {
+                if (recommendations != null && recommendations.size() > 0) {
                     editor.putString(itemName + "_dendro", new Gson().toJson(recommendations));
                     log = new ChangelogItem();
-                    log.setMessage(getResources().getString(R.string.log_loaded) + ": " +projectName);
+                    log.setMessage(getResources().getString(R.string.log_loaded) + ": " + projectName);
                     log.setTitle(getResources().getString(R.string.log_loaded));
                     logs.add(log);
                 }
@@ -279,7 +289,7 @@ public class NewFavoriteBaseFragment extends Fragment {
                 editor.apply();
 
                 ChangelogManager.addItems(logs, getActivity());
-                if(mDialog != null) {
+                if (mDialog != null) {
                     mDialog.dismiss();
                 }
 

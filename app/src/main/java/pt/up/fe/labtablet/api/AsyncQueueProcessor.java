@@ -9,8 +9,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.Utils;
 
 /**
  * Process metadata queues after editing or validating metadata records
@@ -56,7 +58,13 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
         if (deletionQueue != null && deletionQueue.size() > 0) {
             for (Descriptor desc : deletionQueue) {
                 if (!desc.getFilePath().equals("")) {
-                    new File(desc.getFilePath()).delete();
+                    if (!(new File(desc.getFilePath()).delete())) {
+                        ChangelogItem item = new ChangelogItem();
+                        item.setMessage("Queue Processor" + "Failed to delete file " + desc.getFilePath());
+                        item.setTitle(mContext.getResources().getString(R.string.developer_error));
+                        item.setDate(Utils.getDate());
+                        ChangelogManager.addLog(item, mContext);
+                    }
                 }
             }
         }

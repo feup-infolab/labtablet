@@ -10,10 +10,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,12 +19,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.Utils;
 
-/**
- * Created by ricardo on 11-03-2014.
- */
 public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
 
     private final Activity context;
@@ -54,7 +52,7 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
         // reuse views
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.item_metadata_list, null);
+            rowView = inflater.inflate(R.layout.item_metadata_list, parent, false);
             // configure view holder
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.mDescriptorName = (TextView) rowView.findViewById(R.id.metadata_item_title);
@@ -127,6 +125,11 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
                 o2.inSampleSize = scale;
                 return BitmapFactory.decodeStream(new FileInputStream(file), null, o2);
             } catch (FileNotFoundException e) {
+                ChangelogItem item = new ChangelogItem();
+                item.setMessage("MetadataListAdapter" + "File was not found: " + e.toString());
+                item.setTitle(context.getResources().getString(R.string.developer_error));
+                item.setDate(Utils.getDate());
+                ChangelogManager.addLog(item, context);
             }
             return null;
         }

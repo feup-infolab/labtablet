@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,13 +26,15 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.DescriptorsListAdapter;
+import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.AssociationItem;
+import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class DescriptorPickerActivity extends Activity implements ActionBar.OnNavigationListener {
 
-    private ListView lv_descriptors;
+    private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
     private TextView tv_header;
     private DescriptorsListAdapter mAdapter;
     private SharedPreferences settings;
@@ -42,8 +45,6 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
     private Integer returnMode;
     private Bundle mBundle;
 
-    private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
         returnMode = mBundle.getInt("returnMode");
         favoriteName = mBundle.getString("favoriteName");
 
-        if(favoriteName.equals("")) {
+        if (favoriteName.equals("")) {
             Toast.makeText(this, "Empty fav name", Toast.LENGTH_SHORT).show();
         }
 
@@ -61,14 +62,14 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                 getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
-        if(!settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
+        if (!settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
             Toast.makeText(getApplication(),
                     getResources().getString(R.string.base_configuration_not_found),
                     Toast.LENGTH_LONG).show();
             return;
         }
 
-        if(returnMode.equals(Utils.DESCRIPTOR_GET)) {
+        if (returnMode.equals(Utils.DESCRIPTOR_GET)) {
             tv_header.setText(getResources().getString(R.string.select_descriptor_return));
         } else if (returnMode.equals(Utils.DESCRIPTOR_DEFINE)) {
             tv_header.setText(getResources().getString(R.string.select_descriptor_new));
@@ -78,29 +79,38 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
 
         if (!mBundle.containsKey("file_extension")) {
             extension = "";
-        } else  {
+        } else {
             extension = mBundle.getString("file_extension");
         }
 
         // Set up the action bar to show a dropdown list.
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        ActionBar actionBar = getActionBar();
+        if (actionBar == null) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("DescriptorPicker" + "Couldn't get actionbar. Compatibility mode layout");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, DescriptorPickerActivity.this);
+        } else {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
-        // Set up the dropdown list navigation in the action bar.
-        actionBar.setListNavigationCallbacks(
-                // Specify a SpinnerAdapter to populate the dropdown list.
-                new ArrayAdapter<String>(
-                        actionBar.getThemedContext(),
-                        android.R.layout.simple_list_item_1,
-                        android.R.id.text1,
-                        new String[] {
-                                getResources().getString(R.string.recommended),
-                                getResources().getString(R.string.from_dendro),
-                                getResources().getString(R.string.all)
-                        }),
-                this);
+            // Set up the dropdown list navigation in the action bar.
+            actionBar.setListNavigationCallbacks(
+                    // Specify a SpinnerAdapter to populate the dropdown list.
+                    new ArrayAdapter<String>(
+                            actionBar.getThemedContext(),
+                            android.R.layout.simple_list_item_1,
+                            android.R.id.text1,
+                            new String[]{
+                                    getResources().getString(R.string.recommended),
+                                    getResources().getString(R.string.from_dendro),
+                                    getResources().getString(R.string.all)
+                            }),
+                    this);
+        }
 
+        ListView lv_descriptors;
         lv_descriptors = (ListView) findViewById(R.id.lv_descriptors);
         lv_descriptors.setDividerHeight(0);
 
@@ -121,7 +131,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                 final Descriptor selectedDescriptor = displayedDescriptors.get(position);
 
                 //save empty descriptor as an association
-                if(returnMode == Utils.DESCRIPTOR_GET) {
+                if (returnMode == Utils.DESCRIPTOR_GET) {
                     String descriptorJson = mBundle.getString("descriptor");
                     Descriptor emptyDescriptor = new Gson().fromJson(descriptorJson, Descriptor.class);
                     selectedDescriptor.setValue(emptyDescriptor.getValue());
@@ -129,13 +139,12 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                     returnIntent.putExtra("descriptor", new Gson().toJson(selectedDescriptor, Descriptor.class));
                     setResult(RESULT_OK, returnIntent);
                     finish();
-                }
-                else if (returnMode == Utils.DESCRIPTOR_ASSOCIATE) {
-                    String associationsJson  = settings.getString(Utils.ASSOCIATIONS_CONFIG_ENTRY, "");
+                } else if (returnMode == Utils.DESCRIPTOR_ASSOCIATE) {
+                    String associationsJson = settings.getString(Utils.ASSOCIATIONS_CONFIG_ENTRY, "");
                     ArrayList<AssociationItem> mAssociations =
                             new Gson().fromJson(associationsJson, Utils.ARRAY_ASSOCIATION_ITEM);
 
-                    for(AssociationItem item : mAssociations) {
+                    for (AssociationItem item : mAssociations) {
                         if (item.getFileExtension().contains(extension)) {
                             item.setDescriptor(selectedDescriptor);
                         }
@@ -149,7 +158,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                     finish();
                 }
                 //select descriptor and set its value
-                else if(returnMode == Utils.DESCRIPTOR_DEFINE) {
+                else if (returnMode == Utils.DESCRIPTOR_DEFINE) {
                     selectedDescriptor.setState(Utils.DESCRIPTOR_STATE_VALIDATED);
                     AlertDialog.Builder builder = new AlertDialog.Builder(DescriptorPickerActivity.this);
                     builder.setTitle(selectedDescriptor.getName());
@@ -164,7 +173,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                     builder.setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if(input.getText().toString().equals("")) {
+                            if (input.getText().toString().equals("")) {
                                 input.setError("The value shall not be empty.");
                             } else {
                                 selectedDescriptor.setValue(input.getText().toString());
@@ -194,16 +203,34 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
+    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         // Restore the previously serialized current dropdown position.
         if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
+            if (getActionBar() == null) {
+                ChangelogItem item = new ChangelogItem();
+                item.setMessage("DescriptorPicker" + "Couldn't get actionbar");
+                item.setTitle(getResources().getString(R.string.developer_error));
+                item.setDate(Utils.getDate());
+                ChangelogManager.addLog(item, DescriptorPickerActivity.this);
+                return;
+            }
             getActionBar().setSelectedNavigationItem(
                     savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+
+        if (getActionBar() == null) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("DescriptorPicker" + "Couldn't get actionbar");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, DescriptorPickerActivity.this);
+            return;
+        }
+
         // Serialize the current dropdown position.
         outState.putInt(STATE_SELECTED_NAVIGATION_ITEM,
                 getActionBar().getSelectedNavigationIndex());
@@ -231,14 +258,22 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
             case 0: //recommended
                 displayedDescriptors = new ArrayList<Descriptor>();
                 tv_header.setText(getResources().getString(R.string.pick_recommended_descriptors));
-                for(Descriptor d : mDescriptors) {
+                for (Descriptor d : mDescriptors) {
                     if (d.getTag().equals(extension)) {
                         displayedDescriptors.add(d);
                     }
                 }
 
-                if(displayedDescriptors.size() == 0) {
+                if (displayedDescriptors.size() == 0) {
                     Toast.makeText(this, getResources().getString(R.string.no_dendro_recommended_descriptors), Toast.LENGTH_SHORT).show();
+                    if (getActionBar() == null) {
+                        ChangelogItem item = new ChangelogItem();
+                        item.setMessage("DescriptorPicker" + "Couldn't get actionbar; recommended descriptors");
+                        item.setTitle(getResources().getString(R.string.developer_error));
+                        item.setDate(Utils.getDate());
+                        ChangelogManager.addLog(item, DescriptorPickerActivity.this);
+                        break;
+                    }
                     getActionBar().setSelectedNavigationItem(2);
                 } else {
                     mAdapter.clear();
@@ -249,7 +284,17 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
             case 1: //Dendro
                 if (!settings.contains(favoriteName + "_dendro")) {
                     Toast.makeText(this, getResources().getString(R.string.no_recommended_descriptors), Toast.LENGTH_SHORT).show();
-                    getActionBar().setSelectedNavigationItem(2);
+                    ActionBar mActionBar = getActionBar();
+                    if (mActionBar == null) {
+                        ChangelogItem item = new ChangelogItem();
+                        item.setMessage("DescriptorPickerActivity" + "Couldn't get actionbar. Compatibility mode layout");
+                        item.setTitle(getResources().getString(R.string.developer_error));
+                        item.setDate(Utils.getDate());
+                        ChangelogManager.addLog(item, DescriptorPickerActivity.this);
+                    } else {
+                        getActionBar().setSelectedNavigationItem(2);
+                    }
+
                     break;
                 }
 

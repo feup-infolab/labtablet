@@ -1,6 +1,7 @@
 package pt.up.fe.labtablet.activities;
 
 import android.animation.ObjectAnimator;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -18,14 +19,20 @@ import android.widget.Toast;
 import java.util.Locale;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.api.SubmissionStepHandler;
 import pt.up.fe.labtablet.fragments.SubmissionStep1;
 import pt.up.fe.labtablet.fragments.SubmissionStep2;
 import pt.up.fe.labtablet.fragments.SubmissionStep3;
 import pt.up.fe.labtablet.fragments.SubmissionStep4;
+import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.utils.Utils;
 
 public class SubmissionValidationActivity extends Activity implements SubmissionStepHandler {
 
+    private static String favoriteName;
+    private static String projectName;
+    private static String destUri;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -35,16 +42,27 @@ public class SubmissionValidationActivity extends Activity implements Submission
      * {@link android.support.v13.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
-
-    private static String favoriteName;
-    private static String projectName;
-    private static String destUri;
-    private ProgressBar pb_submission_state;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    private ProgressBar pb_submission_state;
+
+    public static String getProjectName() {
+        return projectName;
+    }
+
+    public static void setProjectName(String inProjectName) {
+        projectName = inProjectName;
+    }
+
+    public static String getDestUri() {
+        return destUri;
+    }
+
+    public static void setDestUri(String uri) {
+        destUri = uri;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +81,19 @@ public class SubmissionValidationActivity extends Activity implements Submission
         pb_submission_state.setProgress(0);
 
         favoriteName = getIntent().getStringExtra("favorite_name");
-        getActionBar().setTitle(favoriteName);
-        getActionBar().setSubtitle("Validating submission");
+
+        ActionBar mActionBar = getActionBar();
+        if (mActionBar == null) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("SubmissionValidation" + "Couldn't get actionbar. Compatibility mode layout");
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, SubmissionValidationActivity.this);
+        } else {
+            mActionBar.setTitle(favoriteName);
+            mActionBar.setSubtitle("Validating submission");
+        }
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -122,7 +151,6 @@ public class SubmissionValidationActivity extends Activity implements Submission
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -140,6 +168,23 @@ public class SubmissionValidationActivity extends Activity implements Submission
     @Override
     public void nextStep(int stage) {
         mViewPager.setCurrentItem(stage);
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_warning)
+                .setTitle(R.string.cancel_submission)
+                .setMessage(R.string.really_cancel_upload)
+                .setPositiveButton(R.string.form_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+
     }
 
     /**
@@ -161,7 +206,7 @@ public class SubmissionValidationActivity extends Activity implements Submission
                 case 1:
                     return SubmissionStep2.newInstance(favoriteName, SubmissionValidationActivity.this);
                 case 2:
-                    return  SubmissionStep3.newInstance(favoriteName, SubmissionValidationActivity.this);
+                    return SubmissionStep3.newInstance(favoriteName, SubmissionValidationActivity.this);
                 case 3:
                     return SubmissionStep4.newInstance(favoriteName, projectName, destUri);
                 default:
@@ -186,37 +231,10 @@ public class SubmissionValidationActivity extends Activity implements Submission
                 case 2:
                     return getString(R.string.title_section3).toUpperCase(l);
                 case 3:
-                    return  getString(R.string.title_section4).toUpperCase(l);
+                    return getString(R.string.title_section4).toUpperCase(l);
             }
             return null;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_warning)
-                .setTitle(R.string.cancel_submission)
-                .setMessage(R.string.really_cancel_upload)
-                .setPositiveButton(R.string.form_ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-
-    }
-
-
-    public static void setProjectName(String inProjectName) {projectName = inProjectName; }
-    public static String getProjectName() {return projectName;}
-    public static String getDestUri() {
-        return destUri;
-    }
-    public static void setDestUri(String uri) {
-        destUri = uri;
     }
 
 }

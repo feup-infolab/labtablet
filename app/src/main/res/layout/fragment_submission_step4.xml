@@ -4,75 +4,72 @@
     android:layout_height="match_parent"
     tools:context="pt.up.fe.labtablet.fragments.SubmissionStep4">
 
- <RelativeLayout
-     android:layout_width="fill_parent"
-     android:layout_height="wrap_content">
-
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:background="@drawable/card"
-        android:id="@+id/submission_state_rl"
-        android:layout_alignParentTop="true"
-        >
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/submission_loading_tv"
+        <RelativeLayout
+            android:id="@+id/submission_state_rl"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_width="wrap_content"
+            android:background="@drawable/card"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/submission_loading_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/submission_loading"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <ProgressBar
+                android:id="@+id/pb_submission_loading"
+                style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/submission_loading_tv"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="50dp"
+                android:layout_marginTop="50dp"
+                android:max="100"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/submission_status_message"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pb_submission_loading"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:text="@string/wait"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/light_gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/submission_status_message"
+                android:gravity="center"
+                android:text="@string/submission_effect"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/submission_start_upload"
+            style="@style/btnStyleBeige"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_below="@id/submission_state_rl"
             android:layout_centerHorizontal="true"
-            android:text="@string/submission_loading" />
-
-        <ProgressBar
-            android:layout_below="@id/submission_loading_tv"
-            android:id="@+id/pb_submission_loading"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp"
-            android:visibility="visible"
-            style="@android:style/Widget.Holo.ProgressBar.Horizontal"
-            android:max="100"
-            />
-
-        <TextView
-            android:id="@+id/submission_status_message"
-            android:layout_below="@id/pb_submission_loading"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/wait"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/light_gray"
-            android:layout_marginBottom="20dp"
-            android:gravity="center"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/submission_status_message"
-            android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/submission_effect"/>
-
+            android:layout_marginTop="25dp"
+            android:drawableEnd="@drawable/ab_upload"
+            android:padding="20dp"
+            android:text="@string/start_process"
+            android:textSize="20sp" />
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/submission_start_upload"
-        android:layout_below="@id/submission_state_rl"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:textSize="20sp"
-        style="@style/btnStyleBeige"
-        android:drawableEnd="@drawable/ab_upload"
-        android:text="@string/start_proccess"
-        android:padding="20dp"
-        />
- </RelativeLayout>
 </FrameLayout>

@@ -10,10 +10,7 @@ import pt.up.fe.labtablet.models.Dendro.Ontologies.Nie;
 import pt.up.fe.labtablet.models.Dendro.Ontologies.Rdf;
 import pt.up.fe.labtablet.models.Dendro.Ontologies.Research;
 
-/**
- * Created by ricardo on 08-05-2014.
- */
-public class Project{
+public class Project {
     private Achem achem;
     private Dcb dcb;
     private Dcterms dcterms;
@@ -25,66 +22,86 @@ public class Project{
     private Research research;
     private String uri;
 
-    public Project() {};
+    public Project() {
+    }
 
-    public Achem getAchem(){
+    public Achem getAchem() {
         return this.achem;
     }
-    public void setAchem(Achem achem){
+
+    public void setAchem(Achem achem) {
         this.achem = achem;
     }
-    public Dcb getDcb(){
+
+    public Dcb getDcb() {
         return this.dcb;
     }
-    public void setDcb(Dcb dcb){
+
+    public void setDcb(Dcb dcb) {
         this.dcb = dcb;
     }
-    public Dcterms getDcterms(){
+
+    public Dcterms getDcterms() {
         return this.dcterms;
     }
-    public void setDcterms(Dcterms dcterms){
+
+    public void setDcterms(Dcterms dcterms) {
         this.dcterms = dcterms;
     }
-    public Ddr getDdr(){
+
+    public Ddr getDdr() {
         return this.ddr;
     }
-    public void setDdr(Ddr ddr){
+
+    public void setDdr(Ddr ddr) {
         this.ddr = ddr;
     }
-    public Foaf getFoaf(){
+
+    public Foaf getFoaf() {
         return this.foaf;
     }
-    public void setFoaf(Foaf foaf){
+
+    public void setFoaf(Foaf foaf) {
         this.foaf = foaf;
     }
-    public Nfo getNfo(){
+
+    public Nfo getNfo() {
         return this.nfo;
     }
-    public void setNfo(Nfo nfo){
+
+    public void setNfo(Nfo nfo) {
         this.nfo = nfo;
     }
-    public Nie getNie(){
+
+    public Nie getNie() {
         return this.nie;
     }
-    public void setNie(Nie nie){
+
+    public void setNie(Nie nie) {
         this.nie = nie;
     }
-    public Rdf getRdf(){
+
+    public Rdf getRdf() {
         return this.rdf;
     }
-    public void setRdf(Rdf rdf){
+
+    public void setRdf(Rdf rdf) {
         this.rdf = rdf;
     }
-    public Research getResearch(){
+
+    public Research getResearch() {
         return this.research;
     }
-    public void setResearch(Research research){
+
+    public void setResearch(Research research) {
         this.research = research;
     }
-    public String getUri(){
+
+    public String getUri() {
         return this.uri;
     }
-    public void setUri(String uri){
+
+    public void setUri(String uri) {
         this.uri = uri;
     }
 }
