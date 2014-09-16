@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Dendro.DendroFolderItem;
-import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, ArrayList<DendroFolderItem>> {

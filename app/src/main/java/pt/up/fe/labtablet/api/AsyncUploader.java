@@ -275,16 +275,12 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
         @Override
         public boolean isStreaming() {
             return mEntity.isStreaming();
-        } // CONSIDER put a _real_ delegator into here!
+        }
 
         @Override
         public void writeTo(OutputStream outstream) throws IOException {
 
             class ProxyOutputStream extends FilterOutputStream {
-                /**
-                 * @author Stephen Colebourne
-                 */
-
                 public ProxyOutputStream(OutputStream proxy) {
                     super(proxy);
                 }
@@ -314,7 +310,7 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
                 }
                 public void write(byte[] bts, int st, int end) throws IOException {
                     totalSent += end;
-                    publishProgress((int) ((totalSent / (float) totalSize) * 100));
+                    publishProgress(((int) ((totalSent / (float) totalSize) * 100))+100);
                     out.write(bts, st, end);
                 }
             }
@@ -325,4 +321,3 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
     };
 
 }
-

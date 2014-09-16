@@ -114,12 +114,12 @@ public class SubmissionStep4 extends Fragment {
                             return;
                         }
 
-                        if (value <= 1) {
-                            tv_progress_status.setText(getResources().getString(R.string.creating_package));
-                            pbStatus.setProgress(value*100);
+
+                        if (value > 100) {
+                            tv_progress_status.setText(getResources().getString(R.string.uploading));
+                            pbStatus.setProgress(value -100);
                             return;
                         }
-
                         pbStatus.setProgress(value);
                         switch (value) {
                             case 10:
@@ -142,6 +142,8 @@ public class SubmissionStep4 extends Fragment {
                                 break;
                             case 100:
                                 tv_progress_status.setText(getResources().getString(R.string.finished));
+                                break;
+                            default:
                                 break;
                         }
                     }
