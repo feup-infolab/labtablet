@@ -27,6 +27,7 @@ import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.Form;
 
 public class FileMgr {
 
@@ -188,6 +189,35 @@ public class FileMgr {
         }
     }
 
+    public static void overwriteForms(ArrayList<Form> formularios, Context mContext) {
+        SharedPreferences settings = mContext.getSharedPreferences(
+                mContext.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        if (!settings.contains("forms")) {
+            Log.e("OVERWRITE", "Entry was not found for folder ");
+        }
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove("forms");
+        editor.putString("forms", new Gson().toJson(formularios, Utils.ARRAY_FORM_ITEM));
+        editor.apply();
+    }
+
+    public static ArrayList<Form> getForms(Context mContext) {
+        SharedPreferences settings = mContext.getSharedPreferences(
+                mContext.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        if (!settings.contains("forms")) {
+            Log.e("GET FORMS", "Entry was not found");
+            return new ArrayList<Form>();
+        }
+        return new Gson().fromJson(
+                settings.getString("forms", ""),
+                Utils.ARRAY_FORM);
+    }
+
     public static boolean deleteDirectory(File file) {
         boolean result = false;
         if (file.exists()) {
@@ -282,4 +312,6 @@ public class FileMgr {
         SharedPreferences settings = mContext.getSharedPreferences(mContext.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
         return new Gson().fromJson(settings.getString(Utils.DENDRO_CONFS_ENTRY, ""), DendroConfiguration.class);
     }
+
+
 }

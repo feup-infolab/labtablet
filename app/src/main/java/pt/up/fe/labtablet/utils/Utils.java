@@ -12,6 +12,8 @@ import pt.up.fe.labtablet.models.Dendro.DendroDescriptor;
 import pt.up.fe.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.models.FormQuestion;
 
 public class Utils {
 
@@ -55,6 +57,10 @@ public class Utils {
     public static Type ARRAY_DIRECTORY_LISTING = new TypeToken<ArrayList<DendroFolderItem>>() {
     }.getType();
     public static Type ARRAY_DENDRO_METADATA_RECORD = new TypeToken<ArrayList<DendroMetadataRecord>>() {
+    }.getType();
+    public static Type ARRAY_FORM_ITEM = new TypeToken<ArrayList<FormQuestion>>() {
+    }.getType();
+    public static Type ARRAY_FORM = new TypeToken<ArrayList<Form>>() {
     }.getType();
 
     // ---- Activities Results ---------

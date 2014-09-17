@@ -210,4 +210,6 @@
     <string name="remove_file_title">Remover ficheiro</string>
     <string name="metadata">Metadata</string>
     <string name="data">Data</string>
+    <string name="title_activity_form_creator">FormCreatorActivity</string>
+    <string name="action_new_form">New Form</string>
 </resources>

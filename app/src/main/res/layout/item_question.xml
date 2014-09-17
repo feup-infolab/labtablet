@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card"
+    android:padding="20dp"
+    android:orientation="vertical"
+    >
+
+    <Button
+        android:id="@+id/form_item_delete"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/ab_cross"
+        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_question"
+        android:layout_toStartOf="@id/form_item_delete"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <View
+        android:layout_height="fill_parent"
+        android:layout_width="0dp"
+        android:layout_weight="0.02"
+        android:layout_marginEnd="5dp"
+        android:background="@android:color/holo_red_dark"
+        />
+
+    <TextView
+        android:id="@+id/form_item_question"
+        android:layout_width="0dp"
+        android:layout_weight="0.98"
+        android:layout_height="wrap_content"
+        android:ellipsize="none"
+        style="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:text="Is this a question? because i really want to know if this is reaaaaally reaaaaaaly a question. Maybe mr saxobeat can help with this discovery."
+        />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_below="@id/ll_question"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        >
+
+        <TextView
+            android:id="@+id/form_item_type"
+            android:layout_alignParentTop="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/second_grey"
+            android:text="Multiple Choice"
+            />
+        <TextView
+            android:id="@+id/form_item_values"
+            android:layout_below="@id/form_item_type"
+            android:layout_marginTop="5dp"
+            android:text="[ Yes, No, Maybe, Maybe not, I don't know ]"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        </RelativeLayout>
+</RelativeLayout>
