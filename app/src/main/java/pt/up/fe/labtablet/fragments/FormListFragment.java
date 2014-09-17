@@ -16,9 +16,10 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.activities.FormCreatorActivity;
+import pt.up.fe.labtablet.activities.FormViewerActivity;
 import pt.up.fe.labtablet.adapters.FormListAdapter;
 import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class FormListFragment extends ListFragment {
@@ -34,9 +35,7 @@ public class FormListFragment extends ListFragment {
         getListView().setBackgroundColor(0);
         setHasOptionsMenu(true);
 
-        items = new ArrayList<Form>();
-        Form item = new Form("Forulário Leproso");
-        items.add(item);
+        items = FileMgr.getForms(getActivity());
 
 
         mAdapter = new FormListAdapter(getActivity(), items);
@@ -46,7 +45,7 @@ public class FormListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, final int position, long id) {
 
-        Intent intent = new Intent(getActivity(), FormCreatorActivity.class);
+        Intent intent = new Intent(getActivity(), FormViewerActivity.class);
         intent.putExtra("form", new Gson().toJson(items.get(position), Utils.ARRAY_FORM_ITEM));
         startActivity(intent);
 

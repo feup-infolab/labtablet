@@ -53,7 +53,7 @@
             >
         </activity>
         <activity
-            android:name="pt.up.fe.labtablet.activities.FormCreatorActivity"
+            android:name=".activities.FormViewerActivity"
             android:label="@string/title_activity_form_creator"
             android:screenOrientation="portrait"
             >

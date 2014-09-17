@@ -21,7 +21,7 @@ public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
 
 
     public FormItemListAdapter(Activity context, ArrayList<FormQuestion> srcItems) {
-        super(context, R.layout.item_form_list, srcItems);
+        super(context, R.layout.item_question, srcItems);
         this.context = context;
         this.items = srcItems;
     }
@@ -39,7 +39,7 @@ public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
         // reuse views
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.item_form_list, parent, false);
+            rowView = inflater.inflate(R.layout.item_question, parent, false);
             // configure view holder
 
             ViewHolder viewHolder = new ViewHolder();
