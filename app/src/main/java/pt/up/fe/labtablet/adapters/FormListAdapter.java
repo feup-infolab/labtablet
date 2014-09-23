@@ -1,7 +1,8 @@
 package pt.up.fe.labtablet.adapters;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.app.FragmentTransaction;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.activities.FormViewerActivity;
+import pt.up.fe.labtablet.fragments.FormViewFragment;
 import pt.up.fe.labtablet.models.Form;
-import pt.up.fe.labtablet.utils.Utils;
 
 /**
  * Created by ricardo on 9/17/14.
@@ -64,9 +64,18 @@ public class FormListAdapter extends ArrayAdapter<Form> {
         holder.mFormTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, FormViewerActivity.class);
-                intent.putExtra("form", new Gson().toJson(items.get(position), Form.class));
-                context.startActivity(intent);
+                //Intent intent = new Intent(context, FormViewerActivity.class);
+                //intent.putExtra("form", new Gson().toJson(items.get(position), Form.class));
+                //context.startActivity(intent);
+                FragmentTransaction transaction = context.getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                FormViewFragment formDetail = new FormViewFragment();
+                Bundle args = new Bundle();
+                args.putString("form", new Gson().toJson(items.get(position)));
+                formDetail.setArguments(args);
+                transaction.replace(R.id.frame_container, formDetail);
+                //transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 

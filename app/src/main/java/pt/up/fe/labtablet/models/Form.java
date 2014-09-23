@@ -29,4 +29,8 @@ public class Form {
         this.formQuestions = formQuestions;
     }
 
+    public void addQuestion(FormQuestion fq) {
+        this.formQuestions.add(fq);
+    }
+
 }

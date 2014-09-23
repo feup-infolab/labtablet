@@ -32,18 +32,14 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.NavDrawerListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.fragments.ConfigurationFragment;
-import pt.up.fe.labtablet.fragments.FormListFragment;
 import pt.up.fe.labtablet.fragments.HomeFragment;
 import pt.up.fe.labtablet.fragments.ListChangelogFragment;
 import pt.up.fe.labtablet.fragments.ListFavoritesFragment;
+import pt.up.fe.labtablet.fragments.ListFormFragment;
 import pt.up.fe.labtablet.fragments.NewFavoriteBaseFragment;
 import pt.up.fe.labtablet.fragments.SearchFragment;
 import pt.up.fe.labtablet.models.ChangelogItem;
-import pt.up.fe.labtablet.models.Form;
-import pt.up.fe.labtablet.models.FormEnumType;
-import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.models.NavDrawerItem;
-import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class MainActivity extends Activity {
@@ -139,23 +135,6 @@ public class MainActivity extends Activity {
             displayView(0);
         }
         mDrawerLayout.openDrawer(mDrawerList);
-
-
-        //TODO remove this object injector!
-        ArrayList<Form> formularios  = new ArrayList<Form>();
-        for (int i = 0; i < 15; ++i) {
-            Form f = new Form("formulario " + i);
-
-            ArrayList<FormQuestion> qestoes = new ArrayList<FormQuestion>();
-            for(int j = 0; j < 10; ++j) {
-                FormQuestion fq = new FormQuestion(FormEnumType.FREE_TEXT, "pergunta? " + j, "Resposta!! " + j);
-                qestoes.add(fq);
-            }
-            f.setFormQuestions(qestoes);
-            formularios.add(f);
-        }
-        FileMgr.overwriteForms(formularios, this);
-        //-----------------------------------------------------------------------
     }
 
     @Override
@@ -226,7 +205,7 @@ public class MainActivity extends Activity {
                 tag = "LISTFAV";
                 break;
             case 4:
-                fragment = new FormListFragment();
+                fragment = new ListFormFragment();
                 tag = "LISTFORM";
                 break;
             case 5:

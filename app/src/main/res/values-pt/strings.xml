@@ -212,4 +212,8 @@
     <string name="data">Data</string>
     <string name="title_activity_form_creator">FormCreatorActivity</string>
     <string name="action_new_form">New Form</string>
+    <string name="get_form_name">Form name</string>
+    <string name="form_editor_top">These are the questions associated with this form. You can edit them or add new ones.</string>
+    <string name="empty_form_rl">There are no items associated with this form. To add a new one, tap the button below.</string>
+    <string name="title_activity_form_question_creator">FormQuestionCreatorActivity</string>
 </resources>

@@ -47,7 +47,10 @@ public class Utils {
     //Launch sketchActivity
     public static final int SKETCH_INTENT_REQUEST = 6;
     //When the metadata edition changed the title
-    public static final int RESULT_TITLE_CHANGED = 8;
+    public static final int BUILD_FORM_QUESTION = 8;
+
+
+
     public static Type ARRAY_ASSOCIATION_ITEM = new TypeToken<ArrayList<AssociationItem>>() {
     }.getType();
     public static Type ARRAY_CHANGELOG_ITEM = new TypeToken<ArrayList<ChangelogItem>>() {

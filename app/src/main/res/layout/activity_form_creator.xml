@@ -1,27 +1,72 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     >
 
     <TextView
-        android:text="Form creator 2000"
+        android:id="@+id/form_view_instructions"
+        android:text="@string/form_editor_top"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:layout_marginTop="0dp"
+        android:padding="20dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textStyle="bold"
         android:fontFamily="sans-serif"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card"
+        android:layout_alignParentTop="true"
        />
 
     <ListView
         android:id="@+id/lv_form_items"
+        android:layout_below="@id/form_view_instructions"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.9"
+        android:layout_height="fill_parent"
         />
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/empty_form_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/iv_empty_form_img"
+            android:layout_centerInParent="true"
+            android:src="@android:drawable/ic_dialog_info"
+            android:layout_marginBottom="35dp"
+            />
+
+        <TextView
+            android:layout_below="@id/iv_empty_form_img"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_form_rl"
+            android:textColor="@color/second_grey"
+            android:gravity="center"
+            android:textSize="35sp"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+            />
+        </RelativeLayout>
+
+    <Button
+        android:id="@+id/bt_form_new_question"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/round_button"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:paddingBottom="16dp"
+        android:text="+"
+        android:textColor="@color/white"
+        android:textSize="40sp" />
+
+</RelativeLayout>
