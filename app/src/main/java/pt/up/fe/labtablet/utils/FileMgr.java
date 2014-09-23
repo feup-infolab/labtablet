@@ -363,4 +363,20 @@ public class FileMgr {
     }
 
 
+    public static void deleteForm(String formName, Context mContext) {
+        SharedPreferences settings = mContext.getSharedPreferences(mContext.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
+        if (!settings.contains("forms")) {
+            Log.e("DELETE_FORM", "ENTRY WAS NOT FOUND!");
+            return;
+        }
+
+        ArrayList<Form> forms = getForms(mContext);
+        for (Form f: forms) {
+            if  (f.getFormName().equals(formName)) {
+                forms.remove(f);
+                break;
+            }
+        }
+        overwriteForms(forms, mContext);
+    }
 }

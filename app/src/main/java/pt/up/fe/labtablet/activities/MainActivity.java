@@ -3,11 +3,8 @@ package pt.up.fe.labtablet.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -221,6 +218,8 @@ public class MainActivity extends Activity {
         }
 
         if (fragment != null) {
+            //the favorite creation view should never be added to the back stack
+
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.frame_container, fragment, tag)
@@ -301,8 +300,11 @@ public class MainActivity extends Activity {
         super.onSaveInstanceState(outState);
     }
 
+
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
+        /*
         Fragment displayedFragment = getFragmentManager().findFragmentByTag("HOME");
 
         if (displayedFragment.isVisible()) {
@@ -326,11 +328,10 @@ public class MainActivity extends Activity {
             transaction.addToBackStack("HOME");
             transaction.commit();
         }
+        */
     }
 
-    /**
-     * Slide menu item click listener
-     */
+
     private class SlideMenuClickListener implements
             ListView.OnItemClickListener {
         @Override
@@ -340,5 +341,7 @@ public class MainActivity extends Activity {
             displayView(position);
         }
     }
+
+
 }
 

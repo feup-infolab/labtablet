@@ -46,7 +46,7 @@ public class ListFormFragment extends ListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_form_list_fragment, menu);
+        inflater.inflate(R.menu.form_list_fragment, menu);
     }
 
     @Override

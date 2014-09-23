@@ -52,33 +52,40 @@ public class FormListAdapter extends ArrayAdapter<Form> {
 
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.mFormTitle = (TextView) rowView.findViewById(R.id.form_name);
+            viewHolder.mFormItemDescription = (TextView) rowView.findViewById(R.id.form_item_description);
+            viewHolder.mFormItemDuration = (TextView) rowView.findViewById(R.id.form_item_duration);
+            viewHolder.mFormItemQuestions = (TextView) rowView.findViewById(R.id.form_item_number_questions);
             rowView.setTag(viewHolder);
+            rowView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentTransaction transaction = context.getFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                    FormViewFragment formDetail = new FormViewFragment();
+                    Bundle args = new Bundle();
+                    args.putString("form", new Gson().toJson(items.get(position)));
+                    formDetail.setArguments(args);
+                    transaction.replace(R.id.frame_container, formDetail);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            });
         }
 
         // fill data
         ViewHolder holder = (ViewHolder) rowView.getTag();
         final Form item = items.get(position);
 
+        holder.mFormItemQuestions.setText(item.getFormQuestions().size() + " Questions");
+        holder.mFormItemDuration.setText(item.getDuration() + " min");
+        if (item.getFormDescription().equals("")) {
+            holder.mFormItemDescription.setVisibility(View.GONE);
+        } else {
+            holder.mFormItemDescription.setVisibility(View.VISIBLE);
+            holder.mFormItemDescription.setText(item.getFormDescription());
+        }
+
         holder.mFormTitle.setText(item.getFormName());
-
-        holder.mFormTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Intent intent = new Intent(context, FormViewerActivity.class);
-                //intent.putExtra("form", new Gson().toJson(items.get(position), Form.class));
-                //context.startActivity(intent);
-                FragmentTransaction transaction = context.getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
-                FormViewFragment formDetail = new FormViewFragment();
-                Bundle args = new Bundle();
-                args.putString("form", new Gson().toJson(items.get(position)));
-                formDetail.setArguments(args);
-                transaction.replace(R.id.frame_container, formDetail);
-                //transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-
         Animation animation = AnimationUtils.makeInAnimation(context, false);
         rowView.startAnimation(animation);
         return rowView;
@@ -86,5 +93,8 @@ public class FormListAdapter extends ArrayAdapter<Form> {
 
     static class ViewHolder {
         public TextView mFormTitle;
+        public TextView mFormItemDescription;
+        public TextView mFormItemQuestions;
+        public TextView mFormItemDuration;
     }
 }

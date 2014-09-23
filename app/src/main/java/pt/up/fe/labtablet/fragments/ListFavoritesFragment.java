@@ -90,7 +90,6 @@ public class ListFavoritesFragment extends ListFragment {
                 args.putString("favorite_name", "");
                 datasetDetail.setArguments(args);
                 transaction.replace(R.id.frame_container, datasetDetail);
-                transaction.addToBackStack(null);
                 transaction.commit();
                 return true;
             default:

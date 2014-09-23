@@ -1,10 +1,15 @@
 package pt.up.fe.labtablet.fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,16 +33,14 @@ public class FormViewFragment extends Fragment {
     private ListView lvFormItems;
     private Form currentForm;
     private Button btAddFormItem;
-    private Button btEditFormItems;
     private RelativeLayout rlEmptyForm;
     FormItemListAdapter mAdapter;
 
     public FormViewFragment(){}
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_form_creator, container, false);
+        View rootView = inflater.inflate(R.layout.activity_question_creator, container, false);
 
         if (savedInstanceState != null) {
             currentForm = new Gson().fromJson(
@@ -54,7 +57,9 @@ public class FormViewFragment extends Fragment {
                     Form.class);
         }
 
-        getActivity().getActionBar().setTitle(currentForm.getFormName());
+        if (getActivity().getActionBar() != null) {
+            getActivity().getActionBar().setTitle(currentForm.getFormName());
+        }
 
         lvFormItems = (ListView) rootView.findViewById(R.id.lv_form_items);
         rlEmptyForm = (RelativeLayout) rootView.findViewById(R.id.empty_form_view);
@@ -72,6 +77,8 @@ public class FormViewFragment extends Fragment {
                 startActivityForResult(mIntent, Utils.BUILD_FORM_QUESTION);
             }
         });
+
+        setHasOptionsMenu(true);
         return rootView;
     }
 
@@ -88,6 +95,7 @@ public class FormViewFragment extends Fragment {
         } else {
             rlEmptyForm.setVisibility(View.GONE);
         }
+
         super.onResume();
     }
 
@@ -95,6 +103,10 @@ public class FormViewFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode != Utils.BUILD_FORM_QUESTION)
+            return;
+
+        //event was cancelled
+        if (data == null)
             return;
 
         FormQuestion recFQ = new Gson().fromJson(
@@ -105,5 +117,43 @@ public class FormViewFragment extends Fragment {
         FileMgr.updateForm(currentForm, getActivity());
         mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions());
         lvFormItems.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.form_edition_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() != R.id.action_edit_form_delete) {
+            return false;
+        }
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.action_delete))
+                .setMessage(getString(R.string.form_really_delete))
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        FileMgr.deleteForm(currentForm.getFormName(), getActivity());
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                        transaction.replace(R.id.frame_container, new ListFormFragment());
+                        transaction.commit();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                    }
+                })
+                .setIcon(R.drawable.ic_recycle)
+                .show();
+
+
+
+
+        return true;
     }
 }

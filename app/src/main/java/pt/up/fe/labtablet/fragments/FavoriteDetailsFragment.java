@@ -332,11 +332,13 @@ public class FavoriteDetailsFragment extends Fragment {
             mIntent.putExtra("favorite_name", favoriteName);
 
             getActivity().startActivityForResult(mIntent, Utils.SUBMISSION_VALIDATION);
+            /*
             FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
             getActivity().getFragmentManager().popBackStack();
             transaction.remove(FavoriteDetailsFragment.this);
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
             transaction.commit();
+            */
         } else if (item.getItemId() == R.id.action_favorite_delete) {
             //remove this favorite
             new AlertDialog.Builder(getActivity())
@@ -356,8 +358,10 @@ public class FavoriteDetailsFragment extends Fragment {
 
                             FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
                             getActivity().getFragmentManager().popBackStack();
-                            transaction.remove(FavoriteDetailsFragment.this);
-                            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+
+                            transaction.replace(R.id.frame_container, new ListFavoritesFragment());
+                            //getFragmentManager().popBackStack();
+                            transaction.addToBackStack(null);
                             transaction.commit();
                         }
                     })

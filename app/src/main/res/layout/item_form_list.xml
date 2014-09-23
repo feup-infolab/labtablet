@@ -14,7 +14,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
-        android:background="@drawable/ab_cross"
+        android:background="@android:drawable/ic_menu_close_clear_cancel"
         style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
         />
 
@@ -27,10 +27,9 @@
 
         <View
             android:layout_height="fill_parent"
-            android:layout_width="0dp"
-            android:layout_weight="0.02"
+            android:layout_width="2dp"
             android:layout_marginEnd="5dp"
-            android:background="@android:color/holo_red_dark"
+            android:background="@color/list_background_pressed"
             />
 
         <TextView
@@ -39,8 +38,8 @@
             android:layout_weight="0.98"
             android:layout_height="wrap_content"
             android:ellipsize="none"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:text="Este é o nome do formulário. Gostoooosa. Põe nutela faschabor."
+            style="@android:style/TextAppearance.DeviceDefault.Large"
+            android:text="Bota fogo"
             />
     </LinearLayout>
 
@@ -49,17 +48,41 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         >
 
         <TextView
-            android:id="@+id/form_item_other"
-            android:layout_alignParentTop="true"
+            android:id="@+id/form_item_description"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="none"
             style="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:textColor="@color/second_grey"
-            android:text="This is reserved for other information such as number of questions and other relevant indicators"
+            android:text="A form about life. Understanding life as it should be, considering the purpose of being happy and making other happy as well. Changing the community with our work and enjoy doing so."
+
+            />
+
+        <TextView
+            android:id="@+id/form_item_number_questions"
+            android:layout_below="@id/form_item_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_note"
+            android:gravity="center"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:text="12 Questions"
+            android:layout_marginEnd="5dp"
+            />
+
+        <TextView
+            android:id="@+id/form_item_duration"
+            android:layout_below="@id/form_item_description"
+            android:layout_toEndOf="@id/form_item_number_questions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_wait"
+            android:gravity="center"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:text="15min"
             />
     </RelativeLayout>
 </RelativeLayout>
