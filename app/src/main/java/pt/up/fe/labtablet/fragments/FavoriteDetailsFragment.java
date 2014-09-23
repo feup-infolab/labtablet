@@ -361,6 +361,7 @@ public class FavoriteDetailsFragment extends Fragment {
 
                             transaction.replace(R.id.frame_container, new ListFavoritesFragment());
                             //getFragmentManager().popBackStack();
+
                             transaction.addToBackStack(null);
                             transaction.commit();
                         }
