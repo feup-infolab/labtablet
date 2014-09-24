@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.models.FormEnumType;
 import pt.up.fe.labtablet.models.FormQuestion;
 
 public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
@@ -55,7 +56,13 @@ public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
 
         holder.mFormItemQuestion.setText(item.getQuestion());
         holder.mFormItemType.setText(item.getType().toString());
-        holder.mFormItemAllowedValues.setText(item.getAllowedValues().toString());
+
+        if (item.getType().equals(FormEnumType.MULTIPLE_CHOICE)) {
+            holder.mFormItemAllowedValues.setText(item.getAllowedValues().toString());
+        } else {
+            holder.mFormItemAllowedValues.setVisibility(View.GONE);
+        }
+
 
         Animation animation = AnimationUtils.makeInAnimation(context, false);
         rowView.startAnimation(animation);

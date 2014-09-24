@@ -40,6 +40,15 @@
         <item>@drawable/ic_pages</item>
     </array>
 
+    <string-array name="question_types">
+        <item>Select type</item>
+        <item>Free Text</item> //
+        <item>Number</item> //
+        <item>Yes/No</item> //MC{Y,N}
+        <item>Closed Vocabulary</item> //MC{a,b,c}
+        <item>Range</item> //MC{1-3}
+    </string-array>
+
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="new_favorite_instructions">Pairing LabTablet with the repository will allow you to collect metadata, and upload it to the repository where your dataset is stored.</string>

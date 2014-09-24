@@ -323,7 +323,6 @@ public class MainActivity extends Activity {
                     .setNegativeButton(R.string.cancel, null)
                     .show();
         } else {
-
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
             transaction.replace(R.id.frame_container, displayedFragment);

@@ -14,8 +14,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
-        android:background="@android:drawable/ic_menu_close_clear_cancel"
+        android:background="@drawable/ic_recycle"
         style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+        android:visibility="gone"
         />
 
     <LinearLayout

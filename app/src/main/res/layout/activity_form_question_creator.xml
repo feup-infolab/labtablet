@@ -1,13 +1,320 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    >
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        >
 
-    <Button
-        android:id="@+id/new_form_question_submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TAP ME"
-        android:layout_centerInParent="true"
-        />
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/ll_question_specify_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Write below the text for this question"
+                android:gravity="center"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:drawableTop="@android:drawable/btn_star"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                />
+            <EditText
+                android:id="@+id/question_specify_text"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences|textMultiLine"
+                android:hint="Your input goes here"/>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_gray"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                />
+
+            <Button
+                android:id="@+id/question_text_submit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@android:string/ok"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_question_specify_type"
+            android:visibility="gone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Now, choose below the expected type of answer"
+                android:gravity="center"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:drawableTop="@drawable/ic_location"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_gray"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                />
+
+            <Spinner
+                android:id="@+id/question_type_spinner"
+                android:gravity="center"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_question_specify_range"
+            android:visibility="gone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Select the range to restrict the answer"
+                android:gravity="center"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:drawableTop="@android:drawable/btn_star"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                />
+
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                >
+                <EditText
+                    android:id="@+id/question_range_from"
+                    android:hint="From"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.45"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.1"
+                    android:layout_height="fill_parent"
+                    android:rotation="180"
+                    android:src="@drawable/ab_forward"
+                    />
+
+                <EditText
+                    android:id="@+id/question_range_to"
+                    android:hint="To"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.45"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_gray"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                />
+            <Button
+                android:id="@+id/question_specify_range_submit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@android:string/ok"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_question_vocabulary"
+            android:background="@drawable/card"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Add the allowed values to the list below"
+                android:gravity="center"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:drawableTop="@android:drawable/ic_menu_share"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/question_et_add_word"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
+                    android:hint="Allowed words go here"
+                    />
+
+                <ImageButton
+                    android:id="@+id/question_add_word"
+                    style="@android:style/Holo.ButtonBar.AlertDialog"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="0.1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ab_plus"
+                    />
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/list_allowed_vocabulary"
+                android:layout_width="fill_parent"
+                android:layout_height="150dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+
+                />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_gray"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                />
+
+            <Button
+                android:id="@+id/question_vocabulary_submit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@android:string/ok"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_question_save_and_return"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:drawableTop="@drawable/ic_check"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:text="OK! Your question was created! Tap the butotn below to add it to the form and conclude this process. If you wish, you can specify the expected time for the user to answer this question."
+                />
+
+            <EditText
+                android:id="@+id/question_expected_duration"
+                android:inputType="number"
+                android:gravity="center"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:hint="Expected duration (optional, in minutes)"
+                />
+
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_gray"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                />
+
+            <Button
+                android:id="@+id/question_save_and_return"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@android:string/ok"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                />
+
+
+
+            </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

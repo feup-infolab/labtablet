@@ -30,6 +30,15 @@
         <item>Configurações</item>
     </string-array>
 
+    <string-array name="question_types">
+        <item>Selecionar tipo</item>
+        <item>Texto Livre</item> //
+        <item>Número</item> //
+        <item>Sim/Não</item> //MC{Y,N}
+        <item>Vocabulário fechado</item> //MC{a,b,c}
+        <item>Range</item> //MC{1,2,3}
+    </string-array>
+
     <!-- Nav Drawer List Item Icons -->
     <!-- Keep them in order as the titles are in -->
     <array name="nav_drawer_icons">

@@ -10,12 +10,12 @@ public class FormQuestion {
     private ArrayList<String> allowedValues;
     private ArrayList<Descriptor> metadata;
 
-    public FormQuestion(FormEnumType type, String question, String value) {
+    public FormQuestion(FormEnumType type, String question, ArrayList<String> allowedValues ,String value) {
         this.type = type;
         this.value = value;
         this.question = question;
         this.metadata = new ArrayList<Descriptor>();
-        this.allowedValues = new ArrayList<String>();
+        this.allowedValues = allowedValues;
     }
 
     public FormEnumType getType() {

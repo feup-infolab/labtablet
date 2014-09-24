@@ -14,7 +14,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
-        android:background="@drawable/ab_cross"
+        android:background="@drawable/ic_recycle"
         style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
         />
 
