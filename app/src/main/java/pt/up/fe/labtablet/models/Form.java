@@ -8,6 +8,7 @@ public class Form {
     private String formName;
     private String formDescription;
     private ArrayList<FormQuestion> formQuestions;
+    private boolean descriptionSet;
 
     public Form(String name) {
         formQuestions = new ArrayList<FormQuestion>();
@@ -15,12 +16,15 @@ public class Form {
         this.formName = name;
     }
 
-    public String getFormName() {
-        return formName;
+    public void setDescription(String description) {
+        this.formDescription = description;
+        descriptionSet = true;
     }
 
-    public void setFormName(String formName) {
-        this.formName = formName;
+    public boolean isDescriptionSet(){return descriptionSet;}
+
+    public String getFormName() {
+        return formName;
     }
 
     public ArrayList<FormQuestion> getFormQuestions() {
@@ -47,9 +51,4 @@ public class Form {
     public String getFormDescription() {
         return formDescription;
     }
-
-    public void setFormDescription(String formDescription) {
-        this.formDescription = formDescription;
-    }
-
 }

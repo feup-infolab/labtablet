@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -40,7 +41,7 @@ public class FormViewFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_question_creator, container, false);
+        final View rootView = inflater.inflate(R.layout.activity_question_creator, container, false);
 
         if (savedInstanceState != null) {
             currentForm = new Gson().fromJson(
@@ -79,8 +80,44 @@ public class FormViewFragment extends Fragment {
         });
 
         setHasOptionsMenu(true);
+
+        //handle form description
+        if (currentForm.isDescriptionSet()) {
+            (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.GONE);
+            return rootView;
+        }
+
+        (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.VISIBLE);
+        (rootView.findViewById(R.id.set_form_description_no)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //dismiss description
+                currentForm.setDescription("");
+                FileMgr.updateForm(currentForm, getActivity());
+                (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.GONE);
+            }
+        });
+
+        (rootView.findViewById(R.id.set_form_description_yes)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                (rootView.findViewById(R.id.ll_set_form_description_lower_view)).setVisibility(View.VISIBLE);
+                (rootView).findViewById(R.id.bt_form_description_submit).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EditText etFormDescription = (EditText) (rootView.findViewById(R.id.et_set_form_description));
+                        currentForm.setDescription(etFormDescription.getText().toString());
+                        FileMgr.updateForm(currentForm, getActivity());
+                        (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.GONE);
+                    }
+                });
+
+            }
+        });
         return rootView;
     }
+
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

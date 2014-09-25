@@ -292,15 +292,6 @@ public class MainActivity extends Activity {
                 return;
 
             Toast.makeText(this, getString(R.string.uploaded_successfully), Toast.LENGTH_SHORT).show();
-            //Remove favorite is now disabled
-            /*
-            FileMgr.removeFavorite(data.getStringExtra("favoriteName"), this);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
-            ListFavoritesFragment favoriteList = new ListFavoritesFragment();
-            transaction.replace(R.id.frame_container, favoriteList);
-            transaction.commit();
-            */
         }
     }
 

@@ -224,6 +224,7 @@ public class FileMgr {
         for (Form f : savedForms) {
             if (f.getFormName().equals(inForm.getFormName())) {
                 f.setFormQuestions(inForm.getFormQuestions());
+                f.setDescription(inForm.getFormDescription());
             }
         }
 
