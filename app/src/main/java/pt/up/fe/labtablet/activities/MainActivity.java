@@ -56,6 +56,8 @@ public class MainActivity extends Activity {
     // slide menu items
     private String[] navMenuTitles;
 
+    private boolean wasDrawerShown;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,8 +135,12 @@ public class MainActivity extends Activity {
 
         if (savedInstanceState == null) {
             displayView(0);
+            mDrawerLayout.openDrawer(mDrawerList);
+            wasDrawerShown = true;
+        } else {
+            wasDrawerShown = savedInstanceState.getBoolean("was_drawer_shown");
         }
-        mDrawerLayout.openDrawer(mDrawerList);
+
     }
 
     @Override
@@ -300,6 +306,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean("was_drawer_shown", wasDrawerShown);
         super.onSaveInstanceState(outState);
     }
 

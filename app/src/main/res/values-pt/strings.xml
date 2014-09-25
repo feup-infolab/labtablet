@@ -225,4 +225,5 @@
     <string name="form_editor_top">These are the questions associated with this form. You can edit them or add new ones.</string>
     <string name="empty_form_rl">There are no items associated with this form. To add a new one, tap the button below.</string>
     <string name="title_activity_form_question_creator">FormQuestionCreatorActivity</string>
+    <string name="form_already_exists">This form already exists in your list. Please provide a different name</string>
 </resources>

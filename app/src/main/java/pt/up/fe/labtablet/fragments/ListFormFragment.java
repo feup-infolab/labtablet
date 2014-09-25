@@ -14,12 +14,15 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.FormListAdapter;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.Utils;
 
 public class ListFormFragment extends ListFragment {
 
@@ -30,11 +33,20 @@ public class ListFormFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("items")) {
+                items = new Gson().fromJson(savedInstanceState.getString("items"), Utils.ARRAY_FORM);
+            } else {
+                Toast.makeText(getActivity(), "Failed to load state", Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            items = FileMgr.getForms(getActivity());
+        }
         getListView().setDividerHeight(0);
         getListView().setBackgroundColor(0);
         setHasOptionsMenu(true);
 
-        items = FileMgr.getForms(getActivity());
         mAdapter = new FormListAdapter(getActivity(), items);
         setListAdapter(mAdapter);
     }
@@ -43,6 +55,14 @@ public class ListFormFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, final int position, long id) {
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("items", new Gson().toJson(items));
+        super.onSaveInstanceState(outState);
+    }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -74,17 +94,19 @@ public class ListFormFragment extends ListFragment {
                     return;
                 }
 
-                //TODO check if the form already exists
 
-                FileMgr.addForm(
-                        new Form(input.getText().toString()),
-                        getActivity()
-                );
+                for (Form f: items) {
+                    if (f.getFormName().equals(input.getText().toString())) {
+                        Toast.makeText(getActivity(), getString(R.string.form_already_exists), Toast.LENGTH_LONG).show();
+                        dialog.cancel();
+                        return;
+                    }
+                }
 
-                items = FileMgr.getForms(getActivity());
+                items.add(new Form(input.getText().toString()));
+                FileMgr.overwriteForms(items, getActivity());
                 mAdapter = new FormListAdapter(getActivity(), items);
                 getListView().setAdapter(mAdapter);
-
                 Toast.makeText(getActivity(), getString(android.R.string.ok), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }

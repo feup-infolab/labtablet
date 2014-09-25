@@ -276,7 +276,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
-                android:text="OK! Your question was created! Tap the butotn below to add it to the form and conclude this process. If you wish, you can specify the expected time for the user to answer this question."
+                android:text="OK! Your question was created! Tap the button below to add it to the form and conclude this process. If you wish, you can specify the expected time for the user to answer this question."
                 />
 
             <EditText
