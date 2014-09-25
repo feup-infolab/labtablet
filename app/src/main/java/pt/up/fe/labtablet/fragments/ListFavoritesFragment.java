@@ -100,6 +100,7 @@ public class ListFavoritesFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
+
         String path = Environment.getExternalStorageDirectory().toString();
         File f = new File(path + "/" + getResources().getString(R.string.app_name));
         File[] files = f.listFiles();

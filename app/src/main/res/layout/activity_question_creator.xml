@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:id="@+id/ll_set_form_description"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_alignParentTop="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
