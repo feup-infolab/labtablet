@@ -211,7 +211,14 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
             @Override
             public void onClick(View view) {
 
+                EditText etDuration = (EditText) findViewById(R.id.question_expected_duration);
+
                 FormQuestion fq = new FormQuestion(questionType, questionBody, allowedValues, "");
+                if(!etDuration.getText().toString().equals("")) {
+                    fq.setDuration(Integer.parseInt(etDuration.getText().toString()));
+                } else {
+                    fq.setDuration(1);
+                }
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("form_question", new Gson().toJson(fq));
                 setResult(Utils.BUILD_FORM_QUESTION, returnIntent);

@@ -7,6 +7,10 @@ public class FormQuestion {
     private FormEnumType type;
     private String value;
     private String question;
+
+
+
+    private int duration;
     private ArrayList<String> allowedValues;
     private ArrayList<Descriptor> metadata;
 
@@ -56,5 +60,13 @@ public class FormQuestion {
 
     public void setAllowedValues(ArrayList<String> admissibleValues) {
         this.allowedValues = admissibleValues;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

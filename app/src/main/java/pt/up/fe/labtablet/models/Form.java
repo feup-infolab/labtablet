@@ -7,7 +7,6 @@ public class Form {
 
     private String formName;
     private String formDescription;
-    private int duration;
     private ArrayList<FormQuestion> formQuestions;
 
     public Form(String name) {
@@ -37,15 +36,12 @@ public class Form {
     }
 
     public int getDuration() {
-        if(duration == 0) {
-            return formQuestions.size();
+
+        int total = 0;
+        for (FormQuestion fq : getFormQuestions()) {
+            total += fq.getDuration();
         }
-
-        return duration;
-    }
-
-    public void setDuration(int formDuration) {
-        this.duration = formDuration;
+        return total;
     }
 
     public String getFormDescription() {
