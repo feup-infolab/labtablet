@@ -3,11 +3,8 @@ package pt.up.fe.labtablet.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -141,6 +138,8 @@ public class MainActivity extends Activity {
         } else {
             wasDrawerShown = savedInstanceState.getBoolean("was_drawer_shown");
         }
+
+
 
     }
 
@@ -303,6 +302,7 @@ public class MainActivity extends Activity {
     }
 
 
+    /*
     @Override
     public void onBackPressed() {
 
@@ -329,6 +329,7 @@ public class MainActivity extends Activity {
             transaction.commit();
         }
     }
+    */
 
 
     private class SlideMenuClickListener implements

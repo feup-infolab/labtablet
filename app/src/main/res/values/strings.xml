@@ -222,4 +222,16 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="form_description_goes_here">Your form\'s description goes here</string>
+    <string name="collected_metadata">Below is the metadata gathered during this session. Select which records you want to keep and confirm the best descriptor.</string>
+    <string name="write_text_for_question">Write below the text for this question</string>
+    <string name="input_goes_here">Your input goes here</string>
+    <string name="choose_expected_type">Now, choose below the expected type of answer</string>
+    <string name="choose_range">Select the range to restrict the answer</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="give_allowed_values">Add the allowed values to the list below</string>
+    <string name="question_created">OK! Your question was created! Tap the button below to add it to the form and conclude this process. If you wish, you can specify the expected time for the user to answer this question.</string>
+    <string name="expected_duration">Expected duration (optional, in minutes)</string>
+    <string name="want_to_give_form_description">Would you like to provide a description for this form?</string>
+    <string name="select_form_solve">Select the form to fill from the list bellow</string>
 </resources>

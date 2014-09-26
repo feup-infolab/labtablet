@@ -26,6 +26,7 @@
         <item>Pesquisar</item>
         <item>Novo favorito</item>
         <item>Os meus favoritos</item>
+        <item>Formulários</item>
         <item>Eventos</item>
         <item>Configurações</item>
     </string-array>
@@ -46,6 +47,7 @@
         <item>@drawable/ic_ic_search</item>
         <item>@android:drawable/ic_input_add</item>
         <item>@android:drawable/btn_star_big_on</item>
+        <item>@drawable/ic_communities</item>
         <item>@drawable/ic_whats_hot</item>
         <item>@drawable/ic_pages</item>
     </array>
@@ -217,16 +219,28 @@
     <string name="importing_file">A importar ficheiro&#8230;</string>
     <string name="no_apps_available">Não existem aplicações para abrir este tipo de ficheiros.</string>
     <string name="remove_file_title">Remover ficheiro</string>
-    <string name="metadata">Metadata</string>
-    <string name="data">Data</string>
+    <string name="metadata">Metadados</string>
+    <string name="data">Dados</string>
     <string name="title_activity_form_creator">FormCreatorActivity</string>
-    <string name="action_new_form">New Form</string>
-    <string name="get_form_name">Form name</string>
-    <string name="form_editor_top">These are the questions associated with this form. You can edit them or add new ones.</string>
-    <string name="empty_form_rl">There are no items associated with this form. To add a new one, tap the button below.</string>
+    <string name="action_new_form">Novo formulário</string>
+    <string name="get_form_name">Nome do formulário</string>
+    <string name="form_editor_top">Estas são as perguntas atualmente associadas a este formulário. Nesta vista, pode edita-las ou adicionar novas perguntas.</string>
+    <string name="empty_form_rl">Não existem perguntas associadas a este formulário. Para adicionar novas perguntas, clique no botão em baixo.</string>
     <string name="title_activity_form_question_creator">FormQuestionCreatorActivity</string>
-    <string name="form_already_exists">This form already exists in your list. Please provide a different name</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="form_description_goes_here">Your form\'s description goes here</string>
+    <string name="form_already_exists">Já existe um registo com este nome, por favor indique outro.</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="form_description_goes_here">Descrição do formulário</string>
+    <string name="collected_metadata">Below is the metadata gathered during this session. Select which records you want to keep and confirm the best descriptor.</string>
+    <string name="write_text_for_question">Write below the text for this question</string>
+    <string name="input_goes_here">Your input goes here</string>
+    <string name="choose_expected_type">Now, choose below the expected type of answer</string>
+    <string name="choose_range">Select the range to restrict the answer</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="give_allowed_values">Add the allowed values to the list below</string>
+    <string name="question_created">OK! Your question was created! Tap the button below to add it to the form and conclude this process. If you wish, you can specify the expected time for the user to answer this question.</string>
+    <string name="expected_duration">Expected duration (optional, in minutes)</string>
+    <string name="want_to_give_form_description">Would you like to provide a description for this form?</string>
+    <string name="select_form_solve">Select the form to fill from the list bellow</string>
 </resources>

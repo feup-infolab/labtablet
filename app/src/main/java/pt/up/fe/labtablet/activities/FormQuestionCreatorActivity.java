@@ -188,7 +188,6 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                             Toast.makeText(FormQuestionCreatorActivity.this, "a -> A,", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
                         (findViewById(R.id.question_specify_range_submit)).setEnabled(false);
                         enableSubmissionView();
                     }
@@ -217,7 +216,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 if(!etDuration.getText().toString().equals("")) {
                     fq.setDuration(Integer.parseInt(etDuration.getText().toString()));
                 } else {
-                    fq.setDuration(1);
+                    fq.setDuration(0);
                 }
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("form_question", new Gson().toJson(fq));

@@ -357,12 +357,11 @@ public class FavoriteDetailsFragment extends Fragment {
                             ChangelogManager.addLog(log, getActivity());
 
                             FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-                            getActivity().getFragmentManager().popBackStack();
+                            //getActivity().getFragmentManager().popBackStack();
 
                             transaction.replace(R.id.frame_container, new ListFavoritesFragment());
                             //getFragmentManager().popBackStack();
 
-                            transaction.addToBackStack(null);
                             transaction.commit();
                         }
                     })

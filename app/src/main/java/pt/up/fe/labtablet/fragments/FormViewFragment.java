@@ -12,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -33,7 +32,6 @@ public class FormViewFragment extends Fragment {
 
     private ListView lvFormItems;
     private Form currentForm;
-    private Button btAddFormItem;
     private RelativeLayout rlEmptyForm;
     FormItemListAdapter mAdapter;
 
@@ -64,13 +62,12 @@ public class FormViewFragment extends Fragment {
 
         lvFormItems = (ListView) rootView.findViewById(R.id.lv_form_items);
         rlEmptyForm = (RelativeLayout) rootView.findViewById(R.id.empty_form_view);
-        btAddFormItem = (Button) rootView.findViewById(R.id.bt_form_new_question);
         mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions());
 
         lvFormItems.setAdapter(mAdapter);
         lvFormItems.setDividerHeight(0);
 
-        btAddFormItem.setOnClickListener(new View.OnClickListener() {
+        (rootView.findViewById(R.id.bt_form_new_question)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //launch intent to build a new question
@@ -92,6 +89,8 @@ public class FormViewFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //dismiss description
+                (rootView.findViewById(R.id.set_form_description_no)).setEnabled(false);
+                (rootView.findViewById(R.id.set_form_description_yes)).setEnabled(false);
                 currentForm.setDescription("");
                 FileMgr.updateForm(currentForm, getActivity());
                 (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.GONE);
@@ -102,6 +101,8 @@ public class FormViewFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 (rootView.findViewById(R.id.ll_set_form_description_lower_view)).setVisibility(View.VISIBLE);
+                (rootView.findViewById(R.id.set_form_description_no)).setEnabled(false);
+                (rootView.findViewById(R.id.set_form_description_yes)).setEnabled(false);
                 (rootView).findViewById(R.id.bt_form_description_submit).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

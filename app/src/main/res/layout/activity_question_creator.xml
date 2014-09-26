@@ -21,7 +21,7 @@
             android:padding="20dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Would you like to provide a description for this form?"
+            android:text="@string/want_to_give_form_description"
             />
 
         <LinearLayout
@@ -102,23 +102,15 @@
         />
 
     <RelativeLayout
+        android:layout_below="@id/form_view_instructions"
         android:id="@+id/empty_form_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_centerInParent="true"
         >
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/iv_empty_form_img"
-            android:layout_centerInParent="true"
-            android:src="@android:drawable/ic_dialog_info"
-            android:layout_marginBottom="35dp"
-            />
-
         <TextView
-            android:layout_below="@id/iv_empty_form_img"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/empty_form_rl"

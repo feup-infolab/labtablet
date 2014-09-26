@@ -28,8 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="10dp"
-            android:layout_alignParentLeft="true"
-            android:contentDescription="Closed or Open"
+            android:layout_alignParentStart="true"
             android:src="@drawable/ic_pages" />
 
         <TextView
@@ -39,11 +38,10 @@
             android:padding="6dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Folder Title this is a folder title that is way biger"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_toLeftOf="@id/dendro_open_folder"
-            android:layout_toRightOf="@id/folder_item_type"
+            android:layout_toStartOf="@id/dendro_open_folder"
+            android:layout_toEndOf="@id/folder_item_type"
             android:layout_height="wrap_content"
             />
 
@@ -53,14 +51,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:layout_toLeftOf="@id/dendro_open_folder"
+            android:layout_toStartOf="@id/dendro_open_folder"
             android:padding="2dp"
             android:layout_gravity="center"
             android:gravity="center_vertical"
-            android:layout_toRightOf="@id/folder_item_type"
+            android:layout_toEndOf="@id/folder_item_type"
             android:layout_below="@id/folder_item_title"
             android:textColor="@color/second_grey"
-            android:text="12MB"
             />
 
         <TextView
@@ -68,14 +65,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_below="@id/folder_item_size"
             android:gravity="center_vertical"
             android:textColor="@color/second_grey"
             android:text="@string/modified"
-            android:layout_marginRight="2dp"
+            android:layout_marginEnd="2dp"
             android:padding="2dp"
-            android:layout_toRightOf="@id/folder_item_type"
+            android:layout_toEndOf="@id/folder_item_type"
             />
 
         <TextView
@@ -83,14 +80,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:layout_toLeftOf="@id/dendro_open_folder"
+            android:layout_toStartOf="@id/dendro_open_folder"
             android:textColor="@color/second_grey"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_below="@id/folder_item_size"
             android:gravity="center_vertical"
-            android:text="01-01-2015"
             android:padding="2dp"
-            android:layout_toRightOf="@id/folder_item_date_desc"
+            android:layout_toEndOf="@id/folder_item_date_desc"
             />
 
     </RelativeLayout>

@@ -11,7 +11,6 @@
         android:layout_height="90dp"
         android:layout_alignParentStart="true"
         android:layout_marginEnd="6dip"
-        android:contentDescription="Closed or Open"
         android:src="@drawable/ic_metadata" />
 
     <TextView
@@ -23,7 +22,6 @@
         android:layout_toEndOf="@id/metadata_item_type"
         android:ellipsize="start"
         android:singleLine="true"
-        android:text="Metadata Value"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:textStyle="bold" />
 

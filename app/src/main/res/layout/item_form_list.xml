@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="none"
             style="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:text="A form about life. Understanding life as it should be, considering the purpose of being happy and making other happy as well. Changing the community with our work and enjoy doing so."
+            android:text="Form description"
 
             />
 

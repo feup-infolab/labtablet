@@ -1,5 +1,7 @@
 package pt.up.fe.labtablet.api;
 
+import android.util.Log;
+
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -32,6 +34,7 @@ public class CkanAPI {
                 items.add(item);
             }
         } catch (CKANException e) {
+            Log.e("CKAN", e.toString());
             throw e;
         }
         return items;
