@@ -106,6 +106,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 (findViewById(R.id.ll_question_specify_range)).setVisibility(View.GONE);
                 (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.GONE);
                 enableSubmissionView();
+                break;
             case 2:
                 questionType = FormEnumType.NUMBER;
                 (findViewById(R.id.ll_question_specify_range)).setVisibility(View.GONE);

@@ -44,7 +44,6 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">0.6</item>
         <item name="android:background">@drawable/custom_btn_orange_right</item>
-
     </style>
 
 

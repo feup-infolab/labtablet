@@ -59,7 +59,7 @@ public class ListFavoritesFragment extends ListFragment {
 
         FavoriteItem selectedItem = mFavoriteItems.get(position);
 
-        FragmentTransaction transaction = super.getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
 
         //switch to the dataset view
@@ -68,7 +68,7 @@ public class ListFavoritesFragment extends ListFragment {
         args.putString("favorite_name", selectedItem.getTitle());
         datasetDetail.setArguments(args);
         transaction.replace(R.id.frame_container, datasetDetail);
-        transaction.addToBackStack(null);
+        transaction.addToBackStack("nopes");
         transaction.commit();
     }
 
@@ -90,6 +90,7 @@ public class ListFavoritesFragment extends ListFragment {
                 args.putString("favorite_name", "");
                 datasetDetail.setArguments(args);
                 transaction.replace(R.id.frame_container, datasetDetail);
+                transaction.addToBackStack("nopes");
                 transaction.commit();
                 return true;
             default:

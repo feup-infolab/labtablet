@@ -171,7 +171,7 @@ public class FormViewFragment extends Fragment {
         new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.action_delete))
                 .setMessage(getString(R.string.form_really_delete))
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         FileMgr.deleteForm(currentForm.getFormName(), getActivity());
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -180,7 +180,7 @@ public class FormViewFragment extends Fragment {
                         transaction.commit();
                     }
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
 

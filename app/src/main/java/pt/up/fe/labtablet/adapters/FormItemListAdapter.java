@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -47,6 +48,13 @@ public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
             viewHolder.mFormItemQuestion = (TextView) rowView.findViewById(R.id.form_item_question);
             viewHolder.mFormItemType = (TextView) rowView.findViewById(R.id.form_item_type);
             viewHolder.mFormItemAllowedValues = (TextView) rowView.findViewById(R.id.form_item_values);
+            viewHolder.mFormItemRemove = (Button) rowView.findViewById(R.id.form_item_delete);
+            viewHolder.mFormItemRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    notifyDataSetChanged();
+                }
+            });
             rowView.setTag(viewHolder);
         }
 
@@ -73,6 +81,7 @@ public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
         public TextView mFormItemQuestion;
         public TextView mFormItemAllowedValues;
         public TextView mFormItemType;
+        public Button mFormItemRemove;
     }
 
 }

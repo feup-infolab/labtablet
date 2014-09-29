@@ -8,6 +8,7 @@
     >
 
     <Button
+        android:visibility="invisible"
         android:id="@+id/form_item_delete"
         android:layout_width="38dp"
         android:layout_height="38dp"

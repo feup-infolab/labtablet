@@ -359,8 +359,8 @@ public class FavoriteDetailsFragment extends Fragment {
                             FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
                             //getActivity().getFragmentManager().popBackStack();
 
-                            transaction.replace(R.id.frame_container, new ListFavoritesFragment());
-                            //getFragmentManager().popBackStack();
+                            //transaction.replace(R.id.frame_container, new ListFavoritesFragment());
+                            getFragmentManager().popBackStack();
 
                             transaction.commit();
                         }

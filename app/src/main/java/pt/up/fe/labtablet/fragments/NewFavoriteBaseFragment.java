@@ -300,8 +300,8 @@ public class NewFavoriteBaseFragment extends Fragment {
                 args.putString("favorite_name", et_datasetName.getText().toString());
                 datasetDetail.setArguments(args);
                 transaction.replace(R.id.frame_container, datasetDetail);
-                transaction.addToBackStack(null);
-                getFragmentManager().popBackStackImmediate();
+                transaction.addToBackStack("nopes");
+                getFragmentManager().popBackStack();
                 transaction.commit();
 
             }
