@@ -1,7 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:animateLayoutChanges="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/rl_form_solver_intro"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/light_gray"
+        >
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card"
+            >
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/form_solver_intro"
+                android:padding="20dp"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/second_grey"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                />
+            <Button
+                android:id="@+id/bt_dismiss_form_intro"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/form_ok"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/form_solver_list"
+        android:layout_below="@id/rl_form_solver_intro"
+        android:visibility="visible"
+        android:dividerHeight="-1dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <Chronometer
+        android:visibility="visible"
+        android:id="@+id/form_solver_chrono"
+        android:background="@drawable/card"
+        android:padding="20dp"
+        android:layout_below="@id/rl_form_solver_intro"
+        android:layout_alignParentEnd="true"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

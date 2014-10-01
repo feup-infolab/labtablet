@@ -118,20 +118,17 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 (findViewById(R.id.ll_question_specify_range)).setVisibility(View.GONE);
                 (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.GONE);
                 allowedValues = new ArrayList<String>();
-                allowedValues.add(getString(android.R.string.yes));
-                allowedValues.add(getString(android.R.string.no));
+                allowedValues.add(getString(R.string.yes));
+                allowedValues.add(getString(R.string.no));
                 enableSubmissionView();
                 break;
             case 4:
                 questionType = FormEnumType.MULTIPLE_CHOICE;
                 (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.VISIBLE);
-                allowedValues = new ArrayList<String>();
                 ListView lv_allowed_word = (ListView) findViewById(R.id.list_allowed_vocabulary);
-
-
+                allowedValues = new ArrayList<String>();
                 mAdapter = new ArrayAdapter<String>(this,
                         android.R.layout.simple_list_item_1, allowedValues);
-
                 lv_allowed_word.setAdapter(mAdapter);
 
                 (findViewById(R.id.question_add_word)).setOnClickListener(new View.OnClickListener() {

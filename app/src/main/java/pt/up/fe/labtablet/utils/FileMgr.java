@@ -204,6 +204,15 @@ public class FileMgr {
         editor.apply();
     }
 
+    public static Form getForm(Context mContext, String formName) {
+        ArrayList<Form> forms = getForms(mContext);
+        for (Form f : forms) {
+            if (f.getFormName().equals(formName)) {
+                return f;
+            }
+        }
+        return null;
+    }
 
     public static void updateForm(Form inForm, Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(

@@ -220,7 +220,7 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
                 imv.setVisibility(View.VISIBLE);
                 imv.setImageBitmap(result);
             } else {
-                imv.setImageResource(R.drawable.ic_metadata);
+                imv.setImageResource(R.drawable.ic_note);
             }
         }
 

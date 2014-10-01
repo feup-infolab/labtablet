@@ -20,12 +20,16 @@ public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
 
     private final Activity context;
     private ArrayList<FormQuestion> items;
+    private formListAdapterInterface mInterface;
 
 
-    public FormItemListAdapter(Activity context, ArrayList<FormQuestion> srcItems) {
+    public FormItemListAdapter(Activity context,
+                               ArrayList<FormQuestion> srcItems,
+                               formListAdapterInterface adapterInterface) {
         super(context, R.layout.item_question, srcItems);
         this.context = context;
         this.items = srcItems;
+        this.mInterface = adapterInterface;
     }
 
     @Override
@@ -36,7 +40,7 @@ public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
     }
 
     @Override
-    public View getView(int position, final View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         View rowView = convertView;
         // reuse views
         if (rowView == null) {
@@ -49,17 +53,12 @@ public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
             viewHolder.mFormItemType = (TextView) rowView.findViewById(R.id.form_item_type);
             viewHolder.mFormItemAllowedValues = (TextView) rowView.findViewById(R.id.form_item_values);
             viewHolder.mFormItemRemove = (Button) rowView.findViewById(R.id.form_item_delete);
-            viewHolder.mFormItemRemove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    notifyDataSetChanged();
-                }
-            });
             rowView.setTag(viewHolder);
         }
 
         // fill data
         ViewHolder holder = (ViewHolder) rowView.getTag();
+        holder.mFormItemRemove.setTag(position);
         final FormQuestion item = items.get(position);
 
         holder.mFormItemQuestion.setText(item.getQuestion());
@@ -71,6 +70,14 @@ public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
             holder.mFormItemAllowedValues.setVisibility(View.GONE);
         }
 
+        holder.mFormItemRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInterface.onItemRemoval(items.get(position));
+                items.remove(position);
+                notifyDataSetChanged();
+            }
+        });
 
         Animation animation = AnimationUtils.makeInAnimation(context, false);
         rowView.startAnimation(animation);
@@ -82,6 +89,11 @@ public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
         public TextView mFormItemAllowedValues;
         public TextView mFormItemType;
         public Button mFormItemRemove;
+    }
+
+    public interface formListAdapterInterface {
+        //called whenever a file is selected for removal
+        public void onItemRemoval(FormQuestion q);
     }
 
 }

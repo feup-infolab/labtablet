@@ -234,4 +234,6 @@
     <string name="expected_duration">Expected duration (optional, in minutes)</string>
     <string name="want_to_give_form_description">Would you like to provide a description for this form?</string>
     <string name="select_form_solve">Select the form to fill from the list bellow</string>
+    <string name="form_solver_intro">You are about to start a questionaire that has X questions and is estimated to take Y minutes. Tap the button below to start.</string>
+    <string name="form">Form</string>
 </resources>

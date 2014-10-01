@@ -50,6 +50,7 @@ import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.api.LTLocationListener;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -66,6 +67,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     private Button bt_network_temperature_sample;
     private Button bt_luminosity_sample;
     private Button bt_magnetic_sample;
+    private Button bt_launch_form;
 
     private TextView tv_title;
     private Switch sw_gps;
@@ -241,8 +243,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         item.setDate(Utils.getDate());
                         ChangelogManager.addLog(item, FieldModeActivity.this);
                     }
-
-
                 } else {
                     recording = true;
                     pb_update.setIndeterminate(true);
@@ -335,6 +335,29 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             }
         });
 
+        bt_launch_form.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<Form> forms = FileMgr.getForms(FieldModeActivity.this);
+                final CharSequence values[] = new CharSequence[forms.size()];
+                for (int i = 0; i < forms.size(); ++i) {
+                    values[i] = forms.get(i).getFormName();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(FieldModeActivity.this);
+                builder.setTitle(getResources().getString(R.string.select_form_solve));
+                builder.setItems(values, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent formIntent = new Intent(FieldModeActivity.this, FormSolverActivity.class);
+                        formIntent.putExtra("form_name", values[which]);
+                        startActivityForResult(formIntent, Utils.SOLVE_FORM);
+                    }
+                });
+                builder.show();
+            }
+        });
+
     }
 
     private void registerBatInforReceiver() {
@@ -366,6 +389,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         bt_luminosity_sample = (Button) findViewById(R.id.bt_luminosity);
         bt_magnetic_sample = (Button) findViewById(R.id.bt_magnetic);
         bt_network_temperature_sample = (Button) findViewById(R.id.bt_network_temperature_sample);
+        bt_launch_form = (Button) findViewById(R.id.bt_form);
 
         bt_network_temperature_sample.setOnClickListener(sensorClickListener);
         bt_temperature_sample.setOnClickListener(sensorClickListener);

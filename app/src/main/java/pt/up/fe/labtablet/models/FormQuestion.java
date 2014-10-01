@@ -23,6 +23,7 @@ public class FormQuestion {
     }
 
     public FormEnumType getType() {
+
         return type;
     }
 

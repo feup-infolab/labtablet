@@ -58,6 +58,12 @@
             android:label="@string/title_activity_form_question_creator"
             >
         </activity>
+        <activity
+            android:name="pt.up.fe.labtablet.activities.FormSolverActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_form_question_creator"
+            >
+        </activity>
     </application>
 
 </manifest>

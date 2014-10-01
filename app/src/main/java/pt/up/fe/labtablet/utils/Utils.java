@@ -48,7 +48,14 @@ public class Utils {
     public static final int SKETCH_INTENT_REQUEST = 6;
     //When the metadata edition changed the title
     public static final int BUILD_FORM_QUESTION = 8;
+    //When the form solver activity is launched
+    public static final int SOLVE_FORM = 9;
 
+    public static final int VIEW_TYPE_TEXT = 0;
+
+    public static final int VIEW_NUMBER_PICKER = 1;
+
+    public static final int VIEW_TYPE_CLOSED_VOCAB = 2;
 
 
     public static Type ARRAY_ASSOCIATION_ITEM = new TypeToken<ArrayList<AssociationItem>>() {

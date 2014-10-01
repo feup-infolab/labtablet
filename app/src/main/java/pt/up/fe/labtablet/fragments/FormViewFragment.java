@@ -34,6 +34,7 @@ public class FormViewFragment extends Fragment {
     private Form currentForm;
     private RelativeLayout rlEmptyForm;
     FormItemListAdapter mAdapter;
+    FormItemListAdapter.formListAdapterInterface mInterface;
 
     public FormViewFragment(){}
 
@@ -60,9 +61,16 @@ public class FormViewFragment extends Fragment {
             getActivity().getActionBar().setTitle(currentForm.getFormName());
         }
 
+        mInterface = new FormItemListAdapter.formListAdapterInterface() {
+            @Override
+            public void onItemRemoval(FormQuestion q) {
+                    Toast.makeText(getActivity(), "Interface triggered", Toast.LENGTH_SHORT).show();
+            }
+        };
+
         lvFormItems = (ListView) rootView.findViewById(R.id.lv_form_items);
         rlEmptyForm = (RelativeLayout) rootView.findViewById(R.id.empty_form_view);
-        mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions());
+        mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions(), mInterface);
 
         lvFormItems.setAdapter(mAdapter);
         lvFormItems.setDividerHeight(0);
@@ -153,7 +161,7 @@ public class FormViewFragment extends Fragment {
 
         currentForm.addQuestion(recFQ);
         FileMgr.updateForm(currentForm, getActivity());
-        mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions());
+        mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions(), mInterface);
         lvFormItems.setAdapter(mAdapter);
     }
 
