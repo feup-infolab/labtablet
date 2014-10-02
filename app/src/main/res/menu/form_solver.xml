@@ -1,9 +1,2 @@
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/action_new_dataset"
-        android:icon="@drawable/ab_plus"
-        android:title="@string/new_dataset_item"
-        android:showAsAction="always|withText"
-        />
+<menu>
 </menu>

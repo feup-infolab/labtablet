@@ -47,16 +47,6 @@
         </LinearLayout>
     </LinearLayout>
 
-
-    <ListView
-        android:id="@+id/form_solver_list"
-        android:layout_below="@id/rl_form_solver_intro"
-        android:visibility="visible"
-        android:dividerHeight="-1dp"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        />
-
     <Chronometer
         android:visibility="visible"
         android:id="@+id/form_solver_chrono"
@@ -67,4 +57,17 @@
         android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:id="@+id/sv_question_items"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"
+        >
+        <TableLayout
+            android:id="@+id/tl_question_items"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+    </ScrollView>
 </RelativeLayout>
