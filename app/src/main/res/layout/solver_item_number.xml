@@ -29,6 +29,7 @@
     <NumberPicker
         android:id="@+id/solver_question_number_picker"
         android:layout_marginTop="15dp"
+        android:orientation="horizontal"
         android:layout_below="@id/solver_question_body"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"

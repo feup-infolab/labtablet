@@ -54,11 +54,11 @@ public class FormSolverListAdapter extends ArrayAdapter<FormQuestion> {
     public View getView(final int position, final View convertView, ViewGroup parent) {
         View rowView = convertView;
         // reuse views
+        int viewType = getItemViewType(position);
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
             ViewHolder viewHolder = new ViewHolder();
 
-            int viewType = getItemViewType(position);
             switch (viewType) {
                 case Utils.VIEW_TYPE_TEXT:
                     rowView = inflater.inflate(R.layout.solver_item_text, parent, false);
@@ -84,13 +84,10 @@ public class FormSolverListAdapter extends ArrayAdapter<FormQuestion> {
         // fill data
         ViewHolder holder = (ViewHolder) rowView.getTag();
         holder.mQuestionBody.setText(items.get(position).getQuestion());
-        switch (getItemViewType(position)) {
+        switch (viewType) {
             case Utils.VIEW_TYPE_TEXT:
-                holder.textPicker.setHint("Your answer here");
                 break;
             case Utils.VIEW_NUMBER_PICKER:
-                holder.numberPicker.setMinValue(1);
-                holder.numberPicker.setMaxValue(10);
                 break;
             case Utils.VIEW_TYPE_CLOSED_VOCAB:
                 //TODO spinner values
