@@ -162,6 +162,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 });
                 break;
             case 5:
+                questionType = FormEnumType.RANGE;
                 (findViewById(R.id.ll_question_specify_range)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.question_specify_range_submit)).setOnClickListener(new View.OnClickListener() {
                     @Override

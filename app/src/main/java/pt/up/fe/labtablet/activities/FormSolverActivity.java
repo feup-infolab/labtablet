@@ -2,13 +2,18 @@ package pt.up.fe.labtablet.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -24,7 +29,7 @@ import pt.up.fe.labtablet.utils.Utils;
 public class FormSolverActivity extends Activity {
 
     private Form targetForm;
-    private TableLayout table;
+    private LinearLayout table;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,7 @@ public class FormSolverActivity extends Activity {
         }
 
         setContentView(R.layout.activity_form_solver);
-        table = (TableLayout) findViewById(R.id.tl_question_items);
+        table = (LinearLayout) findViewById(R.id.ll_question_items);
         (findViewById(R.id.bt_dismiss_form_intro)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,25 +64,54 @@ public class FormSolverActivity extends Activity {
             }
         });
 
-
+        if (getActionBar() != null) {
+            getActionBar().setTitle(targetForm.getFormName());
+        }
 
         int questionCount = targetForm.getFormQuestions().size();
-        //This will be long...
 
         for (int i = 0; i < questionCount; ++i) {
-            TableRow table_row = new TableRow(this);
-
             View v = getQuestionView(targetForm.getFormQuestions().get(i));
-            table_row.addView(v);
-
-            table.addView(table_row);
+            table.addView(v);
         }
     }
 
     public View getQuestionView(FormQuestion fq) {
         LayoutInflater inflater = LayoutInflater.from(FormSolverActivity.this);
-        View wholeView = inflater.inflate(R.layout.solver_item_text, null, false);
-        return wholeView;
+        View baseView;
+
+        switch (fq.getType()) {
+            case FREE_TEXT:
+                baseView = inflater.inflate(R.layout.solver_item_text, null, false);
+                ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
+                break;
+            case RANGE:
+                baseView = inflater.inflate(R.layout.solver_item_number, null, false);
+                ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
+                NumberPicker np = (NumberPicker) baseView.findViewById(R.id.solver_question_number_picker);
+                if (fq.getAllowedValues().size() > 0) {
+                    np.setMinValue(Integer.parseInt(fq.getAllowedValues().get(0)));
+                    np.setMaxValue(Integer.parseInt(fq.getAllowedValues().get(1)));
+                }
+                break;
+            case NUMBER:
+                baseView = inflater.inflate(R.layout.solver_item_text, null, false);
+                ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
+                ((EditText)baseView.findViewById(R.id.solver_question_text)).setInputType(InputType.TYPE_CLASS_NUMBER);
+                break;
+            case MULTIPLE_CHOICE:
+                baseView = inflater.inflate(R.layout.solver_item_spinner, null, false);
+                ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
+                Spinner spValues = (Spinner) baseView.findViewById(R.id.solver_question_spinner);
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+                        (FormSolverActivity.this, android.R.layout.simple_spinner_dropdown_item, fq.getAllowedValues());
+                spValues.setAdapter(dataAdapter);
+                break;
+            default:
+                baseView = null;
+        }
+
+        return baseView;
     }
 
     @Override
