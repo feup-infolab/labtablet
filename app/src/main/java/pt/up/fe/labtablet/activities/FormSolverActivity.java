@@ -57,7 +57,10 @@ public class FormSolverActivity extends Activity {
         (findViewById(R.id.bt_dismiss_form_intro)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((Chronometer)(findViewById(R.id.form_solver_chrono))).start();
+                Chronometer chronos = (Chronometer)(findViewById(R.id.form_solver_chrono));
+                chronos.setVisibility(View.VISIBLE);
+                chronos.start();
+
                 table.setVisibility(View.VISIBLE);
                 (findViewById(R.id.sv_question_items)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.rl_form_solver_intro)).setVisibility(View.GONE);

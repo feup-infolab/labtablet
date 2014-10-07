@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:animateLayoutChanges="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     >
 
     <LinearLayout
@@ -48,15 +49,17 @@
     </LinearLayout>
 
     <Chronometer
-        android:visibility="visible"
+        android:visibility="invisible"
         android:id="@+id/form_solver_chrono"
-        android:background="@drawable/card"
-        android:padding="20dp"
-        android:layout_below="@id/rl_form_solver_intro"
-        android:layout_alignParentEnd="true"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:background="@color/list_background_pressed"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:layout_gravity="top|end"
+        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        />
 
     <ScrollView
         android:id="@+id/sv_question_items"
@@ -64,12 +67,14 @@
         android:layout_height="fill_parent"
         android:visibility="gone"
         android:fillViewport="true"
+        android:animateLayoutChanges="true"
         >
         <LinearLayout
             android:id="@+id/ll_question_items"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:animateLayoutChanges="true"
             />
     </ScrollView>
-</RelativeLayout>
+</LinearLayout>
