@@ -535,6 +535,9 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 break;
 
             case Utils.SOLVE_FORM:
+                if (data == null) {
+                    return;
+                }
                 if (!data.getExtras().containsKey("form")) {
                     Toast.makeText(this, "No form received", Toast.LENGTH_SHORT).show();
                     return;

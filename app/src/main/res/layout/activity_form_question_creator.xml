@@ -24,10 +24,10 @@
                 android:text="@string/write_text_for_question"
                 android:gravity="center"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
-                android:drawableTop="@android:drawable/btn_star"
+                android:drawableTop="@drawable/ab_edit"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="20dp"
                 />
             <EditText
@@ -124,9 +124,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 />
-
-
-
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -205,7 +202,9 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                >
 
                 <EditText
                     android:id="@+id/question_et_add_word"
@@ -226,7 +225,6 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ab_plus"
                     />
-
             </LinearLayout>
 
             <ListView
@@ -256,6 +254,70 @@
                 android:layout_marginEnd="10dp"
                 style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                 />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_question_is_mandatory"
+            android:layout_width="fill_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:padding="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/is_question_mandatory"
+                />
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_gray"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <Button
+                    android:id="@+id/mandatory_no"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no"
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"
+                    android:background="@color/light_gray"
+                    android:layout_marginBottom="10dp"
+                    />
+                <Button
+                    android:id="@+id/mandatory_yes"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:textAllCaps="true"
+                    android:layout_height="wrap_content"
+                    android:text="@string/yes"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="10dp"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -309,7 +371,7 @@
                 android:layout_marginEnd="10dp"
                 style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                 />
-            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

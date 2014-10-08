@@ -1,11 +1,13 @@
 package pt.up.fe.labtablet.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -23,13 +25,14 @@ import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.utils.Utils;
 
 
-public class FormQuestionCreatorActivity extends Activity implements AdapterView.OnItemSelectedListener {
+public class FormQuestionCreatorActivity extends Activity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private String questionBody;
     private ArrayList<String> allowedValues;
     private FormEnumType questionType;
     private int from;
     private int to;
+    private boolean mandatory;
 
     //adapter for the closed vocabulary question
     ArrayAdapter<String> mAdapter;
@@ -50,9 +53,9 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                     etQuestionBody.setError(getString(R.string.required));
                     return;
                 }
-
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etQuestionBody.getWindowToken(), 0);
                 questionBody = etQuestionBody.getText().toString();
-
                 Spinner questionTypeSelection = (Spinner) findViewById(R.id.question_type_spinner);
 
                 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(FormQuestionCreatorActivity.this,
@@ -105,13 +108,13 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 questionType = FormEnumType.FREE_TEXT;
                 (findViewById(R.id.ll_question_specify_range)).setVisibility(View.GONE);
                 (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.GONE);
-                enableSubmissionView();
+                enableMandatoryView();
                 break;
             case 2:
                 questionType = FormEnumType.NUMBER;
                 (findViewById(R.id.ll_question_specify_range)).setVisibility(View.GONE);
                 (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.GONE);
-                enableSubmissionView();
+                enableMandatoryView();
                 break;
             case 3:
                 questionType = FormEnumType.MULTIPLE_CHOICE;
@@ -120,7 +123,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 allowedValues = new ArrayList<String>();
                 allowedValues.add(getString(R.string.yes));
                 allowedValues.add(getString(R.string.no));
-                enableSubmissionView();
+                enableMandatoryView();
                 break;
             case 4:
                 questionType = FormEnumType.MULTIPLE_CHOICE;
@@ -157,7 +160,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                         (findViewById(R.id.question_et_add_word)).setEnabled(false);
 
                         questionType = FormEnumType.MULTIPLE_CHOICE;
-                        enableSubmissionView();
+                        enableMandatoryView();
                     }
                 });
                 break;
@@ -188,7 +191,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                             return;
                         }
                         (findViewById(R.id.question_specify_range_submit)).setEnabled(false);
-                        enableSubmissionView();
+                        enableMandatoryView();
                     }
                 });
                 break;
@@ -203,7 +206,16 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
 
     }
 
+    public void enableMandatoryView() {
+        (findViewById(R.id.ll_question_is_mandatory)).setVisibility(View.VISIBLE);
+        (findViewById(R.id.mandatory_no)).setOnClickListener(this);
+        (findViewById(R.id.mandatory_yes)).setOnClickListener(this);
+    }
+
     public void enableSubmissionView() {
+
+        (findViewById(R.id.mandatory_no)).setEnabled(false);
+        (findViewById(R.id.mandatory_yes)).setEnabled(false);
         (findViewById(R.id.ll_question_save_and_return)).setVisibility(View.VISIBLE);
         (findViewById(R.id.question_save_and_return)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,11 +229,30 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 } else {
                     fq.setDuration(0);
                 }
+
+                fq.setMandatory(mandatory);
+
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("form_question", new Gson().toJson(fq));
                 setResult(Utils.BUILD_FORM_QUESTION, returnIntent);
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.mandatory_no:
+                mandatory = false;
+                break;
+            case R.id.mandatory_yes:
+                mandatory = true;
+                break;
+            default:
+                return;
+        }
+
+        enableSubmissionView();
     }
 }

@@ -7,6 +7,7 @@ public class FormQuestion {
     private FormEnumType type;
     private String value;
     private String question;
+    private boolean mandatory;
 
 
 
@@ -69,5 +70,13 @@ public class FormQuestion {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public boolean isMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(boolean mandatory) {
+        this.mandatory = mandatory;
     }
 }
