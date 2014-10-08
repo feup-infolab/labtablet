@@ -1,6 +1,7 @@
 package pt.up.fe.labtablet.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -18,10 +19,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.models.FormEnumType;
 import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
@@ -113,7 +117,6 @@ public class FormSolverActivity extends Activity {
             default:
                 baseView = null;
         }
-
         return baseView;
     }
 
@@ -126,7 +129,40 @@ public class FormSolverActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        return false;
+        if (item.getItemId() != R.id.action_finish_form) {
+            return false;
+        }
+
+        //TODO check for unanswered questions
+
+        int viewCount = table.getChildCount();
+        ArrayList<FormQuestion> fqs = targetForm.getFormQuestions();
+        for (int i = 0; i < viewCount; ++i) {
+
+            FormEnumType questionType = fqs.get(i).getType();
+            View childView = table.getChildAt(i);
+
+            switch (questionType) {
+                case NUMBER:
+                case FREE_TEXT:
+                    EditText etSource = (EditText) childView.findViewById(R.id.solver_question_text);
+                    fqs.get(i).setValue(etSource.getText().toString());
+                    break;
+                case MULTIPLE_CHOICE:
+                    Spinner spSource = (Spinner) childView.findViewById(R.id.solver_question_spinner);
+                    fqs.get(i).setValue(spSource.getSelectedItem().toString());
+                    break;
+                case RANGE:
+                    NumberPicker npSource = (NumberPicker) childView.findViewById(R.id.solver_question_number_picker);
+                    fqs.get(i).setValue("" + npSource.getValue());
+                    break;
+            }
+        }
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("form", new Gson().toJson(targetForm));
+        setResult(Utils.SOLVE_FORM, returnIntent);
+        finish();
+        return true;
     }
 
 }

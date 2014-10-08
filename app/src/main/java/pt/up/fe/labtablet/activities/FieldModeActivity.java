@@ -497,37 +497,61 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         //get the picture filename and update records
-        if (requestCode == Utils.SKETCH_INTENT_REQUEST) {
-            if (resultCode == RESULT_OK) {
+        switch (requestCode) {
+            case Utils.SKETCH_INTENT_REQUEST:
+                if (resultCode != RESULT_OK)
+                    return;
+
                 String filePath = data.getStringExtra("result");
                 Descriptor desc = new Descriptor();
                 desc.setValue(Uri.parse(filePath).getLastPathSegment());
                 desc.setFilePath(filePath);
                 desc.setTag(Utils.PICTURE_TAGS);
                 metadata.add(desc);
-            }
-            //other result different from OK shall not be added to the metadata
-        } else if (requestCode == Utils.CAMERA_INTENT_REQUEST) {
-            Descriptor desc = new Descriptor();
-            desc.setFilePath(capturedImageUri.getPath());
-            desc.setValue(capturedImageUri.getLastPathSegment());
-            desc.setTag(Utils.PICTURE_TAGS);
-            metadata.add(desc);
-        } else if (requestCode == Utils.METADATA_VALIDATION) {
-            //go back to field mode
-            if (data == null) {
-                return;
-            }
-            //save metadata
-            if (!data.getExtras().containsKey("descriptors")) {
-                Toast.makeText(this, "No descriptors received", Toast.LENGTH_SHORT).show();
-            } else {
+                break;
+
+            case Utils.CAMERA_INTENT_REQUEST:
+                Descriptor desc2 = new Descriptor();
+                desc2.setFilePath(capturedImageUri.getPath());
+                desc2.setValue(capturedImageUri.getLastPathSegment());
+                desc2.setTag(Utils.PICTURE_TAGS);
+                metadata.add(desc2);
+                break;
+
+            case Utils.METADATA_VALIDATION:
+                if (data == null) {
+                    return;
+                }
+                if (!data.getExtras().containsKey("descriptors")) {
+                    Toast.makeText(this, "No descriptors received", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 String descriptorsJson = data.getStringExtra("descriptors");
                 ArrayList<Descriptor> itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
                 FileMgr.addDescriptors(favorite_name, itemDescriptors, this);
                 Toast.makeText(this, getResources().getString(R.string.metadata_added_success), Toast.LENGTH_SHORT).show();
-            }
-            finish();
+                finish();
+                break;
+
+            case Utils.SOLVE_FORM:
+                if (!data.getExtras().containsKey("form")) {
+                    Toast.makeText(this, "No form received", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //TODO handle form
+                new AlertDialog.Builder(this)
+                        .setTitle("RESULT FORM")
+                        .setMessage(data.getStringExtra("form"))
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setIcon(R.drawable.ab_plus)
+                        .show();
+
+                break;
         }
     }
 
