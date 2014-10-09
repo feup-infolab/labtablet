@@ -44,6 +44,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.api.AsyncFormPDFGenerator;
 import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.AsyncWeatherFetcher;
 import pt.up.fe.labtablet.api.ChangelogManager;
@@ -494,7 +495,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
 
         //get the picture filename and update records
         switch (requestCode) {
@@ -549,6 +550,30 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         .setMessage(data.getStringExtra("form"))
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                new AsyncFormPDFGenerator(new AsyncTaskHandler<String>() {
+                                    @Override
+                                    public void onSuccess(String result) {
+                                        Toast.makeText(FieldModeActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception error) {
+                                        Toast.makeText(FieldModeActivity.this, "Core Meltdown", Toast.LENGTH_SHORT).show();
+                                        ChangelogItem item = new ChangelogItem();
+                                        item.setMessage("PDF generator: " + error.toString());
+                                        item.setTitle(getResources().getString(R.string.developer_error));
+                                        item.setDate(Utils.getDate());
+                                        ChangelogManager.addLog(item, FieldModeActivity.this);
+                                    }
+
+                                    @Override
+                                    public void onProgressUpdate(int value) {
+
+                                    }
+                                }).execute(
+                                        new Gson().fromJson(data.getStringExtra("form"), Form.class),
+                                        favorite_name,
+                                        FieldModeActivity.this);
                             }
                         })
                         .setIcon(R.drawable.ab_plus)
@@ -601,7 +626,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         }
 
         return super.onOptionsItemSelected(item);
-
     }
 
     public boolean startService() {
@@ -610,7 +634,9 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             return true;
         } catch (Exception error) {
             ChangelogItem item = new ChangelogItem();
-            item.setMessage("Location Listener: " + error.toString() + "When starting the service. Device may not have any GPS devices or the resources may be in use by another application.");
+            item.setMessage("Location Listener: " +
+                    error.toString() +
+                    "When starting the service. Device may not have any GPS devices or the resources may be in use by another application.");
             item.setTitle(getResources().getString(R.string.developer_error));
             item.setDate(Utils.getDate());
             ChangelogManager.addLog(item, FieldModeActivity.this);
@@ -628,7 +654,9 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     desc.setValue(bt_network_temperature_sample.getText().toString());
                     desc.setTag(Utils.TEMP_TAGS);
                     metadata.add(desc);
-                    Toast.makeText(getApplication(), getResources().getString(R.string.net_temp_saved), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(),
+                            getResources().getString(R.string.net_temp_saved),
+                            Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.bt_temperature_sample:
@@ -636,7 +664,9 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     desc.setValue(bt_temperature_sample.getText().toString());
                     desc.setTag(Utils.TEMP_TAGS);
                     metadata.add(desc);
-                    Toast.makeText(getApplication(), getResources().getString(R.string.temp_saved), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(),
+                            getResources().getString(R.string.temp_saved),
+                            Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.bt_magnetic:
@@ -644,7 +674,9 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     desc.setValue(real_magnetic_value);
                     desc.setTag(Utils.MAGNETIC_TAGS);
                     metadata.add(desc);
-                    Toast.makeText(getApplication(), getResources().getString(R.string.mag_saved), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(),
+                            getResources().getString(R.string.mag_saved),
+                            Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.bt_luminosity:
@@ -652,7 +684,9 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     desc.setValue(bt_luminosity_sample.getText().toString());
                     desc.setTag(Utils.TEXT_TAGS);
                     metadata.add(desc);
-                    Toast.makeText(getApplication(), getResources().getString(R.string.lum_saved), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(),
+                            getResources().getString(R.string.lum_saved),
+                            Toast.LENGTH_SHORT).show();
                     break;
 
                 default:
@@ -672,7 +706,8 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         @Override
         protected void onPreExecute() {
             mLocationListener = new mLocationListener();
-            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            mLocationManager =
+                    (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
             mLocationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, 0, 0,
@@ -680,12 +715,10 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
 
             pb_location.setIndeterminate(true);
             pb_location.setVisibility(View.VISIBLE);
-
         }
 
         @Override
         protected void onCancelled() {
-            System.out.println("Cancelled by user!");
             pb_location.setIndeterminate(false);
             mLocationManager.removeUpdates(mLocationListener);
         }
@@ -707,7 +740,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         @Override
         protected String doInBackground(String... params) {
             while (this.lati == 0.0) {
-                Log.d("GPS", "waiting for coordinates");
             }
             return null;
         }
@@ -722,7 +754,8 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     longi = location.getLongitude();
                 } catch (Exception e) {
                     pb_update.setIndeterminate(false);
-                    Toast.makeText(getApplicationContext(), "Unable to get Location"
+                    Toast.makeText(getApplicationContext(),
+                            "Unable to get Location"
                             , Toast.LENGTH_LONG).show();
                 }
 

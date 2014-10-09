@@ -245,9 +245,11 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
         switch (view.getId()) {
             case R.id.mandatory_no:
                 mandatory = false;
+                (findViewById(R.id.mandatory_no)).setBackgroundColor(getResources().getColor(R.color.light_gray));
                 break;
             case R.id.mandatory_yes:
                 mandatory = true;
+                (findViewById(R.id.mandatory_yes)).setBackgroundColor(getResources().getColor(R.color.light_gray));
                 break;
             default:
                 return;
