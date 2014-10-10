@@ -3,6 +3,7 @@ package pt.up.fe.labtablet.activities;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -540,45 +541,49 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     return;
                 }
                 if (!data.getExtras().containsKey("form")) {
-                    Toast.makeText(this, "No form received", Toast.LENGTH_SHORT).show();
+                    ChangelogItem item = new ChangelogItem();
+                    item.setMessage("No form was received after selection.");
+                    item.setTitle(getResources().getString(R.string.developer_error));
+                    item.setDate(Utils.getDate());
+                    ChangelogManager.addLog(item, FieldModeActivity.this);
                     return;
                 }
 
-                //TODO handle form
-                new AlertDialog.Builder(this)
-                        .setTitle("RESULT FORM")
-                        .setMessage(data.getStringExtra("form"))
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                new AsyncFormPDFGenerator(new AsyncTaskHandler<String>() {
-                                    @Override
-                                    public void onSuccess(String result) {
-                                        Toast.makeText(FieldModeActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-                                    }
+                final ProgressDialog dialog = ProgressDialog.show(FieldModeActivity.this, "",
+                        getString(R.string.loading), true);
+                dialog.show();
+                new AsyncFormPDFGenerator(new AsyncTaskHandler<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Toast.makeText(FieldModeActivity.this,
+                                getString(R.string.success),
+                                Toast.LENGTH_SHORT).show();
 
-                                    @Override
-                                    public void onFailure(Exception error) {
-                                        Toast.makeText(FieldModeActivity.this, "Core Meltdown", Toast.LENGTH_SHORT).show();
-                                        ChangelogItem item = new ChangelogItem();
-                                        item.setMessage("PDF generator: " + error.toString());
-                                        item.setTitle(getResources().getString(R.string.developer_error));
-                                        item.setDate(Utils.getDate());
-                                        ChangelogManager.addLog(item, FieldModeActivity.this);
-                                    }
+                        dialog.dismiss();
+                    }
 
-                                    @Override
-                                    public void onProgressUpdate(int value) {
+                    @Override
+                    public void onFailure(Exception error) {
+                        Toast.makeText(FieldModeActivity.this,
+                                getString(R.string.fail),
+                                Toast.LENGTH_SHORT).show();
 
-                                    }
-                                }).execute(
-                                        new Gson().fromJson(data.getStringExtra("form"), Form.class),
-                                        favorite_name,
-                                        FieldModeActivity.this);
-                            }
-                        })
-                        .setIcon(R.drawable.ab_plus)
-                        .show();
+                        dialog.dismiss();
+                        ChangelogItem item = new ChangelogItem();
+                        item.setMessage("PDF generator: " + error.toString());
+                        item.setTitle(getResources().getString(R.string.developer_error));
+                        item.setDate(Utils.getDate());
+                        ChangelogManager.addLog(item, FieldModeActivity.this);
+                    }
 
+                    @Override
+                    public void onProgressUpdate(int value) {
+
+                    }
+                }).execute(
+                        new Gson().fromJson(data.getStringExtra("form"), Form.class),
+                        favorite_name,
+                        FieldModeActivity.this);
                 break;
         }
     }
@@ -630,7 +635,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
 
     public boolean startService() {
         try {
-            new FetchCordinates().execute();
+            new FetchCoordinates().execute();
             return true;
         } catch (Exception error) {
             ChangelogItem item = new ChangelogItem();
@@ -644,11 +649,16 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         }
     }
 
+    /**
+     * Handles tapping on each sensor's button to capture its value
+     */
     public class SensorsOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             Descriptor desc;
-            switch (view.getId()) {
+            int id = view.getId();
+
+            switch (id) {
                 case R.id.bt_network_temperature_sample:
                     desc = new Descriptor();
                     desc.setValue(bt_network_temperature_sample.getText().toString());
@@ -688,14 +698,14 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                             getResources().getString(R.string.lum_saved),
                             Toast.LENGTH_SHORT).show();
                     break;
-
-                default:
-                    break;
             }
         }
     }
 
-    public class FetchCordinates extends AsyncTask<String, Integer, String> {
+    /**
+     * Waits until valid coordinates are available
+     */
+    public class FetchCoordinates extends AsyncTask<String, Integer, String> {
         public double lati = 0.0;
         public double longi = 0.0;
 
@@ -777,9 +787,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 Log.i("onStatusChanged", "onStatusChanged");
 
             }
-
         }
-
     }
 
 

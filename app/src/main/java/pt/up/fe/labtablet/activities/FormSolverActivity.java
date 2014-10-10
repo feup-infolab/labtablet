@@ -134,7 +134,6 @@ public class FormSolverActivity extends Activity {
         }
 
         //TODO check for unanswered questions
-
         int viewCount = table.getChildCount();
         ArrayList<FormQuestion> fqs = targetForm.getFormQuestions();
         for (int i = 0; i < viewCount; ++i) {

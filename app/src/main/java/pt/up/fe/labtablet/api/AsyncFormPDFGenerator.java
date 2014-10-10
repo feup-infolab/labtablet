@@ -162,7 +162,9 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         // Build metrics section
         anchor = new Anchor("Gathered Metrics", catFont);
         anchor.setName("Gathered Metrics");
-        catPart = new Chapter(new Paragraph(anchor), 2);
+        Paragraph metricsPatagraph = new Paragraph(anchor);
+        addEmptyLine(metricsPatagraph, 2);
+        catPart = new Chapter(metricsPatagraph, 2);
 
         createMetrics(catPart, form);
         // now add all this to the document

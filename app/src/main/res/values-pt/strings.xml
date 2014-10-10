@@ -246,4 +246,6 @@
     <string name="form_solver_intro">Está prestes a iniciar um questionário com X questões, e com uma duração prevista de Y minutos. Para começar clique no botão em baixo.</string>
     <string name="form">Questionário</string>
     <string name="is_question_mandatory">Esta pergunta é obrigatória?</string>
+    <string name="success">Success!</string>
+    <string name="fail">Operation failed</string>
 </resources>

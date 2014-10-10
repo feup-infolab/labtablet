@@ -13,7 +13,6 @@ public class Form {
     private ArrayList<FormQuestion> formQuestions;
     private boolean descriptionSet;
 
-
     public Form(String name) {
         formQuestions = new ArrayList<FormQuestion>();
         this.formDescription = "";

@@ -237,4 +237,6 @@
     <string name="form_solver_intro">You are about to start a questionaire that has X questions and is estimated to take Y minutes. Tap the button below to start.</string>
     <string name="form">Form</string>
     <string name="is_question_mandatory">Is this question mandatory?</string>
+    <string name="success">Success!</string>
+    <string name="fail">Operation failed</string>
 </resources>
