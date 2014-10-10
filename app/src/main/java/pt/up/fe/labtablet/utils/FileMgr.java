@@ -78,13 +78,12 @@ public class FileMgr {
     }
 
     public static String getMimeType(String url) {
-        String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url.toLowerCase());
-        if (extension != null) {
-            MimeTypeMap mime = MimeTypeMap.getSingleton();
-            type = mime.getMimeTypeFromExtension(extension);
-        }
-        return type;
+
+        return MimeTypeMap
+                .getSingleton()
+                .getMimeTypeFromExtension(MimeTypeMap
+                        .getFileExtensionFromUrl(url.substring(
+                                url.lastIndexOf("."))));
     }
 
     public static long folderSize(File directory) {

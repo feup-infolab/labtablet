@@ -77,7 +77,7 @@ public class Utils {
     public static Type ARRAY_DENDRO_DESCRIPTORS = new TypeToken<ArrayList<DendroDescriptor>>() {
     }.getType();
     //Configuration entries. If updated, the application must be completely reinstalled
-    //can't use previous instances
+    //should not use previous instances
     public static String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
     public static String ASSOCIATIONS_CONFIG_ENTRY = "associations";
     public static String DESCRIPTORS_CONFIG_ENTRY = "base_descriptors";
