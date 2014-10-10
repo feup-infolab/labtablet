@@ -159,6 +159,9 @@ public class FormSolverActivity extends Activity {
             }
         }
         Intent returnIntent = new Intent();
+        targetForm.setElapsedTime(
+                ((Chronometer)findViewById(R.id.form_solver_chrono)).getText().toString());
+
         returnIntent.putExtra("form", new Gson().toJson(targetForm));
         setResult(Utils.SOLVE_FORM, returnIntent);
         finish();

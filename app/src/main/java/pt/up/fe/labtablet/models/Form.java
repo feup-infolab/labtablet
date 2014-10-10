@@ -1,14 +1,18 @@
 package pt.up.fe.labtablet.models;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 
 public class Form {
 
     private String formName;
     private String formDescription;
+    private String elapsedTime;
     private ArrayList<FormQuestion> formQuestions;
     private boolean descriptionSet;
+
 
     public Form(String name) {
         formQuestions = new ArrayList<FormQuestion>();
@@ -39,16 +43,27 @@ public class Form {
         this.formQuestions.add(fq);
     }
 
-    public int getDuration() {
+    public String getDuration() {
 
         int total = 0;
         for (FormQuestion fq : getFormQuestions()) {
             total += fq.getDuration();
         }
-        return total;
+
+        SimpleDateFormat df = new SimpleDateFormat("mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return df.format(total*1000);
     }
 
     public String getFormDescription() {
         return formDescription;
+    }
+
+    public void setElapsedTime(String elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
+
+    public String getElapsedTime() {
+        return this.elapsedTime;
     }
 }

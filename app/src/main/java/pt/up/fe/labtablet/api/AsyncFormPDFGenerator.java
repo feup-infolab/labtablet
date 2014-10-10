@@ -163,22 +163,16 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         anchor = new Anchor("Gathered Metrics", catFont);
         anchor.setName("Gathered Metrics");
         catPart = new Chapter(new Paragraph(anchor), 2);
-        //TODO add elapsed time, estimated time, Date, hour, Number of questions
-        createTable(catPart, form);
+
+        createMetrics(catPart, form);
         // now add all this to the document
         document.add(catPart);
-
     }
 
-    private static void createTable(Section subCatPart, Form form)
+    private static void createMetrics(Section subCatPart, Form form)
             throws BadElementException {
+
         PdfPTable table = new PdfPTable(3);
-
-        // t.setBorderColor(BaseColor.GRAY);
-        // t.setPadding(4);
-        // t.setSpacing(4);
-        // t.setBorderWidth(1);
-
         PdfPCell c1 = new PdfPCell(new Phrase("Metric"));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
@@ -192,17 +186,37 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         table.addCell(c1);
         table.setHeaderRows(1);
 
-        //TODO for each metadata record
+        table.addCell("Date");
+        table.addCell("" + new Date());
+        table.addCell("N/A");
+
         table.addCell("Elapsed time");
-        table.addCell("162");
+        table.addCell(form.getElapsedTime());
         table.addCell("Seconds");
-        //tow 2
+
+        table.addCell("Estimated time");
+        table.addCell("" + form.getDuration());
+        table.addCell("Seconds");
+
         table.addCell("# Questions");
         table.addCell("" + form.getFormQuestions().size());
         table.addCell("N/A");
 
-        subCatPart.add(table);
+        ArrayList<FormQuestion> formQuestions = form.getFormQuestions();
+        int answeredCount = 0;
+        for (FormQuestion fq : formQuestions) {
+                if (fq.getValue() != null &&
+                        !fq.getValue().equals("")) {
 
+                    ++answeredCount;
+                }
+        }
+
+        table.addCell("# Answered questions");
+        table.addCell("" + answeredCount);
+        table.addCell("N/A");
+
+        subCatPart.add(table);
     }
 
     private static void addEmptyLine(Paragraph paragraph, int number) {

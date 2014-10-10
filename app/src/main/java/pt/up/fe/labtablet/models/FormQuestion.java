@@ -13,13 +13,11 @@ public class FormQuestion {
 
     private int duration;
     private ArrayList<String> allowedValues;
-    private ArrayList<Descriptor> metadata;
 
     public FormQuestion(FormEnumType type, String question, ArrayList<String> allowedValues ,String value) {
         this.type = type;
         this.value = value;
         this.question = question;
-        this.metadata = new ArrayList<Descriptor>();
         this.allowedValues = allowedValues;
     }
 
@@ -40,28 +38,12 @@ public class FormQuestion {
         this.value = value;
     }
 
-    public ArrayList<Descriptor> getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(ArrayList<Descriptor> metadata) {
-        this.metadata = metadata;
-    }
-
     public String getQuestion() {
         return question;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
     public ArrayList<String> getAllowedValues() {
         return allowedValues;
-    }
-
-    public void setAllowedValues(ArrayList<String> admissibleValues) {
-        this.allowedValues = admissibleValues;
     }
 
     public int getDuration() {
