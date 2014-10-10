@@ -5,7 +5,20 @@ This README summarizes the LabTablet purpose and features. This repository holds
 ### How do I get set up? ###
 
 * Summary of set up
+
+Setting up LabTablet is a pretty straightforward task. The project was developed in the android studio IDE, and thus it can easily be opened by this application. After the first launch, graddle will take some time to find and solve any dependencies and configure the workbench. LabTablet requires Android KitKat to run. Although its compatibility can later be expanded to older Android Versions, for now some of the API calls will not work on API 18 and below.
+
 * Dependencies
+
+Some libraries are needed to handle specific features of the LabTablet interface:
+
+1. For networking, I used the Apache http components that can be found either inside the project or directly on their website;
+
+2. To receive valuable debug information, I used the project [ACRA](https://code.google.com/p/acra/) that submits crash reports to a webserver specifically designed to this purpose. This is only transmitted when the application crashes. Other less severe errors are reported to the ChangelogManager (NavDrawer -> Logs);
+
+3. To export any questionaire or form results to PDF, LabTablet uses [iTextPDF](http://itextpdf.com/);
+
+4. Other "built-in" dependencies are Gson to handle avery json conversion and http response.
 
 ### Who do I talk to? ###
 
