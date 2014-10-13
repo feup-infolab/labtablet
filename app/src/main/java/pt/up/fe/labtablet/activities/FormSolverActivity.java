@@ -57,6 +57,7 @@ public class FormSolverActivity extends Activity {
             }
         }
 
+
         setContentView(R.layout.activity_form_solver);
         table = (LinearLayout) findViewById(R.id.ll_question_items);
         (findViewById(R.id.bt_dismiss_form_intro)).setOnClickListener(new View.OnClickListener() {
@@ -98,8 +99,10 @@ public class FormSolverActivity extends Activity {
                 ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
                 NumberPicker np = (NumberPicker) baseView.findViewById(R.id.solver_question_number_picker);
                 if (fq.getAllowedValues().size() > 0) {
-                    np.setMinValue(Integer.parseInt(fq.getAllowedValues().get(0)));
-                    np.setMaxValue(Integer.parseInt(fq.getAllowedValues().get(1)));
+                    //0 will be the "pick an item" option
+                    //1 and 2 are respectively the lower and upper bound
+                    np.setMinValue(Integer.parseInt(fq.getAllowedValues().get(1)));
+                    np.setMaxValue(Integer.parseInt(fq.getAllowedValues().get(2)));
                 }
                 break;
             case NUMBER:
@@ -137,15 +140,15 @@ public class FormSolverActivity extends Activity {
         }
 
         boolean requirementsMet = true;
-        //TODO check for unanswered questions
         int viewCount = table.getChildCount();
         ArrayList<FormQuestion> fqs = targetForm.getFormQuestions();
         for (int i = 0; i < viewCount; ++i) {
 
             FormEnumType questionType = fqs.get(i).getType();
             View childView = table.getChildAt(i);
-
+            //CHeck whether the question is mandatory or not
             ImageView questionStatus = (ImageView) childView.findViewById(R.id.solver_question_status);
+
             switch (questionType) {
                 case NUMBER:
                 case FREE_TEXT:
@@ -179,7 +182,6 @@ public class FormSolverActivity extends Activity {
         if (!requirementsMet) {
             Toast.makeText(this, getString(R.string.empty_questions_exist), Toast.LENGTH_SHORT).show();
             return true;
-
         }
 
         Intent returnIntent = new Intent();
