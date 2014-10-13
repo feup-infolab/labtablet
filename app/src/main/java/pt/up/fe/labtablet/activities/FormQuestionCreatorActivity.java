@@ -223,6 +223,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
 
                 EditText etDuration = (EditText) findViewById(R.id.question_expected_duration);
 
+                allowedValues.add(0, getString(R.string.pick_allowed_values));
                 FormQuestion fq = new FormQuestion(questionType, questionBody, allowedValues, "");
                 if(!etDuration.getText().toString().equals("")) {
                     fq.setDuration(Integer.parseInt(etDuration.getText().toString()));

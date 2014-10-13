@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/solver_question_status"
+        android:visibility="invisible"
         android:src="@drawable/ic_warning"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"

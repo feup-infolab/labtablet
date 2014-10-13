@@ -239,4 +239,6 @@
     <string name="is_question_mandatory">Is this question mandatory?</string>
     <string name="success">Success!</string>
     <string name="fail">Operation failed</string>
+    <string name="pick_allowed_values">Pick an item</string>
+    <string name="empty_questions_exist">There is at least one unanswered question that is mandatory.</string>
 </resources>

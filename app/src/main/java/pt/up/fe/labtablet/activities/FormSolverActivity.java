@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
@@ -111,7 +112,9 @@ public class FormSolverActivity extends Activity {
                 ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
                 Spinner spValues = (Spinner) baseView.findViewById(R.id.solver_question_spinner);
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
-                        (FormSolverActivity.this, android.R.layout.simple_spinner_dropdown_item, fq.getAllowedValues());
+                        (FormSolverActivity.this,
+                                android.R.layout.simple_spinner_dropdown_item,
+                                fq.getAllowedValues());
                 spValues.setAdapter(dataAdapter);
                 break;
             default:
@@ -133,6 +136,7 @@ public class FormSolverActivity extends Activity {
             return false;
         }
 
+        boolean requirementsMet = true;
         //TODO check for unanswered questions
         int viewCount = table.getChildCount();
         ArrayList<FormQuestion> fqs = targetForm.getFormQuestions();
@@ -141,14 +145,28 @@ public class FormSolverActivity extends Activity {
             FormEnumType questionType = fqs.get(i).getType();
             View childView = table.getChildAt(i);
 
+            ImageView questionStatus = (ImageView) childView.findViewById(R.id.solver_question_status);
             switch (questionType) {
                 case NUMBER:
                 case FREE_TEXT:
                     EditText etSource = (EditText) childView.findViewById(R.id.solver_question_text);
+                    if (fqs.get(i).isMandatory() && etSource.getText().toString().equals("")) {
+                        questionStatus.setVisibility(View.VISIBLE);
+                        requirementsMet = false;
+                        break;
+                    }
+
                     fqs.get(i).setValue(etSource.getText().toString());
                     break;
+
                 case MULTIPLE_CHOICE:
                     Spinner spSource = (Spinner) childView.findViewById(R.id.solver_question_spinner);
+                    if (fqs.get(i).isMandatory() &&
+                            spSource.getSelectedItem().toString().equals(getString(R.string.pick_allowed_values))) {
+                        questionStatus.setVisibility(View.VISIBLE);
+                        requirementsMet = false;
+                        break;
+                    }
                     fqs.get(i).setValue(spSource.getSelectedItem().toString());
                     break;
                 case RANGE:
@@ -157,6 +175,13 @@ public class FormSolverActivity extends Activity {
                     break;
             }
         }
+
+        if (!requirementsMet) {
+            Toast.makeText(this, getString(R.string.empty_questions_exist), Toast.LENGTH_SHORT).show();
+            return true;
+
+        }
+
         Intent returnIntent = new Intent();
         targetForm.setElapsedTime(
                 ((Chronometer)findViewById(R.id.form_solver_chrono)).getText().toString());
