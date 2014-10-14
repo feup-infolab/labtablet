@@ -5,10 +5,7 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.api.AsyncImageLoader;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
@@ -154,7 +150,7 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
             }
         });
 
-        new LoadImage(holder.mDescriptorType).execute();
+        new AsyncImageLoader(holder.mDescriptorType, context).execute();
 
         Animation animation = AnimationUtils.makeInAnimation(context, false);
         rowView.startAnimation(animation);
@@ -169,67 +165,5 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
         public TextView mDescriptorDate;
         public TextView mDescriptorSize;
         public ImageButton mRemoveFile;
-    }
-
-    class LoadImage extends AsyncTask<Object, Void, Bitmap> {
-
-        private ImageView imv;
-        private String path;
-
-        public LoadImage(ImageView imv) {
-            this.imv = imv;
-            this.path = imv.getTag().toString();
-        }
-
-        @Override
-        protected Bitmap doInBackground(Object... params) {
-
-            if (path.equals(""))
-                return null;
-
-            File file = new File(path);
-            if (!file.exists())
-                return null;
-
-            try {
-                //Decode image size
-                BitmapFactory.Options o = new BitmapFactory.Options();
-                o.inJustDecodeBounds = true;
-                BitmapFactory.decodeStream(new FileInputStream(file), null, o);
-
-                //The new size we want to scale to
-                final int REQUIRED_SIZE = 70;
-
-                //Find the correct scale value. It should be the power of 2.
-                int scale = 1;
-                while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
-                    scale *= 2;
-
-                //Decode with inSampleSize
-                BitmapFactory.Options o2 = new BitmapFactory.Options();
-                o2.inSampleSize = scale;
-                return BitmapFactory.decodeStream(new FileInputStream(file), null, o2);
-            } catch (FileNotFoundException e) {
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if (!imv.getTag().toString().equals(path)) {
-               /* The path is not same. This means that this
-                  image view is handled by some other async task.
-                  We don't do anything and return. */
-                return;
-            }
-
-            if (result != null && imv != null) {
-                imv.setVisibility(View.VISIBLE);
-                imv.setImageBitmap(result);
-            } else {
-                imv.setImageResource(R.drawable.ic_note);
-            }
-        }
-
     }
 }

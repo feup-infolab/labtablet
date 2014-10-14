@@ -42,6 +42,7 @@ public class FormViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.activity_question_creator, container, false);
 
+        //restore state, if applicable
         if (savedInstanceState != null) {
             currentForm = new Gson().fromJson(
                     savedInstanceState.getString("form"),
@@ -196,9 +197,6 @@ public class FormViewFragment extends Fragment {
                 })
                 .setIcon(R.drawable.ic_recycle)
                 .show();
-
-
-
 
         return true;
     }

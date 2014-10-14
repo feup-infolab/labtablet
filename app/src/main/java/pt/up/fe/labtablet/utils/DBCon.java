@@ -57,21 +57,13 @@ public class DBCon {
         return folderMetadata;
     }
 
-    public static void overwriteDescriptors(String settingsEntry, ArrayList<Descriptor> descriptors, Context mContext) {
-        SharedPreferences settings = mContext.getSharedPreferences(
-                mContext.getResources().getString(R.string.app_name),
-                Context.MODE_PRIVATE);
 
-        if (!settings.contains(settingsEntry)) {
-            Log.e("OVERWRITE", "Entry was not found for folder " + settingsEntry);
-        }
 
-        SharedPreferences.Editor editor = settings.edit();
-        editor.remove(settingsEntry);
-        editor.putString(settingsEntry, new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
-        editor.apply();
-    }
-
+    /**
+     * Returns the available associations
+     * @param mContext
+     * @return
+     */
     public static ArrayList<AssociationItem> getAssociations(Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
@@ -87,6 +79,33 @@ public class DBCon {
                 Utils.ARRAY_ASSOCIATION_ITEM);
     }
 
+    /**
+     * Replaces all the descriptors by the ones that it receives
+     * @param settingsEntry
+     * @param descriptors
+     * @param mContext
+     */
+    public static void overwriteDescriptors(String settingsEntry, ArrayList<Descriptor> descriptors, Context mContext) {
+        SharedPreferences settings = mContext.getSharedPreferences(
+                mContext.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        if (!settings.contains(settingsEntry)) {
+            Log.e("OVERWRITE", "Entry was not found for folder " + settingsEntry);
+        }
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(settingsEntry);
+        editor.putString(settingsEntry, new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
+        editor.apply();
+    }
+
+    /**
+     * Adds a set of descriptors (metadata) to the selected favorite
+     * @param favoriteName
+     * @param itemDescriptors
+     * @param mContext
+     */
     public static void addDescriptors(String favoriteName, ArrayList<Descriptor> itemDescriptors, Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
@@ -101,6 +120,11 @@ public class DBCon {
         }
     }
 
+    /**
+     * Replace all forms with the received ones
+     * @param forms
+     * @param mContext
+     */
     public static void overwriteForms(ArrayList<Form> forms, Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
@@ -126,6 +150,11 @@ public class DBCon {
         return null;
     }
 
+    /**
+     * Update a record in the DB
+     * @param inForm
+     * @param mContext
+     */
     public static void updateForm(Form inForm, Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
@@ -155,6 +184,11 @@ public class DBCon {
         editor.apply();
     }
 
+    /**
+     * Adds a form record
+     * @param form
+     * @param mContext
+     */
     public static void addForm(Form form, Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
@@ -175,6 +209,11 @@ public class DBCon {
         editor.apply();
     }
 
+    /**
+     * Returns the available forms that the user previously created
+     * @param mContext
+     * @return
+     */
     public static ArrayList<Form> getForms(Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
@@ -189,6 +228,12 @@ public class DBCon {
                 Utils.ARRAY_FORM);
     }
 
+    /**
+     * Removes a form from the records, only shoudl remove the single record and not
+     * the forms that were already filled (data)
+     * @param formName
+     * @param mContext
+     */
     public static void deleteForm(String formName, Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(mContext.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
         if (!settings.contains("forms")) {

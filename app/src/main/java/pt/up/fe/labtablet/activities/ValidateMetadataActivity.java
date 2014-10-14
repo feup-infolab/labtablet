@@ -84,9 +84,7 @@ public class ValidateMetadataActivity extends Activity {
                 descriptors, DBCon.getAssociations(this), favoriteName, mInterface);
 
         lv_unvalidated_metadata.setAdapter(mAdapter);
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,9 +1,6 @@
 package pt.up.fe.labtablet.adapters;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.api.ChangelogManager;
-import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.api.AsyncImageLoader;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.DBCon;
-import pt.up.fe.labtablet.utils.Utils;
 
 public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
 
@@ -72,7 +64,7 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
         holder.mDescriptorType.setTag(item.getFilePath());
 
 
-        new LoadImage(holder.mDescriptorType).execute();
+        new AsyncImageLoader(holder.mDescriptorType, context).execute();
 
         Animation animation = AnimationUtils.makeInAnimation(context, false);
         rowView.startAnimation(animation);
@@ -86,70 +78,4 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
         public TextView mDescriptorDate;
     }
 
-    class LoadImage extends AsyncTask<Object, Void, Bitmap> {
-
-        private ImageView imv;
-        private String path;
-
-        public LoadImage(ImageView imv) {
-            this.imv = imv;
-            this.path = imv.getTag().toString();
-        }
-
-        @Override
-        protected Bitmap doInBackground(Object... params) {
-
-            if (path.equals(""))
-                return null;
-
-            File file = new File(path);
-            if (!file.exists())
-                return null;
-
-            try {
-                //Decode image size
-                BitmapFactory.Options o = new BitmapFactory.Options();
-                o.inJustDecodeBounds = true;
-                BitmapFactory.decodeStream(new FileInputStream(file), null, o);
-
-                //The new size we want to scale to
-                final int REQUIRED_SIZE = 70;
-
-                //Find the correct scale value. It should be the power of 2.
-                int scale = 1;
-                while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
-                    scale *= 2;
-
-                //Decode with inSampleSize
-                BitmapFactory.Options o2 = new BitmapFactory.Options();
-                o2.inSampleSize = scale;
-                return BitmapFactory.decodeStream(new FileInputStream(file), null, o2);
-            } catch (FileNotFoundException e) {
-                ChangelogItem item = new ChangelogItem();
-                item.setMessage("MetadataListAdapter" + "File was not found: " + e.toString());
-                item.setTitle(context.getResources().getString(R.string.developer_error));
-                item.setDate(Utils.getDate());
-                ChangelogManager.addLog(item, context);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if (!imv.getTag().toString().equals(path)) {
-               /* The path is not same. This means that this
-                  image view is handled by some other async task.
-                  We don't do anything and return. */
-                return;
-            }
-
-            if (result != null && imv != null) {
-                imv.setVisibility(View.VISIBLE);
-                imv.setImageBitmap(result);
-            } else {
-                imv.setImageResource(R.drawable.ic_metadata);
-            }
-        }
-
-    }
 }
