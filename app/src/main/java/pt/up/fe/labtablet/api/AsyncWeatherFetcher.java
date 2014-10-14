@@ -36,7 +36,6 @@ public class AsyncWeatherFetcher extends AsyncTask<Context, Void, Integer> {
             crit.setAccuracy(Criteria.ACCURACY_FINE);
             String provider = lm.getBestProvider(crit, true);
 
-            //TODO if the last known location is not known, start an async task to get it
             Location loc = lm.getLastKnownLocation(provider);
 
             HttpClient client = new DefaultHttpClient();

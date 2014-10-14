@@ -2,6 +2,7 @@ package pt.up.fe.labtablet.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -136,14 +137,20 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
 
                 if (mime == null) {
                     Toast.makeText(context,
-                            context.getResources().getString(R.string.no_apps_available),
+                            context.getResources().getString(R.string.could_not_get_extension),
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Intent intent = new Intent();
                 intent.setAction(android.content.Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.fromFile(file), mime);
-                context.startActivity(intent);
+                try {
+                    context.startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(context,
+                            context.getResources().getString(R.string.no_apps_available),
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

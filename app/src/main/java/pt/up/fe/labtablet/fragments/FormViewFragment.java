@@ -183,7 +183,7 @@ public class FormViewFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         FileMgr.deleteForm(currentForm.getFormName(), getActivity());
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                        //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                         transaction.replace(R.id.frame_container, new ListFormFragment());
                         transaction.commit();
                     }

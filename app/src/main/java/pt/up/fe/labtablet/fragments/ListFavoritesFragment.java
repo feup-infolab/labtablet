@@ -60,7 +60,7 @@ public class ListFavoritesFragment extends ListFragment {
         FavoriteItem selectedItem = mFavoriteItems.get(position);
 
         FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
 
         //switch to the dataset view
         FavoriteDetailsFragment datasetDetail = new FavoriteDetailsFragment();
@@ -84,7 +84,7 @@ public class ListFavoritesFragment extends ListFragment {
         switch (item.getItemId()) {
             case R.id.action_new_dataset:
                 FragmentTransaction transaction = super.getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                 NewFavoriteBaseFragment datasetDetail = new NewFavoriteBaseFragment();
                 Bundle args = new Bundle();
                 args.putString("favorite_name", "");
@@ -104,6 +104,19 @@ public class ListFavoritesFragment extends ListFragment {
 
         String path = Environment.getExternalStorageDirectory().toString();
         File f = new File(path + "/" + getResources().getString(R.string.app_name));
+        if (!f.exists()) {
+            f.mkdir();
+        }
+
+
+        // Create directory into internal memory;
+        //f = getActivity().getDir("LabTablet", Context.MODE_PRIVATE);
+        // Get a file myfile within the dir mydir.
+        //File fileWithinMyDir = new File(mydir, "myfile");
+        // Use the stream as usual to write into the file.
+        //FileOutputStream out = new FileOutputStream(fileWithinMyDir);
+
+
         File[] files = f.listFiles();
 
         mFavoriteItems.clear();

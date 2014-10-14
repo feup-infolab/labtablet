@@ -326,7 +326,7 @@ public class MainActivity extends Activity {
                     .show();
         } else {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+            //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
             transaction.replace(R.id.frame_container, displayedFragment);
             transaction.addToBackStack("HOME");
             transaction.commit();

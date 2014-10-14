@@ -276,7 +276,7 @@ public class FileMgr {
                 Utils.ARRAY_FORM);
     }
 
-    public static boolean deleteDirectory(File file) {
+    private static boolean deleteDirectory(File file) {
         boolean result = false;
         if (file.exists()) {
             if (file.isDirectory()) {

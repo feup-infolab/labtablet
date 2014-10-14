@@ -18,7 +18,7 @@ import pt.up.fe.labtablet.utils.FileMgr;
 
 
 public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, ProjectListResponse> {
-    HttpGet httpget;
+    private HttpGet httpget;
     private AsyncTaskHandler<ProjectListResponse> mHandler;
     private Exception error;
     private Context mContext;

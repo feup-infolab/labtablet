@@ -294,16 +294,15 @@ public class NewFavoriteBaseFragment extends Fragment {
                 }
 
                 FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                 FavoriteDetailsFragment datasetDetail = new FavoriteDetailsFragment();
                 Bundle args = new Bundle();
                 args.putString("favorite_name", et_datasetName.getText().toString());
                 datasetDetail.setArguments(args);
                 transaction.replace(R.id.frame_container, datasetDetail);
-                transaction.addToBackStack("nopes");
+                transaction.addToBackStack(null);
                 getFragmentManager().popBackStack();
                 transaction.commit();
-
             }
         });
 

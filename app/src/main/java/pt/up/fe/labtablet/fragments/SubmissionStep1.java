@@ -35,7 +35,7 @@ public class SubmissionStep1 extends Fragment {
     private Drawable bad;
     private Drawable meh;
     private ConnectionChangeReceiver mReceiver;
-    static SubmissionStepHandler mHandler;
+    private static SubmissionStepHandler mHandler;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -50,7 +50,7 @@ public class SubmissionStep1 extends Fragment {
         return fragment;
     }
 
-    public SubmissionStep1() {
+    private SubmissionStep1() {
     }
 
     @Override
@@ -100,7 +100,7 @@ public class SubmissionStep1 extends Fragment {
         return ((float)level / (float)scale) * 100.0f;
     }
 
-    public class ConnectionChangeReceiver extends BroadcastReceiver
+    private class ConnectionChangeReceiver extends BroadcastReceiver
     {
         @Override
         public void onReceive( Context context, Intent intent )

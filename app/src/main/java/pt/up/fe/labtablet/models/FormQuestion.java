@@ -14,11 +14,11 @@ public class FormQuestion {
     private int duration;
     private ArrayList<String> allowedValues;
 
-    public FormQuestion(FormEnumType type, String question, ArrayList<String> allowedValues, String value) {
+    public FormQuestion(FormEnumType type, String question, ArrayList<String> allowedValues) {
         this.type = type;
-        this.value = value;
         this.question = question;
         this.allowedValues = allowedValues;
+        this.value = "";
     }
 
     public FormEnumType getType() {

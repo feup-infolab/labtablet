@@ -44,6 +44,10 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
         setContentView(R.layout.activity_form_question_creator);
         allowedValues = new ArrayList<String>();
 
+        if (getActionBar() != null) {
+            getActionBar().setTitle(getString(R.string.create_form_question_head));
+        }
+        
         (findViewById(R.id.question_text_submit)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,8 +57,11 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                     etQuestionBody.setError(getString(R.string.required));
                     return;
                 }
+
+                //keyboard, sit!
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(etQuestionBody.getWindowToken(), 0);
+
                 questionBody = etQuestionBody.getText().toString();
                 Spinner questionTypeSelection = (Spinner) findViewById(R.id.question_type_spinner);
 
@@ -68,7 +75,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 questionTypeSelection.setOnItemSelectedListener(FormQuestionCreatorActivity.this);
                 (findViewById(R.id.ll_question_specify_type)).setVisibility(View.VISIBLE);
 
-                //maybe its usefull to be able to edit the question until the last minute...
+                //maybe its useful to be able to edit the question until the last minute...
                 (findViewById(R.id.question_specify_text)).setEnabled(false);
                 (findViewById(R.id.question_text_submit)).setEnabled(false);
             }
@@ -223,8 +230,8 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
 
                 EditText etDuration = (EditText) findViewById(R.id.question_expected_duration);
 
-                allowedValues.add(0, getString(R.string.pick_allowed_values));
-                FormQuestion fq = new FormQuestion(questionType, questionBody, allowedValues, "");
+                allowedValues.add(0, getString(R.string.pick_from_spinner));
+                FormQuestion fq = new FormQuestion(questionType, questionBody, allowedValues);
                 if(!etDuration.getText().toString().equals("")) {
                     fq.setDuration(Integer.parseInt(etDuration.getText().toString()));
                 } else {

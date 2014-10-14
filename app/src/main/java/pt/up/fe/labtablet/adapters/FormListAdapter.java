@@ -60,7 +60,7 @@ public class FormListAdapter extends ArrayAdapter<Form> {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction transaction = context.getFragmentManager().beginTransaction();
-                    transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                    //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                     FormViewFragment formDetail = new FormViewFragment();
                     Bundle args = new Bundle();
                     args.putString("form", new Gson().toJson(items.get(position)));

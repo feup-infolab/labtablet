@@ -33,10 +33,9 @@ public class ChangelogManager {
             return;
         }
 
-        ArrayList<ChangelogItem> storedItems = new Gson().fromJson(
+        items = new Gson().fromJson(
                 settings.getString(Utils.CHANGELOG_CONFIG_ENTRY, ""),
                 Utils.ARRAY_CHANGELOG_ITEM);
-        items = storedItems;
         items.add(item);
 
         editor.putString(Utils.CHANGELOG_CONFIG_ENTRY, new Gson().toJson(

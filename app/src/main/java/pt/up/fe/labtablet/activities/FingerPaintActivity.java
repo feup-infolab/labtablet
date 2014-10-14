@@ -30,7 +30,7 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class FingerPaintActivity extends Activity implements ColorPickerDialog.OnColorChangedListener {
 
-    MyView mDrawingView;
+    private MyView mDrawingView;
     private String folderName;
     private Paint mPaint;
 
