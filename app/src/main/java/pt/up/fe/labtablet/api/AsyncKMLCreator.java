@@ -29,7 +29,7 @@ public class AsyncKMLCreator extends AsyncTask<Object, Integer, String> {
     @Override
     protected String doInBackground(Object... params) {
 
-        if (!(params[0] instanceof ArrayList) || params[1] instanceof String) {
+        if (!(params[0] instanceof ArrayList) || !(params[1] instanceof String)) {
             Log.e("KML creator", "Wrong instances!");
             return null;
         }

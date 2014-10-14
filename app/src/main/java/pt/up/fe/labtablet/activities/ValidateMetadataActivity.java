@@ -22,7 +22,7 @@ import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class ValidateMetadataActivity extends Activity {
@@ -81,7 +81,7 @@ public class ValidateMetadataActivity extends Activity {
                 };
 
         mAdapter = new UnvalidatedMetadataListAdapter(this,
-                descriptors, FileMgr.getAssociations(this), favoriteName, mInterface);
+                descriptors, DBCon.getAssociations(this), favoriteName, mInterface);
 
         lv_unvalidated_metadata.setAdapter(mAdapter);
 

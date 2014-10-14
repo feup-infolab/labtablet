@@ -43,6 +43,7 @@ import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -109,7 +110,7 @@ public class FavoriteDetailsFragment extends Fragment {
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
+        itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
 
         for (Descriptor desc : itemDescriptors) {
             if (desc.getDescriptor().contains("description")) {
@@ -189,7 +190,7 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_edit_view.setVisibility(View.VISIBLE);
 
         lv_metadata.setDividerHeight(0);
-        itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
+        itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
         mMetadataAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
         lv_metadata.setAdapter(mMetadataAdapter);
     }
@@ -251,7 +252,7 @@ public class FavoriteDetailsFragment extends Fragment {
             String descriptorJson = data.getStringExtra("descriptor");
             Descriptor newDescriptor = new Gson().fromJson(descriptorJson, Descriptor.class);
             itemDescriptors.add(newDescriptor);
-            FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+            DBCon.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
 
             this.onResume();
 
@@ -261,7 +262,7 @@ public class FavoriteDetailsFragment extends Fragment {
 
             String descriptorsJson = data.getStringExtra("descriptors");
             itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
-            FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+            DBCon.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
 
             this.onResume();
 
@@ -411,13 +412,13 @@ public class FavoriteDetailsFragment extends Fragment {
                     } else if (mView.getTag().equals(Utils.DESCRIPTION_TAG)) {
                         tv_description.setText(input.getText().toString());
 
-                        itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
+                        itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
                         for (Descriptor desc : itemDescriptors) {
                             if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
                                 desc.setValue(input.getText().toString());
                             }
                         }
-                        FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+                        DBCon.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
                     }
                     onResume();
                     dialog.dismiss();

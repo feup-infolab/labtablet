@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 import pt.up.fe.labtablet.utils.Zipper;
 
@@ -162,7 +162,7 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
 
         //export metadata
         publishProgress(50);
-        ArrayList<Descriptor> descriptors = FileMgr.getDescriptors(favoriteName, mContext);
+        ArrayList<Descriptor> descriptors = DBCon.getDescriptors(favoriteName, mContext);
         ArrayList<DendroMetadataRecord> metadataRecords = new ArrayList<DendroMetadataRecord>();
 
         if (descriptors.size() == 0) {

@@ -22,7 +22,7 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
@@ -42,7 +42,7 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
     @Override
     public void notifyDataSetChanged() {
         items.clear();
-        items.addAll(FileMgr.getDescriptors(favoriteName, context));
+        items.addAll(DBCon.getDescriptors(favoriteName, context));
         super.notifyDataSetChanged();
     }
 

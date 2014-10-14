@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class HomeFragment extends Fragment {
@@ -186,7 +186,7 @@ public class HomeFragment extends Fragment {
                             + File.separator + getResources().getString(R.string.app_name));
             for (File f : file.listFiles()) {
                 if (f.isDirectory()) {
-                    worldDescriptors.addAll(FileMgr.getDescriptors(f.getName(), getActivity()));
+                    worldDescriptors.addAll(DBCon.getDescriptors(f.getName(), getActivity()));
                 }
             }
 

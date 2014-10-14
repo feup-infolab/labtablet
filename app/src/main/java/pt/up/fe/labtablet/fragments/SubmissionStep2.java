@@ -21,7 +21,7 @@ import pt.up.fe.labtablet.activities.ValidateMetadataActivity;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.api.SubmissionStepHandler;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
 
@@ -61,7 +61,7 @@ public class SubmissionStep2 extends Fragment {
             favoriteName = savedInstanceState.getString("favorite_name");
         }
 
-        itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
+        itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
 
         lvMetadata = (ListView) rootView.findViewById(R.id.submission_validation_metadata_list);
         lvMetadata.setDividerHeight(0);
@@ -88,7 +88,7 @@ public class SubmissionStep2 extends Fragment {
             itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
             mAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
             lvMetadata.setAdapter(mAdapter);
-            FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+            DBCon.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
             Toast.makeText(getActivity(), "Updated", Toast.LENGTH_SHORT).show();
         }
     }
