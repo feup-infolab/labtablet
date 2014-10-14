@@ -23,7 +23,7 @@ import java.util.List;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.DescriptorPickerActivity;
-import pt.up.fe.labtablet.api.AsyncImageLoader;
+import pt.up.fe.labtablet.async.AsyncImageLoader;
 import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;

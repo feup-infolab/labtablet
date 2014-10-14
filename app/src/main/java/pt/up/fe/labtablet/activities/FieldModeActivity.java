@@ -45,11 +45,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.api.AsyncFormPDFGenerator;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
-import pt.up.fe.labtablet.api.AsyncWeatherFetcher;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.api.LTLocationListener;
+import pt.up.fe.labtablet.async.AsyncFormPDFGenerator;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.labtablet.async.AsyncWeatherFetcher;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.Form;
@@ -653,7 +653,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     /**
      * Handles tapping on each sensor's button to capture its value
      */
-    public class SensorsOnClickListener implements View.OnClickListener {
+    class SensorsOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             Descriptor desc;

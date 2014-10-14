@@ -20,7 +20,7 @@ import pt.up.fe.labtablet.fragments.FormViewFragment;
 import pt.up.fe.labtablet.models.Form;
 
 /**
- * Created by ricardo on 9/17/14.
+ * Adapter for the list of available forms
  */
 public class FormListAdapter extends ArrayAdapter<Form> {
 

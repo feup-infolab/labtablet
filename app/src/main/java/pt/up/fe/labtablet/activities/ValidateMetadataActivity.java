@@ -17,9 +17,9 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.UnvalidatedMetadataListAdapter;
-import pt.up.fe.labtablet.api.AsyncQueueProcessor;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.async.AsyncQueueProcessor;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.DBCon;
@@ -27,7 +27,7 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class ValidateMetadataActivity extends Activity {
 
-    ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;
     private ArrayList<Descriptor> descriptors;
     private ArrayList<Descriptor> deletionQueue;
     private ArrayList<Descriptor> convertionQueue;

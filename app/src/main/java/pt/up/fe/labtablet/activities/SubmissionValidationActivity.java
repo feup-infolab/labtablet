@@ -42,7 +42,7 @@ public class SubmissionValidationActivity extends Activity implements Submission
      * may be best to switch to a
      * {@link android.support.v13.app.FragmentStatePagerAdapter}.
      */
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
     /**
      * The {@link ViewPager} that will host the section contents.
      */

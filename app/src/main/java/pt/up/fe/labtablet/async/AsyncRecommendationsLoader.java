@@ -1,4 +1,4 @@
-package pt.up.fe.labtablet.api;
+package pt.up.fe.labtablet.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -15,6 +15,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.api.DendroAPI;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Dendro.DendroDescriptor;

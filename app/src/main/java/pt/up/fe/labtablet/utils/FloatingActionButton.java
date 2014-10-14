@@ -20,14 +20,14 @@ import android.widget.FrameLayout;
 
 public class FloatingActionButton extends View {
 
-    final static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
-    final static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
+    private final static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
+    private final static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
 
-    Context context;
-    Paint mButtonPaint;
-    Paint mDrawablePaint;
-    Bitmap mBitmap;
-    boolean mHidden = false;
+    private Context context;
+    private Paint mButtonPaint;
+    private Paint mDrawablePaint;
+    private Bitmap mBitmap;
+    private boolean mHidden = false;
 
     public FloatingActionButton(Context context) {
         super(context);

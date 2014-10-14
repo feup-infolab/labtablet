@@ -1,9 +1,10 @@
-package pt.up.fe.labtablet.api;
+package pt.up.fe.labtablet.async;
 
 import android.os.AsyncTask;
 
 import java.util.ArrayList;
 
+import pt.up.fe.labtablet.api.CkanAPI;
 import pt.up.fe.labtablet.models.FavoriteItem;
 
 

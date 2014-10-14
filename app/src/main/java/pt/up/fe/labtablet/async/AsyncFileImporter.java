@@ -1,4 +1,4 @@
-package pt.up.fe.labtablet.api;
+package pt.up.fe.labtablet.async;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,8 +1,10 @@
-package pt.up.fe.labtablet.api;
+package pt.up.fe.labtablet.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import pt.up.fe.labtablet.api.DendroAPI;
 
 public class AsyncAuthenticator extends AsyncTask<Object, Integer, String> {
     //input, remove, output

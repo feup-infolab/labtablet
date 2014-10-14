@@ -33,8 +33,8 @@ public class FormViewFragment extends Fragment {
     private ListView lvFormItems;
     private Form currentForm;
     private RelativeLayout rlEmptyForm;
-    FormItemListAdapter mAdapter;
-    FormItemListAdapter.formListAdapterInterface mInterface;
+    private FormItemListAdapter mAdapter;
+    private FormItemListAdapter.formListAdapterInterface mInterface;
 
     public FormViewFragment(){}
 

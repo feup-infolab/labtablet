@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
-import pt.up.fe.labtablet.api.AsyncUploader;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.labtablet.async.AsyncUploader;
 import pt.up.fe.labtablet.utils.Utils;
 
 

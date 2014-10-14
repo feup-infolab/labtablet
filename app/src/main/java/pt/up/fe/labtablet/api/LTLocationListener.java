@@ -15,17 +15,19 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.async.AsyncKMLCreator;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class LTLocationListener implements LocationListener {
 
-    ArrayList<Location> mLocations;
     private Context mContext;
     private String path;
     private LocationManager locationManager;
     private kmlCreatedInterface mKmlInterface;
+    private ArrayList<Location> mLocations;
 
     public LTLocationListener(Context context, String path, String favoriteName, kmlCreatedInterface kmlInterface) {
         mLocations = new ArrayList<Location>();

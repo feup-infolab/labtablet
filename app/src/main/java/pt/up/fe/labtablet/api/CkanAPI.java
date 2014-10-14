@@ -5,11 +5,11 @@ import android.util.Log;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import pt.up.fe.labtablet.api.ckan.CKANException;
-import pt.up.fe.labtablet.api.ckan.Client;
-import pt.up.fe.labtablet.api.ckan.Connection;
-import pt.up.fe.labtablet.api.ckan.Dataset;
 import pt.up.fe.labtablet.models.FavoriteItem;
+import pt.up.fe.labtablet.models.ckan.CKANException;
+import pt.up.fe.labtablet.models.ckan.Client;
+import pt.up.fe.labtablet.models.ckan.Connection;
+import pt.up.fe.labtablet.models.ckan.Dataset;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class CkanAPI {

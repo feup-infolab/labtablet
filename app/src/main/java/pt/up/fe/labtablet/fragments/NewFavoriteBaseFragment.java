@@ -27,10 +27,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.api.AsyncProjectListFetcher;
-import pt.up.fe.labtablet.api.AsyncRecommendationsLoader;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.async.AsyncProjectListFetcher;
+import pt.up.fe.labtablet.async.AsyncRecommendationsLoader;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Dendro.Project;
 import pt.up.fe.labtablet.models.Dendro.ProjectListResponse;
@@ -39,14 +39,13 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class NewFavoriteBaseFragment extends Fragment {
 
+    private EditText et_datasetName;
+    private EditText et_datasetDescription;
 
-    EditText et_datasetName;
-    EditText et_datasetDescription;
-
-    Button bt_load_suggestions;
-    Button bt_submit;
-    ProgressDialog mDialog;
-    SharedPreferences.Editor editor;
+    private Button bt_load_suggestions;
+    private Button bt_submit;
+    private ProgressDialog mDialog;
+    private SharedPreferences.Editor editor;
     private SharedPreferences settings;
     private String projectName;
     private ArrayList<Project> availableProjects;

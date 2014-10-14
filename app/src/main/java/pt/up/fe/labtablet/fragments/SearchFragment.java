@@ -18,8 +18,8 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.FavoriteListAdapter;
-import pt.up.fe.labtablet.api.AsyncSearchTask;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
+import pt.up.fe.labtablet.async.AsyncSearchTask;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.FavoriteItem;
 
 public class SearchFragment extends Fragment {

@@ -27,10 +27,10 @@ import java.util.List;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
-import pt.up.fe.labtablet.api.AsyncDendroDirectoryFetcher;
-import pt.up.fe.labtablet.api.AsyncProjectListFetcher;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.SubmissionStepHandler;
+import pt.up.fe.labtablet.async.AsyncDendroDirectoryFetcher;
+import pt.up.fe.labtablet.async.AsyncProjectListFetcher;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.labtablet.models.Dendro.Project;
@@ -41,10 +41,10 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class SubmissionStep3 extends Fragment {
 
-    static SubmissionStepHandler mHandler;
+    private static SubmissionStepHandler mHandler;
     private static String projectName;
-    MenuItem actionRefresh;
-    MenuItem actionUp;
+    private MenuItem actionRefresh;
+    private MenuItem actionUp;
     private ListView dendroDirList;
     private DendroFolderAdapter mAdapter;
     private ProgressBar progressBar;

@@ -1,4 +1,4 @@
-package pt.up.fe.labtablet.api;
+package pt.up.fe.labtablet.async;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -73,9 +74,10 @@ public class AsyncImageLoader extends AsyncTask<Object, Void, Bitmap> {
     @Override
     protected void onPostExecute(Bitmap result) {
         if (!imv.getTag().toString().equals(path)) {
-               /* The path is not same. This means that this
-                  image view is handled by some other async task.
-                  We don't do anything and return. */
+            /**
+             * Reject take off. This imv was from another class or
+             * was already recycled, so do nothing.
+             */
             return;
         }
 

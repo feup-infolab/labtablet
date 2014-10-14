@@ -1,4 +1,4 @@
-package pt.up.fe.labtablet.api;
+package pt.up.fe.labtablet.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.api.DendroAPI;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.DBCon;
@@ -233,7 +234,10 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
         public String message;
     }
 
-    //class to retrieve the upload progress for large files
+    /**
+     * class to retrieve the upload progress for large files
+     * had to implement native methods..
+     */
     class LabTabletUploadEntity implements HttpEntity {
 
         private HttpEntity mEntity;

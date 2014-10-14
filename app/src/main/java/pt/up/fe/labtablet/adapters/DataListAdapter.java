@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.api.AsyncImageLoader;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.async.AsyncImageLoader;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.FileMgr;

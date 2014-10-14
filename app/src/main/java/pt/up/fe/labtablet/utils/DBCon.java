@@ -22,8 +22,8 @@ public class DBCon {
 
     /**
      * Returns the available descriptors for that specific settings entry
-     * @param settingsEntry
-     * @param mContext
+     * @param settingsEntry entry for the preferences settings
+     * @param mContext context
      * @return
      */
     public static ArrayList<Descriptor> getDescriptors(String settingsEntry, Context mContext) {

@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.Utils;

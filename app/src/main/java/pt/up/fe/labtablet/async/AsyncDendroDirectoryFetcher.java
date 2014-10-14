@@ -1,4 +1,4 @@
-package pt.up.fe.labtablet.api;
+package pt.up.fe.labtablet.async;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.api.DendroAPI;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.labtablet.utils.Utils;

@@ -1,4 +1,4 @@
-package pt.up.fe.labtablet.api;
+package pt.up.fe.labtablet.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -12,6 +12,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import pt.up.fe.labtablet.api.DendroAPI;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Dendro.ProjectListResponse;
 import pt.up.fe.labtablet.utils.FileMgr;

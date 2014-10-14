@@ -38,9 +38,9 @@ import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.labtablet.activities.ValidateMetadataActivity;
 import pt.up.fe.labtablet.adapters.DataListAdapter;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
-import pt.up.fe.labtablet.api.AsyncFileImporter;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.async.AsyncFileImporter;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.DBCon;
@@ -49,20 +49,21 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class FavoriteDetailsFragment extends Fragment {
 
-    TextView tv_title;
-    TextView tv_description;
-    Button bt_fieldMode;
-    Button bt_new_metadata;
-    ImageButton bt_edit_view;
-    //Buttons to switch between data and metadata views
-    Button bt_meta_view;
-    Button bt_data_view;
+    private TextView tv_title;
+    private TextView tv_description;
+    private Button bt_fieldMode;
+    private Button bt_new_metadata;
+    private ImageButton bt_edit_view;
 
-    ImageButton bt_edit_title;
-    ImageButton bt_edit_description;
-    ListView lv_metadata;
-    MetadataListAdapter mMetadataAdapter;
-    DataListAdapter mDataAdapter;
+    //Buttons to switch between data and metadata views
+    private Button bt_meta_view;
+    private Button bt_data_view;
+
+    private ImageButton bt_edit_title;
+    private ImageButton bt_edit_description;
+    private ListView lv_metadata;
+    private MetadataListAdapter mMetadataAdapter;
+    private DataListAdapter mDataAdapter;
     private boolean isMetadataVisible;
     private ArrayList<Descriptor> itemDescriptors;
     private String favoriteName;

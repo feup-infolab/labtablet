@@ -1,4 +1,4 @@
-package pt.up.fe.labtablet.api.ckan;
+package pt.up.fe.labtablet.models.ckan;
 
 /**
  * Represents an extra metadata field in a dataset or group

@@ -26,8 +26,8 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class ListFormFragment extends ListFragment {
 
-    ArrayList<Form> items;
-    FormListAdapter mAdapter;
+    private ArrayList<Form> items;
+    private FormListAdapter mAdapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

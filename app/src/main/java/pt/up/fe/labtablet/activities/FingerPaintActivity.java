@@ -21,9 +21,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.api.AsyncBitmapExporter;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.async.AsyncBitmapExporter;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.utils.ColorPickerDialog;
 import pt.up.fe.labtablet.utils.Utils;

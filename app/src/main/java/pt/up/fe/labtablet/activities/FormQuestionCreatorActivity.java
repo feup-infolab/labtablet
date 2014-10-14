@@ -35,7 +35,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
     private boolean mandatory;
 
     //adapter for the closed vocabulary question
-    ArrayAdapter<String> mAdapter;
+    private ArrayAdapter<String> mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
