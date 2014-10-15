@@ -230,6 +230,7 @@
 
             <ListView
                 android:id="@+id/list_allowed_vocabulary"
+                android:animateLayoutChanges="true"
                 android:layout_width="fill_parent"
                 android:layout_height="150dp"
                 android:layout_marginEnd="10dp"
