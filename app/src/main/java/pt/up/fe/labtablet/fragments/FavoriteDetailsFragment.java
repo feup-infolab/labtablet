@@ -390,6 +390,12 @@ public class FavoriteDetailsFragment extends Fragment {
             builder.setView(input);
             builder.setMessage(getResources().getString(R.string.update_name_instructions));
 
+            if (mView.getTag().equals(Utils.TITLE_TAG)) {
+                input.setText(favoriteName);
+            } else {
+                input.setText(tv_description.getText().toString());
+            }
+
             // Set up the buttons
             builder.setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
                 @Override
