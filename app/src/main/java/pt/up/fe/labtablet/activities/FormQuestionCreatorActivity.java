@@ -75,7 +75,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 questionTypeSelection.setOnItemSelectedListener(FormQuestionCreatorActivity.this);
                 (findViewById(R.id.ll_question_specify_type)).setVisibility(View.VISIBLE);
 
-                //maybe its useful to be able to edit the question until the last minute...
+                (findViewById(R.id.question_type_spinner)).setEnabled(true);
                 (findViewById(R.id.question_specify_text)).setEnabled(false);
                 (findViewById(R.id.question_text_submit)).setEnabled(false);
             }
@@ -92,10 +92,23 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId() == R.id.action_question_cancel) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_question_cancel) {
             finish();
             return true;
         }
+        if (itemId != R.id.action_question_undo)
+            return false;
+
+        //start over, manipulate views visibility
+        (findViewById(R.id.ll_question_specify_type)).setVisibility(View.GONE);
+        (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.GONE);
+        (findViewById(R.id.ll_question_specify_range)).setVisibility(View.GONE);
+        (findViewById(R.id.ll_question_is_mandatory)).setVisibility(View.GONE);
+        (findViewById(R.id.ll_question_save_and_return)).setVisibility(View.GONE);
+
+        (findViewById(R.id.question_specify_text)).setEnabled(true);
+        (findViewById(R.id.question_text_submit)).setEnabled(true);
 
         return false;
     }
@@ -135,6 +148,9 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
             case 4:
                 questionType = FormEnumType.MULTIPLE_CHOICE;
                 (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.VISIBLE);
+                (findViewById(R.id.question_et_add_word)).setEnabled(true);
+                (findViewById(R.id.question_add_word)).setEnabled(true);
+
                 ListView lv_allowed_word = (ListView) findViewById(R.id.list_allowed_vocabulary);
                 allowedValues = new ArrayList<String>();
                 mAdapter = new ArrayAdapter<String>(this,
@@ -174,6 +190,8 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
             case 5:
                 questionType = FormEnumType.RANGE;
                 (findViewById(R.id.ll_question_specify_range)).setVisibility(View.VISIBLE);
+                (findViewById(R.id.question_specify_range_submit)).setEnabled(true);
+
                 (findViewById(R.id.question_specify_range_submit)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -215,6 +233,9 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
 
     public void enableMandatoryView() {
         (findViewById(R.id.ll_question_is_mandatory)).setVisibility(View.VISIBLE);
+        (findViewById(R.id.mandatory_no)).setEnabled(true);
+        (findViewById(R.id.mandatory_yes)).setEnabled(true);
+
         (findViewById(R.id.mandatory_no)).setOnClickListener(this);
         (findViewById(R.id.mandatory_yes)).setOnClickListener(this);
     }
@@ -253,16 +274,15 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
         switch (view.getId()) {
             case R.id.mandatory_no:
                 mandatory = false;
-                (findViewById(R.id.mandatory_no)).setBackgroundColor(getResources().getColor(R.color.light_gray));
                 break;
             case R.id.mandatory_yes:
                 mandatory = true;
-                (findViewById(R.id.mandatory_yes)).setBackgroundColor(getResources().getColor(R.color.light_gray));
                 break;
             default:
                 return;
         }
-
+        (findViewById(R.id.mandatory_no)).setEnabled(false);
+        (findViewById(R.id.mandatory_yes)).setEnabled(false);
         enableSubmissionView();
     }
 }

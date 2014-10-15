@@ -253,4 +253,5 @@
     <string name="pick_from_spinner">Select an option</string>
     <string name="create_form_question_head">Create question</string>
     <string name="could_not_get_extension">Could not find the file extension.</string>
+    <string name="undo">Undo</string>
 </resources>

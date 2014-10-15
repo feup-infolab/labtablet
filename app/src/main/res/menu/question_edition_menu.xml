@@ -2,9 +2,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/action_question_undo"
+        android:icon="@drawable/ab_reload"
+        android:title="@string/undo"
+        android:showAsAction="always|withText"
+        />
+
+    <item
         android:id="@+id/action_question_cancel"
         android:icon="@drawable/ab_cross"
         android:title="@android:string/cancel"
-        android:showAsAction="always|withText"
+        android:showAsAction="ifRoom"
         />
 </menu>
