@@ -50,7 +50,7 @@ public class SubmissionStep1 extends Fragment {
         return fragment;
     }
 
-    private SubmissionStep1() {
+    public SubmissionStep1() {
     }
 
     @Override

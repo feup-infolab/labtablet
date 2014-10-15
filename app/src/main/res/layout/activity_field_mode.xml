@@ -20,7 +20,7 @@
                 android:id="@+id/tv_title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_margin="2dp"
-                    android:layout_toRightOf="@id/bt_form">
+                    android:layout_toEndOf="@id/bt_form">
 
                     <Button
                         android:id="@+id/bt_one_time_position"

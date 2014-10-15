@@ -29,6 +29,7 @@
 
     <EditText
         android:id="@+id/solver_question_text"
+        android:hint="@string/input_goes_here"
         android:layout_marginTop="15dp"
         android:layout_below="@id/solver_question_body"
         android:layout_width="fill_parent"

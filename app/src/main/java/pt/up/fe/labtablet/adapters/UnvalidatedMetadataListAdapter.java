@@ -49,7 +49,8 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
-        // reuse views
+
+        // let us all reuse these amazing views
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
             rowView = inflater.inflate(R.layout.item_unvalidated_metadata, null);
@@ -68,7 +69,7 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
             rowView.setTag(viewHolder);
         }
 
-        // fill data
+        // put some data on them
         final ViewHolder holder = (ViewHolder) rowView.getTag();
 
         holder.bt_remove.setTag(position);
@@ -89,7 +90,7 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
         for (AssociationItem association : associations) {
             Descriptor chosenOne = association.getDescriptor();
 
-            //there is no context associated
+            //there is no context associated, reject
             if (chosenOne.getTag() == null) {
                 break;
             }
@@ -215,7 +216,9 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
         return rowView;
     }
 
-    //Queue to process items as soon as the changes are applied
+    /**
+     * Queue to process items as soon as the changes are applied
+     */
     public interface unvalidatedMetadataInterface {
         //called whenever a file is selected for removal
         public void onFileDeletion(Descriptor desc);

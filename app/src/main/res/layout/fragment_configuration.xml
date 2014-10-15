@@ -1,398 +1,392 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="pt.up.fe.labtablet.fragments.ConfigurationFragment">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    tools:context="pt.up.fe.labtablet.fragments.ConfigurationFragment"
+    >
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <RelativeLayout
+            android:id="@+id/gv_file"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/card"
+
             >
 
-            <RelativeLayout
-                android:id="@+id/gv_file"
+            <TextView
+                android:id="@+id/conf_pick_file_instructions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="@string/file_select"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                />
+            <View
+                android:id="@+id/conf_pick_file_separator"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/conf_pick_file_instructions"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray"
+                />
+            <Button
+                android:id="@+id/bt_file_path"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/conf_pick_file_separator"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:drawableStart="@android:drawable/ic_menu_agenda"
+                android:ems="10"
+                android:text="@string/bt_file_select"
+                android:textAllCaps="true" />
+
+        </RelativeLayout>
+
+        <GridLayout
+            android:id="@+id/gv_clear"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gv_file"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/card"
+            android:columnCount="3"
+            android:rowCount="3">
+
+
+            <TextView
+                android:id="@+id/configuration_instructions"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="3"
+                android:layout_row="0"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="@string/configuration_header"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                />
+
+
+            <Button
+                android:id="@+id/bt_clear_associations"
+                style="@style/btnStyleBeige"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/clear_associations"
+                android:textAllCaps="true"
+                />
+        </GridLayout>
+
+        <LinearLayout
+            android:id="@+id/gl_gps"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gv_clear"
+            android:background="@drawable/card"
+            android:orientation="vertical"
+            >
+
+
+            <TextView
+                android:id="@+id/conf_kml_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingTop="20dp"
+                android:text="KML"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                />
+
+            <TextView
+                android:id="@+id/conf_kml_instructions"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/gps_description"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                />
+
+            <TextView
+                android:id="@+id/kml_extension_descriptor"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Descriptor not set"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                />
+
+            <TextView
+                android:id="@+id/kml_extension_description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                />
+
+            <View
+                android:id="@+id/conf_kml_separator"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray"
+                />
+
+            <Button
+                android:id="@+id/bt_kml_edit"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/edit"
+                android:textAllCaps="true"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/gl_jpg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gl_gps"
+            android:background="@drawable/card"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/conf_jpeg_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingTop="20dp"
+                android:text="JPEG"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                />
+
+            <TextView
+                android:id="@+id/conf_jpeg_description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/jpg_description"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                />
+
+            <TextView
+                android:id="@+id/jpg_extension_descriptor"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/descriptor_not_set"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                />
+
+            <TextView
+                android:id="@+id/jpg_extension_description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                />
+            <View
+                android:id="@+id/conf_jpeg_separator"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray"
+                />
+
+            <Button
+                android:id="@+id/bt_jpg_edit"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/edit"
+                android:textAllCaps="true"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rl_mp3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gl_jpg"
+            android:background="@drawable/card"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/conf_mp3_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingTop="20dp"
+                android:text="MP3"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                />
+
+            <TextView
+                android:id="@+id/conf_mp3_description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/mp3_description"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                />
+
+            <TextView
+                android:id="@+id/mp3_extension_descriptor"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Descriptor not set"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                />
+
+            <TextView
+                android:id="@+id/mp3_extension_description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                />
+
+            <View
+                android:id="@+id/conf_mp3_separator"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray"
+                />
+
+            <Button
+                android:id="@+id/bt_mp3_edit"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Edit"
+                android:textAllCaps="true"
+                />
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/dendro_configurations"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_mp3"
+            android:background="@drawable/card"
+            android:padding="20dp"
+            >
+
+            <Button
+                android:id="@+id/dendro_configurations_save"
+                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="5dp"
+                android:drawableTop="@drawable/ic_warning"
+                android:text="@string/action_test_save"
+                />
+
+
+            <TextView
+                android:id="@+id/dendro_configurations_title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:background="@drawable/card"
+                android:layout_toStartOf="@id/dendro_configurations_save"
+                android:text="@string/dendro_configurations"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                />
 
-                >
-
-                <TextView
-                    android:id="@+id/conf_pick_file_instructions"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:padding="20dp"
-                    android:text="@string/file_select"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    />
-                <View
-                    android:id="@+id/conf_pick_file_separator"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/conf_pick_file_instructions"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray"
-                    />
-                <Button
-                    android:id="@+id/bt_file_path"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/conf_pick_file_separator"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:drawableLeft="@android:drawable/ic_menu_agenda"
-                    android:ems="10"
-                    android:text="@string/bt_file_select"
-                    android:textAllCaps="true" />
-
-            </RelativeLayout>
-
-            <GridLayout
-                android:id="@+id/gv_clear"
+            <TextView
+                android:id="@+id/dendro_configurations_description"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/gv_file"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/card"
-                android:columnCount="3"
-                android:rowCount="3">
+                android:layout_below="@id/dendro_configurations_title"
+                android:layout_toStartOf="@id/dendro_configurations_save"
+                android:text="@string/dendro_configurations_description"
+                />
 
-
-                <TextView
-                    android:id="@+id/configuration_instructions"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_columnSpan="3"
-                    android:layout_row="0"
-                    android:gravity="center"
-                    android:padding="20dp"
-                    android:text="@string/configuration_header"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    />
-
-
-                <Button
-                    android:id="@+id/bt_clear_associations"
-                    style="@style/btnStyleBeige"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/clear_associations"
-                    android:textAllCaps="true"
-                    />
-            </GridLayout>
-
-            <LinearLayout
-                android:id="@+id/gl_gps"
+            <EditText
+                android:id="@+id/dendro_configurations_address"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/gv_clear"
-                android:background="@drawable/card"
-                android:orientation="vertical"
-                >
+                android:layout_below="@id/dendro_configurations_description"
+                android:drawableStart="@android:drawable/ic_menu_directions"
+                android:hint="Dendro URL"
+                android:inputType="textUri"
+                />
 
-
-                <TextView
-                    android:id="@+id/conf_kml_title"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="20dp"
-                    android:text="KML"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    />
-
-                <TextView
-                    android:id="@+id/conf_kml_instructions"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="@string/gps_description"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    />
-
-                <TextView
-                    android:id="@+id/kml_extension_descriptor"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Descriptor not set"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    />
-
-                <TextView
-                    android:id="@+id/kml_extension_description"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    />
-
-                <View
-                    android:id="@+id/conf_kml_separator"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray"
-                    />
-
-                <Button
-                    android:id="@+id/bt_kml_edit"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="@string/edit"
-                    android:textAllCaps="true"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/gl_jpg"
+            <EditText
+                android:id="@+id/dendro_configurations_username"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/gl_gps"
-                android:background="@drawable/card"
-                android:orientation="vertical"
-                >
+                android:layout_below="@id/dendro_configurations_address"
+                android:drawableStart="@android:drawable/ic_menu_myplaces"
+                android:hint="Username"
+                />
 
-                <TextView
-                    android:id="@+id/conf_jpeg_title"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="20dp"
-                    android:text="JPEG"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    />
-
-                <TextView
-                    android:id="@+id/conf_jpeg_description"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/jpg_description"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    />
-
-                <TextView
-                    android:id="@+id/jpg_extension_descriptor"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/descriptor_not_set"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    />
-
-                <TextView
-                    android:id="@+id/jpg_extension_description"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/jpg_extension_descriptor"
-                    android:gravity="center"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    />
-                <View
-                    android:id="@+id/conf_jpeg_separator"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray"
-                    />
-
-                <Button
-                    android:id="@+id/bt_jpg_edit"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="@string/edit"
-                    android:textAllCaps="true"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/rl_mp3"
+            <EditText
+                android:id="@+id/dendro_configurations_password"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/gl_jpg"
-                android:background="@drawable/card"
-                android:orientation="vertical"
-                >
-
-                <TextView
-                    android:id="@+id/conf_mp3_title"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="20dp"
-                    android:text="MP3"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    />
-
-                <TextView
-                    android:id="@+id/conf_mp3_description"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/mp3_description"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    />
-
-                <TextView
-                    android:id="@+id/mp3_extension_descriptor"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Descriptor not set"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    />
-
-                <TextView
-                    android:id="@+id/mp3_extension_description"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    />
-
-                <View
-                    android:id="@+id/conf_mp3_separator"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray"
-                    />
-
-                <Button
-                    android:id="@+id/bt_mp3_edit"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Edit"
-                    android:textAllCaps="true"
-                    />
-            </LinearLayout>
-
-
-            <RelativeLayout
-                android:id="@+id/dendro_configurations"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/rl_mp3"
-                android:background="@drawable/card"
-                android:padding="20dp"
-                >
-
-                <Button
-                    android:id="@+id/dendro_configurations_save"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginEnd="5dp"
-                    android:drawableTop="@drawable/ic_warning"
-                    android:text="@string/action_test_save"
-                    />
-
-
-                <TextView
-                    android:id="@+id/dendro_configurations_title"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_toStartOf="@id/dendro_configurations_save"
-                    android:text="@string/dendro_configurations"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    />
-
-                <TextView
-                    android:id="@+id/dendro_configurations_description"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/dendro_configurations_title"
-                    android:layout_toStartOf="@id/dendro_configurations_save"
-                    android:text="@string/dendro_configurations_description"
-                    />
-
-                <EditText
-                    android:id="@+id/dendro_configurations_address"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/dendro_configurations_description"
-                    android:drawableStart="@android:drawable/ic_menu_directions"
-                    android:hint="Dendro URL"
-                    android:inputType="textUri"
-                    />
-
-                <EditText
-                    android:id="@+id/dendro_configurations_username"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/dendro_configurations_address"
-                    android:drawableStart="@android:drawable/ic_menu_myplaces"
-                    android:hint="Username"
-                    />
-
-                <EditText
-                    android:id="@+id/dendro_configurations_password"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/dendro_configurations_username"
-                    android:hint="Password"
-                    android:inputType="textPassword"
-                    />
+                android:layout_below="@id/dendro_configurations_username"
+                android:hint="Password"
+                android:inputType="textPassword"
+                />
 
 
 
-            </RelativeLayout>
         </RelativeLayout>
+    </RelativeLayout>
 
-    </ScrollView>
-
-</FrameLayout>
+</ScrollView>
