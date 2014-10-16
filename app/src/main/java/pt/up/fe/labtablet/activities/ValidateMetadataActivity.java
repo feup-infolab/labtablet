@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
@@ -136,6 +137,7 @@ public class ValidateMetadataActivity extends Activity {
 
         } else if (item.getItemId() == R.id.action_metadata_cancel) {
             deletionQueue.clear();
+
             Intent returnIntent = new Intent();
             returnIntent.putExtra("descriptors", new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
             finish();
@@ -182,6 +184,14 @@ public class ValidateMetadataActivity extends Activity {
     @Override
     public void onBackPressed() {
         deletionQueue.clear();
+
+        //remove unwanted files
+        for (Descriptor desc : descriptors) {
+            if (desc.hasFile()) {
+                new File(desc.getFilePath()).delete();
+            }
+        }
+        descriptors = new ArrayList<Descriptor>();
         Intent returnIntent = new Intent();
         returnIntent.putExtra("descriptors", new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
         setResult(RESULT_CANCELED, returnIntent);

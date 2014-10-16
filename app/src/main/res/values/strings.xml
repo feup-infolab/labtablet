@@ -127,7 +127,7 @@
     <string name="easily_manage">Easily manage opened projects and metadata</string>
     <string name="upload_and_make_accessible">Upload metadata to the repository and make it available to your team</string>
     <string name="swipe_to_menu">Swipe to open the menu</string>
-    <string name="launch_field_mode">Launch field mode</string>
+    <string name="launch_field_mode">Field mode</string>
     <string name="metadata_validated">Metadata validated</string>
     <string name="swipe_to_next">Swipe to the next step</string>
     <string name="stop">Stop</string>

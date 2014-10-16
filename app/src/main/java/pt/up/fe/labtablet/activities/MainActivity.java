@@ -288,7 +288,6 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.i("", "REQ:" + requestCode + " RES:" + resultCode);
         if (requestCode == Utils.SUBMISSION_VALIDATION) {
 
             if (data == null)

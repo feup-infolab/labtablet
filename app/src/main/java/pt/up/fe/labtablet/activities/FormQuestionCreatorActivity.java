@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -34,6 +35,14 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
     private int to;
     private boolean mandatory;
 
+    //Layouts for visibility handling
+    LinearLayout viewQuestionType;
+    LinearLayout viewQuestionMandatory;
+    LinearLayout viewQuestionVocabularies;
+    LinearLayout viewQuestionRange;
+    LinearLayout viewQuestionConclusion;
+
+
     //adapter for the closed vocabulary question
     private ArrayAdapter<String> mAdapter;
 
@@ -47,7 +56,13 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
         if (getActionBar() != null) {
             getActionBar().setTitle(getString(R.string.create_form_question_head));
         }
-        
+
+        viewQuestionType = (LinearLayout) findViewById(R.id.ll_question_specify_type);
+        viewQuestionMandatory = (LinearLayout)  findViewById(R.id.ll_question_is_mandatory);
+        viewQuestionVocabularies = (LinearLayout) findViewById(R.id.ll_question_vocabulary);
+        viewQuestionRange = (LinearLayout) findViewById(R.id.ll_question_specify_range);
+        viewQuestionConclusion = (LinearLayout) findViewById(R.id.ll_question_save_and_return);
+
         (findViewById(R.id.question_text_submit)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,9 +88,9 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 // Apply the adapter to the spinner
                 questionTypeSelection.setAdapter(adapter);
                 questionTypeSelection.setOnItemSelectedListener(FormQuestionCreatorActivity.this);
-                (findViewById(R.id.ll_question_specify_type)).setVisibility(View.VISIBLE);
+                viewQuestionType.setVisibility(View.VISIBLE);
 
-                (findViewById(R.id.question_type_spinner)).setEnabled(true);
+                questionTypeSelection.setEnabled(true);
                 (findViewById(R.id.question_specify_text)).setEnabled(false);
                 (findViewById(R.id.question_text_submit)).setEnabled(false);
             }
@@ -101,11 +116,11 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
             return false;
 
         //start over, manipulate views visibility
-        (findViewById(R.id.ll_question_specify_type)).setVisibility(View.GONE);
-        (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.GONE);
-        (findViewById(R.id.ll_question_specify_range)).setVisibility(View.GONE);
-        (findViewById(R.id.ll_question_is_mandatory)).setVisibility(View.GONE);
-        (findViewById(R.id.ll_question_save_and_return)).setVisibility(View.GONE);
+        viewQuestionType.setVisibility(View.GONE);
+        viewQuestionVocabularies.setVisibility(View.GONE);
+        viewQuestionRange.setVisibility(View.GONE);
+        viewQuestionMandatory.setVisibility(View.GONE);
+        viewQuestionConclusion.setVisibility(View.GONE);
 
         (findViewById(R.id.question_specify_text)).setEnabled(true);
         (findViewById(R.id.question_text_submit)).setEnabled(true);
@@ -126,20 +141,23 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
         switch (i) {
             case 1:
                 questionType = FormEnumType.FREE_TEXT;
-                (findViewById(R.id.ll_question_specify_range)).setVisibility(View.GONE);
-                (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.GONE);
+                viewQuestionRange.setVisibility(View.GONE);
+                viewQuestionVocabularies.setVisibility(View.GONE);
+
                 enableMandatoryView();
                 break;
             case 2:
                 questionType = FormEnumType.NUMBER;
-                (findViewById(R.id.ll_question_specify_range)).setVisibility(View.GONE);
-                (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.GONE);
+                viewQuestionRange.setVisibility(View.GONE);
+                viewQuestionVocabularies.setVisibility(View.GONE);
+
                 enableMandatoryView();
                 break;
             case 3:
                 questionType = FormEnumType.MULTIPLE_CHOICE;
-                (findViewById(R.id.ll_question_specify_range)).setVisibility(View.GONE);
-                (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.GONE);
+                viewQuestionRange.setVisibility(View.GONE);
+                viewQuestionVocabularies.setVisibility(View.GONE);
+
                 allowedValues = new ArrayList<String>();
                 allowedValues.add(getString(R.string.yes));
                 allowedValues.add(getString(R.string.no));
@@ -147,7 +165,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 break;
             case 4:
                 questionType = FormEnumType.MULTIPLE_CHOICE;
-                (findViewById(R.id.ll_question_vocabulary)).setVisibility(View.VISIBLE);
+                viewQuestionVocabularies.setVisibility(View.VISIBLE);
                 (findViewById(R.id.question_et_add_word)).setEnabled(true);
                 (findViewById(R.id.question_add_word)).setEnabled(true);
 
@@ -189,7 +207,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 break;
             case 5:
                 questionType = FormEnumType.RANGE;
-                (findViewById(R.id.ll_question_specify_range)).setVisibility(View.VISIBLE);
+                viewQuestionRange.setVisibility(View.VISIBLE);
                 (findViewById(R.id.question_specify_range_submit)).setEnabled(true);
 
                 (findViewById(R.id.question_specify_range_submit)).setOnClickListener(new View.OnClickListener() {
@@ -232,7 +250,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
     }
 
     public void enableMandatoryView() {
-        (findViewById(R.id.ll_question_is_mandatory)).setVisibility(View.VISIBLE);
+        viewQuestionMandatory.setVisibility(View.VISIBLE);
         (findViewById(R.id.mandatory_no)).setEnabled(true);
         (findViewById(R.id.mandatory_yes)).setEnabled(true);
 
@@ -241,10 +259,10 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
     }
 
     public void enableSubmissionView() {
-
+        viewQuestionConclusion.setVisibility(View.VISIBLE);
         (findViewById(R.id.mandatory_no)).setEnabled(false);
         (findViewById(R.id.mandatory_yes)).setEnabled(false);
-        (findViewById(R.id.ll_question_save_and_return)).setVisibility(View.VISIBLE);
+
         (findViewById(R.id.question_save_and_return)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -60,7 +60,6 @@ public class FavoriteDetailsFragment extends Fragment {
     private Button bt_data_view;
 
     private ImageButton bt_edit_title;
-    private ImageButton bt_edit_description;
     private ListView lv_metadata;
     private MetadataListAdapter mMetadataAdapter;
     private DataListAdapter mDataAdapter;
@@ -81,15 +80,12 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_fieldMode = (Button) rootView.findViewById(R.id.bt_field_mode);
         lv_metadata = (ListView) rootView.findViewById(R.id.lv_favorite_metadata);
         bt_new_metadata = (Button) rootView.findViewById(R.id.bt_new_metadata);
-        bt_edit_description = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_description);
         bt_edit_title = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_title);
         bt_meta_view = (Button) rootView.findViewById(R.id.tab_metadata);
         bt_data_view = (Button) rootView.findViewById(R.id.tab_data);
         bt_edit_view = (ImageButton) rootView.findViewById(R.id.bt_edit_metadata);
 
         bt_edit_title.setTag(Utils.TITLE_TAG);
-        bt_edit_description.setTag(Utils.DESCRIPTION_TAG);
-
 
         if (savedInstanceState != null) {
             favoriteName = savedInstanceState.getString("favorite_name");
@@ -114,6 +110,8 @@ public class FavoriteDetailsFragment extends Fragment {
         itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
 
         for (Descriptor desc : itemDescriptors) {
+            if (desc.getDescriptor() == null)
+                break;
             if (desc.getDescriptor().contains("description")) {
                 tv_description.setText(desc.getValue());
             }
@@ -126,7 +124,6 @@ public class FavoriteDetailsFragment extends Fragment {
 
         dcClickListener mClickListener = new dcClickListener();
         bt_edit_title.setOnClickListener(mClickListener);
-        bt_edit_description.setOnClickListener(mClickListener);
 
         bt_fieldMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -332,15 +329,8 @@ public class FavoriteDetailsFragment extends Fragment {
 
             Intent mIntent = new Intent(getActivity(), SubmissionValidationActivity.class);
             mIntent.putExtra("favorite_name", favoriteName);
-
             getActivity().startActivityForResult(mIntent, Utils.SUBMISSION_VALIDATION);
-            /*
-            FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-            getActivity().getFragmentManager().popBackStack();
-            transaction.remove(FavoriteDetailsFragment.this);
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            transaction.commit();
-            */
+
         } else if (item.getItemId() == R.id.action_favorite_delete) {
             //remove this favorite
             new AlertDialog.Builder(getActivity())
@@ -416,16 +406,6 @@ public class FavoriteDetailsFragment extends Fragment {
                             }
                         }
 
-                    } else if (mView.getTag().equals(Utils.DESCRIPTION_TAG)) {
-                        tv_description.setText(input.getText().toString());
-
-                        itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
-                        for (Descriptor desc : itemDescriptors) {
-                            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
-                                desc.setValue(input.getText().toString());
-                            }
-                        }
-                        DBCon.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
                     }
                     onResume();
                     dialog.dismiss();
