@@ -105,7 +105,6 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
         }
 
         //if there are any files to upload, zip them
-        publishProgress(21);
         if (new File(from).listFiles().length > 0) {
             Zipper mZipper = new Zipper();
             String to = Environment.getExternalStorageDirectory() + "/" + favoriteName + ".zip";

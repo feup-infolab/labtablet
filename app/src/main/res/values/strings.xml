@@ -89,7 +89,7 @@
     <string name="submission_initial_instructions">Check internet connectivity and battery level\n\nValidate metadata records to submit.\n\nProceed to the upload stage.</string>
     <string name="size">Size</string>
     <string name="modified">Modified</string>
-    <string name="wait">Waiting</string>
+    <string name="wait">Ready to start</string>
     <string name="progress_update_dir_exists">Checking if the project exists&#8230;</string>
     <string name="title_get_project_name">Please provide the name of the project where this favorite will be deposited.</string>
     <string name="title_section4">Section4</string>
