@@ -26,13 +26,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <View
-            android:layout_height="fill_parent"
-            android:layout_width="2dp"
-            android:layout_marginEnd="5dp"
-            android:background="@color/list_background_pressed"
-            />
-
         <TextView
             android:id="@+id/form_name"
             android:layout_width="0dp"

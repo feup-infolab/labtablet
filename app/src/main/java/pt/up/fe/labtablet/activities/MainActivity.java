@@ -141,9 +141,6 @@ public class MainActivity extends Activity {
         } else {
             wasDrawerShown = savedInstanceState.getBoolean("was_drawer_shown");
         }
-
-
-
     }
 
     @Override
@@ -306,7 +303,6 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-
 
         Fragment displayedFragment = getFragmentManager().findFragmentByTag("HOME");
 

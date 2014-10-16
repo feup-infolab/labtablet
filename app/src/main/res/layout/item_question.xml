@@ -3,15 +3,17 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/card"
-    android:padding="20dp"
+
     android:orientation="vertical"
     >
 
     <Button
-        android:visibility="invisible"
+        android:visibility="visible"
         android:id="@+id/form_item_delete"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
@@ -21,6 +23,8 @@
 
     <LinearLayout
         android:id="@+id/ll_question"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
         android:layout_toStartOf="@id/form_item_delete"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -28,14 +32,14 @@
 
     <View
         android:layout_height="fill_parent"
-        android:layout_width="0dp"
-        android:layout_weight="0.02"
+        android:layout_width="2dp"
         android:layout_marginEnd="5dp"
         android:background="@android:color/holo_red_dark"
         />
 
     <TextView
         android:id="@+id/form_item_question"
+        android:layout_gravity="center_vertical"
         android:layout_width="0dp"
         android:layout_weight="0.98"
         android:layout_height="wrap_content"
@@ -47,10 +51,13 @@
 
     <RelativeLayout
         android:layout_below="@id/ll_question"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="10dp"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         >
 
         <TextView

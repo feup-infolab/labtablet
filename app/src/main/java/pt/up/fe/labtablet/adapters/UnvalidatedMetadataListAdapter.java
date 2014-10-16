@@ -127,7 +127,7 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
                                 int pos = (Integer) view.getTag();
                                 if (items.get(pos).hasFile()) {
                                     //Add file for deletion
-                                    mInterface.onDataConvertion(items.get(pos));
+                                    mInterface.onDataMigration(items.get(pos));
                                 }
                                 //remove the descriptor
                                 items.remove(pos);
@@ -224,7 +224,7 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
         public void onFileDeletion(Descriptor desc);
 
         //When a metadata record is migrated to the data folder
-        public void onDataConvertion(Descriptor desc);
+        public void onDataMigration(Descriptor desc);
     }
 
     static class ViewHolder {

@@ -45,7 +45,7 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
 
         //YOLO
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (Exception e) {
             error = e;
             return null;
@@ -55,6 +55,7 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
         Activity mContext = (Activity) params[1];
         ArrayList<Descriptor> deletionQueue = (ArrayList<Descriptor>) params[2];
         ArrayList<Descriptor> migrationQueue = (ArrayList<Descriptor>) params[3];
+
 
         if (deletionQueue != null && deletionQueue.size() > 0) {
             for (Descriptor desc : deletionQueue) {

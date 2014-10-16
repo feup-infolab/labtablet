@@ -31,7 +31,7 @@ public class ValidateMetadataActivity extends Activity {
     private ProgressDialog mProgressDialog;
     private ArrayList<Descriptor> descriptors;
     private ArrayList<Descriptor> deletionQueue;
-    private ArrayList<Descriptor> convertionQueue;
+    private ArrayList<Descriptor> conversionQueue;
     private UnvalidatedMetadataListAdapter mAdapter;
     private String favoriteName;
 
@@ -57,11 +57,11 @@ public class ValidateMetadataActivity extends Activity {
             favoriteName = getIntent().getStringExtra("favorite_name");
             descriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
             deletionQueue = new ArrayList<Descriptor>();
-            convertionQueue = new ArrayList<Descriptor>();
+            conversionQueue = new ArrayList<Descriptor>();
         } else {
             descriptors = new Gson().fromJson(savedInstanceState.getString("descriptors"), Utils.ARRAY_DESCRIPTORS);
             deletionQueue = new Gson().fromJson(savedInstanceState.getString("deletionQueue"), Utils.ARRAY_DESCRIPTORS);
-            convertionQueue = new Gson().fromJson(savedInstanceState.getString("convertionQueue"), Utils.ARRAY_DESCRIPTORS);
+            conversionQueue = new Gson().fromJson(savedInstanceState.getString("convertionQueue"), Utils.ARRAY_DESCRIPTORS);
             favoriteName = savedInstanceState.getString("favorite_name");
         }
 
@@ -76,8 +76,8 @@ public class ValidateMetadataActivity extends Activity {
                     }
 
                     @Override
-                    public void onDataConvertion(Descriptor desc) {
-                        convertionQueue.add(desc);
+                    public void onDataMigration(Descriptor desc) {
+                        conversionQueue.add(desc);
                     }
                 };
 
@@ -131,9 +131,9 @@ public class ValidateMetadataActivity extends Activity {
 
                 @Override
                 public void onProgressUpdate(int value) {
-
+                    mProgressDialog.setProgress(value);
                 }
-            }).execute(favoriteName, ValidateMetadataActivity.this, deletionQueue, convertionQueue);
+            }).execute(favoriteName, ValidateMetadataActivity.this, deletionQueue, conversionQueue);
 
         } else if (item.getItemId() == R.id.action_metadata_cancel) {
             deletionQueue.clear();
@@ -176,8 +176,7 @@ public class ValidateMetadataActivity extends Activity {
         outState.putString("favorite_name", favoriteName);
         outState.putString("descriptors", new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
         outState.putString("deletionQueue", new Gson().toJson(deletionQueue, Utils.ARRAY_DESCRIPTORS));
-        outState.putString("convertionQueue", new Gson().toJson(convertionQueue, Utils.ARRAY_DESCRIPTORS));
-
+        outState.putString("convertionQueue", new Gson().toJson(conversionQueue, Utils.ARRAY_DESCRIPTORS));
         super.onSaveInstanceState(outState);
     }
 

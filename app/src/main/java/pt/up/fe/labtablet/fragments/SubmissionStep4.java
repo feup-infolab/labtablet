@@ -128,6 +128,9 @@ public class SubmissionStep4 extends Fragment {
                             case 20:
                                 tv_progress_status.setText(getResources().getString(R.string.authenticating));
                                 break;
+                            case 21:
+                                tv_progress_status.setText(getResources().getString(R.string.creating_package));
+                                break;
                             case 25:
                                 tv_progress_status.setText(getResources().getString(R.string.uploading));
                                 break;
