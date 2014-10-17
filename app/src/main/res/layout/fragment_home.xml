@@ -13,7 +13,7 @@
         <TextView
             android:id="@+id/tv_home"
             android:typeface="serif"
-            android:textSize="60sp"
+            android:textSize="80sp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"

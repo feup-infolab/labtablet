@@ -41,6 +41,11 @@ public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, Project
         mContext = params[0];
 
         try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+
+        }
+        try {
             String cookie = DendroAPI.authenticate(mContext);
 
             DendroConfiguration conf = FileMgr.getDendroConf(mContext);

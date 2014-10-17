@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,16 +43,16 @@ public class SubmissionStep3 extends Fragment {
     private MenuItem actionUp;
     private ListView dendroDirList;
     private DendroFolderAdapter mAdapter;
-    private ProgressBar progressBar;
-    private Button selectFolder;
-    private String path;
-    private Button btInstructions;
     private TextView tv_empty;
+    private Button selectFolder;
+    private Button btInstructions;
+
     private AsyncProjectListFetcher mProjectFetcher;
     private AsyncDendroDirectoryFetcher mDirectoryFetcher;
     private ArrayList<DendroFolderItem> folders;
     private ArrayList<Project> availableProjects;
 
+    private String path;
 
     public SubmissionStep3() {
         this.path = "/data";
@@ -82,10 +81,8 @@ public class SubmissionStep3 extends Fragment {
 
         dendroDirList = (ListView) rootView.findViewById(R.id.dendro_folders_list);
         selectFolder = (Button) rootView.findViewById(R.id.dendro_folders_select);
-        progressBar = (ProgressBar) rootView.findViewById(R.id.dendro_folders_progress);
         btInstructions = (Button) rootView.findViewById(R.id.step3_instructions);
         tv_empty = (TextView) rootView.findViewById(R.id.step3_empty);
-        progressBar.setVisibility(View.GONE);
         btInstructions.setVisibility(View.VISIBLE);
         tv_empty.setVisibility(View.GONE);
 
@@ -145,10 +142,10 @@ public class SubmissionStep3 extends Fragment {
     }
 
     public void refreshFoldersList() {
-        progressBar.setVisibility(View.VISIBLE);
+        //TODO
+        //progressBar.setVisibility(View.VISIBLE);
         initDirectoryFetcher();
         mDirectoryFetcher.execute(projectName + path, getActivity());
-
     }
 
     @Override
@@ -212,7 +209,6 @@ public class SubmissionStep3 extends Fragment {
                 actionUp.setVisible(true);
                 actionRefresh.setVisible(true);
                 dendroDirList.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -234,7 +230,10 @@ public class SubmissionStep3 extends Fragment {
     }
 
     public void initDialog() {
-        progressBar.setVisibility(View.VISIBLE);
+        btInstructions.setText("Loading. Please stand by...");
+        btInstructions.setVisibility(View.VISIBLE);
+        btInstructions.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_wait, 0, 0);
+
         mProjectFetcher = new AsyncProjectListFetcher(new AsyncTaskHandler<ProjectListResponse>() {
             @Override
             public void onSuccess(ProjectListResponse result) {
@@ -266,7 +265,6 @@ public class SubmissionStep3 extends Fragment {
 
                 btInstructions.setVisibility(View.GONE);
                 tv_empty.setVisibility(View.GONE);
-                progressBar.setVisibility(View.GONE);
                 builder.show();
 
             }
@@ -276,10 +274,12 @@ public class SubmissionStep3 extends Fragment {
                 if (getActivity() == null) {
                     return;
                 }
-                (getActivity().findViewById(R.id.dendro_folders_buttons)).setVisibility(View.INVISIBLE);
-                btInstructions.setVisibility(View.GONE);
+                //(getActivity().findViewById(R.id.dendro_folders_buttons)).setVisibility(View.INVISIBLE);
+                //btInstructions.setVisibility(View.GONE);
+                btInstructions.setText("Unable to load folders. Try again?");
+                btInstructions.setVisibility(View.VISIBLE);
+                btInstructions.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ab_cross, 0, 0);
                 tv_empty.setVisibility(View.GONE);
-                progressBar.setVisibility(View.GONE);
             }
 
             @Override
