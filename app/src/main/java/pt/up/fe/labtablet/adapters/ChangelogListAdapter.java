@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +13,10 @@ import java.util.ArrayList;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.ChangelogItem;
 
+/**
+ * Adapter for hte logs the application may produce
+ * (when adding, importing or removing resources, as well as when a crash or problem happens)
+ */
 public class ChangelogListAdapter extends ArrayAdapter<ChangelogItem> {
 
     private final Activity context;
@@ -59,9 +61,6 @@ public class ChangelogListAdapter extends ArrayAdapter<ChangelogItem> {
         } else {
             holder.type.setImageResource(R.drawable.ic_wait);
         }
-
-        Animation animation = AnimationUtils.makeInChildBottomAnimation(context);
-        rowView.startAnimation(animation);
 
         return rowView;
     }
