@@ -246,4 +246,5 @@
     <string name="could_not_get_extension">Could not find the file extension.</string>
     <string name="undo">Start over</string>
     <string name="new_folder">New folder</string>
+    <string name="unable_load_projects">Unable to load folders. Try again?</string>
 </resources>

@@ -23,7 +23,7 @@ import pt.up.fe.labtablet.utils.Utils;
  */
 public class AsyncFileImporter extends AsyncTask<Object, Integer, Void> {
 
-    private AsyncTaskHandler<String> mHandler;
+    private final AsyncTaskHandler<String> mHandler;
     private Exception error;
 
     public AsyncFileImporter(AsyncTaskHandler<String> mHandler) {

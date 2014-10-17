@@ -17,6 +17,10 @@ import pt.up.fe.labtablet.async.AsyncImageLoader;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.DBCon;
 
+/**
+ * Handles each metadata item and shows additional info
+ * such as its value and associated descriptor
+ */
 public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
 
     private final Activity context;

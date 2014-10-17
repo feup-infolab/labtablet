@@ -26,6 +26,10 @@ import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.utils.Utils;
 
 
+/**
+ * Loads and configures the view to handle creating a question and adds it
+ * to a specific form
+ */
 public class FormQuestionCreatorActivity extends Activity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private String questionBody;
@@ -36,11 +40,11 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
     private boolean mandatory;
 
     //Layouts for visibility handling
-    LinearLayout viewQuestionType;
-    LinearLayout viewQuestionMandatory;
-    LinearLayout viewQuestionVocabularies;
-    LinearLayout viewQuestionRange;
-    LinearLayout viewQuestionConclusion;
+    private LinearLayout viewQuestionType;
+    private LinearLayout viewQuestionMandatory;
+    private LinearLayout viewQuestionVocabularies;
+    private LinearLayout viewQuestionRange;
+    private LinearLayout viewQuestionConclusion;
 
 
     //adapter for the closed vocabulary question
@@ -249,7 +253,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
 
     }
 
-    public void enableMandatoryView() {
+    private void enableMandatoryView() {
         viewQuestionMandatory.setVisibility(View.VISIBLE);
         (findViewById(R.id.mandatory_no)).setEnabled(true);
         (findViewById(R.id.mandatory_yes)).setEnabled(true);
@@ -258,7 +262,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
         (findViewById(R.id.mandatory_yes)).setOnClickListener(this);
     }
 
-    public void enableSubmissionView() {
+    private void enableSubmissionView() {
         viewQuestionConclusion.setVisibility(View.VISIBLE);
         (findViewById(R.id.mandatory_no)).setEnabled(false);
         (findViewById(R.id.mandatory_yes)).setEnabled(false);

@@ -58,7 +58,7 @@ public class SubmissionStep3 extends Fragment {
         this.path = "/data";
     }
 
-    public static SubmissionStep3 newInstance(String projectName, SubmissionStepHandler handler) {
+    public static SubmissionStep3 newInstance(SubmissionStepHandler handler) {
         SubmissionStep3 fragment = new SubmissionStep3();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -117,6 +117,7 @@ public class SubmissionStep3 extends Fragment {
                 DendroFolderItem item = folders.get(position);
                 if (item.getDdr().getFileExtension().equals(Utils.DENDRO_FOLDER_EXTENSION)) {
                     path += "/" + item.getNie().getTitle();
+
                     //items.get((Integer) view.getTag()).getNie().getTitle();
                     selectFolder.setVisibility(View.VISIBLE);
                     selectFolder.setEnabled(true);
@@ -141,9 +142,7 @@ public class SubmissionStep3 extends Fragment {
         Log.e("Step3", "Received intent, but didn't launch anything. Request: " + requestCode + " Result: " + resultCode);
     }
 
-    public void refreshFoldersList() {
-        //TODO
-        //progressBar.setVisibility(View.VISIBLE);
+    private void refreshFoldersList() {
         initDirectoryFetcher();
         mDirectoryFetcher.execute(projectName + path, getActivity());
     }
@@ -190,7 +189,7 @@ public class SubmissionStep3 extends Fragment {
 
     }
 
-    public void initDirectoryFetcher() {
+    private void initDirectoryFetcher() {
         mDirectoryFetcher = new AsyncDendroDirectoryFetcher(new AsyncTaskHandler<ArrayList<DendroFolderItem>>() {
             @Override
             public void onSuccess(ArrayList<DendroFolderItem> result) {
@@ -229,8 +228,9 @@ public class SubmissionStep3 extends Fragment {
         });
     }
 
-    public void initDialog() {
+    private void initDialog() {
         btInstructions.setText("Loading. Please stand by...");
+        btInstructions.setEnabled(false);
         btInstructions.setVisibility(View.VISIBLE);
         btInstructions.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_wait, 0, 0);
 
@@ -263,6 +263,7 @@ public class SubmissionStep3 extends Fragment {
                     }
                 });
 
+                btInstructions.setEnabled(true);
                 btInstructions.setVisibility(View.GONE);
                 tv_empty.setVisibility(View.GONE);
                 builder.show();
@@ -274,9 +275,9 @@ public class SubmissionStep3 extends Fragment {
                 if (getActivity() == null) {
                     return;
                 }
-                //(getActivity().findViewById(R.id.dendro_folders_buttons)).setVisibility(View.INVISIBLE);
-                //btInstructions.setVisibility(View.GONE);
-                btInstructions.setText("Unable to load folders. Try again?");
+
+                btInstructions.setText(getString(R.string.unable_load_projects));
+                btInstructions.setEnabled(true);
                 btInstructions.setVisibility(View.VISIBLE);
                 btInstructions.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ab_cross, 0, 0);
                 tv_empty.setVisibility(View.GONE);
@@ -288,11 +289,4 @@ public class SubmissionStep3 extends Fragment {
             }
         });
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-
 }

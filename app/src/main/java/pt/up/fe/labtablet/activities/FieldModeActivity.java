@@ -57,6 +57,10 @@ import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Exposes many of the device's sensors to gather their values
+ * It also adds options to import from other resources such as camera, screen and gps
+ */
 public class FieldModeActivity extends Activity implements SensorEventListener {
 
 
@@ -72,7 +76,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     private Button bt_magnetic_sample;
     private Button bt_launch_form;
 
-    private TextView tv_title;
     private Switch sw_gps;
 
     private SensorManager sensorManager;
@@ -118,13 +121,10 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 + "/" + favorite_name + "/"
                 + "meta";
 
-        //MKDIR meta
+        //Make meta directory
         FileMgr.makeMetaDir(getApplication(), path);
-
-        atatchButtons();
-
-        tv_title = (TextView) findViewById(R.id.tv_title);
-        tv_title.setText(favorite_name);
+        ((TextView) findViewById(R.id.tv_title)).setText(favorite_name);
+        attachButtons();
 
         ActionBar mActionBar = getActionBar();
         if (mActionBar == null) {
@@ -151,7 +151,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 metadata.add(kmlDescriptor);
             }
         };
-        locationListener = new LTLocationListener(FieldModeActivity.this, path, favorite_name, interfaceKml);
+        locationListener = new LTLocationListener(FieldModeActivity.this, path, interfaceKml);
 
         sw_gps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,7 +241,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         metadata.add(mDesc);
                     } catch (Exception e) {
                         ChangelogItem item = new ChangelogItem();
-                        item.setMessage("FieldMode audio recorder: " + e.toString() + "When stopping the recorder. Device stopped woorking.");
+                        item.setMessage("FieldMode audio recorder: " + e.toString() + "When stopping the recorder. Device stopped working.");
                         item.setTitle(getResources().getString(R.string.developer_error));
                         item.setDate(Utils.getDate());
                         ChangelogManager.addLog(item, FieldModeActivity.this);
@@ -287,7 +287,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             public void onClick(View view) {
                 if (!startService()) {
                     Log.e("LOCATIONListener", "error staring service");
-
                 }
             }
         });
@@ -381,7 +380,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 
-    private void atatchButtons() {
+    private void attachButtons() {
         bt_audio = (Button) findViewById(R.id.bt_audio);
         bt_sketch = (Button) findViewById(R.id.bt_sketch);
         bt_photo = (Button) findViewById(R.id.bt_camera);
@@ -634,7 +633,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean startService() {
+    private boolean startService() {
         try {
             new FetchCoordinates().execute();
             return true;
@@ -653,7 +652,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     /**
      * Handles tapping on each sensor's button to capture its value
      */
-    class SensorsOnClickListener implements View.OnClickListener {
+    private class SensorsOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             Descriptor desc;
@@ -706,9 +705,9 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     /**
      * Waits until valid coordinates are available
      */
-    public class FetchCoordinates extends AsyncTask<String, Integer, String> {
-        public double lati = 0.0;
-        public double longi = 0.0;
+    public class FetchCoordinates extends AsyncTask<String, Integer, Void> {
+        public double latitude = 0.0;
+        public double longitude = 0.0;
 
 
         public LocationManager mLocationManager;
@@ -735,22 +734,23 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(Void result) {
             pb_location.setIndeterminate(false);
 
             Descriptor desc = new Descriptor();
-            desc.setValue(lati + "," + longi);
+            desc.setValue(latitude + "," + longitude);
             desc.setTag(Utils.GEO_TAGS);
             metadata.add(desc);
 
             Toast.makeText(FieldModeActivity.this,
-                    "LAT:" + lati + " LNG:" + longi,
+                    "LAT:" + latitude + " LNG:" + longitude,
                     Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        protected String doInBackground(String... params) {
-            while (this.lati == 0.0) {
+        protected Void doInBackground(String... params) {
+            while (this.latitude == 0.0) {
+                //empty block on purpose
             }
             return null;
         }
@@ -761,8 +761,8 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             public void onLocationChanged(Location location) {
 
                 try {
-                    lati = location.getLatitude();
-                    longi = location.getLongitude();
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
                 } catch (Exception e) {
                     pb_update.setIndeterminate(false);
                     Toast.makeText(getApplicationContext(),

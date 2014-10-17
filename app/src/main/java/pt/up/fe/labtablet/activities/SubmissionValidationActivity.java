@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -28,6 +27,10 @@ import pt.up.fe.labtablet.fragments.SubmissionStep4;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Holds the four steps to upload a favorite to the repository and handles
+ * their transition
+ */
 public class SubmissionValidationActivity extends Activity implements SubmissionStepHandler {
 
     private static String favoriteName;
@@ -35,18 +38,9 @@ public class SubmissionValidationActivity extends Activity implements Submission
     private static String destUri;
 
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v13.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    /**
      * The {@link ViewPager} that will host the section contents.
      */
-    ViewPager mViewPager;
+    private ViewPager mViewPager;
     private ProgressBar pb_submission_state;
 
     public static String getProjectName() {
@@ -98,7 +92,7 @@ public class SubmissionValidationActivity extends Activity implements Submission
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -161,12 +155,6 @@ public class SubmissionValidationActivity extends Activity implements Submission
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void nextStep(int stage) {
         mViewPager.setCurrentItem(stage);
     }
@@ -207,7 +195,7 @@ public class SubmissionValidationActivity extends Activity implements Submission
                 case 1:
                     return SubmissionStep2.newInstance(favoriteName, SubmissionValidationActivity.this);
                 case 2:
-                    return SubmissionStep3.newInstance(favoriteName, SubmissionValidationActivity.this);
+                    return SubmissionStep3.newInstance(SubmissionValidationActivity.this);
                 case 3:
                     return SubmissionStep4.newInstance(favoriteName, projectName, destUri);
                 default:

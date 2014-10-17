@@ -246,13 +246,14 @@
     <string name="form_solver_intro">Está prestes a iniciar um questionário com X questões, e com uma duração prevista de Y minutos. Para começar clique no botão em baixo.</string>
     <string name="form">Questionário</string>
     <string name="is_question_mandatory">Esta pergunta é obrigatória?</string>
-    <string name="success">Success!</string>
-    <string name="fail">Operation failed</string>
-    <string name="pick_allowed_values">Pick an item</string>
-    <string name="empty_questions_exist">There is at least one unanswered question that is mandatory.</string>
-    <string name="pick_from_spinner">Select an option</string>
-    <string name="create_form_question_head">Create question</string>
-    <string name="could_not_get_extension">Could not find the file extension.</string>
-    <string name="undo">Undo</string>
-    <string name="new_folder">New folder</string>
+    <string name="success">Concluído!</string>
+    <string name="fail">Erro</string>
+    <string name="pick_allowed_values">Escolha uma opção</string>
+    <string name="empty_questions_exist">Existe pelo menos uma questão obrigatória que não foi respondida.</string>
+    <string name="pick_from_spinner">Selecione uma opção</string>
+    <string name="create_form_question_head">Criar questão</string>
+    <string name="could_not_get_extension">Impossível encontrar o formato do ficheiro.</string>
+    <string name="undo">Desfazer</string>
+    <string name="new_folder">Nova pasta</string>
+    <string name="unable_load_projects">Erro ao carregar pastas. Tentar novamente?</string>
 </resources>

@@ -6,9 +6,13 @@ import android.util.Log;
 
 import pt.up.fe.labtablet.api.DendroAPI;
 
+/**
+ * Authenticates the available credentials with the repository
+ */
 public class AsyncAuthenticator extends AsyncTask<Object, Integer, String> {
+
     //input, remove, output
-    private AsyncTaskHandler<String> mHandler;
+    private final AsyncTaskHandler<String> mHandler;
     private Exception error;
 
 

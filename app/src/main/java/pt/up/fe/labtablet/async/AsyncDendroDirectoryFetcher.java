@@ -25,9 +25,12 @@ import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Loads the directory structure from the repository
+ */
 public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, ArrayList<DendroFolderItem>> {
     //input, remove, output
-    private AsyncTaskHandler<ArrayList<DendroFolderItem>> mHandler;
+    private final AsyncTaskHandler<ArrayList<DendroFolderItem>> mHandler;
     private Exception error;
 
     public AsyncDendroDirectoryFetcher(AsyncTaskHandler<ArrayList<DendroFolderItem>> mHandler) {

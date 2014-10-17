@@ -17,6 +17,10 @@ import java.net.URI;
 
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Loads the weather predictions for the received coordinates from the
+ * OpenWheather API
+ */
 public class AsyncWeatherFetcher extends AsyncTask<Context, Void, Integer> {
     //input, remove, output
     private AsyncTaskHandler<Integer> mHandler;

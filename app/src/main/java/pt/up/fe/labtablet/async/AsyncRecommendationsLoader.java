@@ -24,10 +24,12 @@ import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
-
+/**
+ * Loads the descriptor recommendations from the repository for a specific favorite
+ */
 public class AsyncRecommendationsLoader extends AsyncTask<Object, Integer, ArrayList<Descriptor>> {
 
-    private AsyncTaskHandler<ArrayList<Descriptor>> mHandler;
+    private final AsyncTaskHandler<ArrayList<Descriptor>> mHandler;
     private Exception error;
 
 

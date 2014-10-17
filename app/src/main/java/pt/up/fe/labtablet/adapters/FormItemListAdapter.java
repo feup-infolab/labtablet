@@ -16,12 +16,15 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.FormEnumType;
 import pt.up.fe.labtablet.models.FormQuestion;
 
+/**
+ * Adapter to manage info about each form, in a similar way as it is done
+ * with favorites
+ */
 public class FormItemListAdapter extends ArrayAdapter<FormQuestion> {
 
     private final Activity context;
-    private ArrayList<FormQuestion> items;
-    private formListAdapterInterface mInterface;
-
+    private final ArrayList<FormQuestion> items;
+    private final formListAdapterInterface mInterface;
 
     public FormItemListAdapter(Activity context,
                                ArrayList<FormQuestion> srcItems,

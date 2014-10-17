@@ -28,13 +28,17 @@ import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Handles the metadata records that are still to be validated
+ * eg to be associated with a descriptor
+ */
 public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
     private final Activity context;
     private final List<Descriptor> items;
     private final Context mContext;
     private final List<AssociationItem> associations;
     private final String favoriteName;
-    private unvalidatedMetadataInterface mInterface;
+    private final unvalidatedMetadataInterface mInterface;
 
     public UnvalidatedMetadataListAdapter(Activity context, List<Descriptor> srcItems, List<AssociationItem> associations, String favoriteName, unvalidatedMetadataInterface actInterface) {
         super(context, R.layout.item_unvalidated_metadata, srcItems);

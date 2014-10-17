@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -21,12 +20,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.async.AsyncGenericChecker;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
-import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class HomeFragment extends Fragment {
@@ -132,7 +129,7 @@ public class HomeFragment extends Fragment {
                 public void onProgressUpdate(int value) {
 
                 }
-            }).execute();
+            }).execute(getActivity(), "");
         }
 
         btConfigurations.setOnClickListener(new View.OnClickListener() {
@@ -170,62 +167,5 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
-    public class AsyncGenericChecker extends AsyncTask<Void, Void, Integer> {
 
-        private AsyncTaskHandler<Integer> mHandler;
-        private Exception error;
-
-        public AsyncGenericChecker(AsyncTaskHandler<Integer> mHandler) {
-            this.mHandler = mHandler;
-        }
-
-        @Override
-        protected Integer doInBackground(Void... params) {
-            SharedPreferences settings = getActivity().getSharedPreferences(
-                    getResources().getString(R.string.app_name),
-                    Context.MODE_PRIVATE);
-            if(settings == null) {
-                return 0;
-            }
-
-            int counter = 0;
-            ArrayList<Descriptor> worldDescriptors = new ArrayList<Descriptor>();
-            File file = new File(
-                    Environment.getExternalStorageDirectory()
-                            + File.separator + getResources().getString(R.string.app_name));
-            for (File f : file.listFiles()) {
-                if (f.isDirectory()) {
-                    worldDescriptors.addAll(DBCon.getDescriptors(f.getName(), getActivity()));
-                }
-            }
-
-            for (Descriptor desc : worldDescriptors) {
-                if (desc.getTag().equals(Utils.GENERIC_TAG)) {
-                    counter ++;
-                }
-            }
-            return counter;
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-            super.onPostExecute(result);
-            if (error != null) {
-                mHandler.onFailure(error);
-            } else {
-                mHandler.onSuccess(result);
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pbMetadataLoading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-    }
 }

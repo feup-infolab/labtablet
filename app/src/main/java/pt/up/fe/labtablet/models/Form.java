@@ -7,7 +7,7 @@ import java.util.TimeZone;
 
 public class Form {
 
-    private String formName;
+    private final String formName;
     private String formDescription;
     private String elapsedTime;
     private ArrayList<FormQuestion> formQuestions;

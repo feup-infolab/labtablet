@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -16,21 +15,12 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.FavoriteItem;
 
 /**
- * 
- * @author ricardo 
- * To manage info within the home page 
- * 
+ * Handles the list of favorites in the device, showing
+ * additional info such as their size and creation date
  */
 public class FavoriteListAdapter extends ArrayAdapter<FavoriteItem>{
 	private final Activity context;
 	private final List<FavoriteItem> items;
-
-	static class ViewHolder {
-		public TextView mFavoriteName;
-        public TextView mFavoriteDate;
-		public ImageView mFavoriteType;
-        public TextView mFavoriteSize;
-	}
 
 	public FavoriteListAdapter(Activity context, List<FavoriteItem> srcItems) {
 		super(context, R.layout.item_favorite_list, srcItems);
@@ -48,7 +38,6 @@ public class FavoriteListAdapter extends ArrayAdapter<FavoriteItem>{
 			// configure view holder
 			ViewHolder viewHolder = new ViewHolder();
 			viewHolder.mFavoriteName = (TextView) rowView.findViewById(R.id.folder_item_title);
-			viewHolder.mFavoriteType = (ImageView) rowView.findViewById(R.id.folder_item_type);
             viewHolder.mFavoriteSize = (TextView) rowView.findViewById(R.id.folder_item_size);
             viewHolder.mFavoriteDate = (TextView) rowView.findViewById(R.id.folder_item_date);
 			rowView.setTag(viewHolder);
@@ -67,4 +56,10 @@ public class FavoriteListAdapter extends ArrayAdapter<FavoriteItem>{
 
 		return rowView;
 	}
+
+    static class ViewHolder {
+        public TextView mFavoriteName;
+        public TextView mFavoriteDate;
+        public TextView mFavoriteSize;
+    }
 }

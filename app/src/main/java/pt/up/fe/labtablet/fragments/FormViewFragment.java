@@ -27,7 +27,9 @@ import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
-
+/**
+ * Fragment for the form view with the associated questions
+ */
 public class FormViewFragment extends Fragment {
 
     private ListView lvFormItems;

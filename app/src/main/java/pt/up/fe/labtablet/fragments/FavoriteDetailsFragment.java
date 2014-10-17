@@ -51,18 +51,13 @@ public class FavoriteDetailsFragment extends Fragment {
 
     private TextView tv_title;
     private TextView tv_description;
-    private Button bt_fieldMode;
-    private Button bt_new_metadata;
     private ImageButton bt_edit_view;
 
     //Buttons to switch between data and metadata views
     private Button bt_meta_view;
     private Button bt_data_view;
 
-    private ImageButton bt_edit_title;
     private ListView lv_metadata;
-    private MetadataListAdapter mMetadataAdapter;
-    private DataListAdapter mDataAdapter;
     private boolean isMetadataVisible;
     private ArrayList<Descriptor> itemDescriptors;
     private String favoriteName;
@@ -75,12 +70,16 @@ public class FavoriteDetailsFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        Button bt_new_metadata = (Button) rootView.findViewById(R.id.bt_new_metadata);
+        Button bt_fieldMode = (Button) rootView.findViewById(R.id.bt_field_mode);
+        ImageButton bt_edit_title = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_title);
+
         tv_title = (TextView) rootView.findViewById(R.id.tv_title);
         tv_description = (TextView) rootView.findViewById(R.id.tv_description);
-        bt_fieldMode = (Button) rootView.findViewById(R.id.bt_field_mode);
+
         lv_metadata = (ListView) rootView.findViewById(R.id.lv_favorite_metadata);
-        bt_new_metadata = (Button) rootView.findViewById(R.id.bt_new_metadata);
-        bt_edit_title = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_title);
+
+
         bt_meta_view = (Button) rootView.findViewById(R.id.tab_metadata);
         bt_data_view = (Button) rootView.findViewById(R.id.tab_data);
         bt_edit_view = (ImageButton) rootView.findViewById(R.id.bt_edit_metadata);
@@ -181,7 +180,7 @@ public class FavoriteDetailsFragment extends Fragment {
         return rootView;
     }
 
-    public void loadMetadataView() {
+    private void loadMetadataView() {
         bt_data_view.setEnabled(true);
         bt_meta_view.setEnabled(false);
         isMetadataVisible = true;
@@ -189,11 +188,12 @@ public class FavoriteDetailsFragment extends Fragment {
 
         lv_metadata.setDividerHeight(0);
         itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
-        mMetadataAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
+
+        MetadataListAdapter mMetadataAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
         lv_metadata.setAdapter(mMetadataAdapter);
     }
 
-    public void loadDataView() {
+    private void loadDataView() {
         bt_data_view.setEnabled(false);
         bt_meta_view.setEnabled(true);
         bt_edit_view.setVisibility(View.INVISIBLE);
@@ -221,7 +221,7 @@ public class FavoriteDetailsFragment extends Fragment {
             }
         }
 
-        mDataAdapter = new DataListAdapter(getActivity(), itemDescriptors, favoriteName);
+        DataListAdapter mDataAdapter = new DataListAdapter(getActivity(), itemDescriptors, favoriteName);
         lv_metadata.setAdapter(mDataAdapter);
     }
 

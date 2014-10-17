@@ -16,10 +16,12 @@ import java.util.Date;
 
 import pt.up.fe.labtablet.utils.Utils;
 
-
+/**
+ * Creates a KML file with the received coordinates
+ */
 public class AsyncKMLCreator extends AsyncTask<Object, Integer, String> {
 
-    private AsyncTaskHandler<String> mHandler;
+    private final AsyncTaskHandler<String> mHandler;
     private Exception error;
 
     public AsyncKMLCreator(AsyncTaskHandler<String> mHandler) {

@@ -10,7 +10,7 @@ import java.io.FileOutputStream;
 public class AsyncBitmapExporter extends AsyncTask<Object, Integer, Void> {
     //input, remove, output
 
-    private AsyncTaskHandler<Void> mHandler;
+    private final AsyncTaskHandler<Void> mHandler;
     private Exception error;
 
     public AsyncBitmapExporter(AsyncTaskHandler<Void> mHandler) {

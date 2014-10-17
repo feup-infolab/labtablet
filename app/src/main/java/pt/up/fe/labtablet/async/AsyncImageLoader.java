@@ -23,9 +23,9 @@ import pt.up.fe.labtablet.utils.Utils;
  */
 public class AsyncImageLoader extends AsyncTask<Object, Void, Bitmap> {
 
-    private ImageView imv;
-    private String path;
-    private Context mContext;
+    private final ImageView imv;
+    private final String path;
+    private final Context mContext;
 
     public AsyncImageLoader(ImageView imv, Context context) {
         this.imv = imv;
@@ -81,11 +81,10 @@ public class AsyncImageLoader extends AsyncTask<Object, Void, Bitmap> {
             return;
         }
 
-        if (result != null && imv != null) {
+        //imv != null?
+        if (result != null) {
             imv.setVisibility(View.VISIBLE);
             imv.setImageBitmap(result);
-        } else {
-            //imv.setImageResource(R.drawable.ic_metadata);
         }
     }
 

@@ -17,12 +17,12 @@ import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Dendro.ProjectListResponse;
 import pt.up.fe.labtablet.utils.FileMgr;
 
-
+/**
+ * Retrieves the list of projects from the repository
+ */
 public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, ProjectListResponse> {
-    private HttpGet httpget;
-    private AsyncTaskHandler<ProjectListResponse> mHandler;
+    private final AsyncTaskHandler<ProjectListResponse> mHandler;
     private Exception error;
-    private Context mContext;
 
     public AsyncProjectListFetcher(AsyncTaskHandler<ProjectListResponse> mHandler) {
         this.mHandler = mHandler;
@@ -38,19 +38,14 @@ public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, Project
             error = new Exception("Type mismatch (expected Context)");
             return null;
         }
-        mContext = params[0];
+        Context mContext = params[0];
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-
-        }
         try {
             String cookie = DendroAPI.authenticate(mContext);
 
             DendroConfiguration conf = FileMgr.getDendroConf(mContext);
             HttpClient httpclient = new DefaultHttpClient();
-            httpget = new HttpGet(conf.getAddress() + "/projects/my");
+            HttpGet httpget = new HttpGet(conf.getAddress() + "/projects/my");
             httpget.setHeader("Accept", "application/json");
             httpget.setHeader("Cookie", "connect.sid=" + cookie);
 

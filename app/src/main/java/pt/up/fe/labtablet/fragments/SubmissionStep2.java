@@ -31,7 +31,7 @@ public class SubmissionStep2 extends Fragment {
     private MetadataListAdapter mAdapter;
     private ArrayList<Descriptor> itemDescriptors;
     private String favoriteName;
-    static SubmissionStepHandler mHandler;
+    private static SubmissionStepHandler mHandler;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -81,6 +81,7 @@ public class SubmissionStep2 extends Fragment {
         if(data == null)
             return;
 
+        //deal with the received descriptors
         if(!data.getExtras().containsKey("descriptors")) {
             Toast.makeText(getActivity(), "No descriptors received", Toast.LENGTH_SHORT).show();
         } else {

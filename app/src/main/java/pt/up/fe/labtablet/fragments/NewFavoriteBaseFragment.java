@@ -37,13 +37,15 @@ import pt.up.fe.labtablet.models.Dendro.ProjectListResponse;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Fragment to create a new favorite in the application
+ */
 public class NewFavoriteBaseFragment extends Fragment {
 
-    private EditText et_datasetName;
-    private EditText et_datasetDescription;
+    private EditText favoriteName;
+    private EditText favoriteDescription;
 
     private Button bt_load_suggestions;
-    private Button bt_submit;
     private ProgressDialog mDialog;
     private SharedPreferences.Editor editor;
     private SharedPreferences settings;
@@ -56,9 +58,9 @@ public class NewFavoriteBaseFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_new_dataset, container, false);
 
-        et_datasetName = (EditText) rootView.findViewById(R.id.et_dataset_name);
-        et_datasetDescription = (EditText) rootView.findViewById(R.id.et_dataset_description);
-        bt_submit = (Button) rootView.findViewById(R.id.bt_submit);
+        favoriteName = (EditText) rootView.findViewById(R.id.et_dataset_name);
+        favoriteDescription = (EditText) rootView.findViewById(R.id.et_dataset_description);
+        Button bt_submit = (Button) rootView.findViewById(R.id.bt_submit);
         bt_load_suggestions = (Button) rootView.findViewById(R.id.new_favorite_proj_load);
 
         ActionBar mActionBar = getActivity().getActionBar();
@@ -72,7 +74,7 @@ public class NewFavoriteBaseFragment extends Fragment {
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        et_datasetName.requestFocus();
+        favoriteName.requestFocus();
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("recommendations")) {
@@ -88,7 +90,7 @@ public class NewFavoriteBaseFragment extends Fragment {
             }
         }
 
-        //create preferences entry for that dataset
+        //create preferences entry for that favorite
         settings = getActivity().getSharedPreferences(
                 getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
@@ -199,8 +201,8 @@ public class NewFavoriteBaseFragment extends Fragment {
         bt_submit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (et_datasetName.getText().toString().equals("")) {
-                    et_datasetName.setError("A name must be provided");
+                if (favoriteName.getText().toString().equals("")) {
+                    favoriteName.setError("A name must be provided");
                     return;
                 }
 
@@ -219,16 +221,16 @@ public class NewFavoriteBaseFragment extends Fragment {
                     return;
                 }
 
-                String itemName = et_datasetName.getText().toString();
+                String itemName = favoriteName.getText().toString();
 
-                final File datasetFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                final File favoriteFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                         + "/" + getResources().getString(R.string.app_name) + "/"
-                        + et_datasetName.getText());
+                        + favoriteName.getText());
 
-                if (!datasetFolder.exists()) {
-                    Log.i("mkdir", "mkdir-> " + datasetFolder.mkdir());
+                if (!favoriteFolder.exists()) {
+                    Log.i("Make dir", "" + favoriteFolder.mkdir());
                     Toast.makeText(getActivity(), getResources().getString(R.string.created_folder), Toast.LENGTH_SHORT).show();
-                    getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(datasetFolder)));
+                    getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(favoriteFolder)));
                 }
 
                 editor = settings.edit();
@@ -262,7 +264,7 @@ public class NewFavoriteBaseFragment extends Fragment {
                         log.setTitle(getResources().getString(R.string.log_added));
                         logs.add(log);
                         desc.validate();
-                        desc.setValue(et_datasetDescription.getText().toString());
+                        desc.setValue(favoriteDescription.getText().toString());
                         folderMetadata.add(desc);
                     }
                     if (descName.contains("date")) {
@@ -294,11 +296,11 @@ public class NewFavoriteBaseFragment extends Fragment {
 
                 FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-                FavoriteDetailsFragment datasetDetail = new FavoriteDetailsFragment();
+                FavoriteDetailsFragment favoriteDetail = new FavoriteDetailsFragment();
                 Bundle args = new Bundle();
-                args.putString("favorite_name", et_datasetName.getText().toString());
-                datasetDetail.setArguments(args);
-                transaction.replace(R.id.frame_container, datasetDetail);
+                args.putString("favorite_name", favoriteName.getText().toString());
+                favoriteDetail.setArguments(args);
+                transaction.replace(R.id.frame_container, favoriteDetail);
                 transaction.addToBackStack(null);
                 getFragmentManager().popBackStack();
                 transaction.commit();

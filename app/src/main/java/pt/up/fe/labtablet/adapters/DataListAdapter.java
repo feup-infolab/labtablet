@@ -30,6 +30,9 @@ import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Adapter to handle data files for each favorite
+ */
 public class DataListAdapter extends ArrayAdapter<Descriptor> {
 
     private final Activity context;

@@ -31,6 +31,9 @@ import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Shows the view to solve a form's set of questions and collect available metrics
+ */
 public class FormSolverActivity extends Activity {
 
     private Form targetForm;
@@ -85,7 +88,7 @@ public class FormSolverActivity extends Activity {
         }
     }
 
-    public View getQuestionView(FormQuestion fq) {
+    private View getQuestionView(FormQuestion fq) {
         LayoutInflater inflater = LayoutInflater.from(FormSolverActivity.this);
         View baseView;
 

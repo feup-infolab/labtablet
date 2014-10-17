@@ -21,15 +21,20 @@ import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Listener to record the gps coordinates and export them (if any) to
+ * the KML file
+ */
 public class LTLocationListener implements LocationListener {
 
-    private Context mContext;
-    private String path;
-    private LocationManager locationManager;
-    private kmlCreatedInterface mKmlInterface;
-    private ArrayList<Location> mLocations;
+    final private Context mContext;
+    final private String path;
+    final private kmlCreatedInterface mKmlInterface;
 
-    public LTLocationListener(Context context, String path, String favoriteName, kmlCreatedInterface kmlInterface) {
+    private ArrayList<Location> mLocations;
+    private LocationManager locationManager;
+
+    public LTLocationListener(Context context, String path, kmlCreatedInterface kmlInterface) {
         mLocations = new ArrayList<Location>();
         this.path = path;
         this.mContext = context;
@@ -76,7 +81,7 @@ public class LTLocationListener implements LocationListener {
                 log.setTitle(mContext.getString(R.string.log_added));
                 log.setMessage("Geo localization file added");
                 ChangelogManager.addLog(log, mContext);
-                Toast.makeText(mContext, "Successfuly saved location file.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Successfully saved location file.", Toast.LENGTH_SHORT).show();
                 Descriptor desc = new Descriptor();
                 desc.setFilePath(result);
                 desc.setValue(Uri.parse(result).getLastPathSegment());

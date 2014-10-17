@@ -45,11 +45,7 @@ public class ConfigurationFragment extends Fragment {
     private TextView tv_jpg_descriptor_description;
     private TextView tv_mp3_descriptor;
     private TextView tv_mp3_descriptor_description;
-    private View.OnClickListener mClickListener;
     private Button bt_clear_association;
-    private Button bt_gps_edit;
-    private Button bt_jpg_edit;
-    private Button bt_mp3_edit;
     private Button bt_file;
 
     private EditText et_conf_username;
@@ -119,10 +115,11 @@ public class ConfigurationFragment extends Fragment {
     }
 
     private void setupLayout(View rootView) {
+        Button bt_gps_edit = (Button) rootView.findViewById(R.id.bt_kml_edit);
+        Button bt_jpg_edit = (Button) rootView.findViewById(R.id.bt_jpg_edit);
+        Button bt_mp3_edit = (Button) rootView.findViewById(R.id.bt_mp3_edit);
+
         bt_clear_association = (Button) rootView.findViewById(R.id.bt_clear_associations);
-        bt_gps_edit = (Button) rootView.findViewById(R.id.bt_kml_edit);
-        bt_jpg_edit = (Button) rootView.findViewById(R.id.bt_jpg_edit);
-        bt_mp3_edit = (Button) rootView.findViewById(R.id.bt_mp3_edit);
         bt_file = (Button) rootView.findViewById(R.id.bt_file_path);
         bt_save_dendro_confs = (Button) rootView.findViewById(R.id.dendro_configurations_save);
 
@@ -139,7 +136,7 @@ public class ConfigurationFragment extends Fragment {
         tv_mp3_descriptor = (TextView) rootView.findViewById(R.id.mp3_extension_descriptor);
         tv_mp3_descriptor_description = (TextView) rootView.findViewById(R.id.mp3_extension_description);
 
-        mClickListener = new View.OnClickListener() {
+        View.OnClickListener mClickListener = new View.OnClickListener() {
 
             String extension;
 
@@ -346,8 +343,6 @@ public class ConfigurationFragment extends Fragment {
         //They don't exist, create new ones
         if (!settings.contains("associations")) {
             editor.putString("associations", new Gson().toJson(createBaseAssociations(), Utils.ARRAY_ASSOCIATION_ITEM));
-            //mItems = new ArrayList<AssociationItem>();
-            //editor.putString("associations", new Gson().toJson(mItems, Utils.ARRAY_ASSOCIATION_ITEM));
             editor.commit();
         }
         String associationsJson  = settings.getString("associations", "");

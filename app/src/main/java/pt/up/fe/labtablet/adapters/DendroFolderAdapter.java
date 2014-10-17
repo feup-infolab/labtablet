@@ -15,6 +15,9 @@ import java.util.List;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.Dendro.DendroFolderItem;
 
+/**
+ * Adapter to handle displaying the folders from the repository
+ */
 public class DendroFolderAdapter extends ArrayAdapter<DendroFolderItem> {
     private final Activity context;
     private final List<DendroFolderItem> items;
