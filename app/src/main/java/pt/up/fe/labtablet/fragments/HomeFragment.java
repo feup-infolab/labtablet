@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -59,6 +60,7 @@ public class HomeFragment extends Fragment {
         final Drawable no = getResources().getDrawable(R.drawable.ic_error);
         final Drawable meh = getResources().getDrawable(R.drawable.ic_warning);
 
+
         File file = new File(Environment.getExternalStorageDirectory()
                 + File.separator +getResources().getString(R.string.app_name));
 
@@ -75,6 +77,13 @@ public class HomeFragment extends Fragment {
                 projects = false;
             }
         }
+
+        Typeface fancyFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/LobsterTwo-Regular.ttf");
+        ((TextView)(rootView.findViewById(R.id.tv_home))).setTypeface(fancyFont);
+        ((TextView)(rootView.findViewById(R.id.home_feature_1))).setTypeface(fancyFont);
+        ((TextView)(rootView.findViewById(R.id.home_feature_2))).setTypeface(fancyFont);
+        ((TextView)(rootView.findViewById(R.id.home_feature_3))).setTypeface(fancyFont);
+
 
         SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
         if (settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {

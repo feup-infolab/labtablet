@@ -73,8 +73,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/bt_field_mode"
-            android:layout_marginEnd="40dp"
-            android:layout_marginStart="40dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginStart="2dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
@@ -111,6 +111,9 @@
 
     <ListView
         android:id="@+id/lv_favorite_metadata"
+        android:background="@drawable/view_borders"
+        android:layout_marginEnd="2dp"
+        android:layout_marginStart="2dp"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"

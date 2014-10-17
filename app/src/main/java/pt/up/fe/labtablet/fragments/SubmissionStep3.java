@@ -96,7 +96,6 @@ public class SubmissionStep3 extends Fragment {
             }
         });
 
-
         selectFolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,7 +112,6 @@ public class SubmissionStep3 extends Fragment {
                 mHandler.nextStep(3);
             }
         });
-
 
         dendroDirList.setDividerHeight(0);
         dendroDirList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

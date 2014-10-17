@@ -58,24 +58,10 @@
                 android:layout_below="@id/title_rl"
                 >
 
-
-
-                <ImageButton
-                    android:id="@+id/favorite_view_edit_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:contentDescription="@string/desc_list_item_icon"
-                    android:layout_margin="5dp"
-                    style="@style/btnStyleBeige"
-                    android:layout_centerVertical="true"
-                    android:src="@android:drawable/ic_menu_edit" />
-
                 <TextView
                     android:id="@+id/tv_description"
-                    android:layout_toStartOf="@id/favorite_view_edit_description"
                     android:layout_alignParentStart="true"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="10dp"
@@ -106,8 +92,8 @@
             android:id="@+id/ll_view_tabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
@@ -143,6 +129,9 @@
 
         <ListView
             android:id="@+id/lv_favorite_metadata"
+            android:background="@drawable/view_borders"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_below="@id/ll_view_tabs" />
