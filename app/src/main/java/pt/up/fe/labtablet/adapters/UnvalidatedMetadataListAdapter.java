@@ -107,12 +107,28 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
             }
         }
 
-        if (item.getTag().equals(Utils.TITLE_TAG) || item.getTag().equals(Utils.DESCRIPTION_TAG)) {
-            holder.bt_remove.setVisibility(View.INVISIBLE);
-            holder.bt_make_it_data.setVisibility(View.INVISIBLE);
-        } else if (item.hasFile()) {
+        // ------ Special descriptors handling ------
+        //Can't be edited or removed, descriptor can't change
+        if (item.getTag().equals(Utils.TITLE_TAG)) {
+            holder.bt_edit.setEnabled(false);
+            holder.bt_edit_value.setEnabled(false);
+        }
+        //Can be edited, but not removed nor change its descriptor
+        else if (item.getTag().equals(Utils.DESCRIPTION_TAG)) {
+            holder.bt_edit.setEnabled(false);
+            holder.bt_edit_value.setEnabled(true);
+        }
+        //Can edit both value and descriptor
+
+        //------- File handling -----
+        //Can't change its value
+        if (item.hasFile()) {
+            holder.bt_edit_value.setEnabled(false);
+            holder.bt_edit.setEnabled(true);
             holder.bt_remove.setVisibility(View.VISIBLE);
             holder.bt_make_it_data.setVisibility(View.VISIBLE);
+
+        //can change everything or be removed
         } else {
             holder.bt_remove.setVisibility(View.VISIBLE);
             holder.bt_make_it_data.setVisibility(View.INVISIBLE);

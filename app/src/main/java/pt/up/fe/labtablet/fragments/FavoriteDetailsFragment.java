@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -111,10 +112,10 @@ public class FavoriteDetailsFragment extends Fragment {
         for (Descriptor desc : itemDescriptors) {
             if (desc.getDescriptor() == null)
                 break;
-            if (desc.getDescriptor().contains("description")) {
+            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
                 tv_description.setText(desc.getValue());
             }
-            if (desc.getDescriptor().contains("title")) {
+            if (desc.getTag().equals(Utils.TITLE_TAG)) {
                 tv_title.setText(desc.getValue());
             }
         }
@@ -277,8 +278,32 @@ public class FavoriteDetailsFragment extends Fragment {
             new AsyncFileImporter(new AsyncTaskHandler<String>() {
                 @Override
                 public void onSuccess(String result) {
-                    onResume();
+
                     pd.dismiss();
+
+                    //Ask for the resource description
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+                    alert.setTitle(getString(R.string.resource_description));
+                    alert.setMessage(getString(R.string.give_file_description));
+
+                    //EditText to get the description
+                    final EditText input = new EditText(getActivity());
+                    alert.setView(input);
+
+                    alert.setPositiveButton(getString(android.R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            String value = input.getText().toString();
+                            if (!value.equals("")) {
+                                //TODO add record's description
+                                Log.e("DESC", value);
+                            }
+                            onResume();
+                        }
+                    });
+
+                    alert.show();
                 }
 
                 @Override

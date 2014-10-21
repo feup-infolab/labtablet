@@ -34,8 +34,6 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, Void> {
     @Override
     protected Void doInBackground(Object... params) {
 
-        //(getActivity(), data, favoriteName);
-
         if (params[0] == null || params[1] == null
                 || params[2] == null) {
             error = new Exception("Params for this asynctaks were not provided");
@@ -90,8 +88,12 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, Void> {
             while ((len = in.read(buf)) > 0) {
                 out.write(buf, 0, len);
                 total += len;
-                long progress = (total * 100 / fileLength);
-                publishProgress(Utils.safeLongToInt(progress));
+
+                //we don't want to divide by zero, now do we?
+                if (fileLength != 0) {
+                    long progress = (total * 100 / fileLength);
+                    publishProgress(Utils.safeLongToInt(progress));
+                }
             }
             in.close();
             out.close();

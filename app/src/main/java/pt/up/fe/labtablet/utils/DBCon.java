@@ -13,6 +13,7 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.models.FormQuestion;
 
 /**
  * Class to handle any database-related operation from any of the
@@ -24,7 +25,7 @@ public class DBCon {
      * Returns the available descriptors for that specific settings entry
      * @param settingsEntry entry for the preferences settings
      * @param mContext context
-     * @return
+     * @return An array list of the fetched descriptors
      */
     public static ArrayList<Descriptor> getDescriptors(String settingsEntry, Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(
@@ -57,12 +58,10 @@ public class DBCon {
         return folderMetadata;
     }
 
-
-
     /**
      * Returns the available associations
      * @param mContext
-     * @return
+     * @return An array list of the registered associations
      */
     public static ArrayList<AssociationItem> getAssociations(Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(
@@ -118,6 +117,22 @@ public class DBCon {
             previousDescriptors.addAll(itemDescriptors);
             overwriteDescriptors(favoriteName, previousDescriptors, mContext);
         }
+    }
+
+    /**
+     * Replaces current form questions with new ones
+     * @param formName
+     * @param formQuestions
+     * @param mContext
+     */
+    public static void overwriteFormQuestions(String formName,
+                                              ArrayList<FormQuestion> formQuestions,
+                                              Context mContext) {
+
+        if (getForm(mContext, formName) == null)
+            return;
+
+
     }
 
     /**

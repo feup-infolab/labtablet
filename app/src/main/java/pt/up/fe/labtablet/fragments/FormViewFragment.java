@@ -30,7 +30,7 @@ import pt.up.fe.labtablet.utils.Utils;
 /**
  * Fragment for the form view with the associated questions
  */
-public class FormViewFragment extends Fragment {
+public class FormViewFragment extends Fragment implements FormItemListAdapter.formListAdapterInterface {
 
     private ListView lvFormItems;
     private Form currentForm;
@@ -64,16 +64,9 @@ public class FormViewFragment extends Fragment {
             getActivity().getActionBar().setTitle(currentForm.getFormName());
         }
 
-        mInterface = new FormItemListAdapter.formListAdapterInterface() {
-            @Override
-            public void onItemRemoval(FormQuestion q) {
-                    Toast.makeText(getActivity(), "Interface triggered", Toast.LENGTH_SHORT).show();
-            }
-        };
-
         lvFormItems = (ListView) rootView.findViewById(R.id.lv_form_items);
         rlEmptyForm = (RelativeLayout) rootView.findViewById(R.id.empty_form_view);
-        mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions(), mInterface);
+        mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions(), this);
 
         lvFormItems.setAdapter(mAdapter);
         lvFormItems.setDividerHeight(0);
@@ -201,5 +194,11 @@ public class FormViewFragment extends Fragment {
                 .show();
 
         return true;
+    }
+
+    @Override
+    public void onItemRemoval(FormQuestion q) {
+
+        //TODO deal with this
     }
 }

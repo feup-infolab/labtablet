@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment {
         }
 
         Typeface fancyFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/LobsterTwo-Regular.ttf");
-        //((TextView)(rootView.findViewById(R.id.tv_home))).setTypeface(fancyFont);
+        ((TextView)(rootView.findViewById(R.id.tv_home))).setTypeface(fancyFont);
         //((TextView)(rootView.findViewById(R.id.home_feature_1))).setTypeface(fancyFont);
         //((TextView)(rootView.findViewById(R.id.home_feature_2))).setTypeface(fancyFont);
         //((TextView)(rootView.findViewById(R.id.home_feature_3))).setTypeface(fancyFont);

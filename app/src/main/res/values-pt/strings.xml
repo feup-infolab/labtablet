@@ -256,4 +256,6 @@
     <string name="undo">Desfazer</string>
     <string name="new_folder">Nova pasta</string>
     <string name="unable_load_projects">Erro ao carregar pastas. Tentar novamente?</string>
+    <string name="resource_description">Resource description</string>
+    <string name="give_file_description">If you want to include any description for this resource, please write it down below.</string>
 </resources>

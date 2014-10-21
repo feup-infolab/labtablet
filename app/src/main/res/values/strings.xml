@@ -247,4 +247,6 @@
     <string name="undo">Start over</string>
     <string name="new_folder">New folder</string>
     <string name="unable_load_projects">Unable to load folders. Try again?</string>
+    <string name="resource_description">Resource description</string>
+    <string name="give_file_description">If you want to include any description for this resource, please write it down below.</string>
 </resources>
