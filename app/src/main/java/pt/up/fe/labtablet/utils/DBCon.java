@@ -266,5 +266,15 @@ public class DBCon {
         overwriteForms(forms, mContext);
     }
 
+    /**
+     * Create base entries for descriptors, associations, changelogs,
+     * data descriptors and credentials
+     *
+     * @param mContext
+     */
+    public static void initializeDBEntries(Context mContext) {
+
+    }
+
 
 }

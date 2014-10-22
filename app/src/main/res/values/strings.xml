@@ -189,13 +189,15 @@
     <string name="at_least_undefined_descriptor">There is at least one record without an associated descriptor.</string>
     <string name="created_folder">Created folder</string>
     <string name="dest_folder_undefined">The destination folder is not defined yet. Please select it in the previous step</string>
-    <string name="creating_package">Creating upload package</string>
-    <string name="authenticating">Authenticating</string>
-    <string name="uploading">Uploading&#8230;</string>
-    <string name="creating_metadata_package">Building metadata package</string>
-    <string name="sending_metadata">Sending metadata&#8230;</string>
-    <string name="deleting_temp_files">Deleting temporary files</string>
-    <string name="finished">Upload completed!</string>
+
+    <string name="upload_progress_creating_package">Creating upload package</string>
+    <string name="upload_progress_authenticating">Authenticating</string>
+    <string name="upload_progress_uploading">Uploading&#8230;</string>
+    <string name="upload_progress_creating_metadata_package">Building metadata package</string>
+    <string name="upload_progress_sending_metadata">Sending metadata&#8230;</string>
+    <string name="upload_progress_deleting_temp_files">Deleting temporary files</string>
+    <string name="upload_progress_finished">Upload completed!</string>
+
     <string name="selected_folder">Folder selected</string>
     <string name="pick_color">Color</string>
     <string name="developer_error">Developer error</string>
@@ -249,4 +251,12 @@
     <string name="unable_load_projects">Unable to load folders. Try again?</string>
     <string name="resource_description">Resource description</string>
     <string name="give_file_description">If you want to include any description for this resource, please write it down below.</string>
+    <string name="back">Back</string>
+    <string name="add_metadata">Add record</string>
+    <string name="action_test">Test</string>
+    <string name="drawer_close"></string>
+    <string name="edit_metadata_item_title">Edit record</string>
+    <string name="edit_metadata_records">Edit gathered records</string>
+    <string name="end_session">End</string>
+    <string name="finished">Finished!</string>
 </resources>

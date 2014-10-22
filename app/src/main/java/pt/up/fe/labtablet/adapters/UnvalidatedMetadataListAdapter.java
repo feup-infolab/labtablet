@@ -94,7 +94,7 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
         for (AssociationItem association : associations) {
             Descriptor chosenOne = association.getDescriptor();
 
-            //there is no context associated, reject
+            //there is no context associated, reject take off
             if (chosenOne.getTag() == null) {
                 break;
             }
@@ -176,7 +176,6 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
                                 }
                                 //remove the descriptor
                                 items.remove(pos);
-
                                 notifyDataSetChanged();
                             }
                         })

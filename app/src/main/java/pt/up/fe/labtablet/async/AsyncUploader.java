@@ -34,21 +34,22 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.DendroAPI;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 import pt.up.fe.labtablet.utils.Zipper;
 
-public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
+public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
     //input, remove, output
-    private AsyncTaskHandler<Void> mHandler;
+    private AsyncCustomTaskHandler<Void> mHandler;
     private Exception error;
 
-    public AsyncUploader(AsyncTaskHandler<Void> mHandler) {
+    public AsyncUploader(AsyncCustomTaskHandler<Void> mHandler) {
         this.mHandler = mHandler;
     }
 
     @Override
-    protected void onProgressUpdate(Integer... values) {
+    protected void onProgressUpdate(ProgressUpdateItem... values) {
         mHandler.onProgressUpdate(values[0]);
     }
 
@@ -89,14 +90,13 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
         HttpClient httpclient;
         HttpPost httppost;
 
-        publishProgress(10);
         destUri = destUri.replace(" ", "%20");
 
         //upload files (if any)
         String from = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/" + favoriteName;
 
         //AUTHENTICATE USER
-        publishProgress(20);
+        publishProgress(new ProgressUpdateItem(10, mContext.getResources().getString(R.string.upload_progress_authenticating)));
         try {
             cookie = DendroAPI.authenticate(mContext);
         } catch (Exception e) {
@@ -105,6 +105,7 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
         }
 
         //if there are any files to upload, zip them
+        publishProgress(new ProgressUpdateItem(20, mContext.getResources().getString(R.string.upload_progress_creating_package)));
         if (new File(from).listFiles().length > 0) {
             Zipper mZipper = new Zipper();
             String to = Environment.getExternalStorageDirectory() + "/" + favoriteName + ".zip";
@@ -118,7 +119,7 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
                 return null;
             }
 
-            publishProgress(25);
+            publishProgress(new ProgressUpdateItem(25, mContext.getString(R.string.upload_progress_uploading)));
             httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
@@ -142,7 +143,6 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
             httppost.setEntity(mEntity);
             Log.d("[AsyncUploader]POST", "" + httppost.getRequestLine());
 
-
             try {
                 HttpResponse httpResponse = httpclient.execute(httppost);
                 HttpEntity resEntity = httpResponse.getEntity();
@@ -152,18 +152,21 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
                     error = new Exception(response.result + ": " + response.message);
                     return null;
                 }
-                publishProgress(30);
+
                 if (!file.delete()) {
-                    Toast.makeText(mContext, mContext.getResources().getString(R.string.deleting_temp_files), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.upload_progress_deleting_temp_files), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 Log.e("POST", e.getMessage());
                 error = e;
+                return null;
             }
         }
 
         //export metadata
-        publishProgress(50);
+        publishProgress(new ProgressUpdateItem(
+                50, mContext.getString(R.string.upload_progress_creating_metadata_package)));
+
         ArrayList<Descriptor> descriptors = DBCon.getDescriptors(favoriteName, mContext);
         ArrayList<DendroMetadataRecord> metadataRecords = new ArrayList<DendroMetadataRecord>();
 
@@ -184,8 +187,10 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
             }
         }
 
-        //Post updated metadata to the repository
-        publishProgress(70);
+        //Post folder-level metadata to the repository
+        publishProgress(new ProgressUpdateItem(
+                70, mContext.getString(R.string.upload_progress_sending_metadata)));
+
         try {
             httpclient = new DefaultHttpClient();
             httppost = new HttpPost(destUri + "?update_metadata");
@@ -206,17 +211,21 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
                 error = new Exception(metadataResponse.result + ": " + metadataResponse.message);
                 return null;
             }
-            publishProgress(90);
+            publishProgress(new ProgressUpdateItem(
+                    90, mContext.getString(R.string.upload_progress_deleting_temp_files)));
+
+            //TODO check if there are any file-dependant descriptions
+            //if so, upload them
 
             //any post processing goes here
 
-            publishProgress(100);
+            publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
 
             //finito
         } catch (Exception e) {
             error = e;
+            return null;
         }
-
         return null;
     }
 
@@ -305,8 +314,11 @@ public class AsyncUploader extends AsyncTask<Object, Integer, Void> {
 
                 public void write(byte[] bts, int st, int end) throws IOException {
                     totalSent += end;
-                    publishProgress(
-                            ((int) ((totalSent / (float) totalSize) * 100))+100 );
+                    ProgressUpdateItem progress = new ProgressUpdateItem(
+                            ((int) ((totalSent / (float) totalSize) * 100)),
+                            "Uploading data package"
+                    );
+                    publishProgress(progress);
                     out.write(bts, st, end);
                 }
             }

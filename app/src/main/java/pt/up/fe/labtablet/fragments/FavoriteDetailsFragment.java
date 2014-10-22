@@ -302,7 +302,6 @@ public class FavoriteDetailsFragment extends Fragment {
                             onResume();
                         }
                     });
-
                     alert.show();
                 }
 
