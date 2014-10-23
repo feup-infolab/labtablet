@@ -16,7 +16,7 @@
             android:id="@+id/tv_instructions"
             android:padding="20dp"
             android:layout_alignParentTop="true"
-            android:background="@drawable/card"
+            android:background="@drawable/card_top"
             android:text="@string/new_favorite_instructions"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -103,20 +103,24 @@
                 android:ems="10" />
         </GridLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/rl_proj_name"
             android:layout_width="fill_parent"
             android:layout_below="@id/gv_new_dataset_description"
             android:layout_height="wrap_content"
             android:background="@drawable/card"
-            android:padding="20dp"
-            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             >
             <TextView
                 android:id="@+id/new_favorite_tv_proj_name"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/new_favorite_proj_name_opt"
                 />
@@ -124,42 +128,37 @@
             <TextView
                 android:id="@+id/new_favorite_tv_proj_name_description"
                 android:layout_marginTop="5dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_below="@+id/new_favorite_tv_proj_name"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:textColor="@color/second_grey"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/new_favorite_recommendations"
                 />
 
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/second_grey"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                />
             <Button
                 android:id="@+id/new_favorite_proj_load"
-                android:layout_below="@+id/new_favorite_tv_proj_name_description"
-                android:layout_marginTop="5dp"
-                android:layout_centerHorizontal="true"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:text="@string/proje_name_load"
                 android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
+                android:textColor="@android:color/black"
+                style="@android:style/Widget.Holo.Button.Borderless"
                 />
-            <!--android:drawableTop="@drawable/ic_warning" -->
-
-        </RelativeLayout>
-
-        <Button
-            android:id="@+id/bt_submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/rl_proj_name"
-            style="@style/btnStyleTransparent"
-            android:layout_marginTop="24dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:drawableEnd="@drawable/ic_menu_forward"
-            android:text="@string/new_dataset_submit" />
+        </LinearLayout>
     </RelativeLayout>
 
 </ScrollView>

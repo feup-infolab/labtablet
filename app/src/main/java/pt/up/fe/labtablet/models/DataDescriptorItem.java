@@ -1,17 +1,47 @@
 package pt.up.fe.labtablet.models;
 
+import java.util.ArrayList;
+
 /**
  * Descriptor to hold metadata for each of the imported data resources
  */
 public class DataDescriptorItem {
 
-    private String filePath;
+
+
+    private String fileName;
+    private String localFilePath;
+    private String parent;
+    private ArrayList<Descriptor> fileLevelMetadata;
     private String description;
     private String descriptor;
     private String humanReadableSize;
     private String importDate;
     private String mimeType;
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public ArrayList<Descriptor> getFileLevelMetadata() {
+        return fileLevelMetadata;
+    }
+
+    public void setFileLevelMetadata(ArrayList<Descriptor> fileLevelMetadata) {
+        this.fileLevelMetadata = fileLevelMetadata;
+    }
     public String getMimeType() {
         return mimeType;
     }
@@ -44,12 +74,12 @@ public class DataDescriptorItem {
         this.description = description;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getLocalFilePath() {
+        return localFilePath;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setLocalFilePath(String filePath) {
+        this.localFilePath = filePath;
     }
 
     public String getDescriptor() {

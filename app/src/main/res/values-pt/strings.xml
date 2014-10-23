@@ -258,4 +258,7 @@
     <string name="unable_load_projects">Erro ao carregar pastas. Tentar novamente?</string>
     <string name="resource_description">Resource description</string>
     <string name="give_file_description">If you want to include any description for this resource, please write it down below.</string>
+    <string name="upload_progress_finished">Upload concluído!</string>
+    <string name="upload_progress_describing_imported_data">Describing imported resources</string>
+    <string name="new_favorite_create">Create</string>
 </resources>

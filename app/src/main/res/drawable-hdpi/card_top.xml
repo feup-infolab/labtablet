@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
-
     <item>
         <shape android:shape="rectangle" >
             <!-- <solid android:color="@color/light_gray" /> -->
@@ -19,16 +18,14 @@
         </shape>
     </item>
     <item
-        android:bottom="11dp"
-        android:left="11dp"
-        android:right="11dp"
-        android:top="11dp">
+        android:bottom="12dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp">
         <shape android:shape="rectangle" >
             <corners android:radius="3dp" />
 
             <solid android:color="@color/card_white" />
         </shape>
     </item>
-
-
 </layer-list>

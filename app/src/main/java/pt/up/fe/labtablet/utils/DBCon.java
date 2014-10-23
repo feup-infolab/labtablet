@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.AssociationItem;
+import pt.up.fe.labtablet.models.DataDescriptorItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormQuestion;
@@ -244,7 +245,7 @@ public class DBCon {
     }
 
     /**
-     * Removes a form from the records, only shoudl remove the single record and not
+     * Removes a form from the records, only should remove the single record and not
      * the forms that were already filled (data)
      * @param formName
      * @param mContext
@@ -267,14 +268,58 @@ public class DBCon {
     }
 
     /**
-     * Create base entries for descriptors, associations, changelogs,
-     * data descriptors and credentials
+     * Adds a new entry for a file description.
+     * If the entry does not exists, a new one is added
      *
      * @param mContext
      */
-    public static void initializeDBEntries(Context mContext) {
+    public static void addDadaDescriptor(Context mContext, DataDescriptorItem item) {
 
+        SharedPreferences settings = mContext.getSharedPreferences(
+                mContext.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+
+        ArrayList<DataDescriptorItem> items;
+        SharedPreferences.Editor editor = settings.edit();
+        if (settings.contains(Utils.DATA_DESCRIPTOR_ENTRY)) {
+            items = new Gson().fromJson(settings.getString(Utils.DATA_DESCRIPTOR_ENTRY, ""),
+                            Utils.ARRAY_DATA_DESCRIPTOR_ITEMS);
+        } else {
+            items = new ArrayList<DataDescriptorItem>();
+        }
+
+        items.add(item);
+        editor.remove(Utils.DATA_DESCRIPTOR_ENTRY);
+        editor.putString(Utils.DATA_DESCRIPTOR_ENTRY, new Gson().toJson(items));
+        editor.apply();
     }
 
+    /**
+     * Returns the registered descriptions for a specific parent / favorite / project
+     * @param mContext
+     * @return
+     */
+    public static ArrayList<DataDescriptorItem> getDataDescriptionItems(
+            Context mContext, String favoriteName) {
+
+        SharedPreferences settings = mContext.getSharedPreferences(
+                mContext.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        ArrayList<DataDescriptorItem> items = new Gson().fromJson(
+                settings.getString(Utils.DATA_DESCRIPTOR_ENTRY, ""),
+                Utils.ARRAY_DATA_DESCRIPTOR_ITEMS);
+
+
+        ArrayList<DataDescriptorItem> childrenItems = new ArrayList<DataDescriptorItem>();
+        for (DataDescriptorItem item : items) {
+            if (item.getParent().equals(favoriteName)) {
+                childrenItems.add(item);
+            }
+        }
+
+        return childrenItems;
+    }
 
 }

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.DendroAPI;
+import pt.up.fe.labtablet.models.DataDescriptorItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.ProgressUpdateItem;
@@ -211,21 +212,73 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 error = new Exception(metadataResponse.result + ": " + metadataResponse.message);
                 return null;
             }
-            publishProgress(new ProgressUpdateItem(
-                    90, mContext.getString(R.string.upload_progress_deleting_temp_files)));
 
-            //TODO check if there are any file-dependant descriptions
-            //if so, upload them
 
-            //any post processing goes here
-
-            publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
-
-            //finito
         } catch (Exception e) {
             error = e;
             return null;
         }
+
+        publishProgress(new ProgressUpdateItem(
+                90, mContext.getString(R.string.upload_progress_describing_imported_data)));
+
+        //check if there are any file-dependant descriptions
+        //if so, upload them
+
+        ArrayList<DataDescriptorItem> dataDescriptionItems =
+                DBCon.getDataDescriptionItems(mContext, favoriteName);
+
+        if (dataDescriptionItems == null) {
+            return null;
+        }
+
+        //TODO finish this routine
+        for (DataDescriptorItem item : dataDescriptionItems) {
+
+            metadataRecords = new ArrayList<DendroMetadataRecord>();
+            for (Descriptor desc : item.getFileLevelMetadata()) {
+                metadataRecords.add(
+                        new DendroMetadataRecord(desc.getDescriptor(), desc.getValue())
+                );
+            }
+
+            try {
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost(destUri + File.separator + item.getFileName() + "?update_metadata");
+                httppost.setHeader("Accept", "application/json");
+                httppost.setHeader("Content-Type", "application/json");
+                httppost.setHeader("Cookie", "connect.sid=" + cookie);
+
+                StringEntity se = new StringEntity(new Gson().toJson(
+                        item.getFileLevelMetadata(), Utils.ARRAY_DENDRO_DESCRIPTORS), HTTP.UTF_8);
+
+                Log.e("metadata", new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD));
+                httppost.setEntity(se);
+
+                HttpResponse resp = httpclient.execute(httppost);
+                HttpEntity ent = resp.getEntity();
+                DendroResponse metadataResponse = new Gson().fromJson(
+                        EntityUtils.toString(ent), DendroResponse.class);
+                if (metadataResponse.result.equals(Utils.DENDRO_RESPONSE_ERROR) ||
+                        metadataResponse.result.equals(Utils.DENDRO_RESPONSE_ERROR_2)) {
+                    error = new Exception(metadataResponse.result + ": " + metadataResponse.message);
+                    return null;
+                }
+
+
+            } catch (Exception e) {
+                error = e;
+                return null;
+            }
+
+
+        }
+
+
+        publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
+
+        //finito
+
         return null;
     }
 

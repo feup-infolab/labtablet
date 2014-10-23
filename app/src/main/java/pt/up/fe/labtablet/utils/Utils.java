@@ -8,6 +8,7 @@ import java.util.Date;
 
 import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.models.DataDescriptorItem;
 import pt.up.fe.labtablet.models.Dendro.DendroDescriptor;
 import pt.up.fe.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
@@ -28,11 +29,13 @@ public class Utils {
     public static final String TITLE_TAG = "title";
     public static final String DESCRIPTION_TAG = "description";
     public static final String GENERIC_TAG = "generic";
+
     //Extension used to state a certain file is a folder (when ls)
     public static final String DENDRO_FOLDER_EXTENSION = "folder";
     public static final String DENDRO_RESPONSE_ERROR = "error";
     public static final String DENDRO_RESPONSE_ERROR_2 = "Error";
     public static final String DENDRO_CONFS_ENTRY = "dendro_configurations";
+    public static final String DATA_DESCRIPTOR_ENTRY = "data_descriptors";
     public static final int DESCRIPTOR_STATE_VALIDATED = 1;
     public static final int DESCRIPTOR_STATE_NOT_VALIDATED = 0;
     //When calling metadatavalidationActivity and in return geting an array with the
@@ -58,6 +61,7 @@ public class Utils {
     public static final int VIEW_TYPE_CLOSED_VOCAB = 2;
 
 
+
     public static Type ARRAY_ASSOCIATION_ITEM = new TypeToken<ArrayList<AssociationItem>>() {
     }.getType();
     public static Type ARRAY_CHANGELOG_ITEM = new TypeToken<ArrayList<ChangelogItem>>() {
@@ -72,6 +76,7 @@ public class Utils {
     }.getType();
     public static Type ARRAY_FORM = new TypeToken<ArrayList<Form>>() {
     }.getType();
+    public static Type ARRAY_DATA_DESCRIPTOR_ITEMS = new TypeToken<ArrayList<DataDescriptorItem>>(){}.getType();
 
     // ---- Activities Results ---------
     public static Type ARRAY_DENDRO_DESCRIPTORS = new TypeToken<ArrayList<DendroDescriptor>>() {

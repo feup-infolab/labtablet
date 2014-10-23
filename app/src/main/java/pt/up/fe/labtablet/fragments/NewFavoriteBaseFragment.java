@@ -14,6 +14,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -60,7 +63,6 @@ public class NewFavoriteBaseFragment extends Fragment {
 
         favoriteName = (EditText) rootView.findViewById(R.id.et_dataset_name);
         favoriteDescription = (EditText) rootView.findViewById(R.id.et_dataset_description);
-        Button bt_submit = (Button) rootView.findViewById(R.id.bt_submit);
         bt_load_suggestions = (Button) rootView.findViewById(R.id.new_favorite_proj_load);
 
         ActionBar mActionBar = getActivity().getActionBar();
@@ -74,6 +76,7 @@ public class NewFavoriteBaseFragment extends Fragment {
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        setHasOptionsMenu(true);
         favoriteName.requestFocus();
 
         if (savedInstanceState != null) {
@@ -82,11 +85,13 @@ public class NewFavoriteBaseFragment extends Fragment {
                         savedInstanceState.get("recommendations").toString(),
                         Utils.ARRAY_DESCRIPTORS
                 );
+
                 bt_load_suggestions.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        null, getResources().getDrawable(R.drawable.ic_check), null, null
+                        getResources().getDrawable(R.drawable.ic_check), null, null, null
                 );
 
                 bt_load_suggestions.setText(getResources().getString(R.string.successul_imported_recommendations));
+                bt_load_suggestions.setEnabled(false);
             }
         }
 
@@ -136,9 +141,11 @@ public class NewFavoriteBaseFragment extends Fragment {
                                             return;
                                         }
                                         bt_load_suggestions.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                                                null, getResources().getDrawable(R.drawable.ic_check), null, null
+                                                getResources().getDrawable(R.drawable.ic_check), null, null, null
                                         );
+
                                         bt_load_suggestions.setText(getResources().getString(R.string.successul_imported_recommendations));
+                                        bt_load_suggestions.setEnabled(false);
                                         recommendations = result;
 
                                         if (mDialog != null) {
@@ -198,116 +205,126 @@ public class NewFavoriteBaseFragment extends Fragment {
             }
         });
 
-        bt_submit.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (favoriteName.getText().toString().equals("")) {
-                    favoriteName.setError("A name must be provided");
-                    return;
-                }
-
-                //Base configuration already loaded?
-                if (!settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle("Application Profile not loaded")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                }
-                            })
-                            .setMessage(getResources().getString(R.string.no_profile))
-                            .setIcon(R.drawable.ic_whats_hot)
-                            .show();
-                    return;
-                }
-
-                String itemName = favoriteName.getText().toString();
-
-                final File favoriteFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + "/" + getResources().getString(R.string.app_name) + "/"
-                        + favoriteName.getText());
-
-                if (!favoriteFolder.exists()) {
-                    Log.i("Make dir", "" + favoriteFolder.mkdir());
-                    Toast.makeText(getActivity(), getResources().getString(R.string.created_folder), Toast.LENGTH_SHORT).show();
-                    getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(favoriteFolder)));
-                }
-
-                editor = settings.edit();
-                if (settings.contains(itemName)) {
-                    editor.remove(itemName);
-                    Toast.makeText(getActivity(), "Will overwrite...", Toast.LENGTH_LONG).show();
-                }
-
-                //Load default configuration
-                ArrayList<Descriptor> baseCfg = new Gson().fromJson(settings.getString(Utils.DESCRIPTORS_CONFIG_ENTRY, ""),
-                        Utils.ARRAY_DESCRIPTORS);
-                ArrayList<Descriptor> folderMetadata = new ArrayList<Descriptor>();
-                ArrayList<ChangelogItem> logs = new ArrayList<ChangelogItem>();
-                ChangelogItem log;
-                String descName;
-                for (Descriptor desc : baseCfg) {
-                    descName = desc.getName().toLowerCase();
-                    log = new ChangelogItem();
-                    if (descName.contains("title")) {
-                        log.setMessage(ChangelogManager.addedLog(descName, itemName));
-                        log.setDate(Utils.getDate());
-                        log.setTitle(getResources().getString(R.string.log_added));
-                        logs.add(log);
-                        desc.setValue(itemName);
-                        desc.validate();
-                        folderMetadata.add(desc);
-                    }
-                    if (descName.contains("description")) {
-                        log.setMessage(ChangelogManager.addedLog(descName, itemName));
-                        log.setDate(Utils.getDate());
-                        log.setTitle(getResources().getString(R.string.log_added));
-                        logs.add(log);
-                        desc.validate();
-                        desc.setValue(favoriteDescription.getText().toString());
-                        folderMetadata.add(desc);
-                    }
-                    if (descName.contains("date")) {
-                        log.setMessage(ChangelogManager.addedLog(descName, Utils.getDate()));
-                        log.setDate(Utils.getDate());
-                        log.setTitle(getResources().getString(R.string.log_added));
-                        logs.add(log);
-                        desc.validate();
-                        desc.setValue(Utils.getDate());
-                        folderMetadata.add(desc);
-                    }
-
-                }
-                editor.putString(itemName, new Gson().toJson(folderMetadata));
-                if (recommendations != null && recommendations.size() > 0) {
-                    editor.putString(itemName + "_dendro", new Gson().toJson(recommendations));
-                    log = new ChangelogItem();
-                    log.setMessage(getResources().getString(R.string.log_loaded) + ": " + projectName);
-                    log.setTitle(getResources().getString(R.string.log_loaded));
-                    logs.add(log);
-                }
-
-                editor.apply();
-
-                ChangelogManager.addItems(logs, getActivity());
-                if (mDialog != null) {
-                    mDialog.dismiss();
-                }
-
-                FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-                FavoriteDetailsFragment favoriteDetail = new FavoriteDetailsFragment();
-                Bundle args = new Bundle();
-                args.putString("favorite_name", favoriteName.getText().toString());
-                favoriteDetail.setArguments(args);
-                transaction.replace(R.id.frame_container, favoriteDetail);
-                transaction.addToBackStack(null);
-                getFragmentManager().popBackStack();
-                transaction.commit();
-            }
-        });
-
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.new_favorite, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() != R.id.action_create_favorite) {
+                return super.onOptionsItemSelected(item);
+        }
+
+        if (favoriteName.getText().toString().equals("")) {
+            favoriteName.setError("A name must be provided");
+            return false;
+        }
+
+        //Base configuration already loaded?
+        if (!settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Application Profile not loaded")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    })
+                    .setMessage(getResources().getString(R.string.no_profile))
+                    .setIcon(R.drawable.ic_whats_hot)
+                    .show();
+            return false;
+        }
+
+        String itemName = favoriteName.getText().toString();
+
+        final File favoriteFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                + "/" + getResources().getString(R.string.app_name) + "/"
+                + favoriteName.getText());
+
+        if (!favoriteFolder.exists()) {
+            Log.i("Make dir", "" + favoriteFolder.mkdir());
+            Toast.makeText(getActivity(), getResources().getString(R.string.created_folder), Toast.LENGTH_SHORT).show();
+            getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(favoriteFolder)));
+        }
+
+        editor = settings.edit();
+        if (settings.contains(itemName)) {
+            editor.remove(itemName);
+            Toast.makeText(getActivity(), "Will overwrite...", Toast.LENGTH_LONG).show();
+        }
+
+        //Load default configuration
+        ArrayList<Descriptor> baseCfg = new Gson().fromJson(settings.getString(Utils.DESCRIPTORS_CONFIG_ENTRY, ""),
+                Utils.ARRAY_DESCRIPTORS);
+        ArrayList<Descriptor> folderMetadata = new ArrayList<Descriptor>();
+        ArrayList<ChangelogItem> logs = new ArrayList<ChangelogItem>();
+        ChangelogItem log;
+        String descName;
+        for (Descriptor desc : baseCfg) {
+            descName = desc.getName().toLowerCase();
+            log = new ChangelogItem();
+            if (descName.contains("title")) {
+                log.setMessage(ChangelogManager.addedLog(descName, itemName));
+                log.setDate(Utils.getDate());
+                log.setTitle(getResources().getString(R.string.log_added));
+                logs.add(log);
+                desc.setValue(itemName);
+                desc.validate();
+                folderMetadata.add(desc);
+            }
+            if (descName.contains("description")) {
+                log.setMessage(ChangelogManager.addedLog(descName, itemName));
+                log.setDate(Utils.getDate());
+                log.setTitle(getResources().getString(R.string.log_added));
+                logs.add(log);
+                desc.validate();
+                desc.setValue(favoriteDescription.getText().toString());
+                folderMetadata.add(desc);
+            }
+            if (descName.contains("date")) {
+                log.setMessage(ChangelogManager.addedLog(descName, Utils.getDate()));
+                log.setDate(Utils.getDate());
+                log.setTitle(getResources().getString(R.string.log_added));
+                logs.add(log);
+                desc.validate();
+                desc.setValue(Utils.getDate());
+                folderMetadata.add(desc);
+            }
+
+        }
+        editor.putString(itemName, new Gson().toJson(folderMetadata));
+        if (recommendations != null && recommendations.size() > 0) {
+            editor.putString(itemName + "_dendro", new Gson().toJson(recommendations));
+            log = new ChangelogItem();
+            log.setMessage(getResources().getString(R.string.log_loaded) + ": " + projectName);
+            log.setTitle(getResources().getString(R.string.log_loaded));
+            logs.add(log);
+        }
+
+        editor.apply();
+
+        ChangelogManager.addItems(logs, getActivity());
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+
+        FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        FavoriteDetailsFragment favoriteDetail = new FavoriteDetailsFragment();
+        Bundle args = new Bundle();
+        args.putString("favorite_name", favoriteName.getText().toString());
+        favoriteDetail.setArguments(args);
+        transaction.replace(R.id.frame_container, favoriteDetail);
+        transaction.addToBackStack(null);
+        getFragmentManager().popBackStack();
+        transaction.commit();
+        return true;
     }
 
     @Override

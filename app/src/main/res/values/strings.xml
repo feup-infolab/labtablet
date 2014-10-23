@@ -259,4 +259,6 @@
     <string name="edit_metadata_records">Edit gathered records</string>
     <string name="end_session">End</string>
     <string name="finished">Finished!</string>
+    <string name="upload_progress_describing_imported_data">Describing imported resources</string>
+    <string name="new_favorite_create">Create</string>
 </resources>

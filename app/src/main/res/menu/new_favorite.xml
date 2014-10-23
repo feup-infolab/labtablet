@@ -1,0 +1,9 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_create_favorite"
+        android:icon="@drawable/ab_validate"
+        android:title="@string/new_favorite_create"
+        android:showAsAction="always|withText"
+        />
+</menu>
