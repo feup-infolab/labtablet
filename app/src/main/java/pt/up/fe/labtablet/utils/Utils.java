@@ -29,6 +29,7 @@ public class Utils {
     public static final String TITLE_TAG = "title";
     public static final String DESCRIPTION_TAG = "description";
     public static final String GENERIC_TAG = "generic";
+    public static final String CREATED_TAG = "created";
 
     //Extension used to state a certain file is a folder (when ls)
     public static final String DENDRO_FOLDER_EXTENSION = "folder";

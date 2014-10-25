@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,9 +27,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.DescriptorPickerActivity;
@@ -43,6 +40,7 @@ import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncFileImporter;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.models.DataDescriptorItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
@@ -61,6 +59,7 @@ public class FavoriteDetailsFragment extends Fragment {
     private ListView lv_metadata;
     private boolean isMetadataVisible;
     private ArrayList<Descriptor> itemDescriptors;
+    private ArrayList<DataDescriptorItem> dataItems;
     private String favoriteName;
 
     @Override
@@ -108,6 +107,7 @@ public class FavoriteDetailsFragment extends Fragment {
         }
 
         itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
+
 
         for (Descriptor desc : itemDescriptors) {
             if (desc.getDescriptor() == null)
@@ -200,29 +200,11 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_edit_view.setVisibility(View.INVISIBLE);
 
         isMetadataVisible = false;
-        itemDescriptors = new ArrayList<Descriptor>();
-
-        String path = Environment.getExternalStorageDirectory().toString() + "/"
-                + getResources().getString(R.string.app_name) + "/"
-                + favoriteName;
-
-        File f = new File(path);
-        File[] files = f.listFiles();
-        itemDescriptors.clear();
-
-        for (File inFile : files) {
-            if (inFile.isFile()) {
-                Descriptor newItem = new Descriptor();
-                newItem.setDescriptor("");
-                newItem.setFilePath(inFile.getAbsolutePath());
-                newItem.setDateModified(new Date(inFile.lastModified()).toString());
-                newItem.setName(inFile.getName());
-                newItem.setValue(FileMgr.getMimeType(inFile.getAbsolutePath()));
-                itemDescriptors.add(newItem);
-            }
+        if (dataItems == null || dataItems.isEmpty()) {
+            dataItems = DBCon.getDataDescriptionItems(getActivity(), favoriteName);
         }
 
-        DataListAdapter mDataAdapter = new DataListAdapter(getActivity(), itemDescriptors, favoriteName);
+        DataListAdapter mDataAdapter = new DataListAdapter(getActivity(), dataItems, favoriteName);
         lv_metadata.setAdapter(mDataAdapter);
     }
 
@@ -237,7 +219,7 @@ public class FavoriteDetailsFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (data == null)
@@ -275,11 +257,13 @@ public class FavoriteDetailsFragment extends Fragment {
             pd.setMax(100);
             pd.show();
 
-            new AsyncFileImporter(new AsyncTaskHandler<String>() {
+            new AsyncFileImporter(new AsyncTaskHandler<DataDescriptorItem>() {
                 @Override
-                public void onSuccess(String result) {
+                public void onSuccess(final DataDescriptorItem result) {
 
                     pd.dismiss();
+
+                    //Add description if applicable
 
                     //Ask for the resource description
                     final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
@@ -295,10 +279,18 @@ public class FavoriteDetailsFragment extends Fragment {
                             new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             String value = input.getText().toString();
+
                             if (!value.equals("")) {
-                                //TODO add record's description
+                                ArrayList<Descriptor> itemLevelDescriptors = result.getFileLevelMetadata();
+                                for (Descriptor desc : itemLevelDescriptors) {
+                                    if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                                        desc.setValue(input.getText().toString());
+                                    }
+                                }
                                 Log.e("DESC", value);
                             }
+
+                            DBCon.addDataDescriptor(getActivity(), result);
                             onResume();
                         }
                     });

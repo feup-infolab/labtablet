@@ -13,26 +13,31 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.models.DataDescriptorItem;
+import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
 /**
  * Process metadata queues after editing or validating metadata records
  */
-public class AsyncFileImporter extends AsyncTask<Object, Integer, Void> {
+public class AsyncFileImporter extends AsyncTask<Object, Integer, DataDescriptorItem> {
 
-    private final AsyncTaskHandler<String> mHandler;
+    private final AsyncTaskHandler<DataDescriptorItem> mHandler;
     private Exception error;
 
-    public AsyncFileImporter(AsyncTaskHandler<String> mHandler) {
+    public AsyncFileImporter(AsyncTaskHandler<DataDescriptorItem> mHandler) {
         this.mHandler = mHandler;
     }
 
 
     @Override
-    protected Void doInBackground(Object... params) {
+    protected DataDescriptorItem doInBackground(Object... params) {
 
         if (params[0] == null || params[1] == null
                 || params[2] == null) {
@@ -100,18 +105,48 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, Void> {
             FileMgr.copy(importFile, destFile);
         } catch (IOException e) {
             error = e;
+            return null;
         }
-        return null;
+
+        DataDescriptorItem dataItem = new DataDescriptorItem();
+        dataItem.setParent(favoriteName);
+        dataItem.setImportDate("" + new Date());
+        dataItem.setLocalFilePath(destPath);
+        dataItem.setHumanReadableSize(FileMgr.humanReadableByteCount(destFile.length(), false));
+        dataItem.setMimeType(FileMgr.getMimeType(destPath));
+
+        ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
+
+        ArrayList<Descriptor> loadedDescriptors =
+                DBCon.getDescriptors(Utils.DESCRIPTORS_CONFIG_ENTRY, mContext);
+
+        //If additional metadata is available, it should me added here
+        for (Descriptor desc : loadedDescriptors) {
+            String tag = desc.getTag();
+            if (tag.equals(Utils.TITLE_TAG)) {
+                desc.setValue(destFile.getName());
+                itemLevelMetadata.add(desc);
+            } else if (tag.equals(Utils.CREATED_TAG)) {
+                desc.setValue("" + new Date());
+                itemLevelMetadata.add(desc);
+            } else if (tag.equals(Utils.DESCRIPTION_TAG)) {
+                desc.setValue("");
+                itemLevelMetadata.add(desc);
+            }
+        }
+
+        dataItem.setFileLevelMetadata(itemLevelMetadata);
+        return dataItem;
     }
 
 
     @Override
-    protected void onPostExecute(Void result) {
+    protected void onPostExecute(DataDescriptorItem result) {
         super.onPostExecute(result);
         if (error != null) {
             mHandler.onFailure(error);
         } else {
-            mHandler.onSuccess(null);
+            mHandler.onSuccess(result);
         }
     }
 

@@ -24,6 +24,7 @@ public class DBCon {
 
     /**
      * Returns the available descriptors for that specific settings entry
+     * (either a favorite or the global entry)
      * @param settingsEntry entry for the preferences settings
      * @param mContext context
      * @return An array list of the fetched descriptors
@@ -273,7 +274,7 @@ public class DBCon {
      *
      * @param mContext
      */
-    public static void addDadaDescriptor(Context mContext, DataDescriptorItem item) {
+    public static void addDataDescriptor(Context mContext, DataDescriptorItem item) {
 
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
@@ -284,7 +285,7 @@ public class DBCon {
         SharedPreferences.Editor editor = settings.edit();
         if (settings.contains(Utils.DATA_DESCRIPTOR_ENTRY)) {
             items = new Gson().fromJson(settings.getString(Utils.DATA_DESCRIPTOR_ENTRY, ""),
-                            Utils.ARRAY_DATA_DESCRIPTOR_ITEMS);
+                    Utils.ARRAY_DATA_DESCRIPTOR_ITEMS);
         } else {
             items = new ArrayList<DataDescriptorItem>();
         }
@@ -312,6 +313,9 @@ public class DBCon {
                 Utils.ARRAY_DATA_DESCRIPTOR_ITEMS);
 
 
+        if (items == null) {
+            return new ArrayList<DataDescriptorItem>();
+        }
         ArrayList<DataDescriptorItem> childrenItems = new ArrayList<DataDescriptorItem>();
         for (DataDescriptorItem item : items) {
             if (item.getParent().equals(favoriteName)) {
@@ -321,5 +325,4 @@ public class DBCon {
 
         return childrenItems;
     }
-
 }

@@ -18,10 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
@@ -306,14 +304,14 @@ public class ConfigurationFragment extends Fragment {
                 @Override
                 public void onSuccess(ArrayList<Descriptor> result) {
                     //save default descriptors to the preferences
-                    Type type = new TypeToken<ArrayList<Descriptor>>() {}.getType();
                     SharedPreferences.Editor editor = settings.edit();
 
                     if(settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
                         editor
                                 .remove(Utils.DESCRIPTORS_CONFIG_ENTRY);
                     }
-                    editor.putString(Utils.DESCRIPTORS_CONFIG_ENTRY, new Gson().toJson(result,type));
+                    editor.putString(Utils.DESCRIPTORS_CONFIG_ENTRY, new Gson().toJson(
+                            result, Utils.ARRAY_DESCRIPTORS));
                     editor.apply();
                     bt_file.setText(getResources().getString(R.string.edit));
                     progress.dismiss();

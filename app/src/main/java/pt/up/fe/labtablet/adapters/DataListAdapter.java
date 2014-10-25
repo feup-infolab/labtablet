@@ -20,27 +20,28 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncImageLoader;
 import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.models.DataDescriptorItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
 /**
  * Adapter to handle data files for each favorite
  */
-public class DataListAdapter extends ArrayAdapter<Descriptor> {
+public class DataListAdapter extends ArrayAdapter<DataDescriptorItem> {
 
     private final Activity context;
     private final String favoriteName;
-    private final ArrayList<Descriptor> items;
+    private final ArrayList<DataDescriptorItem> items;
 
 
-    public DataListAdapter(Activity context, ArrayList<Descriptor> srcItems, String favoriteName) {
+    public DataListAdapter(Activity context, ArrayList<DataDescriptorItem> srcItems, String favoriteName) {
         super(context, R.layout.item_data_list, srcItems);
         this.context = context;
         this.items = srcItems;
@@ -54,21 +55,8 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
                 + context.getString(R.string.app_name) + "/"
                 + favoriteName;
 
-        File f = new File(path);
-        File[] files = f.listFiles();
         items.clear();
-
-        for (File inFile : files) {
-            if (inFile.isFile()) {
-                Descriptor newItem = new Descriptor();
-                newItem.setDescriptor("");
-                newItem.setFilePath(inFile.getAbsolutePath());
-                newItem.setDateModified(new Date(inFile.lastModified()).toString());
-                newItem.setName(inFile.getName());
-                newItem.setValue(FileMgr.getMimeType(inFile.getAbsolutePath()));
-                items.add(newItem);
-            }
-        }
+        items.addAll(DBCon.getDataDescriptionItems(context, favoriteName));
 
         super.notifyDataSetChanged();
     }
@@ -84,22 +72,31 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.mDescriptorName = (TextView) rowView.findViewById(R.id.metadata_item_title);
             viewHolder.mDescriptorType = (ImageView) rowView.findViewById(R.id.metadata_item_type);
-            viewHolder.mDescriptorDate = (TextView) rowView.findViewById(R.id.metadata_item_date);
             viewHolder.mDescriptorValue = (TextView) rowView.findViewById(R.id.metadata_item_value);
             viewHolder.mDescriptorSize = (TextView) rowView.findViewById(R.id.metadata_item_size);
             viewHolder.mRemoveFile = (ImageButton) rowView.findViewById(R.id.bt_remove_file);
+            viewHolder.mDescriptorDescription = (TextView) rowView.findViewById(R.id.metadata_item_description);
             rowView.setTag(viewHolder);
         }
 
         // fill data
         ViewHolder holder = (ViewHolder) rowView.getTag();
-        final Descriptor item = items.get(position);
+        final DataDescriptorItem item = items.get(position);
 
-        holder.mDescriptorDate.setText(item.getDateModified());
-        holder.mDescriptorValue.setText(item.getValue());
-        holder.mDescriptorName.setText(item.getName());
-        holder.mDescriptorType.setTag(item.getFilePath());
-        holder.mDescriptorSize.setText(item.getSize());
+        holder.mDescriptorValue.setText(item.getMimeType());
+        holder.mDescriptorName.setText(new File(item.getLocalFilePath()).getName());
+        holder.mDescriptorType.setTag(item.getLocalFilePath());
+        holder.mDescriptorSize.setText(item.getHumanReadableSize());
+
+        ArrayList<Descriptor> itemMetadata = item.getFileLevelMetadata();
+        for (Descriptor desc : itemMetadata) {
+            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                holder.mDescriptorDescription.setVisibility(View.VISIBLE);
+                holder.mDescriptorDescription.setText(desc.getValue());
+            } else {
+                holder.mDescriptorDescription.setVisibility(View.GONE);
+            }
+        }
 
 
         holder.mRemoveFile.setOnClickListener(new View.OnClickListener() {
@@ -112,10 +109,10 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
                         .setIcon(R.drawable.ic_recycle)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                if (!(new File(items.get(position).getFilePath()).delete())) {
+                                if (!(new File(items.get(position).getLocalFilePath()).delete())) {
                                     ChangelogItem item = new ChangelogItem();
                                     item.setMessage("Queue Processor" + "Failed to delete file "
-                                            + items.get(position).getFilePath());
+                                            + items.get(position).getLocalFilePath());
 
                                     item.setTitle(context.getResources().getString(R.string.developer_error));
                                     item.setDate(Utils.getDate());
@@ -131,7 +128,7 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
         holder.mDescriptorType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File file = new File(items.get(position).getFilePath());
+                File file = new File(items.get(position).getLocalFilePath());
                 String mime = FileMgr.getMimeType(file.getAbsolutePath());
 
                 if (mime == null) {
@@ -163,9 +160,9 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
 
     static class ViewHolder {
         public TextView mDescriptorName;
+        public TextView mDescriptorDescription;
         public TextView mDescriptorValue;
         public ImageView mDescriptorType;
-        public TextView mDescriptorDate;
         public TextView mDescriptorSize;
         public ImageButton mRemoveFile;
     }

@@ -7,8 +7,6 @@ import java.util.ArrayList;
  */
 public class DataDescriptorItem {
 
-
-
     private String fileName;
     private String localFilePath;
     private String parent;
