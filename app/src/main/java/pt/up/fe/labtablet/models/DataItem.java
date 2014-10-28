@@ -3,19 +3,18 @@ package pt.up.fe.labtablet.models;
 import java.util.ArrayList;
 
 /**
- * Descriptor to hold metadata for each of the imported data resources
+ * Item to hold metadata, as well as the path of the imported file, for each of the imported data resources
  */
-public class DataDescriptorItem {
+public class DataItem {
 
     private String fileName;
     private String localFilePath;
     private String parent;
-    private ArrayList<Descriptor> fileLevelMetadata;
     private String description;
-    private String descriptor;
     private String humanReadableSize;
-    private String importDate;
     private String mimeType;
+
+    private ArrayList<Descriptor> fileLevelMetadata;
 
     public String getFileName() {
         return fileName;
@@ -48,14 +47,6 @@ public class DataDescriptorItem {
         this.mimeType = mimeType;
     }
 
-    public String getImportDate() {
-        return importDate;
-    }
-
-    public void setImportDate(String importDate) {
-        this.importDate = importDate;
-    }
-
     public String getHumanReadableSize() {
         return humanReadableSize;
     }
@@ -80,11 +71,4 @@ public class DataDescriptorItem {
         this.localFilePath = filePath;
     }
 
-    public String getDescriptor() {
-        return descriptor;
-    }
-
-    public void setDescriptor(String descriptor) {
-        this.descriptor = descriptor;
-    }
 }

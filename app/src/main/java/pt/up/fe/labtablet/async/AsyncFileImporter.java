@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.models.DataDescriptorItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
@@ -26,18 +26,18 @@ import pt.up.fe.labtablet.utils.Utils;
 /**
  * Process metadata queues after editing or validating metadata records
  */
-public class AsyncFileImporter extends AsyncTask<Object, Integer, DataDescriptorItem> {
+public class AsyncFileImporter extends AsyncTask<Object, Integer, DataItem> {
 
-    private final AsyncTaskHandler<DataDescriptorItem> mHandler;
+    private final AsyncTaskHandler<DataItem> mHandler;
     private Exception error;
 
-    public AsyncFileImporter(AsyncTaskHandler<DataDescriptorItem> mHandler) {
+    public AsyncFileImporter(AsyncTaskHandler<DataItem> mHandler) {
         this.mHandler = mHandler;
     }
 
 
     @Override
-    protected DataDescriptorItem doInBackground(Object... params) {
+    protected DataItem doInBackground(Object... params) {
 
         if (params[0] == null || params[1] == null
                 || params[2] == null) {
@@ -108,9 +108,9 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, DataDescriptor
             return null;
         }
 
-        DataDescriptorItem dataItem = new DataDescriptorItem();
+        DataItem dataItem = new DataItem();
         dataItem.setParent(favoriteName);
-        dataItem.setImportDate("" + new Date());
+        //dataItem.setImportDate("" + new Date());
         dataItem.setLocalFilePath(destPath);
         dataItem.setHumanReadableSize(FileMgr.humanReadableByteCount(destFile.length(), false));
         dataItem.setMimeType(FileMgr.getMimeType(destPath));
@@ -141,7 +141,7 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, DataDescriptor
 
 
     @Override
-    protected void onPostExecute(DataDescriptorItem result) {
+    protected void onPostExecute(DataItem result) {
         super.onPostExecute(result);
         if (error != null) {
             mHandler.onFailure(error);

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.AssociationItem;
-import pt.up.fe.labtablet.models.DataDescriptorItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormQuestion;
@@ -274,25 +274,46 @@ public class DBCon {
      *
      * @param mContext
      */
-    public static void addDataDescriptor(Context mContext, DataDescriptorItem item) {
+    public static void addDataItem(Context mContext, DataItem item, String favoriteName) {
 
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
 
-        ArrayList<DataDescriptorItem> items;
+        ArrayList<DataItem> availableItems;
         SharedPreferences.Editor editor = settings.edit();
-        if (settings.contains(Utils.DATA_DESCRIPTOR_ENTRY)) {
-            items = new Gson().fromJson(settings.getString(Utils.DATA_DESCRIPTOR_ENTRY, ""),
+        if (settings.contains(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY)) {
+            availableItems = new Gson().fromJson(settings.getString(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY, ""),
                     Utils.ARRAY_DATA_DESCRIPTOR_ITEMS);
         } else {
-            items = new ArrayList<DataDescriptorItem>();
+            availableItems = new ArrayList<DataItem>();
         }
 
-        items.add(item);
+        availableItems.add(item);
         editor.remove(Utils.DATA_DESCRIPTOR_ENTRY);
-        editor.putString(Utils.DATA_DESCRIPTOR_ENTRY, new Gson().toJson(items));
+        editor.putString(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY, new Gson().toJson(availableItems));
+        editor.commit();
+    }
+
+
+    /**
+     * Overwrite data descriptors for a specific entry
+     */
+    public static void overwriteDataItems(Context mContext, ArrayList<DataItem> items, String favoriteName) {
+
+        SharedPreferences settings = mContext.getSharedPreferences(
+                mContext.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        String dbEntry = favoriteName + Utils.DATA_DESCRIPTOR_ENTRY;
+
+        SharedPreferences.Editor editor = settings.edit();
+        if (settings.contains(dbEntry)) {
+            editor.remove(dbEntry);
+        }
+
+        editor.putString(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY, new Gson().toJson(items));
         editor.apply();
     }
 
@@ -301,28 +322,48 @@ public class DBCon {
      * @param mContext
      * @return
      */
-    public static ArrayList<DataDescriptorItem> getDataDescriptionItems(
+    public static ArrayList<DataItem> getDataDescriptionItems(
             Context mContext, String favoriteName) {
 
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
-        ArrayList<DataDescriptorItem> items = new Gson().fromJson(
-                settings.getString(Utils.DATA_DESCRIPTOR_ENTRY, ""),
+        ArrayList<DataItem> items = new Gson().fromJson(
+                settings.getString(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY, ""),
                 Utils.ARRAY_DATA_DESCRIPTOR_ITEMS);
 
 
         if (items == null) {
-            return new ArrayList<DataDescriptorItem>();
-        }
-        ArrayList<DataDescriptorItem> childrenItems = new ArrayList<DataDescriptorItem>();
-        for (DataDescriptorItem item : items) {
-            if (item.getParent().equals(favoriteName)) {
-                childrenItems.add(item);
-            }
+            return new ArrayList<DataItem>();
         }
 
-        return childrenItems;
+        return items;
+    }
+
+    /**
+     * Updates a specific data level resource
+     * @param mContext
+     * @return
+     */
+    public static void updateDataDescriptionItems(
+            Context mContext, ArrayList<DataItem> entries, String favoriteName) {
+
+        SharedPreferences settings = mContext.getSharedPreferences(
+                mContext.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        ArrayList<DataItem> items = new Gson().fromJson(
+                settings.getString(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY, ""),
+                Utils.ARRAY_DATA_DESCRIPTOR_ITEMS);
+
+        SharedPreferences.Editor editor = settings.edit();
+        if (items != null) {
+            editor.remove(Utils.DATA_DESCRIPTOR_ENTRY);
+        }
+
+        editor.putString(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY,
+                new Gson().toJson(entries, Utils.ARRAY_DATA_DESCRIPTOR_ITEMS));
+        editor.apply();
     }
 }

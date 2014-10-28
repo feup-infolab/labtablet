@@ -4,11 +4,13 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.ChangelogItem;
-import pt.up.fe.labtablet.models.DataDescriptorItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroDescriptor;
 import pt.up.fe.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
@@ -36,9 +38,12 @@ public class Utils {
     public static final String DENDRO_RESPONSE_ERROR = "error";
     public static final String DENDRO_RESPONSE_ERROR_2 = "Error";
     public static final String DENDRO_CONFS_ENTRY = "dendro_configurations";
-    public static final String DATA_DESCRIPTOR_ENTRY = "data_descriptors";
+    public static final String DATA_DESCRIPTOR_ENTRY = "_data";
     public static final int DESCRIPTOR_STATE_VALIDATED = 1;
     public static final int DESCRIPTOR_STATE_NOT_VALIDATED = 0;
+
+    public static final List<String> knownImageMimeTypes = Arrays.asList("image/jpeg", "image/png");
+
     //When calling metadatavalidationActivity and in return geting an array with the
     //validated records;
     public static final int METADATA_VALIDATION = 2;
@@ -77,7 +82,7 @@ public class Utils {
     }.getType();
     public static Type ARRAY_FORM = new TypeToken<ArrayList<Form>>() {
     }.getType();
-    public static Type ARRAY_DATA_DESCRIPTOR_ITEMS = new TypeToken<ArrayList<DataDescriptorItem>>(){}.getType();
+    public static Type ARRAY_DATA_DESCRIPTOR_ITEMS = new TypeToken<ArrayList<DataItem>>(){}.getType();
 
     // ---- Activities Results ---------
     public static Type ARRAY_DENDRO_DESCRIPTORS = new TypeToken<ArrayList<DendroDescriptor>>() {

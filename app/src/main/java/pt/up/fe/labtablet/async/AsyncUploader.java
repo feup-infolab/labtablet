@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.DendroAPI;
-import pt.up.fe.labtablet.models.DataDescriptorItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.ProgressUpdateItem;
@@ -225,7 +225,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         //check if there are any file-dependant descriptions
         //if so, upload them
 
-        ArrayList<DataDescriptorItem> dataDescriptionItems =
+        ArrayList<DataItem> dataDescriptionItems =
                 DBCon.getDataDescriptionItems(mContext, favoriteName);
 
         if (dataDescriptionItems == null) {
@@ -233,7 +233,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         }
 
         //TODO finish this routine
-        for (DataDescriptorItem item : dataDescriptionItems) {
+        for (DataItem item : dataDescriptionItems) {
 
             metadataRecords = new ArrayList<DendroMetadataRecord>();
             for (Descriptor desc : item.getFileLevelMetadata()) {

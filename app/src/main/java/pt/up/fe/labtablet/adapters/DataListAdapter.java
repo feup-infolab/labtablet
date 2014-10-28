@@ -6,7 +6,6 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncImageLoader;
 import pt.up.fe.labtablet.models.ChangelogItem;
-import pt.up.fe.labtablet.models.DataDescriptorItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
@@ -34,14 +33,14 @@ import pt.up.fe.labtablet.utils.Utils;
 /**
  * Adapter to handle data files for each favorite
  */
-public class DataListAdapter extends ArrayAdapter<DataDescriptorItem> {
+public class DataListAdapter extends ArrayAdapter<DataItem> {
 
     private final Activity context;
     private final String favoriteName;
-    private final ArrayList<DataDescriptorItem> items;
+    private final ArrayList<DataItem> items;
 
 
-    public DataListAdapter(Activity context, ArrayList<DataDescriptorItem> srcItems, String favoriteName) {
+    public DataListAdapter(Activity context, ArrayList<DataItem> srcItems, String favoriteName) {
         super(context, R.layout.item_data_list, srcItems);
         this.context = context;
         this.items = srcItems;
@@ -50,14 +49,8 @@ public class DataListAdapter extends ArrayAdapter<DataDescriptorItem> {
 
     @Override
     public void notifyDataSetChanged() {
-
-        String path = Environment.getExternalStorageDirectory().toString() + "/"
-                + context.getString(R.string.app_name) + "/"
-                + favoriteName;
-
-        items.clear();
-        items.addAll(DBCon.getDataDescriptionItems(context, favoriteName));
-
+        //items.clear();
+       // items.addAll(DBCon.getDataDescriptionItems(context, favoriteName));
         super.notifyDataSetChanged();
     }
 
@@ -81,7 +74,7 @@ public class DataListAdapter extends ArrayAdapter<DataDescriptorItem> {
 
         // fill data
         ViewHolder holder = (ViewHolder) rowView.getTag();
-        final DataDescriptorItem item = items.get(position);
+        final DataItem item = items.get(position);
 
         holder.mDescriptorValue.setText(item.getMimeType());
         holder.mDescriptorName.setText(new File(item.getLocalFilePath()).getName());
@@ -91,10 +84,12 @@ public class DataListAdapter extends ArrayAdapter<DataDescriptorItem> {
         ArrayList<Descriptor> itemMetadata = item.getFileLevelMetadata();
         for (Descriptor desc : itemMetadata) {
             if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
-                holder.mDescriptorDescription.setVisibility(View.VISIBLE);
-                holder.mDescriptorDescription.setText(desc.getValue());
-            } else {
-                holder.mDescriptorDescription.setVisibility(View.GONE);
+                if (desc.getValue().equals("")) {
+                    holder.mDescriptorDescription.setVisibility(View.GONE);
+                } else {
+                    holder.mDescriptorDescription.setVisibility(View.VISIBLE);
+                    holder.mDescriptorDescription.setText(desc.getValue());
+                }
             }
         }
 
@@ -117,8 +112,15 @@ public class DataListAdapter extends ArrayAdapter<DataDescriptorItem> {
                                     item.setTitle(context.getResources().getString(R.string.developer_error));
                                     item.setDate(Utils.getDate());
                                     ChangelogManager.addLog(item, context);
+                                    Toast.makeText(context, "Unable to delete file", Toast.LENGTH_SHORT).show();
+                                    return;
                                 }
+
+                                items.remove(item);
+                                DBCon.overwriteDataItems(context, items, favoriteName);
+
                                 notifyDataSetChanged();
+
                             }
                         })
                         .setNegativeButton(android.R.string.no, null).show();
@@ -150,7 +152,12 @@ public class DataListAdapter extends ArrayAdapter<DataDescriptorItem> {
             }
         });
 
-        new AsyncImageLoader(holder.mDescriptorType, context).execute();
+        if (item.getMimeType() != null
+                && Utils.knownImageMimeTypes.contains(item.getMimeType())) {
+            new AsyncImageLoader(holder.mDescriptorType, context).execute();
+        } else {
+            holder.mDescriptorType.setImageResource(R.drawable.ic_file);
+        }
 
         Animation animation = AnimationUtils.makeInAnimation(context, false);
         rowView.startAnimation(animation);
@@ -166,4 +173,6 @@ public class DataListAdapter extends ArrayAdapter<DataDescriptorItem> {
         public TextView mDescriptorSize;
         public ImageButton mRemoveFile;
     }
+
+
 }

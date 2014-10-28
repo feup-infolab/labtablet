@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,7 +39,7 @@ import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncFileImporter;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.ChangelogItem;
-import pt.up.fe.labtablet.models.DataDescriptorItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
@@ -59,7 +58,7 @@ public class FavoriteDetailsFragment extends Fragment {
     private ListView lv_metadata;
     private boolean isMetadataVisible;
     private ArrayList<Descriptor> itemDescriptors;
-    private ArrayList<DataDescriptorItem> dataItems;
+    private ArrayList<DataItem> dataItems;
     private String favoriteName;
 
     @Override
@@ -88,8 +87,10 @@ public class FavoriteDetailsFragment extends Fragment {
 
         if (savedInstanceState != null) {
             favoriteName = savedInstanceState.getString("favorite_name");
+            isMetadataVisible = savedInstanceState.getBoolean("metadata_visible");
         } else {
             favoriteName = this.getArguments().getString("favorite_name");
+            isMetadataVisible = true;
         }
 
         tv_title.setText(favoriteName);
@@ -120,7 +121,12 @@ public class FavoriteDetailsFragment extends Fragment {
             }
         }
 
-        loadMetadataView();
+        if (isMetadataVisible) {
+            loadMetadataView();
+        } else {
+            loadDataView();
+        }
+
 
         dcClickListener mClickListener = new dcClickListener();
         bt_edit_title.setOnClickListener(mClickListener);
@@ -257,9 +263,9 @@ public class FavoriteDetailsFragment extends Fragment {
             pd.setMax(100);
             pd.show();
 
-            new AsyncFileImporter(new AsyncTaskHandler<DataDescriptorItem>() {
+            new AsyncFileImporter(new AsyncTaskHandler<DataItem>() {
                 @Override
-                public void onSuccess(final DataDescriptorItem result) {
+                public void onSuccess(final DataItem result) {
 
                     pd.dismiss();
 
@@ -287,10 +293,9 @@ public class FavoriteDetailsFragment extends Fragment {
                                         desc.setValue(input.getText().toString());
                                     }
                                 }
-                                Log.e("DESC", value);
                             }
 
-                            DBCon.addDataDescriptor(getActivity(), result);
+                            DBCon.addDataItem(getActivity(), result, favoriteName);
                             onResume();
                         }
                     });
@@ -317,6 +322,7 @@ public class FavoriteDetailsFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("favorite_name", favoriteName);
+        outState.putBoolean("metadata_visible", isMetadataVisible);
     }
 
     @Override
