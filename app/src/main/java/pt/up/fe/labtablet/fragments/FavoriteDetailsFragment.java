@@ -2,6 +2,8 @@ package pt.up.fe.labtablet.fragments;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
@@ -21,6 +23,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,7 +82,6 @@ public class FavoriteDetailsFragment extends Fragment {
 
         lv_metadata = (ListView) rootView.findViewById(R.id.lv_favorite_metadata);
 
-
         bt_meta_view = (Button) rootView.findViewById(R.id.tab_metadata);
         bt_data_view = (Button) rootView.findViewById(R.id.tab_data);
         bt_edit_view = (ImageButton) rootView.findViewById(R.id.bt_edit_metadata);
@@ -108,6 +111,7 @@ public class FavoriteDetailsFragment extends Fragment {
         }
 
         itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
+        //dataItems = DBCon.getDataDescriptionItems(getActivity(), favoriteName);
 
 
         for (Descriptor desc : itemDescriptors) {
@@ -206,9 +210,7 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_edit_view.setVisibility(View.INVISIBLE);
 
         isMetadataVisible = false;
-        if (dataItems == null || dataItems.isEmpty()) {
-            dataItems = DBCon.getDataDescriptionItems(getActivity(), favoriteName);
-        }
+        dataItems = DBCon.getDataDescriptionItems(getActivity(), favoriteName);
 
         DataListAdapter mDataAdapter = new DataListAdapter(getActivity(), dataItems, favoriteName);
         lv_metadata.setAdapter(mDataAdapter);
@@ -255,64 +257,56 @@ public class FavoriteDetailsFragment extends Fragment {
 
         } else if (requestCode == Utils.PICK_FILE_INTENT) {
 
-            final ProgressDialog pd = new ProgressDialog(getActivity());
-            pd.setTitle(getString(R.string.loading));
-            pd.setCancelable(false);
-            pd.setIndeterminate(false);
-            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pd.setMax(100);
-            pd.show();
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.import_file_dialog);
+            dialog.setTitle(getResources().getString(R.string.importing_file));
+
+            final EditText importDescription = (EditText) dialog.findViewById(R.id.import_file_description);
+            final ProgressBar importProgress = (ProgressBar) dialog.findViewById(R.id.import_file_progress);
+            final Button importSubmit = (Button) dialog.findViewById(R.id.import_file_submit);
+            final TextView importHeader = (TextView) dialog.findViewById(R.id.import_file_header);
+
+            importSubmit.setEnabled(false);
+            dialog.show();
 
             new AsyncFileImporter(new AsyncTaskHandler<DataItem>() {
                 @Override
                 public void onSuccess(final DataItem result) {
-
-                    pd.dismiss();
-
-                    //Add description if applicable
-
-                    //Ask for the resource description
-                    final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-
-                    alert.setTitle(getString(R.string.resource_description));
-                    alert.setMessage(getString(R.string.give_file_description));
-
-                    //EditText to get the description
-                    final EditText input = new EditText(getActivity());
-                    alert.setView(input);
-
-                    alert.setPositiveButton(getString(android.R.string.ok),
-                            new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            String value = input.getText().toString();
+                    importSubmit.setEnabled(true);
+                    importSubmit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String value = importDescription.getText().toString();
 
                             if (!value.equals("")) {
                                 ArrayList<Descriptor> itemLevelDescriptors = result.getFileLevelMetadata();
                                 for (Descriptor desc : itemLevelDescriptors) {
                                     if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
-                                        desc.setValue(input.getText().toString());
+                                        desc.setValue(value);
                                     }
                                 }
                             }
 
                             DBCon.addDataItem(getActivity(), result, favoriteName);
+                            dialog.dismiss();
                             onResume();
                         }
                     });
-                    alert.show();
+
                 }
 
                 @Override
                 public void onFailure(Exception error) {
                     Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
                     onResume();
-                    pd.dismiss();
+                    dialog.dismiss();
                 }
 
                 @Override
                 public void onProgressUpdate(int value) {
-                    pd.setProgress(value);
-                    pd.setMessage("" + value + "%");
+                    importProgress.setProgress(value);
+                    importHeader.setText("" + value + "%");
                 }
             }).execute(getActivity(), data, favoriteName);
         }

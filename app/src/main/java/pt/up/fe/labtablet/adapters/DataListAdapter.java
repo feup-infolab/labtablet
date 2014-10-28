@@ -118,9 +118,7 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
 
                                 items.remove(item);
                                 DBCon.overwriteDataItems(context, items, favoriteName);
-
                                 notifyDataSetChanged();
-
                             }
                         })
                         .setNegativeButton(android.R.string.no, null).show();
