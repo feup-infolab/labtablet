@@ -274,6 +274,7 @@ public class FavoriteDetailsFragment extends Fragment {
                 @Override
                 public void onSuccess(final DataItem result) {
                     importSubmit.setEnabled(true);
+                    importHeader.setText(getString(R.string.file_imported_description));
                     importSubmit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

@@ -209,6 +209,12 @@ public class FileMgr {
 
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(favoriteName);
+
+        //Remove recommendations from this favorite
+        if (settings.contains(favoriteName + Utils.ASSOCIATIONS_CONFIG_ENTRY)) {
+           editor.remove(favoriteName + Utils.ASSOCIATIONS_CONFIG_ENTRY);
+        }
+
         editor.apply();
         dialog.dismiss();
     }

@@ -11,18 +11,34 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/importing_file"
-        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textAppearance="@android:style/TextAppearance.Large"
         />
 
     <ProgressBar
         android:id="@+id/import_file_progress"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+        style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
         android:indeterminate="false"
         android:progress="20"
         android:max="100"
         />
+
+    <TextView
+        android:text="@string/give_file_description"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"
+        android:textColor="@color/second_grey"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/import_file_description"
@@ -37,8 +53,7 @@
         />
     <Button
         android:id="@+id/import_file_submit"
-        style="@android:style/Widget.Holo.Button.Borderless"
-        android:textColor="@android:color/black"
+        style="@android:style/Widget.DeviceDefault"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/form_ok"
