@@ -91,6 +91,12 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
                     holder.mDescriptorDescription.setText(desc.getValue());
                 }
             }
+
+            if (item.getMimeType() == null) {
+                holder.mDescriptorValue.setVisibility(View.GONE);
+            } else {
+                holder.mDescriptorValue.setVisibility(View.VISIBLE);
+            }
         }
 
 
@@ -130,6 +136,9 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
             public void onClick(View view) {
                 File file = new File(items.get(position).getLocalFilePath());
                 String mime = FileMgr.getMimeType(file.getAbsolutePath());
+                if (mime == null) {
+                    mime = "";
+                }
 
                 if (mime == null) {
                     Toast.makeText(context,

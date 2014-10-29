@@ -7,11 +7,14 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -43,7 +46,7 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
             return null;
         }
 
-        //YOLO
+        //TODO this can be removed
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
@@ -56,7 +59,7 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
         ArrayList<Descriptor> deletionQueue = (ArrayList<Descriptor>) params[2];
         ArrayList<Descriptor> migrationQueue = (ArrayList<Descriptor>) params[3];
 
-
+        //Delete descriptors
         if (deletionQueue != null && deletionQueue.size() > 0) {
             for (Descriptor desc : deletionQueue) {
                 if (!desc.getFilePath().equals("")) {
@@ -71,6 +74,8 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
             }
         }
 
+        //Move resources to the root folder, and add them as DataItems
+        //TO THE DATA KINGDOM!
         if (migrationQueue != null && migrationQueue.size() > 0) {
             for (Descriptor desc : migrationQueue) {
                 String destinationPath = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -85,7 +90,36 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
                 } catch (Exception e) {
                     error = e;
                 }
-                Log.e("MOVED TO", dst.getPath());
+
+                DataItem item = new DataItem();
+                item.setFileName(dst.getName());
+                item.setParent(favoriteName);
+                item.setLocalFilePath(dst.getPath());
+                item.setHumanReadableSize(FileMgr.humanReadableByteCount(dst.length(), false));
+                item.setMimeType(FileMgr.getMimeType(dst.getPath()));
+
+                ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
+
+                ArrayList<Descriptor> loadedDescriptors =
+                        DBCon.getDescriptors(Utils.DESCRIPTORS_CONFIG_ENTRY, mContext);
+
+                //If additional metadata is available, it should me added here
+                for (Descriptor dataDesc : loadedDescriptors) {
+                    String tag = desc.getTag();
+                    if (tag.equals(Utils.TITLE_TAG)) {
+                        dataDesc.setValue(dst.getName());
+                        itemLevelMetadata.add(dataDesc);
+                    } else if (tag.equals(Utils.CREATED_TAG)) {
+                        dataDesc.setValue("" + new Date());
+                        itemLevelMetadata.add(dataDesc);
+                    } else if (tag.equals(Utils.DESCRIPTION_TAG)) {
+                        dataDesc.setValue("");
+                        itemLevelMetadata.add(dataDesc);
+                    }
+                }
+
+                item.setFileLevelMetadata(itemLevelMetadata);
+                DBCon.addDataItem(mContext, item, favoriteName);
             }
         }
         return null;

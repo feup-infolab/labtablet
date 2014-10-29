@@ -212,7 +212,12 @@ public class FileMgr {
 
         //Remove recommendations from this favorite
         if (settings.contains(favoriteName + Utils.ASSOCIATIONS_CONFIG_ENTRY)) {
-           editor.remove(favoriteName + Utils.ASSOCIATIONS_CONFIG_ENTRY);
+           editor.remove(favoriteName + "_dendro");
+        }
+
+        //Remove data entries
+        if (settings.contains(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY)) {
+            editor.remove(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY);
         }
 
         editor.apply();

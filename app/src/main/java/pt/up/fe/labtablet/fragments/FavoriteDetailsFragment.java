@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -197,7 +198,6 @@ public class FavoriteDetailsFragment extends Fragment {
         isMetadataVisible = true;
         bt_edit_view.setVisibility(View.VISIBLE);
 
-        lv_metadata.setDividerHeight(0);
         itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
 
         MetadataListAdapter mMetadataAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
@@ -268,11 +268,13 @@ public class FavoriteDetailsFragment extends Fragment {
             final TextView importHeader = (TextView) dialog.findViewById(R.id.import_file_header);
 
             importSubmit.setEnabled(false);
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
             dialog.show();
 
             new AsyncFileImporter(new AsyncTaskHandler<DataItem>() {
                 @Override
                 public void onSuccess(final DataItem result) {
+
                     importSubmit.setEnabled(true);
                     importHeader.setText(getString(R.string.file_imported_description));
                     importSubmit.setOnClickListener(new View.OnClickListener() {
@@ -292,6 +294,7 @@ public class FavoriteDetailsFragment extends Fragment {
                             DBCon.addDataItem(getActivity(), result, favoriteName);
                             dialog.dismiss();
                             onResume();
+                            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                         }
                     });
 

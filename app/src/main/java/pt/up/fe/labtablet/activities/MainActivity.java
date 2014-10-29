@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Map;
 
 import pt.up.fe.labtablet.R;
@@ -104,7 +103,7 @@ public class MainActivity extends Activity {
 
         //create base folder
         final File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),
-                getResources().getString(R.string.app_name) + new Date().getTime());
+                getResources().getString(R.string.app_name));
         if (!path.exists()) {
             Log.i("CREATEDIR", "" + path.mkdirs());
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(path)));

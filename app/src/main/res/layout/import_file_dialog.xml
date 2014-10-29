@@ -46,11 +46,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@color/second_grey"
-        />
     <Button
         android:id="@+id/import_file_submit"
         style="@android:style/Widget.DeviceDefault"
