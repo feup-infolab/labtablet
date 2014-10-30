@@ -124,9 +124,9 @@
 
         <ListView
             android:id="@+id/lv_favorite_metadata"
+            android:scrollbars="none"
             android:dividerHeight="0dp"
             android:divider="@android:color/transparent"
-            android:background="@drawable/view_borders"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
             android:layout_width="fill_parent"

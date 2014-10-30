@@ -1,68 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:background="@drawable/card"
-    android:orientation="vertical"
+    card_view:cardCornerRadius="0dp"
+    card_view:cardElevation="5sp"
     >
-
-    <ImageView
-        android:id="@+id/changelog_item_type"
-        android:layout_width="wrap_content"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ab_plus"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="5dp"
-        />
+        android:padding="10dp"
+        android:orientation="vertical"
+        >
 
-    <TextView
-        android:id="@+id/changelog_item_title"
-        android:layout_toEndOf="@id/changelog_item_type"
-        android:layout_alignParentEnd="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:maxLength="100"
-        android:layout_gravity="fill_horizontal"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:text="Log title"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginTop="6sp" />
+        <ImageView
+            android:id="@+id/changelog_item_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ab_plus"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="5dp"
+            />
 
-    <TextView
-        android:id="@+id/changelog_item_description"
-        android:layout_below="@id/changelog_item_title"
-        android:layout_toEndOf="@id/changelog_item_type"
-        android:layout_alignParentEnd="true"
-        android:maxLines="5"
-        android:ellipsize="end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="fill_horizontal"
-        android:gravity="center_vertical"
-        android:text="Log description"
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/changelog_item_title"
+            android:layout_toEndOf="@id/changelog_item_type"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:maxLength="100"
+            android:layout_gravity="fill_horizontal"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="Log title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="6sp" />
 
-    <TextView
-        android:id="@+id/changelog_item_date"
-        android:layout_below="@id/changelog_item_description"
-        android:maxLines="1"
-        android:maxLength="16"
-        android:layout_marginTop="12dp"
-        android:textColor="@color/second_grey"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_alignParentEnd="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:text="2015-02-30T15:52Z"
-        android:textSize="16sp"
-        />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/changelog_item_description"
+            android:layout_below="@id/changelog_item_title"
+            android:layout_toEndOf="@id/changelog_item_type"
+            android:layout_alignParentEnd="true"
+            android:maxLines="5"
+            android:ellipsize="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
+            android:gravity="center_vertical"
+            android:text="Log description"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/changelog_item_date"
+            android:layout_below="@id/changelog_item_description"
+            android:maxLines="1"
+            android:maxLength="16"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/second_grey"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="2015-02-30T15:52Z"
+            android:textSize="16sp"
+            />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

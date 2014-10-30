@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Descriptor;
 
@@ -243,8 +244,8 @@ public class FileMgr {
             return false;
         }
 
-        ArrayList<Descriptor> previousRecords = getDescriptors(src, mContext);
-        for (Descriptor desc : previousRecords) {
+        ArrayList<Descriptor> baseMetadataRecords = DBCon.getDescriptors(src, mContext);
+        for (Descriptor desc : baseMetadataRecords) {
             if (desc.getTag().equals(Utils.TITLE_TAG)) {
                 desc.setValue(dst);
             }
@@ -254,11 +255,24 @@ public class FileMgr {
             }
         }
 
+        ArrayList<DataItem> baseDataRecords = DBCon.getDataDescriptionItems(mContext, src);
+        for (DataItem desc : baseDataRecords) {
+
+            desc.setParent(src);
+            ArrayList<Descriptor> dataLevelDecriptors = desc.getFileLevelMetadata();
+            for (Descriptor metadataRecord : dataLevelDecriptors) {
+                metadataRecord.setFilePath(
+                        basePath + File.separator + desc.getFileName());
+            }
+        }
+
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(src);
+        editor.remove(src + Utils.DATA_DESCRIPTOR_ENTRY);
+        editor.remove(src + Utils.ASSOCIATIONS_CONFIG_ENTRY);
 
-        editor.apply();
-        editor.putString(dst, new Gson().toJson(previousRecords, Utils.ARRAY_DESCRIPTORS));
+        editor.putString(dst, new Gson().toJson(baseMetadataRecords, Utils.ARRAY_DESCRIPTORS));
+        editor.putString(dst + Utils.DATA_DESCRIPTOR_ENTRY, new Gson().toJson(baseDataRecords, Utils.ARRAY_DATA_DESCRIPTOR_ITEMS));
         editor.apply();
 
         return file.renameTo(file2);

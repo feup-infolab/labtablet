@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.async.AsyncImageLoader;

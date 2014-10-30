@@ -415,6 +415,7 @@ public class FavoriteDetailsFragment extends Fragment {
                         return;
                     }
 
+                    //Update favorite's name (and DB entries ofc)
                     if (mView.getTag().equals(Utils.TITLE_TAG)) {
                         if (!favoriteName.equals(input.getText().toString())) {
                             if (FileMgr.renameFavorite(favoriteName,
@@ -425,7 +426,6 @@ public class FavoriteDetailsFragment extends Fragment {
                                 tv_title.setText(favoriteName);
                             }
                         }
-
                     }
                     onResume();
                     dialog.dismiss();
