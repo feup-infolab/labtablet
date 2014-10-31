@@ -2,26 +2,26 @@ package pt.up.fe.labtablet.models;
 
 import java.util.ArrayList;
 
+import pt.up.fe.labtablet.utils.Utils;
+
 /**
  * Item to hold metadata, as well as the path of the imported file, for each of the imported data resources
  */
 public class DataItem {
 
-    private String fileName;
-    private String localFilePath;
+    private String resourceName;
+    private String localPath;
     private String parent;
-    private String description;
     private String humanReadableSize;
     private String mimeType;
-
     private ArrayList<Descriptor> fileLevelMetadata;
 
-    public String getFileName() {
-        return fileName;
+    public String getResourceName() {
+        return resourceName;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
     }
 
     public String getParent() {
@@ -56,19 +56,28 @@ public class DataItem {
     }
 
     public String getDescription() {
-        return description;
+        for (Descriptor desc : fileLevelMetadata) {
+            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                return desc.getValue();
+            }
+
+        }
+        return "";
+    }
+
+    public String getLocalPath() {
+        return localPath;
+    }
+
+    public void setLocalPath(String filePath) {
+        this.localPath = filePath;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        for (Descriptor desc : fileLevelMetadata) {
+            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                desc.setValue(description);
+            }
+        }
     }
-
-    public String getLocalFilePath() {
-        return localFilePath;
-    }
-
-    public void setLocalFilePath(String filePath) {
-        this.localFilePath = filePath;
-    }
-
 }

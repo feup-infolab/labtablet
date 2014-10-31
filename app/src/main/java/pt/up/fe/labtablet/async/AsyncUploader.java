@@ -244,7 +244,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
             try {
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost(destUri + File.separator + item.getFileName() + "?update_metadata");
+                httppost = new HttpPost(destUri + File.separator + item.getResourceName() + "?update_metadata");
                 httppost.setHeader("Accept", "application/json");
                 httppost.setHeader("Content-Type", "application/json");
                 httppost.setHeader("Cookie", "connect.sid=" + cookie);

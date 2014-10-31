@@ -3,10 +3,8 @@ package pt.up.fe.labtablet.fragments;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,7 +23,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -259,7 +256,7 @@ public class FavoriteDetailsFragment extends Fragment {
 
             final Dialog dialog = new Dialog(getActivity());
             dialog.setCancelable(false);
-            dialog.setContentView(R.layout.import_file_dialog);
+            dialog.setContentView(R.layout.dialog_import_file);
             dialog.setTitle(getResources().getString(R.string.importing_file));
 
             final EditText importDescription = (EditText) dialog.findViewById(R.id.import_file_description);

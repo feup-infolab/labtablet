@@ -28,8 +28,6 @@ import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Descriptor;
 
-import static pt.up.fe.labtablet.utils.DBCon.getDescriptors;
-
 public class FileMgr {
 
     /**
@@ -262,8 +260,9 @@ public class FileMgr {
             ArrayList<Descriptor> dataLevelDecriptors = desc.getFileLevelMetadata();
             for (Descriptor metadataRecord : dataLevelDecriptors) {
                 metadataRecord.setFilePath(
-                        basePath + File.separator + desc.getFileName());
+                        basePath + dst + File.separator + new File(desc.getLocalPath()).getName());
             }
+            desc.setFileLevelMetadata(dataLevelDecriptors);
         }
 
         SharedPreferences.Editor editor = settings.edit();

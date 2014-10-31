@@ -2,6 +2,7 @@ package pt.up.fe.labtablet.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,13 +51,6 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
     }
 
     @Override
-    public void notifyDataSetChanged() {
-        //items.clear();
-       // items.addAll(DBCon.getDataDescriptionItems(context, favoriteName));
-        super.notifyDataSetChanged();
-    }
-
-    @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
         View rowView = convertView;
         // reuse views
@@ -77,8 +73,8 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
         final DataItem item = items.get(position);
 
         holder.mDescriptorValue.setText(item.getMimeType());
-        holder.mDescriptorName.setText(new File(item.getLocalFilePath()).getName());
-        holder.mDescriptorType.setTag(item.getLocalFilePath());
+        holder.mDescriptorName.setText(new File(item.getLocalPath()).getName());
+        holder.mDescriptorType.setTag(item.getLocalPath());
         holder.mDescriptorSize.setText(item.getHumanReadableSize());
 
         ArrayList<Descriptor> itemMetadata = item.getFileLevelMetadata();
@@ -110,10 +106,10 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
                         .setIcon(R.drawable.ic_recycle)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                if (!(new File(items.get(position).getLocalFilePath()).delete())) {
+                                if (!(new File(items.get(position).getLocalPath()).delete())) {
                                     ChangelogItem item = new ChangelogItem();
                                     item.setMessage("Queue Processor" + "Failed to delete file "
-                                            + items.get(position).getLocalFilePath());
+                                            + items.get(position).getLocalPath());
 
                                     item.setTitle(context.getResources().getString(R.string.developer_error));
                                     item.setDate(Utils.getDate());
@@ -134,18 +130,9 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
         holder.mDescriptorType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File file = new File(items.get(position).getLocalFilePath());
+                File file = new File(items.get(position).getLocalPath());
                 String mime = FileMgr.getMimeType(file.getAbsolutePath());
-                if (mime == null) {
-                    mime = "";
-                }
 
-                if (mime == null) {
-                    Toast.makeText(context,
-                            context.getResources().getString(R.string.could_not_get_extension),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 Intent intent = new Intent();
                 intent.setAction(android.content.Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.fromFile(file), mime);
@@ -169,6 +156,60 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
         Animation animation = AnimationUtils.makeInAnimation(context, false);
         rowView.startAnimation(animation);
 
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.dialog_data_list_preview);
+
+                final TextView dataItemDescription = (TextView) dialog.findViewById(R.id.data_item_description);
+                final EditText dataItemDescriptionEdit = (EditText) dialog.findViewById(R.id.data_item_description_edit);
+                final Button dataItemSubmitChanges = (Button) dialog.findViewById(R.id.data_item_submit_changes);
+                final ImageView dataItemPreview = (ImageView) dialog.findViewById(R.id.data_item_preview);
+                dataItemPreview.setTag(item.getLocalPath());
+
+                final String itemDescription = item.getDescription();
+
+                dataItemDescription.setText(itemDescription);
+                dataItemDescriptionEdit.setText(itemDescription);
+
+                dataItemDescription.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dataItemSubmitChanges.setText(context.getString(R.string.action_save));
+                        dataItemDescription.setVisibility(View.GONE);
+                        dataItemDescriptionEdit.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                dataItemSubmitChanges.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (dataItemDescription.getVisibility() == View.GONE) {
+                            if (!dataItemDescriptionEdit.getText().toString().equals(itemDescription)) {
+                                items.get(position).setDescription(dataItemDescriptionEdit.getText().toString());
+                                DBCon.overwriteDataItems(context, items, favoriteName);
+                                notifyDataSetChanged();
+                            }
+                        }
+                        dialog.dismiss();
+                    }
+                });
+
+                if (item.getMimeType() != null
+                        && Utils.knownImageMimeTypes.contains(item.getMimeType())) {
+                    new AsyncImageLoader(dataItemPreview, context).execute();
+                } else {
+                    dataItemPreview.setImageResource(R.drawable.ic_file_color);
+                }
+
+                dialog.setTitle(item.getResourceName());
+                dialog.show();
+
+            }
+        });
         return rowView;
     }
 

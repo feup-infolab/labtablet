@@ -3,7 +3,6 @@ package pt.up.fe.labtablet.async;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -92,9 +91,9 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
                 }
 
                 DataItem item = new DataItem();
-                item.setFileName(dst.getName());
+                item.setResourceName(dst.getName());
                 item.setParent(favoriteName);
-                item.setLocalFilePath(dst.getPath());
+                item.setLocalPath(dst.getPath());
                 item.setHumanReadableSize(FileMgr.humanReadableByteCount(dst.length(), false));
                 item.setMimeType(FileMgr.getMimeType(dst.getPath()));
 

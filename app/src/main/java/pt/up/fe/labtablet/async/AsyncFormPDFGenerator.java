@@ -90,7 +90,7 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
 
         File file = new File(path);
 
-        dataItem.setLocalFilePath(path);
+        dataItem.setLocalPath(path);
         dataItem.setHumanReadableSize(FileMgr.humanReadableByteCount(file.length(), false));
         dataItem.setMimeType(FileMgr.getMimeType(file.getPath()));
 

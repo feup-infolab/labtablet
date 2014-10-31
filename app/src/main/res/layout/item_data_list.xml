@@ -20,15 +20,15 @@
             android:textColor="@color/white"
             android:background="#b0f5361c"
             android:text="mime type"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:textSize="14sp" />
 
         <ImageButton
             android:id="@+id/bt_remove_file"
-            android:layout_below="@id/metadata_item_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
             android:src="@drawable/ic_recycle"
