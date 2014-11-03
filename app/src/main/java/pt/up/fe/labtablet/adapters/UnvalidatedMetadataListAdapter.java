@@ -26,6 +26,7 @@ import pt.up.fe.labtablet.activities.DescriptorPickerActivity;
 import pt.up.fe.labtablet.async.AsyncImageLoader;
 import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
 /**
@@ -89,7 +90,12 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
         holder.mMetadataPreview.setTag(item.getFilePath());
         holder.bt_edit_value.setTag(position);
 
-        new AsyncImageLoader(holder.mMetadataPreview, mContext).execute();
+        if (item.hasFile()
+                && Utils.knownImageMimeTypes.contains(FileMgr.getMimeType(item.getFilePath()))) {
+            new AsyncImageLoader(holder.mMetadataPreview, context).execute();
+        } else {
+            holder.mMetadataPreview.setImageResource(R.drawable.ic_file);
+        }
 
         for (AssociationItem association : associations) {
             Descriptor chosenOne = association.getDescriptor();

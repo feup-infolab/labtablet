@@ -45,14 +45,6 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
             return null;
         }
 
-        //TODO this can be removed
-        try {
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            error = e;
-            return null;
-        }
-
         String favoriteName = (String) params[0];
         Activity mContext = (Activity) params[1];
         ArrayList<Descriptor> deletionQueue = (ArrayList<Descriptor>) params[2];
@@ -112,7 +104,7 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
                         dataDesc.setValue("" + new Date());
                         itemLevelMetadata.add(dataDesc);
                     } else if (tag.equals(Utils.DESCRIPTION_TAG)) {
-                        dataDesc.setValue("");
+                        dataDesc.setValue("No description provided");
                         itemLevelMetadata.add(dataDesc);
                     }
                 }

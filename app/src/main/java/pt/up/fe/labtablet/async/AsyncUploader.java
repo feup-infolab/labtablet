@@ -223,9 +223,9 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         publishProgress(new ProgressUpdateItem(
                 90, mContext.getString(R.string.upload_progress_describing_imported_data)));
 
+
         //check if there are any file-dependant descriptions
         //if so, upload them
-
         ArrayList<DataItem> dataDescriptionItems =
                 DBCon.getDataDescriptionItems(mContext, favoriteName);
 
@@ -233,7 +233,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             return null;
         }
 
-        //TODO finish this routine
         for (DataItem item : dataDescriptionItems) {
 
             metadataRecords = new ArrayList<DendroMetadataRecord>();
@@ -276,10 +275,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
         }
 
-
         publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
-
-        //finito
 
         return null;
     }
