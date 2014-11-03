@@ -135,7 +135,7 @@ public class HomeFragment extends Fragment {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                 transaction.replace(R.id.frame_container, new ConfigurationFragment());
-                transaction.addToBackStack("nopes");
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });

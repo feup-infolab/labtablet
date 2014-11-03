@@ -1,5 +1,6 @@
 package pt.up.fe.labtablet.models;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.utils.Utils;
@@ -17,7 +18,7 @@ public class DataItem {
     private ArrayList<Descriptor> fileLevelMetadata;
 
     public String getResourceName() {
-        return resourceName;
+        return new File(getLocalPath()).getName();
     }
 
     public void setResourceName(String resourceName) {

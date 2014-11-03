@@ -202,6 +202,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                     metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD), HTTP.UTF_8);
             Log.e("metadata", new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD));
             httppost.setEntity(se);
+            Log.e("META", se.toString());
 
             HttpResponse resp = httpclient.execute(httppost);
             HttpEntity ent = resp.getEntity();
@@ -244,15 +245,16 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
             try {
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost(destUri + File.separator + item.getResourceName() + "?update_metadata");
+                String destPath = destUri + File.separator + item.getResourceName() + "?update_metadata";
+                httppost = new HttpPost(destPath.replace(" ", "%20"));
                 httppost.setHeader("Accept", "application/json");
                 httppost.setHeader("Content-Type", "application/json");
                 httppost.setHeader("Cookie", "connect.sid=" + cookie);
 
                 StringEntity se = new StringEntity(new Gson().toJson(
-                        item.getFileLevelMetadata(), Utils.ARRAY_DENDRO_DESCRIPTORS), HTTP.UTF_8);
+                        metadataRecords, Utils.ARRAY_DENDRO_DESCRIPTORS), HTTP.UTF_8);
 
-                Log.e("metadata", new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD));
+                Log.e("DATA", se.toString());
                 httppost.setEntity(se);
 
                 HttpResponse resp = httpclient.execute(httppost);
