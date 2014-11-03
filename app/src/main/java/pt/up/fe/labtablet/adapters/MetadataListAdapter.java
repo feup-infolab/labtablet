@@ -17,6 +17,8 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.async.AsyncImageLoader;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.DBCon;
+import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.Utils;
 
 /**
  * Handles each metadata item and shows additional info
@@ -69,7 +71,12 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
         holder.mDescriptorType.setTag(item.getFilePath());
 
 
-        new AsyncImageLoader(holder.mDescriptorType, context).execute();
+        if (item.hasFile()
+                && Utils.knownImageMimeTypes.contains(FileMgr.getMimeType(item.getFilePath()))) {
+            new AsyncImageLoader(holder.mDescriptorType, context).execute();
+        } else {
+            holder.mDescriptorType.setImageResource(R.drawable.ic_file);
+        }
 
         Animation animation = AnimationUtils.makeInAnimation(context, false);
         rowView.startAnimation(animation);
