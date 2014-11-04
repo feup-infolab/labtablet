@@ -26,10 +26,11 @@ import java.util.ArrayList;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncImageLoader;
+import pt.up.fe.labtablet.db.DataResourcesMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.utils.DBCon;
+import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -119,7 +120,7 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
                                 }
 
                                 items.remove(item);
-                                DBCon.overwriteDataItems(context, items, favoriteName);
+                                DataResourcesMgr.overwriteDataItems(context, items, favoriteName);
                                 notifyDataSetChanged();
                             }
                         })
@@ -190,7 +191,7 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
                         if (dataItemDescription.getVisibility() == View.GONE) {
                             if (!dataItemDescriptionEdit.getText().toString().equals(itemDescription)) {
                                 items.get(position).setDescription(dataItemDescriptionEdit.getText().toString());
-                                DBCon.overwriteDataItems(context, items, favoriteName);
+                                DataResourcesMgr.overwriteDataItems(context, items, favoriteName);
                                 notifyDataSetChanged();
                             }
                         }

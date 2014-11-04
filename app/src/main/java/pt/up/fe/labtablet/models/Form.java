@@ -8,15 +8,37 @@ import java.util.TimeZone;
 public class Form {
 
     private final String formName;
+    private String parent;
     private String formDescription;
     private String elapsedTime;
     private ArrayList<FormQuestion> formQuestions;
     private boolean descriptionSet;
+    private String linkedResourcePath;
 
-    public Form(String name) {
+
+
+    public Form(String name, String parent) {
         formQuestions = new ArrayList<FormQuestion>();
+        this.parent = parent;
         this.formDescription = "";
         this.formName = name;
+        this.linkedResourcePath = "";
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public String getLinkedResourcePath() {
+        return linkedResourcePath;
+    }
+
+    public void setLinkedResourcePath(String linkedResourcePath) {
+        this.linkedResourcePath = linkedResourcePath;
     }
 
     public void setDescription(String description) {

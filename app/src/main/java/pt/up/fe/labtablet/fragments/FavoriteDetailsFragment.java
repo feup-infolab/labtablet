@@ -40,10 +40,12 @@ import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncFileImporter;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.labtablet.db.DataResourcesMgr;
+import pt.up.fe.labtablet.db.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.utils.DBCon;
+import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -108,7 +110,7 @@ public class FavoriteDetailsFragment extends Fragment {
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
+        itemDescriptors = FavoriteMgr.getDescriptors(favoriteName, getActivity());
         //dataItems = DBCon.getDataDescriptionItems(getActivity(), favoriteName);
 
 
@@ -195,7 +197,7 @@ public class FavoriteDetailsFragment extends Fragment {
         isMetadataVisible = true;
         bt_edit_view.setVisibility(View.VISIBLE);
 
-        itemDescriptors = DBCon.getDescriptors(favoriteName, getActivity());
+        itemDescriptors = FavoriteMgr.getDescriptors(favoriteName, getActivity());
 
         MetadataListAdapter mMetadataAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
         lv_metadata.setAdapter(mMetadataAdapter);
@@ -207,7 +209,7 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_edit_view.setVisibility(View.INVISIBLE);
 
         isMetadataVisible = false;
-        dataItems = DBCon.getDataDescriptionItems(getActivity(), favoriteName);
+        dataItems = DataResourcesMgr.getDataDescriptionItems(getActivity(), favoriteName);
 
         DataListAdapter mDataAdapter = new DataListAdapter(getActivity(), dataItems, favoriteName);
         lv_metadata.setAdapter(mDataAdapter);
@@ -238,7 +240,7 @@ public class FavoriteDetailsFragment extends Fragment {
             String descriptorJson = data.getStringExtra("descriptor");
             Descriptor newDescriptor = new Gson().fromJson(descriptorJson, Descriptor.class);
             itemDescriptors.add(newDescriptor);
-            DBCon.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+            FavoriteMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
 
             this.onResume();
 
@@ -248,7 +250,7 @@ public class FavoriteDetailsFragment extends Fragment {
 
             String descriptorsJson = data.getStringExtra("descriptors");
             itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
-            DBCon.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+            FavoriteMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
 
             this.onResume();
 
@@ -288,7 +290,7 @@ public class FavoriteDetailsFragment extends Fragment {
                                 }
                             }
 
-                            DBCon.addDataItem(getActivity(), result, favoriteName);
+                            DataResourcesMgr.addDataItem(getActivity(), result, favoriteName);
                             dialog.dismiss();
                             onResume();
                             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);

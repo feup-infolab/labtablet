@@ -50,10 +50,11 @@ import pt.up.fe.labtablet.api.LTLocationListener;
 import pt.up.fe.labtablet.async.AsyncFormPDFGenerator;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.async.AsyncWeatherFetcher;
+import pt.up.fe.labtablet.db.FavoriteMgr;
+import pt.up.fe.labtablet.db.FormMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.Form;
-import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -340,7 +341,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         bt_launch_form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<Form> forms = DBCon.getForms(FieldModeActivity.this);
+                ArrayList<Form> forms = FormMgr.getForms(FieldModeActivity.this);
                 final CharSequence values[] = new CharSequence[forms.size()];
                 for (int i = 0; i < forms.size(); ++i) {
                     values[i] = forms.get(i).getFormName();
@@ -531,7 +532,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
 
                 String descriptorsJson = data.getStringExtra("descriptors");
                 ArrayList<Descriptor> itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
-                DBCon.addDescriptors(favorite_name, itemDescriptors, this);
+                FavoriteMgr.addDescriptors(favorite_name, itemDescriptors, this);
                 Toast.makeText(this, getResources().getString(R.string.metadata_added_success), Toast.LENGTH_SHORT).show();
                 finish();
                 break;

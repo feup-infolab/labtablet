@@ -21,9 +21,9 @@ import pt.up.fe.labtablet.adapters.UnvalidatedMetadataListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncQueueProcessor;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.utils.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class ValidateMetadataActivity extends Activity {

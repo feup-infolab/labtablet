@@ -36,9 +36,12 @@ import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.ProgressUpdateItem;
-import pt.up.fe.labtablet.utils.DBCon;
+import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 import pt.up.fe.labtablet.utils.Zipper;
+
+import static pt.up.fe.labtablet.db.DataResourcesMgr.getDataDescriptionItems;
+import static pt.up.fe.labtablet.db.FavoriteMgr.getDescriptors;
 
 public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
     //input, remove, output
@@ -168,7 +171,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         publishProgress(new ProgressUpdateItem(
                 50, mContext.getString(R.string.upload_progress_creating_metadata_package)));
 
-        ArrayList<Descriptor> descriptors = DBCon.getDescriptors(favoriteName, mContext);
+        ArrayList<Descriptor> descriptors = getDescriptors(favoriteName, mContext);
         ArrayList<DendroMetadataRecord> metadataRecords = new ArrayList<DendroMetadataRecord>();
 
         if (descriptors.size() == 0) {
@@ -227,7 +230,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         //check if there are any file-dependant descriptions
         //if so, upload them
         ArrayList<DataItem> dataDescriptionItems =
-                DBCon.getDataDescriptionItems(mContext, favoriteName);
+                getDataDescriptionItems(mContext, favoriteName);
 
         if (dataDescriptionItems == null) {
             return null;

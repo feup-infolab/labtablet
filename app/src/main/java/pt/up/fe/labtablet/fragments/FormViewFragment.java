@@ -22,9 +22,10 @@ import com.google.gson.Gson;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.FormQuestionCreatorActivity;
 import pt.up.fe.labtablet.adapters.FormItemListAdapter;
+import pt.up.fe.labtablet.db.FormMgr;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormQuestion;
-import pt.up.fe.labtablet.utils.DBCon;
+import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
 /**
@@ -96,7 +97,7 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                 (rootView.findViewById(R.id.set_form_description_no)).setEnabled(false);
                 (rootView.findViewById(R.id.set_form_description_yes)).setEnabled(false);
                 currentForm.setDescription("");
-                DBCon.updateForm(currentForm, getActivity());
+                FormMgr.updateForm(currentForm, getActivity());
                 (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.GONE);
             }
         });
@@ -112,7 +113,7 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                     public void onClick(View view) {
                         EditText etFormDescription = (EditText) (rootView.findViewById(R.id.et_set_form_description));
                         currentForm.setDescription(etFormDescription.getText().toString());
-                        DBCon.updateForm(currentForm, getActivity());
+                        FormMgr.updateForm(currentForm, getActivity());
                         (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.GONE);
                     }
                 });
@@ -156,7 +157,7 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                 FormQuestion.class);
 
         currentForm.addQuestion(recFQ);
-        DBCon.updateForm(currentForm, getActivity());
+        FormMgr.updateForm(currentForm, getActivity());
         mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions(), mInterface);
         lvFormItems.setAdapter(mAdapter);
     }
@@ -177,7 +178,7 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                 .setMessage(getString(R.string.form_really_delete))
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        DBCon.deleteForm(currentForm.getFormName(), getActivity());
+                        FormMgr.deleteForm(currentForm.getFormName(), getActivity());
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                         transaction.replace(R.id.frame_container, new ListFormFragment());

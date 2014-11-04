@@ -10,8 +10,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.db.FavoriteMgr;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.utils.DBCon;
+import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
 /**
@@ -53,14 +54,14 @@ public class AsyncGenericChecker extends AsyncTask<Object, Void, Integer> {
                             + File.separator + mContext.getString(R.string.app_name));
             for (File f : file.listFiles()) {
                 if (f.isDirectory()) {
-                    worldDescriptors.addAll(DBCon.getDescriptors(f.getName(), mContext));
+                    worldDescriptors.addAll(FavoriteMgr.getDescriptors(f.getName(), mContext));
                 }
             }
             return countGenerics(worldDescriptors);
         }
 
         //get for this particular one
-        return countGenerics(DBCon.getDescriptors(favoriteName, mContext));
+        return countGenerics(FavoriteMgr.getDescriptors(favoriteName, mContext));
     }
 
     private int countGenerics(ArrayList<Descriptor> descriptors) {

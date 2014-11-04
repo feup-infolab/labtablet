@@ -68,26 +68,24 @@ public class MainActivity extends Activity {
         SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
 
         // BEGIN EXAMPLE
+
         File myPath = new File(Environment.getExternalStorageDirectory().toString());
         File myFile = new File(myPath, "MySharedPreferences");
 
-        try
-        {
+        try {
             FileWriter fw = new FileWriter(myFile);
             PrintWriter pw = new PrintWriter(fw);
 
             Map<String,?> prefsMap = prefs.getAll();
 
-            for(Map.Entry<String,?> entry : prefsMap.entrySet())
-            {
+            for(Map.Entry<String,?> entry : prefsMap.entrySet()) {
                 pw.println(entry.getKey() + ": " + entry.getValue().toString());
             }
 
             pw.close();
             fw.close();
-        }
-        catch (Exception e)
-        {
+
+        } catch (Exception e) {
             // what a terrible failure...
             Log.wtf(getClass().getName(), e.toString());
         }

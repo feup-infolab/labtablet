@@ -25,11 +25,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.db.DataResourcesMgr;
+import pt.up.fe.labtablet.db.FavoriteMgr;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormQuestion;
-import pt.up.fe.labtablet.utils.DBCon;
+import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -97,7 +99,7 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
 
         ArrayList<Descriptor> loadedDescriptors =
-                DBCon.getDescriptors(Utils.DESCRIPTORS_CONFIG_ENTRY, mContext);
+                FavoriteMgr.getDescriptors(Utils.DESCRIPTORS_CONFIG_ENTRY, mContext);
 
         //If additional metadata is available, it should me added here
         for (Descriptor desc : loadedDescriptors) {
@@ -115,7 +117,7 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         }
 
         dataItem.setFileLevelMetadata(itemLevelMetadata);
-        DBCon.addDataItem(mContext, dataItem, favoriteName);
+        DataResourcesMgr.addDataItem(mContext, dataItem, favoriteName);
 
         return null;
     }

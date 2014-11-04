@@ -21,12 +21,16 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
+import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Descriptor;
+
+import static pt.up.fe.labtablet.db.DataResourcesMgr.getDataDescriptionItems;
+import static pt.up.fe.labtablet.db.FavoriteMgr.getDescriptors;
 
 public class FileMgr {
 
@@ -242,7 +246,7 @@ public class FileMgr {
             return false;
         }
 
-        ArrayList<Descriptor> baseMetadataRecords = DBCon.getDescriptors(src, mContext);
+        ArrayList<Descriptor> baseMetadataRecords = getDescriptors(src, mContext);
         for (Descriptor desc : baseMetadataRecords) {
             if (desc.getTag().equals(Utils.TITLE_TAG)) {
                 desc.setValue(dst);
@@ -253,7 +257,7 @@ public class FileMgr {
             }
         }
 
-        ArrayList<DataItem> baseDataRecords = DBCon.getDataDescriptionItems(mContext, src);
+        ArrayList<DataItem> baseDataRecords = getDataDescriptionItems(mContext, src);
         for (DataItem desc : baseDataRecords) {
 
             desc.setParent(src);
