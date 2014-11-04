@@ -40,12 +40,11 @@ import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncFileImporter;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
-import pt.up.fe.labtablet.db.DataResourcesMgr;
-import pt.up.fe.labtablet.db.FavoriteMgr;
+import pt.up.fe.labtablet.db_handlers.DataResourcesMgr;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 

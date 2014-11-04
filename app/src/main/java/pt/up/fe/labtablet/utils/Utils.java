@@ -78,8 +78,6 @@ public class Utils {
     }.getType();
     public static Type ARRAY_DENDRO_METADATA_RECORD = new TypeToken<ArrayList<DendroMetadataRecord>>() {
     }.getType();
-    public static Type ARRAY_FORM_ITEM = new TypeToken<ArrayList<FormQuestion>>() {
-    }.getType();
     public static Type ARRAY_FORM = new TypeToken<ArrayList<Form>>() {
     }.getType();
     public static Type ARRAY_DATA_DESCRIPTOR_ITEMS = new TypeToken<ArrayList<DataItem>>(){}.getType();
@@ -91,7 +89,10 @@ public class Utils {
     //should not use previous instances
     public static String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
     public static String ASSOCIATIONS_CONFIG_ENTRY = "associations";
+
     public static String DESCRIPTORS_CONFIG_ENTRY = "base_descriptors";
+    public static String BASE_FORMS_ENTRY = "base_forms";
+
     public static String CHANGELOG_CONFIG_ENTRY = "changelogs";
     public static long SAMPLE_MILLIS = 5000;
     //Select a descriptor and return it

@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
-import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
@@ -29,8 +28,8 @@ import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Descriptor;
 
-import static pt.up.fe.labtablet.db.DataResourcesMgr.getDataDescriptionItems;
-import static pt.up.fe.labtablet.db.FavoriteMgr.getDescriptors;
+import static pt.up.fe.labtablet.db_handlers.DataResourcesMgr.getDataDescriptionItems;
+import static pt.up.fe.labtablet.db_handlers.FavoriteMgr.getDescriptors;
 
 public class FileMgr {
 

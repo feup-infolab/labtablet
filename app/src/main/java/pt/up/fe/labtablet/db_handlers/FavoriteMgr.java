@@ -1,4 +1,4 @@
-package pt.up.fe.labtablet.db;
+package pt.up.fe.labtablet.db_handlers;
 
 import android.content.Context;
 import android.content.SharedPreferences;

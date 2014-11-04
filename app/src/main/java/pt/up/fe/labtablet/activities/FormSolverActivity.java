@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
-import pt.up.fe.labtablet.db.FormMgr;
+import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormEnumType;
@@ -47,7 +47,9 @@ public class FormSolverActivity extends Activity {
             targetForm = new Gson().fromJson(savedInstanceState.getString("form"), Form.class);
         } else {
             String formName = getIntent().getStringExtra("form_name");
-            targetForm = FormMgr.getForm(this, formName);
+            targetForm =
+                    new Gson().fromJson(getIntent().getStringExtra("form"), Form.class);
+
             if (targetForm == null) {
                 Toast.makeText(this, "Form not found!", Toast.LENGTH_SHORT).show();
                 ChangelogItem item = new ChangelogItem();

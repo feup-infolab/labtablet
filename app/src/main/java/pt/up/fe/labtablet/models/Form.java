@@ -7,7 +7,7 @@ import java.util.TimeZone;
 
 public class Form {
 
-    private final String formName;
+    private String formName;
     private String parent;
     private String formDescription;
     private String elapsedTime;
@@ -15,7 +15,9 @@ public class Form {
     private boolean descriptionSet;
     private String linkedResourcePath;
 
-
+    public void setFormName(String formName) {
+        this.formName = formName;
+    }
 
     public Form(String name, String parent) {
         formQuestions = new ArrayList<FormQuestion>();
@@ -24,6 +26,7 @@ public class Form {
         this.formName = name;
         this.linkedResourcePath = "";
     }
+
 
     public String getParent() {
         return parent;

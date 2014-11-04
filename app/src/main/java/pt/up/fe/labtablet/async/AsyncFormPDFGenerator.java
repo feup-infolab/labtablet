@@ -25,13 +25,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.db.DataResourcesMgr;
-import pt.up.fe.labtablet.db.FavoriteMgr;
+import pt.up.fe.labtablet.db_handlers.DataResourcesMgr;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
+import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormQuestion;
-import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -66,11 +66,16 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         Context mContext = (Context) params[2];
         String favoriteName = (String) params[1];
         Form form = (Form) params[0];
+        form.setParent(form.getFormName());
+        form.setFormName(form.getFormName() + "_" + new Date().getTime());
+
 
         String path = Environment.getExternalStorageDirectory()
                 + "/" + mContext.getString(R.string.app_name)
                 + "/" + favoriteName + "/"
                 + form.getFormName() + "_" + new Date().getTime() + ".pdf";
+
+        form.setLinkedResourcePath(path);
 
         try {
             Document document = new Document();
@@ -118,6 +123,7 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
 
         dataItem.setFileLevelMetadata(itemLevelMetadata);
         DataResourcesMgr.addDataItem(mContext, dataItem, favoriteName);
+        FormMgr.addForm(form, mContext);
 
         return null;
     }

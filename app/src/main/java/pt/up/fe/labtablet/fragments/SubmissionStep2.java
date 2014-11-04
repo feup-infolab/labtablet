@@ -20,9 +20,8 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.ValidateMetadataActivity;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.api.SubmissionStepHandler;
-import pt.up.fe.labtablet.db.FavoriteMgr;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
 

@@ -1,5 +1,6 @@
-package pt.up.fe.labtablet.db;
+package pt.up.fe.labtablet.db_handlers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -122,22 +123,6 @@ public class FormMgr {
     }
 
     /**
-     * Replaces current form questions with new ones
-     * @param formName
-     * @param formQuestions
-     * @param mContext
-     */
-    public static void overwriteFormQuestions(String formName,
-                                              ArrayList<FormQuestion> formQuestions,
-                                              Context mContext) {
-
-        if (getForm(mContext, formName) == null)
-            return;
-
-
-    }
-
-    /**
      * Replace all forms with the received ones
      * @param forms
      * @param mContext
@@ -157,13 +142,103 @@ public class FormMgr {
         editor.apply();
     }
 
-    public static Form getForm(Context mContext, String formName) {
-        ArrayList<Form> forms = getForms(mContext);
-        for (Form f : forms) {
-            if (f.getFormName().equals(formName)) {
-                return f;
+    /**
+     * Returns all the created forms objects
+     * @param mContext
+     * @return
+     */
+    public static ArrayList<Form> getBaseForms(Context mContext) {
+        SharedPreferences settings = mContext.getSharedPreferences(
+                mContext.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        if (!settings.contains(Utils.BASE_FORMS_ENTRY)) {
+            Log.i("OVERWRITE", "Entry was not found for base forms ");
+            return new ArrayList<Form>();
+        }
+
+        return new Gson().fromJson(settings.getString(Utils.BASE_FORMS_ENTRY, ""), Utils.ARRAY_FORM);
+    }
+
+    /**
+     * Adds a new base form
+     */
+    public static void registerBaseForm(Context mContext, Form newItem) {
+        SharedPreferences settings = mContext.getSharedPreferences(
+                mContext.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        ArrayList<Form> baseForms;
+        if (!settings.contains(Utils.BASE_FORMS_ENTRY)) {
+            Log.i("ADD", "Entry was not found for base forms ");
+            baseForms = new ArrayList<Form>();
+        } else {
+            baseForms = new Gson().fromJson(settings.getString(Utils.BASE_FORMS_ENTRY, ""), Utils.ARRAY_FORM);
+        }
+
+        SharedPreferences.Editor editor = settings.edit();
+
+        baseForms.add(newItem);
+        editor.remove(Utils.BASE_FORMS_ENTRY);
+        editor.putString(Utils.BASE_FORMS_ENTRY, new Gson().toJson(baseForms, Utils.ARRAY_FORM));
+        editor.apply();
+    }
+
+    /**
+     * Removes a specific base form from the resources
+     * @param mContext
+     * @param form
+     */
+    public static void removeBaseForm(Context mContext, Form form) {
+        SharedPreferences settings = mContext.getSharedPreferences(
+                mContext.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        ArrayList<Form> baseForms;
+        if (!settings.contains(Utils.BASE_FORMS_ENTRY)) {
+            Log.i("ADD", "Entry was not found for base forms ");
+            return;
+        }
+
+        baseForms = new Gson().fromJson(settings.getString("forms", ""), Utils.ARRAY_FORM);
+        SharedPreferences.Editor editor = settings.edit();
+
+        baseForms.remove(form);
+        editor.putString("forms", new Gson().toJson(baseForms, Utils.ARRAY_FORM));
+        editor.apply();
+    }
+
+    /**
+     * Updates a baseForm with new data
+     * @param currentForm
+     * @param mContext
+     */
+    public static void updateBaseForm(Form currentForm, Context mContext) {
+        SharedPreferences settings = mContext.getSharedPreferences(
+                mContext.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        if (!settings.contains(Utils.BASE_FORMS_ENTRY)) {
+            Log.e("UPDATE", "Entry was not found for base forms ");
+            Toast.makeText(mContext, "Error updating form", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ArrayList<Form> savedForms = new Gson().fromJson(
+                settings.getString(Utils.BASE_FORMS_ENTRY, ""),
+                Utils.ARRAY_FORM
+        );
+
+        for (Form f : savedForms) {
+            if (f.getFormName().equals(currentForm.getFormName())) {
+                f.setFormQuestions(currentForm.getFormQuestions());
+                f.setDescription(currentForm.getFormDescription());
             }
         }
-        return null;
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(Utils.BASE_FORMS_ENTRY);
+        editor.putString(Utils.BASE_FORMS_ENTRY, new Gson().toJson(savedForms));
+        editor.apply();
     }
 }

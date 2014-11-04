@@ -36,12 +36,11 @@ import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.ProgressUpdateItem;
-import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 import pt.up.fe.labtablet.utils.Zipper;
 
-import static pt.up.fe.labtablet.db.DataResourcesMgr.getDataDescriptionItems;
-import static pt.up.fe.labtablet.db.FavoriteMgr.getDescriptors;
+import static pt.up.fe.labtablet.db_handlers.DataResourcesMgr.getDataDescriptionItems;
+import static pt.up.fe.labtablet.db_handlers.FavoriteMgr.getDescriptors;
 
 public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
     //input, remove, output

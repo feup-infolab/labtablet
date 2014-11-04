@@ -1,82 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/form_view_instructions_card"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/card"
-    android:padding="20dp"
-    android:orientation="vertical"
+    card_view:cardCornerRadius="0dp"
+    card_view:cardElevation="5sp"
     >
-
-    <Button
-        android:id="@+id/form_item_delete"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
-        android:background="@drawable/ic_recycle"
-        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-        android:visibility="gone"
-        />
-
-    <LinearLayout
-        android:id="@+id/ll_question"
-        android:layout_toStartOf="@id/form_item_delete"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/form_name"
-            android:layout_width="0dp"
-            android:layout_weight="0.98"
-            android:layout_height="wrap_content"
-            android:ellipsize="none"
-            style="@android:style/TextAppearance.DeviceDefault.Large"
-            android:text="Bota fogo"
-            />
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_below="@id/ll_question"
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
         >
 
-        <TextView
-            android:id="@+id/form_item_description"
+        <Button
+            android:id="@+id/form_item_delete"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_recycle"
+            style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+            android:visibility="gone"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_question"
+            android:layout_toStartOf="@id/form_item_delete"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="none"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:text="Form description"
+            android:orientation="horizontal">
 
-            />
+            <TextView
+                android:id="@+id/form_name"
+                android:layout_width="0dp"
+                android:layout_weight="0.98"
+                android:layout_height="wrap_content"
+                android:ellipsize="none"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:text="Bota fogo"
+                />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/form_item_number_questions"
-            android:layout_below="@id/form_item_description"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_below="@id/ll_question"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_note"
-            android:gravity="center"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:text="12 Questions"
-            android:layout_marginEnd="5dp"
-            />
+            android:layout_marginTop="20dp"
+            >
 
-        <TextView
-            android:id="@+id/form_item_duration"
-            android:layout_below="@id/form_item_description"
-            android:layout_toEndOf="@id/form_item_number_questions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_wait"
-            android:gravity="center"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:text="15min"
-            />
+            <TextView
+                android:id="@+id/form_item_description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="none"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:text="Form description"
+
+                />
+
+            <TextView
+                android:id="@+id/form_item_number_questions"
+                android:layout_below="@id/form_item_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_note"
+                android:gravity="center"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:text="12 Questions"
+                android:layout_marginEnd="5dp"
+                />
+
+            <TextView
+                android:id="@+id/form_item_duration"
+                android:layout_below="@id/form_item_description"
+                android:layout_toEndOf="@id/form_item_number_questions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_wait"
+                android:gravity="center"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:text="15min"
+                />
+        </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
+</android.support.v7.widget.CardView>

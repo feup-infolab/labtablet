@@ -50,8 +50,8 @@ import pt.up.fe.labtablet.api.LTLocationListener;
 import pt.up.fe.labtablet.async.AsyncFormPDFGenerator;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.async.AsyncWeatherFetcher;
-import pt.up.fe.labtablet.db.FavoriteMgr;
-import pt.up.fe.labtablet.db.FormMgr;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
+import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.Form;
@@ -341,7 +341,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         bt_launch_form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<Form> forms = FormMgr.getForms(FieldModeActivity.this);
+                final ArrayList<Form> forms = FormMgr.getBaseForms(FieldModeActivity.this);
                 final CharSequence values[] = new CharSequence[forms.size()];
                 for (int i = 0; i < forms.size(); ++i) {
                     values[i] = forms.get(i).getFormName();
@@ -353,7 +353,8 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent formIntent = new Intent(FieldModeActivity.this, FormSolverActivity.class);
-                        formIntent.putExtra("form_name", values[which]);
+                        formIntent.putExtra("form",
+                                new Gson().toJson(forms.get(which)));
                         startActivityForResult(formIntent, Utils.SOLVE_FORM);
                     }
                 });
@@ -559,7 +560,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         Toast.makeText(FieldModeActivity.this,
                                 getString(R.string.success),
                                 Toast.LENGTH_SHORT).show();
-
                         dialog.dismiss();
                     }
 

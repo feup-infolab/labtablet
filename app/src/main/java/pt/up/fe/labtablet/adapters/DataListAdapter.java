@@ -26,11 +26,12 @@ import java.util.ArrayList;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncImageLoader;
-import pt.up.fe.labtablet.db.DataResourcesMgr;
+import pt.up.fe.labtablet.db_handlers.DataResourcesMgr;
+import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.db.DBCon;
+import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -107,7 +108,20 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
                         .setIcon(R.drawable.ic_recycle)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                if (!(new File(items.get(position).getLocalPath()).delete())) {
+
+                                //check if this file is associated with a form
+                                File currentFile = new File(items.get(position).getLocalPath());
+                                ArrayList<Form> currentForms = FormMgr.getForms(context);
+                                for (Form f : currentForms) {
+                                    if (f.getFormName().equals(currentFile.getName())) {
+                                        //remove entry
+                                        currentForms.remove(f);
+                                        FormMgr.overwriteForms(currentForms, context);
+                                        break;
+                                    }
+                                }
+
+                                if (!currentFile.delete()) {
                                     ChangelogItem item = new ChangelogItem();
                                     item.setMessage("Queue Processor" + "Failed to delete file "
                                             + items.get(position).getLocalPath());

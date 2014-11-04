@@ -20,9 +20,8 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.FormListAdapter;
-import pt.up.fe.labtablet.db.FormMgr;
+import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.Form;
-import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class ListFormFragment extends ListFragment {
@@ -42,7 +41,7 @@ public class ListFormFragment extends ListFragment {
             }
 
         } else {
-            items = FormMgr.getForms(getActivity());
+            items = FormMgr.getBaseForms(getActivity());
         }
         getListView().setDividerHeight(0);
         getListView().setBackgroundColor(0);
@@ -105,7 +104,7 @@ public class ListFormFragment extends ListFragment {
                 }
 
                 items.add(new Form(input.getText().toString(), ""));
-                FormMgr.overwriteForms(items, getActivity());
+                FormMgr.registerBaseForm(getActivity(), new Form(input.getText().toString(), ""));
                 mAdapter = new FormListAdapter(getActivity(), items);
                 getListView().setAdapter(mAdapter);
                 Toast.makeText(getActivity(), getString(android.R.string.ok), Toast.LENGTH_SHORT).show();

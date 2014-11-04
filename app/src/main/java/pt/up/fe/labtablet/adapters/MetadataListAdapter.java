@@ -14,9 +14,8 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.async.AsyncImageLoader;
-import pt.up.fe.labtablet.db.FavoriteMgr;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.db.DBCon;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
