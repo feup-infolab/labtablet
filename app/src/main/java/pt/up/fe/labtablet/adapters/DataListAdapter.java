@@ -113,7 +113,7 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
                                 File currentFile = new File(items.get(position).getLocalPath());
                                 ArrayList<Form> currentForms = FormMgr.getForms(context);
                                 for (Form f : currentForms) {
-                                    if (f.getFormName().equals(currentFile.getName())) {
+                                    if ((f.getFormName() + ".pdf").equals(currentFile.getName())) {
                                         //remove entry
                                         currentForms.remove(f);
                                         FormMgr.overwriteForms(currentForms, context);

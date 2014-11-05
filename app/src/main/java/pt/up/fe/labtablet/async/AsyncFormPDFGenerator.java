@@ -73,7 +73,7 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         String path = Environment.getExternalStorageDirectory()
                 + "/" + mContext.getString(R.string.app_name)
                 + "/" + favoriteName + "/"
-                + form.getFormName() + "_" + new Date().getTime() + ".pdf";
+                + form.getFormName() + ".pdf" ;
 
         form.setLinkedResourcePath(path);
 

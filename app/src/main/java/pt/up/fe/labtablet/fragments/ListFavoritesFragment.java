@@ -109,7 +109,7 @@ public class ListFavoritesFragment extends ListFragment {
         String path = Environment.getExternalStorageDirectory().toString();
         File f = new File(path + "/" + getResources().getString(R.string.app_name));
         if (!f.exists()) {
-            Log.i("MakeDir", "" +f.mkdir());
+            Log.i("MakeDir", "" + f.mkdir());
         }
 
         File[] files = f.listFiles();
