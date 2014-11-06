@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.FavoriteListAdapter;
@@ -117,7 +118,7 @@ public class ListFavoritesFragment extends ListFragment {
         mFavoriteItems.clear();
         for (File inFile : files) {
             if (inFile.isDirectory()) {
-                FavoriteItem newItem = new FavoriteItem();
+                FavoriteItem newItem = new FavoriteItem("" + new Date().getTime());
                 newItem.setSize(FileMgr.humanReadableByteCount(FileMgr.folderSize(inFile), false));
                 newItem.setTitle(inFile.getName());
                 newItem.setDate_modified(Utils.getDate(inFile.lastModified()));

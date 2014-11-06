@@ -40,11 +40,11 @@ import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncFileImporter;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
-import pt.up.fe.labtablet.db_handlers.DataResourcesMgr;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -60,8 +60,8 @@ public class FavoriteDetailsFragment extends Fragment {
 
     private ListView lv_metadata;
     private boolean isMetadataVisible;
-    private ArrayList<Descriptor> itemDescriptors;
-    private ArrayList<DataItem> dataItems;
+
+    private FavoriteItem currentItem;
     private String favoriteName;
 
     @Override
@@ -88,14 +88,13 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_edit_title.setTag(Utils.TITLE_TAG);
 
         if (savedInstanceState != null) {
-            favoriteName = savedInstanceState.getString("favorite_name");
+            currentItem = new Gson().fromJson(savedInstanceState.getString("current_item"), FavoriteItem.class);
             isMetadataVisible = savedInstanceState.getBoolean("metadata_visible");
         } else {
             favoriteName = this.getArguments().getString("favorite_name");
+            currentItem = FavoriteMgr.getFavorite(getActivity(), favoriteName);
             isMetadataVisible = true;
         }
-
-        tv_title.setText(favoriteName);
 
         ActionBar mActionBar = getActivity().getActionBar();
         if (mActionBar == null) {
@@ -109,10 +108,7 @@ public class FavoriteDetailsFragment extends Fragment {
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        itemDescriptors = FavoriteMgr.getDescriptors(favoriteName, getActivity());
-        //dataItems = DBCon.getDataDescriptionItems(getActivity(), favoriteName);
-
-
+        ArrayList<Descriptor> itemDescriptors = currentItem.getMetadataItems();
         for (Descriptor desc : itemDescriptors) {
             if (desc.getDescriptor() == null)
                 break;
@@ -168,7 +164,7 @@ public class FavoriteDetailsFragment extends Fragment {
                 if (isMetadataVisible) {
                     Intent myIntent = new Intent(getActivity(), ValidateMetadataActivity.class);
                     myIntent.putExtra("favorite_name", favoriteName);
-                    myIntent.putExtra("descriptors", new Gson().toJson(itemDescriptors, Utils.ARRAY_DESCRIPTORS));
+                    myIntent.putExtra("descriptors", new Gson().toJson(currentItem.getMetadataItems(), Utils.ARRAY_DESCRIPTORS));
                     startActivityForResult(myIntent, Utils.METADATA_VALIDATION);
                 }
             }
@@ -196,9 +192,7 @@ public class FavoriteDetailsFragment extends Fragment {
         isMetadataVisible = true;
         bt_edit_view.setVisibility(View.VISIBLE);
 
-        itemDescriptors = FavoriteMgr.getDescriptors(favoriteName, getActivity());
-
-        MetadataListAdapter mMetadataAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
+        MetadataListAdapter mMetadataAdapter = new MetadataListAdapter(getActivity(), currentItem.getMetadataItems(), favoriteName);
         lv_metadata.setAdapter(mMetadataAdapter);
     }
 
@@ -208,9 +202,8 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_edit_view.setVisibility(View.INVISIBLE);
 
         isMetadataVisible = false;
-        dataItems = DataResourcesMgr.getDataDescriptionItems(getActivity(), favoriteName);
 
-        DataListAdapter mDataAdapter = new DataListAdapter(getActivity(), dataItems, favoriteName);
+        DataListAdapter mDataAdapter = new DataListAdapter(getActivity(), currentItem, favoriteName);
         lv_metadata.setAdapter(mDataAdapter);
     }
 
@@ -238,8 +231,8 @@ public class FavoriteDetailsFragment extends Fragment {
 
             String descriptorJson = data.getStringExtra("descriptor");
             Descriptor newDescriptor = new Gson().fromJson(descriptorJson, Descriptor.class);
-            itemDescriptors.add(newDescriptor);
-            FavoriteMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+            currentItem.addMetadataItem(newDescriptor);
+            FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, getActivity());
 
             this.onResume();
 
@@ -248,9 +241,10 @@ public class FavoriteDetailsFragment extends Fragment {
                 return;
 
             String descriptorsJson = data.getStringExtra("descriptors");
-            itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
-            FavoriteMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+            currentItem.setMetadataItems((ArrayList<Descriptor>)
+                    new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS));
 
+            FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, getActivity());
             this.onResume();
 
         } else if (requestCode == Utils.PICK_FILE_INTENT) {
@@ -289,7 +283,8 @@ public class FavoriteDetailsFragment extends Fragment {
                                 }
                             }
 
-                            DataResourcesMgr.addDataItem(getActivity(), result, favoriteName);
+                            currentItem.addDataItem(result);
+                            FavoriteMgr.updateFavoriteEntry(favoriteName, currentItem, getActivity());
                             dialog.dismiss();
                             onResume();
                             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
@@ -318,6 +313,7 @@ public class FavoriteDetailsFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("favorite_name", favoriteName);
+        outState.putString("current_item", new Gson().toJson(currentItem));
         outState.putBoolean("metadata_visible", isMetadataVisible);
     }
 

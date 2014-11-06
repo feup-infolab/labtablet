@@ -32,15 +32,14 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.DendroAPI;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.labtablet.utils.Utils;
 import pt.up.fe.labtablet.utils.Zipper;
-
-import static pt.up.fe.labtablet.db_handlers.DataResourcesMgr.getDataDescriptionItems;
-import static pt.up.fe.labtablet.db_handlers.FavoriteMgr.getDescriptors;
 
 public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
     //input, remove, output
@@ -77,7 +76,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 && params[3] instanceof Context) {
 
             favoriteName = (String) params[0];
-            //projectName = (String) params[1];
             destUri = (String) params[2];
             mContext = (Context) params[3];
 
@@ -170,7 +168,8 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         publishProgress(new ProgressUpdateItem(
                 50, mContext.getString(R.string.upload_progress_creating_metadata_package)));
 
-        ArrayList<Descriptor> descriptors = getDescriptors(favoriteName, mContext);
+        FavoriteItem item = FavoriteMgr.getFavorite(mContext, favoriteName);
+        ArrayList<Descriptor> descriptors = item.getMetadataItems();
         ArrayList<DendroMetadataRecord> metadataRecords = new ArrayList<DendroMetadataRecord>();
 
         if (descriptors.size() == 0) {
@@ -229,16 +228,16 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         //check if there are any file-dependant descriptions
         //if so, upload them
         ArrayList<DataItem> dataDescriptionItems =
-                getDataDescriptionItems(mContext, favoriteName);
+                item.getDataItems();
 
         if (dataDescriptionItems == null) {
             return null;
         }
 
-        for (DataItem item : dataDescriptionItems) {
+        for (DataItem dataItem : dataDescriptionItems) {
 
             metadataRecords = new ArrayList<DendroMetadataRecord>();
-            for (Descriptor desc : item.getFileLevelMetadata()) {
+            for (Descriptor desc : dataItem.getFileLevelMetadata()) {
                 metadataRecords.add(
                         new DendroMetadataRecord(desc.getDescriptor(), desc.getValue())
                 );
@@ -246,7 +245,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
             try {
                 httpclient = new DefaultHttpClient();
-                String destPath = destUri + File.separator + item.getResourceName() + "?update_metadata";
+                String destPath = destUri + File.separator + dataItem.getResourceName() + "?update_metadata";
                 httppost = new HttpPost(destPath.replace(" ", "%20"));
                 httppost.setHeader("Accept", "application/json");
                 httppost.setHeader("Content-Type", "application/json");

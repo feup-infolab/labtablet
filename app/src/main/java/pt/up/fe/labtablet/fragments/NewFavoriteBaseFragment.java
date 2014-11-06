@@ -34,10 +34,12 @@ import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncProjectListFetcher;
 import pt.up.fe.labtablet.async.AsyncRecommendationsLoader;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Dendro.Project;
 import pt.up.fe.labtablet.models.Dendro.ProjectListResponse;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.Utils;
 
 /**
@@ -51,7 +53,6 @@ public class NewFavoriteBaseFragment extends Fragment {
     private Button bt_load_suggestions;
     private ProgressDialog mDialog;
     private SharedPreferences.Editor editor;
-    private SharedPreferences settings;
     private String projectName;
     private ArrayList<Project> availableProjects;
     private ArrayList<Descriptor> recommendations;
@@ -95,10 +96,6 @@ public class NewFavoriteBaseFragment extends Fragment {
             }
         }
 
-        //create preferences entry for that favorite
-        settings = getActivity().getSharedPreferences(
-                getResources().getString(R.string.app_name),
-                Context.MODE_PRIVATE);
 
         bt_load_suggestions.setOnClickListener(new OnClickListener() {
 
@@ -226,8 +223,9 @@ public class NewFavoriteBaseFragment extends Fragment {
             return false;
         }
 
+        SharedPreferences settings = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         //Base configuration already loaded?
-        if (!settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
+        if (!settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
             new AlertDialog.Builder(getActivity())
                     .setTitle("Application Profile not loaded")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -253,15 +251,12 @@ public class NewFavoriteBaseFragment extends Fragment {
             getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(favoriteFolder)));
         }
 
-        editor = settings.edit();
-        if (settings.contains(itemName)) {
-            editor.remove(itemName);
-            Toast.makeText(getActivity(), "Will overwrite...", Toast.LENGTH_LONG).show();
-        }
+        //Register favorite
+        FavoriteItem newFavorite = new FavoriteItem(favoriteName.getText().toString());
+
 
         //Load default configuration
-        ArrayList<Descriptor> baseCfg = new Gson().fromJson(settings.getString(Utils.DESCRIPTORS_CONFIG_ENTRY, ""),
-                Utils.ARRAY_DESCRIPTORS);
+        ArrayList<Descriptor> baseCfg = FavoriteMgr.getBaseDescriptors(getActivity());
         ArrayList<Descriptor> folderMetadata = new ArrayList<Descriptor>();
         ArrayList<ChangelogItem> logs = new ArrayList<ChangelogItem>();
         ChangelogItem log;
@@ -296,18 +291,20 @@ public class NewFavoriteBaseFragment extends Fragment {
                 desc.setValue(Utils.getDate());
                 folderMetadata.add(desc);
             }
-
         }
-        editor.putString(itemName, new Gson().toJson(folderMetadata));
+
         if (recommendations != null && recommendations.size() > 0) {
-            editor.putString(itemName + "_dendro", new Gson().toJson(recommendations));
+            newFavorite.setMetadataRecommendations(recommendations);
             log = new ChangelogItem();
             log.setMessage(getResources().getString(R.string.log_loaded) + ": " + projectName);
             log.setTitle(getResources().getString(R.string.log_loaded));
             logs.add(log);
         }
 
-        editor.apply();
+        newFavorite.setMetadataItems(folderMetadata);
+        FavoriteMgr.registerFavorite(getActivity(), newFavorite);
+
+
 
         ChangelogManager.addItems(logs, getActivity());
         if (mDialog != null) {

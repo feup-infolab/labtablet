@@ -10,11 +10,11 @@ import java.util.Date;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
-import pt.up.fe.labtablet.db_handlers.DataResourcesMgr;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -93,7 +93,7 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
                 ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
 
                 ArrayList<Descriptor> loadedDescriptors =
-                        FavoriteMgr.getDescriptors(Utils.DESCRIPTORS_CONFIG_ENTRY, mContext);
+                        FavoriteMgr.getBaseDescriptors(mContext);
 
                 //If additional metadata is available, it should me added here
                 for (Descriptor dataDesc : loadedDescriptors) {
@@ -111,7 +111,10 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
                 }
 
                 item.setFileLevelMetadata(itemLevelMetadata);
-                DataResourcesMgr.addDataItem(mContext, item, favoriteName);
+                FavoriteItem fItem = FavoriteMgr.getFavorite(mContext, favoriteName);
+                fItem.addDataItem(item);
+
+                FavoriteMgr.updateFavoriteEntry(favoriteName, fItem, mContext);
             }
         }
         return null;

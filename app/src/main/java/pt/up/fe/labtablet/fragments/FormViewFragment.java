@@ -22,7 +22,6 @@ import com.google.gson.Gson;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.FormQuestionCreatorActivity;
 import pt.up.fe.labtablet.adapters.FormItemListAdapter;
-import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.utils.Utils;

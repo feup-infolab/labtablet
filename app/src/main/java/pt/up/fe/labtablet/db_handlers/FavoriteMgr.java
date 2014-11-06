@@ -1,16 +1,21 @@
 package pt.up.fe.labtablet.db_handlers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.Editable;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.Utils;
 
 /**
@@ -19,81 +24,120 @@ import pt.up.fe.labtablet.utils.Utils;
 public class FavoriteMgr {
 
     /**
-     * Returns the available descriptors for that specific settings entry
-     * (either a favorite or the global entry)
-     * @param settingsEntry entry for the preferences settings
-     * @param mContext context
-     * @return An array list of the fetched descriptors
+     * Returns the base config loaded from the application profile
+     * @param mContext
+     * @return
      */
-    public static ArrayList<Descriptor> getDescriptors(String settingsEntry, Context mContext) {
+    public static ArrayList<Descriptor> getBaseDescriptors(Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
-        String jsonData = settings.getString(settingsEntry, "");
-        if (!jsonData.equals("") && !jsonData.equals("[]")) {
-            return new Gson().fromJson(jsonData, Utils.ARRAY_DESCRIPTORS);
+        if (!settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
+            Toast.makeText(mContext, "No metadata was found. Default configuration loaded.", Toast.LENGTH_SHORT).show();
+            return new ArrayList<Descriptor>();
         }
-
-        Toast.makeText(mContext, "No metadata was found. Default configuration loaded.", Toast.LENGTH_SHORT).show();
-        ArrayList<Descriptor> baseCfg = new Gson().fromJson(
-                settings.getString(Utils.DESCRIPTORS_CONFIG_ENTRY, ""),
+        return new Gson().fromJson(
+                settings.getString(Utils.BASE_DESCRIPTORS_ENTRY, ""),
                 Utils.ARRAY_DESCRIPTORS);
-
-        ArrayList<Descriptor> folderMetadata = new ArrayList<Descriptor>();
-
-        String descName;
-        for (Descriptor desc : baseCfg) {
-            descName = desc.getName().toLowerCase();
-            if (descName.contains("title")) {
-                desc.setValue(settingsEntry);
-                desc.validate();
-                desc.setDateModified(Utils.getDate());
-                folderMetadata.add(desc);
-                overwriteDescriptors(settingsEntry, folderMetadata, mContext);
-            }
-        }
-        return folderMetadata;
     }
 
     /**
-     * Replaces all the descriptors by the ones that it receives
-     * @param settingsEntry
-     * @param descriptors
-     * @param mContext
+     * Loads and returns a favorite with the specified title (or a new one if non-existing)
+     * @param context
+     * @param favoriteName
+     * @return
      */
-    public static void overwriteDescriptors(String settingsEntry, ArrayList<Descriptor> descriptors, Context mContext) {
-        SharedPreferences settings = mContext.getSharedPreferences(
-                mContext.getResources().getString(R.string.app_name),
+    public static FavoriteItem getFavorite(Context context, String favoriteName) {
+
+
+        SharedPreferences settings = context.getSharedPreferences(
+                context.getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
-        if (!settings.contains(settingsEntry)) {
-            Log.e("OVERWRITE", "Entry was not found for folder " + settingsEntry);
+        String jsonData = settings.getString(favoriteName, "");
+        if (!jsonData.equals("") && !jsonData.equals("[]")) {
+            return new Gson().fromJson(jsonData, FavoriteItem.class);
+        }
+
+        Toast.makeText(context, "No entry for that favorite was found", Toast.LENGTH_SHORT).show();
+        return new FavoriteItem("");
+    }
+
+    /**
+     * Adds a new favorite record entry
+     * @param context
+     * @param favorite
+     */
+    public static void registerFavorite(Context context, FavoriteItem favorite) {
+
+
+        SharedPreferences settings = context.getSharedPreferences(
+                context.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        if (settings.contains(favorite.getTitle())) {
+            Toast.makeText(context, "Tried to add an existing favorite. Operation cancelled", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         SharedPreferences.Editor editor = settings.edit();
-        editor.remove(settingsEntry);
-        editor.putString(settingsEntry, new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
+        editor.putString(favorite.getTitle(), new Gson().toJson(favorite));
         editor.apply();
     }
 
     /**
-     * Adds a set of descriptors (metadata) to the selected favorite
-     * @param favoriteName
-     * @param itemDescriptors
-     * @param mContext
+     * Removes entry from the DB including the linked files (if any)
+     * @param context
+     * @param favorite
      */
-    public static void addDescriptors(String favoriteName, ArrayList<Descriptor> itemDescriptors, Context mContext) {
-        SharedPreferences settings = mContext.getSharedPreferences(
-                mContext.getResources().getString(R.string.app_name),
+    public static void removeFavoriteEntry(Context context, FavoriteItem favorite) {
+        SharedPreferences settings = context.getSharedPreferences(
+                context.getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
-        if (!settings.contains(favoriteName)) {
-            Log.e("Add descriptors", "Entry was not found for folder " + favoriteName);
-        } else {
-            ArrayList<Descriptor> previousDescriptors = getDescriptors(favoriteName, mContext);
-            previousDescriptors.addAll(itemDescriptors);
-            overwriteDescriptors(favoriteName, previousDescriptors, mContext);
+        if (!settings.contains(favorite.getTitle())) {
+            Toast.makeText(context, "Entry " + favorite.getTitle() + " was not found...", Toast.LENGTH_SHORT);
+            return;
         }
+
+        //Delete linked data resources
+        ArrayList<DataItem> favoriteDataResources = favorite.getDataItems();
+        if (favoriteDataResources != null &&
+                favoriteDataResources.size() > 0) {
+
+            for (DataItem item : favoriteDataResources) {
+                //Burn!!
+                if (!new File(item.getLocalPath()).delete()) {
+                    Log.e("DELETE", "Failed to delete" + item.getLocalPath());
+                }
+            }
+        }
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(favorite.getTitle());
+        editor.apply();
+    }
+
+    /**
+     * Updates the selected favorite's attributes
+     * @param entryName
+     * @param item
+     * @param context
+     */
+    public static void updateFavoriteEntry(String entryName, FavoriteItem item, Context context) {
+            SharedPreferences settings = context.getSharedPreferences(
+                    context.getResources().getString(R.string.app_name),
+                    Context.MODE_PRIVATE);
+
+            if (!settings.contains(entryName)) {
+                Log.e("OVERWRITE", "Entry was not found for folder " + entryName);
+                return;
+            }
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.remove(entryName);
+            editor.putString(entryName, new Gson().toJson(item, FavoriteItem.class));
+            editor.apply();
     }
 }

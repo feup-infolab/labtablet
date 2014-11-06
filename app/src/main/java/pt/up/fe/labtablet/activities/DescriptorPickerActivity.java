@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.DescriptorsListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
@@ -61,7 +62,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                 getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
-        if (!settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
+        if (!settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
             Toast.makeText(getApplication(),
                     getResources().getString(R.string.base_configuration_not_found),
                     Toast.LENGTH_LONG).show();
@@ -115,8 +116,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
 
         displayedDescriptors = new ArrayList<Descriptor>();
 
-        mDescriptors = new Gson().fromJson(settings.getString(Utils.DESCRIPTORS_CONFIG_ENTRY, ""),
-                Utils.ARRAY_DESCRIPTORS);
+        mDescriptors = FavoriteMgr.getBaseDescriptors(this);
 
         //set list adapter
         mAdapter = new DescriptorsListAdapter(this, displayedDescriptors);
@@ -216,6 +216,8 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
             getActionBar().setSelectedNavigationItem(
                     savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
         }
+
+        mDescriptors = FavoriteMgr.getBaseDescriptors(this);
     }
 
     @Override

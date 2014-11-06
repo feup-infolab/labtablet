@@ -140,7 +140,7 @@ public class ConfigurationFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                if(!settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
+                if(!settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle("Application Profile not loaded")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -306,11 +306,10 @@ public class ConfigurationFragment extends Fragment {
                     //save default descriptors to the preferences
                     SharedPreferences.Editor editor = settings.edit();
 
-                    if(settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
-                        editor
-                                .remove(Utils.DESCRIPTORS_CONFIG_ENTRY);
+                    if(settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
+                        editor.remove(Utils.BASE_DESCRIPTORS_ENTRY);
                     }
-                    editor.putString(Utils.DESCRIPTORS_CONFIG_ENTRY, new Gson().toJson(
+                    editor.putString(Utils.BASE_DESCRIPTORS_ENTRY, new Gson().toJson(
                             result, Utils.ARRAY_DESCRIPTORS));
                     editor.apply();
                     bt_file.setText(getResources().getString(R.string.edit));

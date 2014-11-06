@@ -40,7 +40,9 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
     @Override
     public void notifyDataSetChanged() {
         items.clear();
-        items.addAll(FavoriteMgr.getDescriptors(favoriteName, context));
+        items.addAll(FavoriteMgr
+                .getFavorite(context, favoriteName)
+                .getMetadataItems());
         super.notifyDataSetChanged();
     }
 

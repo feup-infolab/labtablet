@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
 
 
         SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
-        if (settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
+        if (settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
             tvProfileState.setText(getResources().getString(R.string.profile_already_loaded));
             tvProfileState.setCompoundDrawablesRelativeWithIntrinsicBounds(null,
                     yes, null, null);

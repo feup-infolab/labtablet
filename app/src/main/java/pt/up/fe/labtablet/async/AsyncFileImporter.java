@@ -110,15 +110,15 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, DataItem> {
 
         DataItem dataItem = new DataItem();
         dataItem.setParent(favoriteName);
-        //dataItem.setImportDate("" + new Date());
         dataItem.setLocalPath(destPath);
         dataItem.setHumanReadableSize(FileMgr.humanReadableByteCount(destFile.length(), false));
         dataItem.setMimeType(FileMgr.getMimeType(destPath));
 
+        //Build metadata for this file
         ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
 
         ArrayList<Descriptor> loadedDescriptors =
-                FavoriteMgr.getDescriptors(Utils.DESCRIPTORS_CONFIG_ENTRY, mContext);
+                FavoriteMgr.getBaseDescriptors(mContext);
 
         //If additional metadata is available, it should me added here
         for (Descriptor desc : loadedDescriptors) {

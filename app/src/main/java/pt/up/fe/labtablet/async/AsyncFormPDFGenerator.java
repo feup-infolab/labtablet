@@ -25,11 +25,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.db_handlers.DataResourcesMgr;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
-import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.utils.FileMgr;
@@ -104,9 +103,9 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
 
         ArrayList<Descriptor> loadedDescriptors =
-                FavoriteMgr.getDescriptors(Utils.DESCRIPTORS_CONFIG_ENTRY, mContext);
+                FavoriteMgr.getBaseDescriptors(mContext);
 
-        //If additional metadata is available, it should me added here
+        //If additional metadata is available, it should be added here
         for (Descriptor desc : loadedDescriptors) {
             String tag = desc.getTag();
             if (tag.equals(Utils.TITLE_TAG)) {
@@ -122,8 +121,11 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         }
 
         dataItem.setFileLevelMetadata(itemLevelMetadata);
-        DataResourcesMgr.addDataItem(mContext, dataItem, favoriteName);
-        FormMgr.addForm(form, mContext);
+
+        FavoriteItem item = FavoriteMgr.getFavorite(mContext, favoriteName);
+        item.addDataItem(dataItem);
+        item.addFormItem(form);
+        FavoriteMgr.updateFavoriteEntry(favoriteName, item, mContext);
 
         return null;
     }

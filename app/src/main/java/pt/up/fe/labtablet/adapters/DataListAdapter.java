@@ -26,12 +26,11 @@ import java.util.ArrayList;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncImageLoader;
-import pt.up.fe.labtablet.db_handlers.DataResourcesMgr;
-import pt.up.fe.labtablet.db_handlers.FormMgr;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -42,13 +41,13 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
 
     private final Activity context;
     private final String favoriteName;
-    private final ArrayList<DataItem> items;
+    private final FavoriteItem currentItem;
 
 
-    public DataListAdapter(Activity context, ArrayList<DataItem> srcItems, String favoriteName) {
-        super(context, R.layout.item_data_list, srcItems);
+    public DataListAdapter(Activity context, FavoriteItem item, String favoriteName) {
+        super(context, R.layout.item_data_list, item.getDataItems());
         this.context = context;
-        this.items = srcItems;
+        this.currentItem = item;
         this.favoriteName = favoriteName;
     }
 
@@ -72,6 +71,8 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
 
         // fill data
         ViewHolder holder = (ViewHolder) rowView.getTag();
+
+        final ArrayList<DataItem> items = currentItem.getDataItems();
         final DataItem item = items.get(position);
 
         holder.mDescriptorValue.setText(item.getMimeType());
@@ -109,17 +110,7 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                //check if this file is associated with a form
                                 File currentFile = new File(items.get(position).getLocalPath());
-                                ArrayList<Form> currentForms = FormMgr.getForms(context);
-                                for (Form f : currentForms) {
-                                    if ((f.getFormName() + ".pdf").equals(currentFile.getName())) {
-                                        //remove entry
-                                        currentForms.remove(f);
-                                        FormMgr.overwriteForms(currentForms, context);
-                                        break;
-                                    }
-                                }
 
                                 if (!currentFile.delete()) {
                                     ChangelogItem item = new ChangelogItem();
@@ -134,7 +125,7 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
                                 }
 
                                 items.remove(item);
-                                DataResourcesMgr.overwriteDataItems(context, items, favoriteName);
+                                FavoriteMgr.updateFavoriteEntry(favoriteName, currentItem, context);
                                 notifyDataSetChanged();
                             }
                         })
@@ -204,8 +195,14 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
 
                         if (dataItemDescription.getVisibility() == View.GONE) {
                             if (!dataItemDescriptionEdit.getText().toString().equals(itemDescription)) {
-                                items.get(position).setDescription(dataItemDescriptionEdit.getText().toString());
-                                DataResourcesMgr.overwriteDataItems(context, items, favoriteName);
+
+
+                                FavoriteItem fItem = FavoriteMgr.getFavorite(context, favoriteName);
+                                fItem.getDataItems()
+                                        .get(position)
+                                        .setDescription(dataItemDescriptionEdit.getText().toString());
+
+                                FavoriteMgr.updateFavoriteEntry(favoriteName, fItem, context);
                                 notifyDataSetChanged();
                             }
                         }
