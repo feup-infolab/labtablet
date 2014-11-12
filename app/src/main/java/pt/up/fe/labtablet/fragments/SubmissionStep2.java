@@ -114,8 +114,7 @@ public class SubmissionStep2 extends Fragment {
 
         if (item.getItemId() == R.id.dendro_metadata_edit) {
             Intent intent = new Intent(getActivity(), ValidateMetadataActivity.class);
-            intent.putExtra("descriptors", new Gson().toJson(favoriteItem.getMetadataItems(), Utils.ARRAY_DESCRIPTORS));
-            intent.putExtra("favorite_name", getArguments().getString("favorite_name"));
+            intent.putExtra("favorite", new Gson().toJson(favoriteItem));
             startActivityForResult(intent, Utils.METADATA_VALIDATION);
         } else if (item.getItemId() == R.id.action_dendro_metadata_confirm) {
             mHandler.nextStep(2);

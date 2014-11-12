@@ -16,8 +16,11 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -212,18 +215,6 @@ public class FileMgr {
 
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(favoriteName);
-
-        //Remove recommendations from this favorite
-        if (settings.contains(favoriteName + Utils.ASSOCIATIONS_CONFIG_ENTRY)) {
-           editor.remove(favoriteName + "_dendro");
-        }
-
-        //Remove data entries
-        if (settings.contains(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY)) {
-            //TODO check if the associated resource is a form
-            editor.remove(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY);
-        }
-
         editor.apply();
         dialog.dismiss();
     }
@@ -243,12 +234,12 @@ public class FileMgr {
         }
 
         String basePath = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/" + mContext.getResources().getString(R.string.app_name)
-                + "/";
+                + File.separator + mContext.getResources().getString(R.string.app_name)
+                + File.separator;
 
-        SharedPreferences.Editor editor = settings.edit();
+
         FavoriteItem item = FavoriteMgr.getFavorite(mContext, src);
-        FavoriteMgr.removeFavoriteEntry(mContext, item);
+        FavoriteMgr.removeFavoriteEntry(mContext, item, false);
 
         //Change entry name
         item.setTitle(dst);
@@ -260,7 +251,10 @@ public class FileMgr {
                 desc.setValue(dst);
             }
             if (desc.hasFile()) {
-                desc.setFilePath(basePath + dst + File.separator + "meta" + File.separator + desc.getValue());
+                desc.setFilePath(basePath +
+                        dst + File.separator +
+                        "meta" + File.separator +
+                        desc.getValue());
             }
         }
 
@@ -268,12 +262,9 @@ public class FileMgr {
         ArrayList<DataItem> dataRecords = item.getDataItems();
         for (DataItem desc : dataRecords) {
 
-            desc.setParent(src);
+            desc.setParent(dst);
+            desc.setLocalPath(basePath + dst + File.separator + new File(desc.getLocalPath()).getName());
             ArrayList<Descriptor> dataLevelDecriptors = desc.getFileLevelMetadata();
-            for (Descriptor metadataRecord : dataLevelDecriptors) {
-                metadataRecord.setFilePath(
-                        basePath + dst + File.separator + new File(desc.getLocalPath()).getName());
-            }
             desc.setFileLevelMetadata(dataLevelDecriptors);
         }
 
@@ -281,11 +272,12 @@ public class FileMgr {
         item.setDataItems(dataRecords);
 
         //Move folder
-        File file = new File(basePath + src);
-        File file2 = new File(basePath + dst);
+        File from = new File(basePath, src);
+        File to = new File(basePath, dst);
 
         FavoriteMgr.registerFavorite(mContext, item);
-        return file.renameTo(file2);
+
+        return from.renameTo(to);
     }
 
     /**

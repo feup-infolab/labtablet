@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -108,17 +109,9 @@ public class FavoriteDetailsFragment extends Fragment {
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        ArrayList<Descriptor> itemDescriptors = currentItem.getMetadataItems();
-        for (Descriptor desc : itemDescriptors) {
-            if (desc.getDescriptor() == null)
-                break;
-            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
-                tv_description.setText(desc.getValue());
-            }
-            if (desc.getTag().equals(Utils.TITLE_TAG)) {
-                tv_title.setText(desc.getValue());
-            }
-        }
+        tv_description.setText(currentItem.getDescription());
+        tv_title.setText(currentItem.getTitle());
+
 
         if (isMetadataVisible) {
             loadMetadataView();
@@ -163,8 +156,7 @@ public class FavoriteDetailsFragment extends Fragment {
             public void onClick(View view) {
                 if (isMetadataVisible) {
                     Intent myIntent = new Intent(getActivity(), ValidateMetadataActivity.class);
-                    myIntent.putExtra("favorite_name", favoriteName);
-                    myIntent.putExtra("descriptors", new Gson().toJson(currentItem.getMetadataItems(), Utils.ARRAY_DESCRIPTORS));
+                    myIntent.putExtra("favorite", new Gson().toJson(currentItem));
                     startActivityForResult(myIntent, Utils.METADATA_VALIDATION);
                 }
             }
@@ -192,7 +184,12 @@ public class FavoriteDetailsFragment extends Fragment {
         isMetadataVisible = true;
         bt_edit_view.setVisibility(View.VISIBLE);
 
-        MetadataListAdapter mMetadataAdapter = new MetadataListAdapter(getActivity(), currentItem.getMetadataItems(), favoriteName);
+        MetadataListAdapter mMetadataAdapter =
+                new MetadataListAdapter(
+                        getActivity(),
+                        currentItem.getMetadataItems(),
+                        favoriteName);
+
         lv_metadata.setAdapter(mMetadataAdapter);
     }
 
@@ -203,13 +200,20 @@ public class FavoriteDetailsFragment extends Fragment {
 
         isMetadataVisible = false;
 
-        DataListAdapter mDataAdapter = new DataListAdapter(getActivity(), currentItem, favoriteName);
+        DataListAdapter mDataAdapter = new DataListAdapter(
+                getActivity(),
+                currentItem,
+                favoriteName);
+
         lv_metadata.setAdapter(mDataAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (favoriteName != null) {
+            currentItem = FavoriteMgr.getFavorite(getActivity(), favoriteName);
+        }
         if (isMetadataVisible) {
             loadMetadataView();
         } else {
@@ -237,14 +241,11 @@ public class FavoriteDetailsFragment extends Fragment {
             this.onResume();
 
         } else if (requestCode == Utils.METADATA_VALIDATION) {
-            if (!data.getExtras().containsKey("descriptors"))
-                return;
+            if (!data.getExtras().containsKey("favorite")) {
+                throw new AssertionError("Received no favorite from metadata validation");
+            }
 
-            String descriptorsJson = data.getStringExtra("descriptors");
-            currentItem.setMetadataItems((ArrayList<Descriptor>)
-                    new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS));
-
-            FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, getActivity());
+            currentItem = new Gson().fromJson(data.getStringExtra("favorite"), FavoriteItem.class);
             this.onResume();
 
         } else if (requestCode == Utils.PICK_FILE_INTENT) {
@@ -355,19 +356,8 @@ public class FavoriteDetailsFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             FileMgr.removeFavorite(favoriteName, getActivity());
-
-                            ChangelogItem log = new ChangelogItem();
-                            log.setMessage(getResources().getString(R.string.log_favorite_removed) + favoriteName);
-                            log.setDate(Utils.getDate());
-                            log.setTitle(getResources().getString(R.string.log_removed));
-                            ChangelogManager.addLog(log, getActivity());
-
                             FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-                            //getActivity().getFragmentManager().popBackStack();
-
-                            //transaction.replace(R.id.frame_container, new ListFavoritesFragment());
                             getFragmentManager().popBackStack();
-
                             transaction.commit();
                         }
                     })
@@ -395,7 +385,7 @@ public class FavoriteDetailsFragment extends Fragment {
             builder.setMessage(getResources().getString(R.string.update_name_instructions));
 
             if (mView.getTag().equals(Utils.TITLE_TAG)) {
-                input.setText(favoriteName);
+                input.setText(currentItem.getTitle());
             } else {
                 input.setText(tv_description.getText().toString());
             }
@@ -411,12 +401,13 @@ public class FavoriteDetailsFragment extends Fragment {
 
                     //Update favorite's name (and DB entries ofc)
                     if (mView.getTag().equals(Utils.TITLE_TAG)) {
-                        if (!favoriteName.equals(input.getText().toString())) {
+                        if (!currentItem.getTitle().equals(input.getText().toString())) {
                             if (FileMgr.renameFavorite(favoriteName,
                                     input.getText().toString(),
                                     getActivity())) {
                                 Toast.makeText(getActivity(), "Successfully updated name", Toast.LENGTH_LONG).show();
                                 favoriteName = input.getText().toString();
+                                currentItem.setTitle(favoriteName);
                                 tv_title.setText(favoriteName);
                             }
                         }

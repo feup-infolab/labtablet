@@ -3,15 +3,16 @@ package pt.up.fe.labtablet.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import pt.up.fe.labtablet.utils.Utils;
+
 public class FavoriteItem {
     private String title;
+
     private String size;
     private String path;
     private String date_modified;
     private ArrayList<DataItem> dataItems;
     private ArrayList<Descriptor> metadataItems;
-
-
 
     private ArrayList<Descriptor> metadataRecommendations;
     private HashMap<String, ArrayList<Form>> linkedForms;
@@ -22,6 +23,7 @@ public class FavoriteItem {
         this.dataItems = new ArrayList<DataItem>();
         this.metadataItems = new ArrayList<Descriptor>();
         this.linkedForms = new HashMap<String, ArrayList<Form>>();
+        this.metadataRecommendations = new ArrayList<Descriptor>();
     }
 
     public ArrayList<Descriptor> getMetadataRecommendations() {
@@ -111,5 +113,15 @@ public class FavoriteItem {
            this.linkedForms.put(form.getParent(), new ArrayList<Form>());
            this.linkedForms.get(form.getParent()).add(form);
        }
+    }
+
+    public String getDescription() {
+        for (Descriptor desc : metadataItems) {
+            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                return desc.getValue();
+            }
+        }
+
+        return "";
     }
 }

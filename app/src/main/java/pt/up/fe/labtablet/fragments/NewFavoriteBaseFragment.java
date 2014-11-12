@@ -36,6 +36,7 @@ import pt.up.fe.labtablet.async.AsyncRecommendationsLoader;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.Project;
 import pt.up.fe.labtablet.models.Dendro.ProjectListResponse;
 import pt.up.fe.labtablet.models.Descriptor;
@@ -254,59 +255,32 @@ public class NewFavoriteBaseFragment extends Fragment {
         //Register favorite
         FavoriteItem newFavorite = new FavoriteItem(favoriteName.getText().toString());
 
-
         //Load default configuration
         ArrayList<Descriptor> baseCfg = FavoriteMgr.getBaseDescriptors(getActivity());
         ArrayList<Descriptor> folderMetadata = new ArrayList<Descriptor>();
-        ArrayList<ChangelogItem> logs = new ArrayList<ChangelogItem>();
-        ChangelogItem log;
-        String descName;
+
+        newFavorite.setTitle(itemName);
+
         for (Descriptor desc : baseCfg) {
-            descName = desc.getName().toLowerCase();
-            log = new ChangelogItem();
-            if (descName.contains("title")) {
-                log.setMessage(ChangelogManager.addedLog(descName, itemName));
-                log.setDate(Utils.getDate());
-                log.setTitle(getResources().getString(R.string.log_added));
-                logs.add(log);
-                desc.setValue(itemName);
-                desc.validate();
-                folderMetadata.add(desc);
-            }
-            if (descName.contains("description")) {
-                log.setMessage(ChangelogManager.addedLog(descName, itemName));
-                log.setDate(Utils.getDate());
-                log.setTitle(getResources().getString(R.string.log_added));
-                logs.add(log);
-                desc.validate();
-                desc.setValue(favoriteDescription.getText().toString());
-                folderMetadata.add(desc);
-            }
+            String descName = desc.getName().toLowerCase();
             if (descName.contains("date")) {
-                log.setMessage(ChangelogManager.addedLog(descName, Utils.getDate()));
-                log.setDate(Utils.getDate());
-                log.setTitle(getResources().getString(R.string.log_added));
-                logs.add(log);
                 desc.validate();
                 desc.setValue(Utils.getDate());
+                folderMetadata.add(desc);
+            } else if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                desc.validate();
+                desc.setValue(favoriteDescription.getText().toString());
                 folderMetadata.add(desc);
             }
         }
 
         if (recommendations != null && recommendations.size() > 0) {
             newFavorite.setMetadataRecommendations(recommendations);
-            log = new ChangelogItem();
-            log.setMessage(getResources().getString(R.string.log_loaded) + ": " + projectName);
-            log.setTitle(getResources().getString(R.string.log_loaded));
-            logs.add(log);
         }
 
         newFavorite.setMetadataItems(folderMetadata);
         FavoriteMgr.registerFavorite(getActivity(), newFavorite);
 
-
-
-        ChangelogManager.addItems(logs, getActivity());
         if (mDialog != null) {
             mDialog.dismiss();
         }
@@ -315,7 +289,7 @@ public class NewFavoriteBaseFragment extends Fragment {
         transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         FavoriteDetailsFragment favoriteDetail = new FavoriteDetailsFragment();
         Bundle args = new Bundle();
-        args.putString("favorite_name", favoriteName.getText().toString());
+        args.putString("favorite_name", newFavorite.getTitle());
         favoriteDetail.setArguments(args);
         transaction.replace(R.id.frame_container, favoriteDetail);
         transaction.addToBackStack(null);

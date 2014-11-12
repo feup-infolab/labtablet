@@ -123,4 +123,20 @@ public class Descriptor {
     public void setSize(String size) {
         this.size = size;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (! (o instanceof Descriptor)) {
+            return false;
+        }
+
+        //Compare by the file path in the first place
+        Descriptor desc = (Descriptor) o;
+        if (!desc.getFilePath().equals("")) {
+            return desc.getFilePath().equals(this.getFilePath());
+        } else {
+            return desc.getValue().equals(this.value);
+        }
+
+    }
 }

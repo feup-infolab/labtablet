@@ -91,13 +91,20 @@ public class FavoriteMgr {
      * @param context
      * @param favorite
      */
-    public static void removeFavoriteEntry(Context context, FavoriteItem favorite) {
+    public static void removeFavoriteEntry(Context context, FavoriteItem favorite, boolean removeData) {
         SharedPreferences settings = context.getSharedPreferences(
                 context.getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
         if (!settings.contains(favorite.getTitle())) {
-            Toast.makeText(context, "Entry " + favorite.getTitle() + " was not found...", Toast.LENGTH_SHORT);
+            Toast.makeText(context, "Entry " + favorite.getTitle() + " was not found...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!removeData) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.remove(favorite.getTitle());
+            editor.apply();
             return;
         }
 
@@ -138,6 +145,6 @@ public class FavoriteMgr {
             SharedPreferences.Editor editor = settings.edit();
             editor.remove(entryName);
             editor.putString(entryName, new Gson().toJson(item, FavoriteItem.class));
-            editor.apply();
+            editor.commit();
     }
 }

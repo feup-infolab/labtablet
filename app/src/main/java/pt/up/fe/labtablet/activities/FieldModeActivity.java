@@ -344,7 +344,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         bt_launch_form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final ArrayList<Form> forms = FormMgr.getBaseForms(FieldModeActivity.this);
+                final ArrayList<Form> forms = FormMgr.getCurrentBaseForms(FieldModeActivity.this);
                 final CharSequence values[] = new CharSequence[forms.size()];
                 for (int i = 0; i < forms.size(); ++i) {
                     values[i] = forms.get(i).getFormName();
@@ -529,15 +529,11 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 if (data == null) {
                     return;
                 }
-                if (!data.getExtras().containsKey("descriptors")) {
+                if (!data.getExtras().containsKey("favorite")) {
                     Toast.makeText(this, "No descriptors received", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                String descriptorsJson = data.getStringExtra("descriptors");
-                ArrayList<Descriptor> itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
-
-                FavoriteMgr.updateFavoriteEntry(favorite_name, currentFavoriteItem, this);
                 Toast.makeText(this, getResources().getString(R.string.metadata_added_success), Toast.LENGTH_SHORT).show();
                 finish();
                 break;
@@ -613,8 +609,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
 
         //Proceed to validate collected metadata
         Intent intent = new Intent(FieldModeActivity.this, ValidateMetadataActivity.class);
-        intent.putExtra("descriptors", new Gson().toJson(currentFavoriteItem.getMetadataItems(), Utils.ARRAY_DESCRIPTORS));
-        intent.putExtra("favorite_name", favorite_name);
+        intent.putExtra("favorite", new Gson().toJson(currentFavoriteItem));
         startActivityForResult(intent, Utils.METADATA_VALIDATION);
 
         return super.onOptionsItemSelected(item);

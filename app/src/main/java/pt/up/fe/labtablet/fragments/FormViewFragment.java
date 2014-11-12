@@ -19,9 +19,14 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.FormQuestionCreatorActivity;
 import pt.up.fe.labtablet.adapters.FormItemListAdapter;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
+import pt.up.fe.labtablet.db_handlers.FormMgr;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.utils.Utils;
@@ -95,7 +100,6 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                 (rootView.findViewById(R.id.set_form_description_no)).setEnabled(false);
                 (rootView.findViewById(R.id.set_form_description_yes)).setEnabled(false);
                 currentForm.setDescription("");
-                FormMgr.updateBaseForm(currentForm, getActivity());
                 (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.GONE);
             }
         });
@@ -111,7 +115,6 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                     public void onClick(View view) {
                         EditText etFormDescription = (EditText) (rootView.findViewById(R.id.et_set_form_description));
                         currentForm.setDescription(etFormDescription.getText().toString());
-                        FormMgr.updateBaseForm(currentForm, getActivity());
                         (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.GONE);
                     }
                 });
@@ -155,7 +158,6 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                 FormQuestion.class);
 
         currentForm.addQuestion(recFQ);
-        FormMgr.updateBaseForm(currentForm, getActivity());
         mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions(), mInterface);
         lvFormItems.setAdapter(mAdapter);
     }
@@ -176,7 +178,16 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                 .setMessage(getString(R.string.form_really_delete))
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        FormMgr.deleteForm(currentForm.getFormName(), getActivity());
+                        ArrayList<Form> forms = FormMgr.getCurrentBaseForms(getActivity());
+
+                        for (Form f : forms) {
+                            if (f.getFormName().equals(currentForm.getFormName())) {
+                                forms.remove(f);
+                                FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
+                                break;
+                            }
+                        }
+
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                         transaction.replace(R.id.frame_container, new ListFormFragment());
@@ -186,7 +197,6 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-
                     }
                 })
                 .setIcon(R.drawable.ic_recycle)
@@ -197,7 +207,15 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
 
     @Override
     public void onItemRemoval(FormQuestion q) {
+        currentForm.getFormQuestions().remove(q);
+    }
 
-        //TODO deal with this
+    @Override
+    public void onPause() {
+        ArrayList<Form> forms = FormMgr.getCurrentBaseForms(getActivity());
+        forms.remove(currentForm);
+        forms.add(currentForm);
+        FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
+        super.onPause();
     }
 }

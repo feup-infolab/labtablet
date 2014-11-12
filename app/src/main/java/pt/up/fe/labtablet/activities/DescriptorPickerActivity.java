@@ -55,7 +55,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
         favoriteName = mBundle.getString("favoriteName");
 
         if (favoriteName.equals("")) {
-            Toast.makeText(this, "Empty fav name", Toast.LENGTH_SHORT).show();
+            throw new AssertionError("Descriptor picker received an empty favorite name");
         }
 
         settings = getSharedPreferences(
