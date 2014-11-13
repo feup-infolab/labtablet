@@ -136,7 +136,7 @@ public class DataListAdapter extends ArrayAdapter<DataItem> {
         holder.mDescriptorType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File file = new File(items.get(position).getLocalPath());
+                File file = new File(items.get(position).getLocalPath().toLowerCase());
                 String mime = FileMgr.getMimeType(file.getAbsolutePath());
 
                 Intent intent = new Intent();

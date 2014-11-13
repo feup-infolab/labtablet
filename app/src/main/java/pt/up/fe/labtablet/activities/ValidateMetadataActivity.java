@@ -188,7 +188,7 @@ public class ValidateMetadataActivity extends Activity {
 
         //remove unwanted files
         for (Descriptor desc : fItem.getMetadataItems()) {
-            if (desc.hasFile()) {
+            if (desc.hasFile() && desc.getState() == Utils.DESCRIPTOR_STATE_NOT_VALIDATED) {
                 new File(desc.getFilePath()).delete();
             }
         }

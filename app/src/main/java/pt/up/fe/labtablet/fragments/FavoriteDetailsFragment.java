@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -211,8 +210,11 @@ public class FavoriteDetailsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         if (favoriteName != null) {
             currentItem = FavoriteMgr.getFavorite(getActivity(), favoriteName);
+            tv_description.setText(currentItem.getDescription());
+            tv_title.setText(currentItem.getTitle());
         }
         if (isMetadataVisible) {
             loadMetadataView();

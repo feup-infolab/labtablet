@@ -61,7 +61,7 @@ public class FileMgr {
                 .getSingleton()
                 .getMimeTypeFromExtension(MimeTypeMap
                         .getFileExtensionFromUrl(url.substring(
-                                url.lastIndexOf("."))));
+                                url.toLowerCase().lastIndexOf("."))));
     }
 
     /**
@@ -183,8 +183,8 @@ public class FileMgr {
 
     /**
      * Removes a favorite from the records and deletes its data
-     * @param favoriteName
-     * @param mContext
+     * @param favoriteName entry to remove
+     * @param mContext context to get the settings
      */
     public static void removeFavorite(String favoriteName, Context mContext) {
         ProgressDialog dialog = ProgressDialog.show(mContext, "",

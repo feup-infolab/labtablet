@@ -36,7 +36,6 @@ import pt.up.fe.labtablet.async.AsyncRecommendationsLoader;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
-import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.Project;
 import pt.up.fe.labtablet.models.Dendro.ProjectListResponse;
 import pt.up.fe.labtablet.models.Descriptor;

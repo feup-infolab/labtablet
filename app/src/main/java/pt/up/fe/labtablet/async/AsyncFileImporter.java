@@ -110,7 +110,7 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, DataItem> {
 
         DataItem dataItem = new DataItem();
         dataItem.setParent(favoriteName);
-        dataItem.setLocalPath(destPath);
+        dataItem.setLocalPath(destPath.toLowerCase());
         dataItem.setHumanReadableSize(FileMgr.humanReadableByteCount(destFile.length(), false));
         dataItem.setMimeType(FileMgr.getMimeType(destPath));
 

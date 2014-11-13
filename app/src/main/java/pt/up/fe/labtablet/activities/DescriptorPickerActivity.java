@@ -54,10 +54,6 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
         returnMode = mBundle.getInt("returnMode");
         favoriteName = mBundle.getString("favoriteName");
 
-        if (favoriteName.equals("")) {
-            throw new AssertionError("Descriptor picker received an empty favorite name");
-        }
-
         settings = getSharedPreferences(
                 getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);

@@ -73,7 +73,7 @@ public class DataItem {
     }
 
     public void setLocalPath(String filePath) {
-        this.localPath = filePath;
+        this.localPath = filePath.toLowerCase();
     }
 
     public void setDescription(String description) {

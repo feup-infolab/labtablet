@@ -2,6 +2,7 @@ package pt.up.fe.labtablet.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import pt.up.fe.labtablet.utils.Utils;
 

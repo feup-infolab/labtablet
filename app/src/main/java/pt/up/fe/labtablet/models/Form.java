@@ -90,4 +90,15 @@ public class Form {
     public String getElapsedTime() {
         return this.elapsedTime;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (! (o instanceof Form)) {
+            return false;
+        }
+
+        Form f = (Form) o;
+        return f.getFormName().equals(formName);
+    }
 }

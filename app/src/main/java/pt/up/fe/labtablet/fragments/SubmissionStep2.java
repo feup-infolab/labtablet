@@ -17,7 +17,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.activities.ValidateMetadataActivity;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.api.SubmissionStepHandler;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
@@ -112,11 +111,7 @@ public class SubmissionStep2 extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId() == R.id.dendro_metadata_edit) {
-            Intent intent = new Intent(getActivity(), ValidateMetadataActivity.class);
-            intent.putExtra("favorite", new Gson().toJson(favoriteItem));
-            startActivityForResult(intent, Utils.METADATA_VALIDATION);
-        } else if (item.getItemId() == R.id.action_dendro_metadata_confirm) {
+        if (item.getItemId() == R.id.action_dendro_metadata_confirm) {
             mHandler.nextStep(2);
         }
         return super.onOptionsItemSelected(item);
