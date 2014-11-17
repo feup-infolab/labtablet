@@ -27,7 +27,6 @@ public class Form {
         this.linkedResourcePath = "";
     }
 
-
     public String getParent() {
         return parent;
     }
@@ -90,7 +89,6 @@ public class Form {
     public String getElapsedTime() {
         return this.elapsedTime;
     }
-
 
     @Override
     public boolean equals(Object o) {

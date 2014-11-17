@@ -7,6 +7,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -24,11 +26,14 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.DendroAPI;
@@ -37,7 +42,9 @@ import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
+import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.ProgressUpdateItem;
+import pt.up.fe.labtablet.utils.PDFTools;
 import pt.up.fe.labtablet.utils.Utils;
 import pt.up.fe.labtablet.utils.Zipper;
 
@@ -105,6 +112,57 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             return null;
         }
 
+        // ***** FAVORITE ITEM IS HERE ******
+
+        FavoriteItem item = FavoriteMgr.getFavorite(mContext, favoriteName);
+
+        //***********************************
+
+        //TODO Generate forms and forms' csv file
+        if (item.getLinkedForms().size() > 0) {
+            String progress = mContext.getString(R.string.upload_generating_forms);
+
+            HashMap<String, ArrayList<Form>> linkedForms = item.getLinkedForms();
+
+            publishProgress(new ProgressUpdateItem(15, progress + "0/" + linkedForms.size()));
+            Set<String> formEntries = linkedForms.keySet();
+
+            //Create directories
+            for (String entry : formEntries) {
+
+                //mkdir
+                String entryPath = from + File.separator + entry;
+                if (!new File(entryPath).mkdir()) {
+                    Log.i("MKDIR", "Forms directory already created, skipping...");
+                }
+
+                //Generate PDFs
+                ArrayList<Form> forms = linkedForms.get(entry);
+                for (Form f : forms) {
+                    try {
+                        String path = entryPath + File.separator + f.getFormName() + ".pdf";
+                        Document document = new Document();
+                        PdfWriter.getInstance(document, new FileOutputStream(path));
+                        document.open();
+
+                        PDFTools.addMetaData(document, f);
+                        PDFTools.addTitlePage(document, f);
+                        PDFTools.addContent(document, f);
+
+                        document.close();
+                    } catch (Exception e) {
+                        error = e;
+                    }
+                }
+
+                //Write csv with stats
+            }
+
+
+
+        }
+
+
         //if there are any files to upload, zip them
         publishProgress(new ProgressUpdateItem(20, mContext.getResources().getString(R.string.upload_progress_creating_package)));
         if (new File(from).listFiles().length > 0) {
@@ -168,7 +226,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         publishProgress(new ProgressUpdateItem(
                 50, mContext.getString(R.string.upload_progress_creating_metadata_package)));
 
-        FavoriteItem item = FavoriteMgr.getFavorite(mContext, favoriteName);
         ArrayList<Descriptor> descriptors = item.getMetadataItems();
         ArrayList<DendroMetadataRecord> metadataRecords = new ArrayList<DendroMetadataRecord>();
 
@@ -203,7 +260,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                     metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD), HTTP.UTF_8);
             Log.e("metadata", new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD));
             httppost.setEntity(se);
-            Log.e("META", se.toString());
 
             HttpResponse resp = httpclient.execute(httppost);
             HttpEntity ent = resp.getEntity();
@@ -214,7 +270,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 error = new Exception(metadataResponse.result + ": " + metadataResponse.message);
                 return null;
             }
-
 
         } catch (Exception e) {
             error = e;
@@ -254,7 +309,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 StringEntity se = new StringEntity(new Gson().toJson(
                         metadataRecords, Utils.ARRAY_DENDRO_DESCRIPTORS), HTTP.UTF_8);
 
-                Log.e("DATA", se.toString());
                 httppost.setEntity(se);
 
                 HttpResponse resp = httpclient.execute(httppost);

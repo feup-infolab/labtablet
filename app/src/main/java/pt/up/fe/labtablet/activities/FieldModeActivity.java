@@ -3,13 +3,11 @@ package pt.up.fe.labtablet.activities;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -47,7 +45,6 @@ import java.util.Date;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.api.LTLocationListener;
-import pt.up.fe.labtablet.async.AsyncFormPDFGenerator;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.async.AsyncWeatherFetcher;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
@@ -551,40 +548,13 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     return;
                 }
 
-                final ProgressDialog dialog = ProgressDialog.show(FieldModeActivity.this, "",
-                        getString(R.string.loading), true);
-                dialog.show();
-                new AsyncFormPDFGenerator(new AsyncTaskHandler<String>() {
-                    @Override
-                    public void onSuccess(String result) {
-                        Toast.makeText(FieldModeActivity.this,
-                                getString(R.string.success),
-                                Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onFailure(Exception error) {
-                        Toast.makeText(FieldModeActivity.this,
-                                getString(R.string.fail),
-                                Toast.LENGTH_SHORT).show();
-
-                        dialog.dismiss();
-                        ChangelogItem item = new ChangelogItem();
-                        item.setMessage("PDF generator: " + error.toString());
-                        item.setTitle(getResources().getString(R.string.developer_error));
-                        item.setDate(Utils.getDate());
-                        ChangelogManager.addLog(item, FieldModeActivity.this);
-                    }
-
-                    @Override
-                    public void onProgressUpdate(int value) {
-
-                    }
-                }).execute(
-                        new Gson().fromJson(data.getStringExtra("form"), Form.class),
-                        favorite_name,
-                        FieldModeActivity.this);
+                //Add form item to the favorite record
+                Form form = new Gson().fromJson(data.getStringExtra("form"), Form.class);
+                form.setParent(form.getFormName());
+                form.setFormName(form.getFormName() + "_" + new Date().getTime());
+                currentFavoriteItem.addFormItem(form);
+                FavoriteMgr.updateFavoriteEntry(
+                        currentFavoriteItem.getTitle(), currentFavoriteItem, this);
                 break;
         }
     }
