@@ -131,7 +131,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             for (String entry : formEntries) {
 
                 //mkdir
-                String entryPath = from + File.separator + entry;
+                String entryPath = from + File.separator + "surveys" + File.separator + entry;
                 if (!new File(entryPath).mkdir()) {
                     Log.i("MKDIR", "Forms directory already created, skipping...");
                 }
@@ -156,6 +156,8 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 }
 
                 //Write csv with stats
+                //write columns
+                //write values
             }
 
 

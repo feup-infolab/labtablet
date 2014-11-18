@@ -187,7 +187,7 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                         }
 
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                        transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                         transaction.replace(R.id.frame_container, new ListFormFragment());
                         transaction.commit();
                     }

@@ -9,8 +9,6 @@ public class FormQuestion {
     private String question;
     private boolean mandatory;
 
-
-
     private int duration;
     private ArrayList<String> allowedValues;
 

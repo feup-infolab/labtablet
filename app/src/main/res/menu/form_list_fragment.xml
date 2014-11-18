@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pt.up.fe.labtablet.activities.FingerPaintActivity" >
     <item
+        android:fitsSystemWindows="true"
         android:id="@+id/action_add_form"
         android:icon="@drawable/ab_plus"
         android:orderInCategory="20"
