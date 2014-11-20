@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:background="@drawable/card"
-
             >
 
             <TextView
