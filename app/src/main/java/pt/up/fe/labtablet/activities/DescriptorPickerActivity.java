@@ -194,7 +194,6 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                 }
             }
         });
-
     }
 
     @Override
@@ -212,7 +211,6 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
             getActionBar().setSelectedNavigationItem(
                     savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
         }
-
         mDescriptors = FavoriteMgr.getBaseDescriptors(this);
     }
 
