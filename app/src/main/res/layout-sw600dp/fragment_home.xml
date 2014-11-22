@@ -30,6 +30,7 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+
             >
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -190,6 +191,7 @@
             android:layout_height="fill_parent"
             android:visibility="visible"
             android:padding="8dp"
+            android:layout_marginTop="6dp"
             >
             <ProgressBar
                 android:id="@+id/pb_generic_progress"
@@ -227,7 +229,6 @@
             android:gravity="center"
             android:layout_marginTop="20dp"
             android:drawableStart="@drawable/ic_swipe_right"
-            android:layout_below="@id/rl_metadata_quality"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/second_grey"
             />
