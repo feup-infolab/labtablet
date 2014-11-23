@@ -43,6 +43,7 @@
             android:maxWidth="200dp"
             android:singleLine="true"
             android:text="metadata descriptor"
+            android:textColor="@color/list_background_pressed"
             android:textSize="16sp" />
 
         <TextView

@@ -5,257 +5,271 @@
     tools:context="pt.up.fe.labtablet.fragments.ConfigurationFragment"
     >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         >
 
-        <RelativeLayout
-            android:id="@+id/gv_file"
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/card"
             >
 
-            <TextView
-                android:id="@+id/conf_pick_file_instructions"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/gv_file"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:padding="20dp"
-                android:text="@string/file_select"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                />
-            <View
-                android:id="@+id/conf_pick_file_separator"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/conf_pick_file_instructions"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/darker_gray"
-                />
-            <Button
-                android:id="@+id/bt_file_path"
-                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/conf_pick_file_separator"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:drawableStart="@android:drawable/ic_menu_agenda"
-                android:ems="10"
-                android:text="@string/bt_file_select"
-                android:textAllCaps="true" />
+                >
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/conf_pick_file_instructions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/file_select"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    />
+                <View
+                    android:id="@+id/conf_pick_file_separator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/conf_pick_file_instructions"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/darker_gray"
+                    />
+                <Button
+                    android:id="@+id/bt_file_path"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/conf_pick_file_separator"
+                    android:drawableStart="@android:drawable/ic_menu_agenda"
+                    android:ems="10"
+                    android:text="@string/bt_file_select"
+                    android:textAllCaps="true" />
 
-        <GridLayout
-            android:id="@+id/gv_clear"
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/gv_file"
             android:layout_marginTop="15dp"
-            android:background="@drawable/card"
-            android:columnCount="3"
-            android:rowCount="3">
-
-
-            <TextView
-                android:id="@+id/configuration_instructions"
+            >
+            <LinearLayout
+                android:id="@+id/gv_clear"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_columnSpan="3"
-                android:layout_row="0"
-                android:gravity="center"
-                android:padding="20dp"
-                android:text="@string/configuration_header"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                />
+                android:orientation="vertical"
+                android:columnCount="3"
+                android:rowCount="3">
 
 
-            <Button
-                android:id="@+id/bt_clear_associations"
-                style="@style/btnStyleBeige"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/clear_associations"
-                android:textAllCaps="true"
-                />
-        </GridLayout>
+                <TextView
+                    android:id="@+id/configuration_instructions"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_columnSpan="3"
+                    android:layout_row="0"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="@string/configuration_header"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    />
 
-        <LinearLayout
-            android:id="@+id/gl_gps"
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/darker_gray"
+                    />
+                <Button
+                    android:id="@+id/bt_clear_associations"
+                    android:drawableStart="@drawable/ic_recycle"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clear_associations"
+                    android:textAllCaps="true"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/gv_clear"
-            android:background="@drawable/card"
-            android:orientation="vertical"
+            android:layout_marginTop="15dp"
             >
-
-
-            <TextView
-                android:id="@+id/conf_kml_title"
+            <LinearLayout
+                android:id="@+id/gl_gps"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingBottom="10dp"
-                android:paddingTop="20dp"
-                android:text="KML"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                />
+                android:layout_below="@id/gv_clear"
+                android:orientation="vertical"
+                >
 
-            <TextView
-                android:id="@+id/conf_kml_instructions"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/gps_description"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                />
 
-            <TextView
-                android:id="@+id/kml_extension_descriptor"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Descriptor not set"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                />
+                <TextView
+                    android:id="@+id/conf_kml_title"
+                    android:textColor="@color/list_background_pressed"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="KML"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    />
 
-            <TextView
-                android:id="@+id/kml_extension_description"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                />
+                <TextView
+                    android:id="@+id/conf_kml_instructions"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/gps_description"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    />
 
-            <View
-                android:id="@+id/conf_kml_separator"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/darker_gray"
-                />
+                <TextView
+                    android:id="@+id/kml_extension_descriptor"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Descriptor not set"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    />
 
-            <Button
-                android:id="@+id/bt_kml_edit"
-                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:text="@string/edit"
-                android:textAllCaps="true"
-                />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/kml_extension_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    />
 
-        <LinearLayout
-            android:id="@+id/gl_jpg"
+                <View
+                    android:id="@+id/conf_kml_separator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/darker_gray"
+                    />
+
+                <Button
+                    android:id="@+id/bt_kml_edit"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit"
+                    android:textAllCaps="true"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/gl_gps"
-            android:background="@drawable/card"
-            android:orientation="vertical"
+            android:layout_marginTop="15dp"
             >
-
-            <TextView
-                android:id="@+id/conf_jpeg_title"
+            <LinearLayout
+                android:id="@+id/gl_jpg"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingBottom="10dp"
-                android:paddingTop="20dp"
-                android:text="JPEG"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                />
+                android:layout_below="@id/gl_gps"
+                android:orientation="vertical"
+                >
 
-            <TextView
-                android:id="@+id/conf_jpeg_description"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="@string/jpg_description"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                />
+                <TextView
+                    android:id="@+id/conf_jpeg_title"
+                    android:textColor="@color/list_background_pressed"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="JPEG"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    />
 
-            <TextView
-                android:id="@+id/jpg_extension_descriptor"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/descriptor_not_set"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                />
+                <TextView
+                    android:id="@+id/conf_jpeg_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/jpg_description"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    />
 
-            <TextView
-                android:id="@+id/jpg_extension_description"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                />
-            <View
-                android:id="@+id/conf_jpeg_separator"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/darker_gray"
-                />
+                <TextView
+                    android:id="@+id/jpg_extension_descriptor"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/descriptor_not_set"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    />
 
-            <Button
-                android:id="@+id/bt_jpg_edit"
-                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:text="@string/edit"
-                android:textAllCaps="true"
-                />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/jpg_extension_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    />
+                <View
+                    android:id="@+id/conf_jpeg_separator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/darker_gray"
+                    />
 
+                <Button
+                    android:id="@+id/bt_jpg_edit"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/edit"
+                    android:textAllCaps="true"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            >
         <LinearLayout
             android:id="@+id/rl_mp3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/gl_jpg"
-            android:background="@drawable/card"
             android:orientation="vertical"
             >
 
             <TextView
                 android:id="@+id/conf_mp3_title"
+                android:textColor="@color/list_background_pressed"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingBottom="10dp"
-                android:paddingTop="20dp"
                 android:text="MP3"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 />
@@ -294,8 +308,6 @@
                 android:id="@+id/conf_mp3_separator"
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray"
                 />
@@ -305,22 +317,24 @@
                 style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:text="Edit"
                 android:textAllCaps="true"
                 />
         </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            >
         <RelativeLayout
             android:id="@+id/dendro_configurations"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/rl_mp3"
-            android:background="@drawable/card"
-            android:padding="20dp"
+            android:padding="10dp"
             >
 
             <Button
@@ -338,6 +352,8 @@
 
             <TextView
                 android:id="@+id/dendro_configurations_title"
+                android:textColor="@color/list_background_pressed"
+                android:gravity="center"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -386,6 +402,7 @@
 
 
         </RelativeLayout>
-    </RelativeLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
 
 </ScrollView>

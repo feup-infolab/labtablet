@@ -1,5 +1,6 @@
 package pt.up.fe.labtablet.adapters;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -212,7 +213,11 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
                 builder.setTitle(items.get(pos).getName());
 
                 final EditText input = new EditText(mContext);
-                input.setInputType(InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE);
+                final ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                input.setLayoutParams(lparams);
+
                 input.setText(item.getValue());
                 input.setTag(item.getValue());
                 builder.setView(input);
