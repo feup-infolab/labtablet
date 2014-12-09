@@ -37,7 +37,6 @@ public class ListFavoritesFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getListView().setDividerHeight(0);
         setHasOptionsMenu(true);
         ActionBar mActionBar = getActivity().getActionBar();
         if (mActionBar == null) {

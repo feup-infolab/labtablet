@@ -37,16 +37,20 @@ import java.util.Set;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.DendroAPI;
+import pt.up.fe.labtablet.db_handlers.DBCon;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.labtablet.utils.PDFTools;
 import pt.up.fe.labtablet.utils.Utils;
 import pt.up.fe.labtablet.utils.Zipper;
+
+import static pt.up.fe.labtablet.utils.CSVHandler.generateCSV;
 
 public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
     //input, remove, output
@@ -76,7 +80,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         Context mContext;
         String favoriteName;
 
-
         if (params[0] instanceof String
                 && params[1] instanceof String
                 && params[2] instanceof String
@@ -95,6 +98,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             error = new Exception("Type mismatch");
             return null;
         }
+
         HttpClient httpclient;
         HttpPost httppost;
 
@@ -116,52 +120,22 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
         FavoriteItem item = FavoriteMgr.getFavorite(mContext, favoriteName);
 
-        //***********************************
+        // ***********************************
 
-        //TODO Generate forms and forms' csv file
+        //Generate forms and forms' csv file
         if (item.getLinkedForms().size() > 0) {
             String progress = mContext.getString(R.string.upload_generating_forms);
 
             HashMap<String, ArrayList<Form>> linkedForms = item.getLinkedForms();
 
             publishProgress(new ProgressUpdateItem(15, progress + "0/" + linkedForms.size()));
-            Set<String> formEntries = linkedForms.keySet();
 
-            //Create directories
-            for (String entry : formEntries) {
-
-                //mkdir
-                String entryPath = from + File.separator + "surveys" + File.separator + entry;
-                if (!new File(entryPath).mkdir()) {
-                    Log.i("MKDIR", "Forms directory already created, skipping...");
-                }
-
-                //Generate PDFs
-                ArrayList<Form> forms = linkedForms.get(entry);
-                for (Form f : forms) {
-                    try {
-                        String path = entryPath + File.separator + f.getFormName() + ".pdf";
-                        Document document = new Document();
-                        PdfWriter.getInstance(document, new FileOutputStream(path));
-                        document.open();
-
-                        PDFTools.addMetaData(document, f);
-                        PDFTools.addTitlePage(document, f);
-                        PDFTools.addContent(document, f);
-
-                        document.close();
-                    } catch (Exception e) {
-                        error = e;
-                    }
-                }
-
-                //Write csv with stats
-                //write columns
-                //write values
+            try {
+                generateCSV(mContext, linkedForms, favoriteName);
+            } catch (IOException e) {
+                error = e;
+                return null;
             }
-
-
-
         }
 
 
@@ -210,12 +184,15 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 DendroResponse response = new Gson().fromJson(EntityUtils.toString(resEntity), DendroResponse.class);
 
                 if (response.result.equals(Utils.DENDRO_RESPONSE_ERROR)) {
-                    error = new Exception(response.result + ": " + response.message);
+                    error = new Exception(response.result +
+                            ": " + response.message);
                     return null;
                 }
 
                 if (!file.delete()) {
-                    Toast.makeText(mContext, mContext.getResources().getString(R.string.upload_progress_deleting_temp_files), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,
+                            mContext.getResources().getString(R.string.upload_progress_deleting_temp_files),
+                            Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 Log.e("POST", e.getMessage());

@@ -77,6 +77,11 @@ public class DataItem {
     }
 
     public void setDescription(String description) {
+
+        if (fileLevelMetadata.size() == 0) {
+         return;
+        }
+
         for (Descriptor desc : fileLevelMetadata) {
             if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
                 desc.setValue(description);
