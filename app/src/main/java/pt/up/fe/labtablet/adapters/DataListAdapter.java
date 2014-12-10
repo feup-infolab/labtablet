@@ -2,75 +2,54 @@ package pt.up.fe.labtablet.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.async.AsyncImageLoader;
+import pt.up.fe.labtablet.db_handlers.DataResourcesMgr;
+import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
-public class DataListAdapter extends ArrayAdapter<Descriptor> {
+/**
+ * Adapter to handle data files for each favorite
+ */
+public class DataListAdapter extends ArrayAdapter<DataItem> {
 
     private final Activity context;
     private final String favoriteName;
-    private final ArrayList<Descriptor> items;
+    private final ArrayList<DataItem> items;
 
 
-    public DataListAdapter(Activity context, ArrayList<Descriptor> srcItems, String favoriteName) {
+    public DataListAdapter(Activity context, ArrayList<DataItem> srcItems, String favoriteName) {
         super(context, R.layout.item_data_list, srcItems);
         this.context = context;
         this.items = srcItems;
         this.favoriteName = favoriteName;
-    }
-
-    @Override
-    public void notifyDataSetChanged() {
-
-        String path = Environment.getExternalStorageDirectory().toString() + "/"
-                + context.getString(R.string.app_name) + "/"
-                + favoriteName;
-
-        File f = new File(path);
-        File[] files = f.listFiles();
-        items.clear();
-
-        for (File inFile : files) {
-            if (inFile.isFile()) {
-                Descriptor newItem = new Descriptor();
-                newItem.setDescriptor("");
-                newItem.setFilePath(inFile.getAbsolutePath());
-                newItem.setDateModified(new Date(inFile.lastModified()).toString());
-                newItem.setName(inFile.getName());
-                newItem.setValue(FileMgr.getMimeType(inFile.getAbsolutePath()));
-                items.add(newItem);
-            }
-        }
-
-        super.notifyDataSetChanged();
     }
 
     @Override
@@ -84,22 +63,39 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.mDescriptorName = (TextView) rowView.findViewById(R.id.metadata_item_title);
             viewHolder.mDescriptorType = (ImageView) rowView.findViewById(R.id.metadata_item_type);
-            viewHolder.mDescriptorDate = (TextView) rowView.findViewById(R.id.metadata_item_date);
             viewHolder.mDescriptorValue = (TextView) rowView.findViewById(R.id.metadata_item_value);
             viewHolder.mDescriptorSize = (TextView) rowView.findViewById(R.id.metadata_item_size);
             viewHolder.mRemoveFile = (ImageButton) rowView.findViewById(R.id.bt_remove_file);
+            viewHolder.mDescriptorDescription = (TextView) rowView.findViewById(R.id.metadata_item_description);
             rowView.setTag(viewHolder);
         }
 
         // fill data
         ViewHolder holder = (ViewHolder) rowView.getTag();
-        final Descriptor item = items.get(position);
+        final DataItem item = items.get(position);
 
-        holder.mDescriptorDate.setText(item.getDateModified());
-        holder.mDescriptorValue.setText(item.getValue());
-        holder.mDescriptorName.setText(item.getName());
-        holder.mDescriptorType.setTag(item.getFilePath());
-        holder.mDescriptorSize.setText(item.getSize());
+        holder.mDescriptorValue.setText(item.getMimeType());
+        holder.mDescriptorName.setText(new File(item.getLocalPath()).getName());
+        holder.mDescriptorType.setTag(item.getLocalPath());
+        holder.mDescriptorSize.setText(item.getHumanReadableSize());
+
+        ArrayList<Descriptor> itemMetadata = item.getFileLevelMetadata();
+        for (Descriptor desc : itemMetadata) {
+            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                if (desc.getValue().equals("")) {
+                    holder.mDescriptorDescription.setVisibility(View.GONE);
+                } else {
+                    holder.mDescriptorDescription.setVisibility(View.VISIBLE);
+                    holder.mDescriptorDescription.setText(desc.getValue());
+                }
+            }
+
+            if (item.getMimeType() == null) {
+                holder.mDescriptorValue.setVisibility(View.GONE);
+            } else {
+                holder.mDescriptorValue.setVisibility(View.VISIBLE);
+            }
+        }
 
 
         holder.mRemoveFile.setOnClickListener(new View.OnClickListener() {
@@ -112,15 +108,33 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
                         .setIcon(R.drawable.ic_recycle)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                if (!(new File(items.get(position).getFilePath()).delete())) {
+
+                                //check if this file is associated with a form
+                                File currentFile = new File(items.get(position).getLocalPath());
+                                ArrayList<Form> currentForms = FormMgr.getForms(context);
+                                for (Form f : currentForms) {
+                                    if (f.getFormName().equals(currentFile.getName())) {
+                                        //remove entry
+                                        currentForms.remove(f);
+                                        FormMgr.overwriteForms(currentForms, context);
+                                        break;
+                                    }
+                                }
+
+                                if (!currentFile.delete()) {
                                     ChangelogItem item = new ChangelogItem();
                                     item.setMessage("Queue Processor" + "Failed to delete file "
-                                            + items.get(position).getFilePath());
+                                            + items.get(position).getLocalPath());
 
                                     item.setTitle(context.getResources().getString(R.string.developer_error));
                                     item.setDate(Utils.getDate());
                                     ChangelogManager.addLog(item, context);
+                                    Toast.makeText(context, "Unable to delete file", Toast.LENGTH_SHORT).show();
+                                    return;
                                 }
+
+                                items.remove(item);
+                                DataResourcesMgr.overwriteDataItems(context, items, favoriteName);
                                 notifyDataSetChanged();
                             }
                         })
@@ -131,98 +145,97 @@ public class DataListAdapter extends ArrayAdapter<Descriptor> {
         holder.mDescriptorType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File file = new File(items.get(position).getFilePath());
+                File file = new File(items.get(position).getLocalPath());
                 String mime = FileMgr.getMimeType(file.getAbsolutePath());
 
-                if (mime == null) {
-                    Toast.makeText(context,
-                            context.getResources().getString(R.string.no_apps_available),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 Intent intent = new Intent();
                 intent.setAction(android.content.Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.fromFile(file), mime);
-                context.startActivity(intent);
+                try {
+                    context.startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(context,
+                            context.getResources().getString(R.string.no_apps_available),
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        new LoadImage(holder.mDescriptorType).execute();
+        if (item.getMimeType() != null
+                && Utils.knownImageMimeTypes.contains(item.getMimeType())) {
+            new AsyncImageLoader(holder.mDescriptorType, context).execute();
+        } else {
+            holder.mDescriptorType.setImageResource(R.drawable.ic_file);
+        }
 
         Animation animation = AnimationUtils.makeInAnimation(context, false);
         rowView.startAnimation(animation);
 
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.dialog_data_list_preview);
+
+                final TextView dataItemDescription = (TextView) dialog.findViewById(R.id.data_item_description);
+                final EditText dataItemDescriptionEdit = (EditText) dialog.findViewById(R.id.data_item_description_edit);
+                final Button dataItemSubmitChanges = (Button) dialog.findViewById(R.id.data_item_submit_changes);
+                final ImageView dataItemPreview = (ImageView) dialog.findViewById(R.id.data_item_preview);
+                dataItemPreview.setTag(item.getLocalPath());
+
+                final String itemDescription = item.getDescription();
+
+                dataItemDescription.setText(itemDescription);
+                dataItemDescriptionEdit.setText(itemDescription);
+
+                dataItemDescription.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dataItemSubmitChanges.setText(context.getString(R.string.action_save));
+                        dataItemDescription.setVisibility(View.GONE);
+                        dataItemDescriptionEdit.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                dataItemSubmitChanges.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (dataItemDescription.getVisibility() == View.GONE) {
+                            if (!dataItemDescriptionEdit.getText().toString().equals(itemDescription)) {
+                                items.get(position).setDescription(dataItemDescriptionEdit.getText().toString());
+                                DataResourcesMgr.overwriteDataItems(context, items, favoriteName);
+                                notifyDataSetChanged();
+                            }
+                        }
+                        dialog.dismiss();
+                    }
+                });
+
+                if (item.getMimeType() != null
+                        && Utils.knownImageMimeTypes.contains(item.getMimeType())) {
+                    new AsyncImageLoader(dataItemPreview, context).execute();
+                } else {
+                    dataItemPreview.setImageResource(R.drawable.ic_file_color);
+                }
+
+                dialog.setTitle(item.getResourceName());
+                dialog.show();
+
+            }
+        });
         return rowView;
     }
 
     static class ViewHolder {
         public TextView mDescriptorName;
+        public TextView mDescriptorDescription;
         public TextView mDescriptorValue;
         public ImageView mDescriptorType;
-        public TextView mDescriptorDate;
         public TextView mDescriptorSize;
         public ImageButton mRemoveFile;
     }
 
-    class LoadImage extends AsyncTask<Object, Void, Bitmap> {
 
-        private ImageView imv;
-        private String path;
-
-        public LoadImage(ImageView imv) {
-            this.imv = imv;
-            this.path = imv.getTag().toString();
-        }
-
-        @Override
-        protected Bitmap doInBackground(Object... params) {
-
-            if (path.equals(""))
-                return null;
-
-            File file = new File(path);
-            if (!file.exists())
-                return null;
-
-            try {
-                //Decode image size
-                BitmapFactory.Options o = new BitmapFactory.Options();
-                o.inJustDecodeBounds = true;
-                BitmapFactory.decodeStream(new FileInputStream(file), null, o);
-
-                //The new size we want to scale to
-                final int REQUIRED_SIZE = 70;
-
-                //Find the correct scale value. It should be the power of 2.
-                int scale = 1;
-                while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
-                    scale *= 2;
-
-                //Decode with inSampleSize
-                BitmapFactory.Options o2 = new BitmapFactory.Options();
-                o2.inSampleSize = scale;
-                return BitmapFactory.decodeStream(new FileInputStream(file), null, o2);
-            } catch (FileNotFoundException e) {
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if (!imv.getTag().toString().equals(path)) {
-               /* The path is not same. This means that this
-                  image view is handled by some other async task.
-                  We don't do anything and return. */
-                return;
-            }
-
-            if (result != null && imv != null) {
-                imv.setVisibility(View.VISIBLE);
-                imv.setImageBitmap(result);
-            } else {
-                imv.setImageResource(R.drawable.ic_metadata);
-            }
-        }
-
-    }
 }

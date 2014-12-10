@@ -23,13 +23,64 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
-import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Descriptor;
 
+import static pt.up.fe.labtablet.db_handlers.DataResourcesMgr.getDataDescriptionItems;
+import static pt.up.fe.labtablet.db_handlers.FavoriteMgr.getDescriptors;
+
 public class FileMgr {
 
+    /**
+     * Converts the lenght of a file to a more readable format (eg 23.5Mb)
+     * @param bytes
+     * @param si
+     * @return
+     */
+    public static String humanReadableByteCount(long bytes, boolean si) {
+        int unit = si ? 1000 : 1024;
+        if (bytes < unit) return bytes + " B";
+        int exp = (int) (Math.log(bytes) / Math.log(unit));
+        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
+        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+    }
+
+    /**
+     * Tries to match the file extension with a mime type
+     * @param url Path to the file
+     * @return
+     */
+    public static String getMimeType(String url) {
+        return MimeTypeMap
+                .getSingleton()
+                .getMimeTypeFromExtension(MimeTypeMap
+                        .getFileExtensionFromUrl(url.substring(
+                                url.lastIndexOf("."))));
+    }
+
+    /**
+     * This function tries to get the real path, when decoding an image or other media files inside
+     * the DCIM folder or the gallery
+     * @param context
+     * @param contentUri
+     * @return
+     */
+    public static String getRealPathFromURI(Context context, Uri contentUri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+    /**
+     * Copy a file to another location
+     * @param src
+     * @param dst
+     * @throws IOException
+     */
     public static void copy(File src, File dst) throws IOException {
 
         if (!dst.exists()) {
@@ -45,14 +96,12 @@ public class FileMgr {
         outStream.close();
     }
 
-    public static String getRealPathFromURI(Context context, Uri contentUri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = context.getContentResolver().query(contentUri, projection, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
-
+    /**
+     * Moves a file to another location
+     * @param src
+     * @param dst
+     * @throws IOException
+     */
     public static void moveFile(File src, File dst) throws IOException {
         if (!dst.exists()) {
             Log.i("New File", "" + dst.createNewFile());
@@ -68,24 +117,13 @@ public class FileMgr {
         outStream.close();
     }
 
-    public static String humanReadableByteCount(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
-        if (bytes < unit) return bytes + " B";
-        int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
-        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
-    }
 
-    public static String getMimeType(String url) {
-        String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url.toLowerCase());
-        if (extension != null) {
-            MimeTypeMap mime = MimeTypeMap.getSingleton();
-            type = mime.getMimeTypeFromExtension(extension);
-        }
-        return type;
-    }
 
+    /**
+     * Calculates the size of a folder, taking into account its contents
+     * @param directory
+     * @return
+     */
     public static long folderSize(File directory) {
         long length = 0;
         for (File file : directory.listFiles()) {
@@ -97,6 +135,11 @@ public class FileMgr {
         return length;
     }
 
+    /**
+     * Creates the folder for the metadata
+     * @param mContext
+     * @param path
+     */
     public static void makeMetaDir(Context mContext, String path) {
 
         final File newFolder = new File(path);
@@ -112,83 +155,11 @@ public class FileMgr {
         }
     }
 
-
-    public static ArrayList<Descriptor> getDescriptors(String settingsEntry, Context mContext) {
-        SharedPreferences settings = mContext.getSharedPreferences(
-                mContext.getResources().getString(R.string.app_name),
-                Context.MODE_PRIVATE);
-
-        String jsonData = settings.getString(settingsEntry, "");
-        if (!jsonData.equals("") && !jsonData.equals("[]")) {
-            return new Gson().fromJson(jsonData, Utils.ARRAY_DESCRIPTORS);
-        }
-
-        Toast.makeText(mContext, "No metadata was found. Default configuration loaded.", Toast.LENGTH_SHORT).show();
-        ArrayList<Descriptor> baseCfg = new Gson().fromJson(
-                settings.getString(Utils.DESCRIPTORS_CONFIG_ENTRY, ""),
-                Utils.ARRAY_DESCRIPTORS);
-
-        ArrayList<Descriptor> folderMetadata = new ArrayList<Descriptor>();
-
-        String descName;
-        for (Descriptor desc : baseCfg) {
-            descName = desc.getName().toLowerCase();
-            if (descName.contains("title")) {
-                desc.setValue(settingsEntry);
-                desc.validate();
-                desc.setDateModified(Utils.getDate());
-                folderMetadata.add(desc);
-                overwriteDescriptors(settingsEntry, folderMetadata, mContext);
-            }
-        }
-        return folderMetadata;
-    }
-
-    public static void overwriteDescriptors(String settingsEntry, ArrayList<Descriptor> descriptors, Context mContext) {
-        SharedPreferences settings = mContext.getSharedPreferences(
-                mContext.getResources().getString(R.string.app_name),
-                Context.MODE_PRIVATE);
-
-        if (!settings.contains(settingsEntry)) {
-            Log.e("OVERWRITE", "Entry was not found for folder " + settingsEntry);
-        }
-
-        SharedPreferences.Editor editor = settings.edit();
-        editor.remove(settingsEntry);
-        editor.putString(settingsEntry, new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
-        editor.apply();
-    }
-
-    public static ArrayList<AssociationItem> getAssociations(Context mContext) {
-        SharedPreferences settings = mContext.getSharedPreferences(
-                mContext.getResources().getString(R.string.app_name),
-                Context.MODE_PRIVATE);
-
-        if (!settings.contains(Utils.ASSOCIATIONS_CONFIG_ENTRY)) {
-            Log.e("GET", "No associations found");
-            return new ArrayList<AssociationItem>();
-        }
-
-        return new Gson().fromJson(
-                settings.getString(Utils.ASSOCIATIONS_CONFIG_ENTRY, ""),
-                Utils.ARRAY_ASSOCIATION_ITEM);
-    }
-
-    public static void addDescriptors(String favoriteName, ArrayList<Descriptor> itemDescriptors, Context mContext) {
-        SharedPreferences settings = mContext.getSharedPreferences(
-                mContext.getResources().getString(R.string.app_name),
-                Context.MODE_PRIVATE);
-
-        if (!settings.contains(favoriteName)) {
-            Log.e("Add descriptors", "Entry was not found for folder " + favoriteName);
-        } else {
-            ArrayList<Descriptor> previousDescriptors = getDescriptors(favoriteName, mContext);
-            previousDescriptors.addAll(itemDescriptors);
-            overwriteDescriptors(favoriteName, previousDescriptors, mContext);
-        }
-    }
-
-    public static boolean deleteDirectory(File file) {
+    /**
+     * Recursively follows the contents of the directory and deletes them
+     * @param file
+     */
+    private static boolean deleteDirectory(File file) {
         boolean result = false;
         if (file.exists()) {
             if (file.isDirectory()) {
@@ -206,6 +177,11 @@ public class FileMgr {
         return result;
     }
 
+    /**
+     * Removes a favorite from the records and deletes its data
+     * @param favoriteName
+     * @param mContext
+     */
     public static void removeFavorite(String favoriteName, Context mContext) {
         ProgressDialog dialog = ProgressDialog.show(mContext, "",
                 "Processing", true);
@@ -235,11 +211,24 @@ public class FileMgr {
 
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(favoriteName);
+
+        //Remove recommendations from this favorite
+        if (settings.contains(favoriteName + Utils.ASSOCIATIONS_CONFIG_ENTRY)) {
+           editor.remove(favoriteName + "_dendro");
+        }
+
+        //Remove data entries
+        if (settings.contains(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY)) {
+            editor.remove(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY);
+        }
+
         editor.apply();
         dialog.dismiss();
     }
 
-    //Update both favorite and its metadata (location + value)
+    /**
+     * Updates both favorite name and its metadata (location + value)
+     */
     public static boolean renameFavorite(String src, String dst, Context mContext) {
         String basePath = Environment.getExternalStorageDirectory().getAbsolutePath()
                 + "/" + mContext.getResources().getString(R.string.app_name)
@@ -256,8 +245,8 @@ public class FileMgr {
             return false;
         }
 
-        ArrayList<Descriptor> previousRecords = getDescriptors(src, mContext);
-        for (Descriptor desc : previousRecords) {
+        ArrayList<Descriptor> baseMetadataRecords = getDescriptors(src, mContext);
+        for (Descriptor desc : baseMetadataRecords) {
             if (desc.getTag().equals(Utils.TITLE_TAG)) {
                 desc.setValue(dst);
             }
@@ -267,19 +256,36 @@ public class FileMgr {
             }
         }
 
+        ArrayList<DataItem> baseDataRecords = getDataDescriptionItems(mContext, src);
+        for (DataItem desc : baseDataRecords) {
+
+            desc.setParent(src);
+            ArrayList<Descriptor> dataLevelDecriptors = desc.getFileLevelMetadata();
+            for (Descriptor metadataRecord : dataLevelDecriptors) {
+                metadataRecord.setFilePath(
+                        basePath + dst + File.separator + new File(desc.getLocalPath()).getName());
+            }
+            desc.setFileLevelMetadata(dataLevelDecriptors);
+        }
+
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(src);
+        editor.remove(src + Utils.DATA_DESCRIPTOR_ENTRY);
+        editor.remove(src + Utils.ASSOCIATIONS_CONFIG_ENTRY);
 
-        editor.apply();
-        editor.putString(dst, new Gson().toJson(previousRecords, Utils.ARRAY_DESCRIPTORS));
+        editor.putString(dst, new Gson().toJson(baseMetadataRecords, Utils.ARRAY_DESCRIPTORS));
+        editor.putString(dst + Utils.DATA_DESCRIPTOR_ENTRY, new Gson().toJson(baseDataRecords, Utils.ARRAY_DATA_DESCRIPTOR_ITEMS));
         editor.apply();
 
         return file.renameTo(file2);
     }
 
-
+    /**
+     * Fetches the username and password given by the user
+     */
     public static DendroConfiguration getDendroConf(Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(mContext.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
         return new Gson().fromJson(settings.getString(Utils.DENDRO_CONFS_ENTRY, ""), DendroConfiguration.class);
     }
+
 }

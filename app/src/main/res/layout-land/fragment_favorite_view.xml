@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:baselineAligned="false"
     android:background="@color/light_gray">
 
     <ScrollView
@@ -28,7 +29,7 @@
                     android:id="@+id/favorite_view_edit_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:contentDescription="@string/desc_list_item_icon"
                     android:layout_margin="5dp"
                     style="@style/btnStyleBeige"
@@ -38,8 +39,8 @@
                     android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_toLeftOf="@id/favorite_view_edit_title"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/favorite_view_edit_title"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
@@ -58,24 +59,10 @@
                 android:layout_below="@id/title_rl"
                 >
 
-
-
-                <ImageButton
-                    android:id="@+id/favorite_view_edit_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:contentDescription="@string/desc_list_item_icon"
-                    android:layout_margin="5dp"
-                    style="@style/btnStyleBeige"
-                    android:layout_centerVertical="true"
-                    android:src="@android:drawable/ic_menu_edit" />
-
                 <TextView
                     android:id="@+id/tv_description"
-                    android:layout_toStartOf="@id/favorite_view_edit_description"
                     android:layout_alignParentStart="true"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="10dp"
@@ -106,8 +93,8 @@
             android:id="@+id/ll_view_tabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
@@ -143,6 +130,10 @@
 
         <ListView
             android:id="@+id/lv_favorite_metadata"
+            android:scrollbars="none"
+            android:divider="@android:color/transparent"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_below="@id/ll_view_tabs" />

@@ -1,11 +1,32 @@
 package pt.up.fe.labtablet.models;
 
+import java.util.ArrayList;
+
 public class FavoriteItem {
     private String title;
     private String size;
     private String description;
     private String path;
     private String date_modified;
+    private ArrayList<DataItem> dataItems;
+    private ArrayList<Descriptor> metadataItems;
+
+
+    public ArrayList<DataItem> getDataItems() {
+        return dataItems;
+    }
+
+    public void setDataItems(ArrayList<DataItem> dataItems) {
+        this.dataItems = dataItems;
+    }
+
+    public ArrayList<Descriptor> getMetadataItems() {
+        return metadataItems;
+    }
+
+    public void setMetadataItems(ArrayList<Descriptor> metadataItems) {
+        this.metadataItems = metadataItems;
+    }
 
     public String getTitle() {
         return title;

@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +24,9 @@ import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Shows the list with the available favorites in the app
+ */
 public class ListFavoritesFragment extends ListFragment {
 
     private ArrayList<FavoriteItem> mFavoriteItems;
@@ -59,16 +63,16 @@ public class ListFavoritesFragment extends ListFragment {
 
         FavoriteItem selectedItem = mFavoriteItems.get(position);
 
-        FragmentTransaction transaction = super.getFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+        FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
 
-        //switch to the dataset view
-        FavoriteDetailsFragment datasetDetail = new FavoriteDetailsFragment();
+        //switch to the favorite view
+        FavoriteDetailsFragment favoriteDetails = new FavoriteDetailsFragment();
         Bundle args = new Bundle();
         args.putString("favorite_name", selectedItem.getTitle());
-        datasetDetail.setArguments(args);
-        transaction.replace(R.id.frame_container, datasetDetail);
-        transaction.addToBackStack(null);
+        favoriteDetails.setArguments(args);
+        transaction.replace(R.id.frame_container, favoriteDetails);
+        transaction.addToBackStack("nopes");
         transaction.commit();
     }
 
@@ -84,13 +88,13 @@ public class ListFavoritesFragment extends ListFragment {
         switch (item.getItemId()) {
             case R.id.action_new_dataset:
                 FragmentTransaction transaction = super.getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
-                NewFavoriteBaseFragment datasetDetail = new NewFavoriteBaseFragment();
+                transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                NewFavoriteBaseFragment favoriteDetails = new NewFavoriteBaseFragment();
                 Bundle args = new Bundle();
                 args.putString("favorite_name", "");
-                datasetDetail.setArguments(args);
-                transaction.replace(R.id.frame_container, datasetDetail);
-                transaction.addToBackStack(null);
+                favoriteDetails.setArguments(args);
+                transaction.replace(R.id.frame_container, favoriteDetails);
+                transaction.addToBackStack("nopes");
                 transaction.commit();
                 return true;
             default:
@@ -101,8 +105,13 @@ public class ListFavoritesFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
+
         String path = Environment.getExternalStorageDirectory().toString();
         File f = new File(path + "/" + getResources().getString(R.string.app_name));
+        if (!f.exists()) {
+            Log.i("MakeDir", "" +f.mkdir());
+        }
+
         File[] files = f.listFiles();
 
         mFavoriteItems.clear();

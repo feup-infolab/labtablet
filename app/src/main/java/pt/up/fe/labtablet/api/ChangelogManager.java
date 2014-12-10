@@ -12,6 +12,10 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * This class is used to manage any log the application may produce,
+ * including saving them to a permanent state
+ */
 public class ChangelogManager {
 
     public static void addLog(ChangelogItem item, Context mContext) {
@@ -33,10 +37,9 @@ public class ChangelogManager {
             return;
         }
 
-        ArrayList<ChangelogItem> storedItems = new Gson().fromJson(
+        items = new Gson().fromJson(
                 settings.getString(Utils.CHANGELOG_CONFIG_ENTRY, ""),
                 Utils.ARRAY_CHANGELOG_ITEM);
-        items = storedItems;
         items.add(item);
 
         editor.putString(Utils.CHANGELOG_CONFIG_ENTRY, new Gson().toJson(
@@ -142,9 +145,5 @@ public class ChangelogManager {
 
     public static String addedLog(String descriptor, String value) {
         return descriptor + " - " + value;
-    }
-
-    public static String createdLog(String value) {
-        return "Created favorite " + value;
     }
 }

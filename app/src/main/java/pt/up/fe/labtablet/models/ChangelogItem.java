@@ -1,18 +1,15 @@
 package pt.up.fe.labtablet.models;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
+/**
+ * Registry for an entry when special events happen in LabTablet
+ */
 public class ChangelogItem {
 
     private String message;
     private String title;
     private String date;
-    private String id;
 
-    public ChangelogItem() {
-        this.id = new Timestamp(new Date().getTime()).toString();
-    }
+    public ChangelogItem() {}
 
     public String getMessage() {
         return message;
@@ -38,16 +35,5 @@ public class ChangelogItem {
         this.title = title;
     }
 
-    public String getID() {
-        return this.id;
-    }
 
-
-    @Override
-    public boolean equals(Object obj) {
-        //well this is a syntax suggestion from the android lint #yolo
-        return obj != null &&
-                (obj == this || obj instanceof ChangelogItem && ((ChangelogItem) obj).getID().equals(this.id));
-
-    }
 }

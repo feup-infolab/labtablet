@@ -5,8 +5,8 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -20,12 +20,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
-import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.async.AsyncGenericChecker;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class HomeFragment extends Fragment {
@@ -59,6 +57,7 @@ public class HomeFragment extends Fragment {
         final Drawable no = getResources().getDrawable(R.drawable.ic_error);
         final Drawable meh = getResources().getDrawable(R.drawable.ic_warning);
 
+
         File file = new File(Environment.getExternalStorageDirectory()
                 + File.separator +getResources().getString(R.string.app_name));
 
@@ -75,6 +74,10 @@ public class HomeFragment extends Fragment {
                 projects = false;
             }
         }
+
+        Typeface fancyFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/LobsterTwo-Regular.ttf");
+        ((TextView)(rootView.findViewById(R.id.tv_home))).setTypeface(fancyFont);
+
 
         SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
         if (settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
@@ -123,15 +126,16 @@ public class HomeFragment extends Fragment {
                 public void onProgressUpdate(int value) {
 
                 }
-            }).execute();
+            }).execute(getActivity(), "");
         }
 
         btConfigurations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                 transaction.replace(R.id.frame_container, new ConfigurationFragment());
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
@@ -140,8 +144,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                 transaction.replace(R.id.frame_container, new NewFavoriteBaseFragment());
+                transaction.addToBackStack("nopes");
                 transaction.commit();
             }
         });
@@ -150,71 +155,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                 transaction.replace(R.id.frame_container, new ListFavoritesFragment());
+                transaction.addToBackStack("nopes");
                 transaction.commit();
             }
         });
-
         return rootView;
     }
 
-    public class AsyncGenericChecker extends AsyncTask<Void, Void, Integer> {
 
-        private AsyncTaskHandler<Integer> mHandler;
-        private Exception error;
-
-        public AsyncGenericChecker(AsyncTaskHandler<Integer> mHandler) {
-            this.mHandler = mHandler;
-        }
-
-        @Override
-        protected Integer doInBackground(Void... params) {
-            SharedPreferences settings = getActivity().getSharedPreferences(
-                    getResources().getString(R.string.app_name),
-                    Context.MODE_PRIVATE);
-            if(settings == null) {
-                return 0;
-            }
-
-            int counter = 0;
-            ArrayList<Descriptor> worldDescriptors = new ArrayList<Descriptor>();
-            File file = new File(
-                    Environment.getExternalStorageDirectory()
-                            + File.separator + getResources().getString(R.string.app_name));
-            for (File f : file.listFiles()) {
-                if (f.isDirectory()) {
-                    worldDescriptors.addAll(FileMgr.getDescriptors(f.getName(), getActivity()));
-                }
-            }
-
-            for (Descriptor desc : worldDescriptors) {
-                if (desc.getTag().equals(Utils.GENERIC_TAG)) {
-                    counter ++;
-                }
-            }
-            return counter;
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-            super.onPostExecute(result);
-            if (error != null) {
-                mHandler.onFailure(error);
-            } else {
-                mHandler.onSuccess(result);
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pbMetadataLoading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-    }
 }

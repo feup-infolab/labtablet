@@ -5,6 +5,11 @@ import java.io.File;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Instance of a descriptor. Descriptors are used to provide context of production to a specific
+ * favorite (dataset) they are designed to hold any resource from simple text to files and media
+ * resources
+ */
 public class Descriptor {
 
     private String name;

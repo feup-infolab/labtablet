@@ -18,6 +18,9 @@ import pt.up.fe.labtablet.adapters.ChangelogListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
 
+/**
+ * Fragment to show the recorded logs from the application
+ */
 public class ListChangelogFragment extends ListFragment {
 
     private ArrayList<ChangelogItem> items;

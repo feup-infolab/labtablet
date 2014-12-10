@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
@@ -50,6 +51,18 @@
             android:name="pt.up.fe.labtablet.activities.SubmissionValidationActivity"
             android:label="@string/title_activity_submission_validation"
             android:screenOrientation="portrait"
+            >
+        </activity>
+        <activity
+            android:name="pt.up.fe.labtablet.activities.FormQuestionCreatorActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_form_question_creator"
+            >
+        </activity>
+        <activity
+            android:name="pt.up.fe.labtablet.activities.FormSolverActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_form_question_creator"
             >
         </activity>
     </application>

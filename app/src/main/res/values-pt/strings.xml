@@ -26,8 +26,18 @@
         <item>Pesquisar</item>
         <item>Novo favorito</item>
         <item>Os meus favoritos</item>
+        <item>Formulários</item>
         <item>Eventos</item>
         <item>Configurações</item>
+    </string-array>
+
+    <string-array name="question_types">
+        <item>Selecionar tipo</item>
+        <item>Texto Livre</item> //
+        <item>Número</item> //
+        <item>Sim/Não</item> //MC{Y,N}
+        <item>Vocabulário fechado</item> //MC{a,b,c}
+        <item>Range</item> //MC{1,2,3}
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
@@ -37,6 +47,7 @@
         <item>@drawable/ic_ic_search</item>
         <item>@android:drawable/ic_input_add</item>
         <item>@android:drawable/btn_star_big_on</item>
+        <item>@drawable/ic_communities</item>
         <item>@drawable/ic_whats_hot</item>
         <item>@drawable/ic_pages</item>
     </array>
@@ -187,12 +198,12 @@
     <string name="at_least_undefined_descriptor">Existe pelo menos um registo sem descritor associado.</string>
     <string name="created_folder">Pasta criada</string>
     <string name="dest_folder_undefined">A pasta destino ainda não está definida. Selectione uma no passo anterior antes de prosseguir</string>
-    <string name="creating_package">Creating upload package</string>
-    <string name="authenticating">A autenticar credenciais</string>
-    <string name="uploading">A enviar…</string>
-    <string name="creating_metadata_package">A construir pacote de metadados</string>
-    <string name="sending_metadata">A enviar metadados…</string>
-    <string name="deleting_temp_files">A apagar ficheiros temporários</string>
+    <string name="upload_progress_creating_package">Creating upload package</string>
+    <string name="upload_progress_authenticating">A autenticar credenciais</string>
+    <string name="upload_progress_uploading">A enviar…</string>
+    <string name="upload_progress_creating_metadata_package">A construir pacote de metadados</string>
+    <string name="upload_progress_sending_metadata">A enviar metadados…</string>
+    <string name="upload_progress_deleting_temp_files">A apagar ficheiros temporários</string>
     <string name="finished">Envio terminado!</string>
     <string name="selected_folder">Pasta selecionada</string>
     <string name="pick_color">Cor</string>
@@ -208,6 +219,48 @@
     <string name="importing_file">A importar ficheiro&#8230;</string>
     <string name="no_apps_available">Não existem aplicações para abrir este tipo de ficheiros.</string>
     <string name="remove_file_title">Remover ficheiro</string>
-    <string name="metadata">Metadata</string>
-    <string name="data">Data</string>
+    <string name="metadata">Metadados</string>
+    <string name="data">Dados</string>
+    <string name="title_activity_form_creator">FormCreatorActivity</string>
+    <string name="action_new_form">Novo formulário</string>
+    <string name="get_form_name">Nome do formulário</string>
+    <string name="form_editor_top">Estas são as perguntas atualmente associadas a este formulário. Nesta vista, pode edita-las ou adicionar novas perguntas.</string>
+    <string name="empty_form_rl">Não existem perguntas associadas a este formulário. Para adicionar novas perguntas, clique no botão em baixo.</string>
+    <string name="title_activity_form_question_creator">FormQuestionCreatorActivity</string>
+    <string name="form_already_exists">Já existe um registo com este nome, por favor indique outro.</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="form_description_goes_here">Descrição do formulário</string>
+    <string name="collected_metadata">Em baixo estão os metadados recolhidos durante esta sessão. Selecione quais os registos a manter e confirme a escolha do descritor apropriado.</string>
+    <string name="write_text_for_question">Escreva em baixo o texto da pergunta</string>
+    <string name="input_goes_here">escrever aqui</string>
+    <string name="choose_expected_type">Agora, selecione o tipo de resposta esperado.</string>
+    <string name="choose_range">Selecione a gama para restringir o valor da resposta</string>
+    <string name="from">De</string>
+    <string name="to">Até</string>
+    <string name="give_allowed_values">Adicione os valores permitidos à seguinte lista</string>
+    <string name="question_created">A pergunta foi criada! Clique no botão em baixo para adicioná-la ao formulário. Se pretender, pode especificar a duração prevista para a resposta.</string>
+    <string name="expected_duration">Duração prevista (opcional, em minutos)</string>
+    <string name="want_to_give_form_description">Quer acrescentar uma descrição ao questionário?</string>
+    <string name="select_form_solve">Selecione o questionário a preencher a partir da lista</string>
+    <string name="form_solver_intro">Está prestes a iniciar um questionário com X questões, e com uma duração prevista de Y minutos. Para começar clique no botão em baixo.</string>
+    <string name="form">Questionário</string>
+    <string name="is_question_mandatory">Esta pergunta é obrigatória?</string>
+    <string name="success">Concluído!</string>
+    <string name="fail">Erro</string>
+    <string name="pick_allowed_values">Escolha uma opção</string>
+    <string name="empty_questions_exist">Existe pelo menos uma questão obrigatória que não foi respondida.</string>
+    <string name="pick_from_spinner">Selecione uma opção</string>
+    <string name="create_form_question_head">Criar questão</string>
+    <string name="could_not_get_extension">Impossível encontrar o formato do ficheiro.</string>
+    <string name="undo">Desfazer</string>
+    <string name="new_folder">Nova pasta</string>
+    <string name="unable_load_projects">Erro ao carregar pastas. Tentar novamente?</string>
+    <string name="resource_description">Resource description</string>
+    <string name="give_file_description">If you want to include any description for this resource, please write it down below.</string>
+    <string name="upload_progress_finished">Upload concluído!</string>
+    <string name="upload_progress_describing_imported_data">Describing imported resources</string>
+    <string name="new_favorite_create">Create</string>
+    <string name="give_imported_file_description">If you want to describe the imported file, please do so in the box below.</string>
+    <string name="file_imported_description">Successfully imported file.</string>
 </resources>

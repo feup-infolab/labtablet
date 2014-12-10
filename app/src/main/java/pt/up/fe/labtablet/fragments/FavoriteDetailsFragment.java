@@ -2,15 +2,15 @@ package pt.up.fe.labtablet.fragments;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,14 +22,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.DescriptorPickerActivity;
@@ -38,32 +37,31 @@ import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.labtablet.activities.ValidateMetadataActivity;
 import pt.up.fe.labtablet.adapters.DataListAdapter;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
-import pt.up.fe.labtablet.api.AsyncFileImporter;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.async.AsyncFileImporter;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.labtablet.db_handlers.DataResourcesMgr;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class FavoriteDetailsFragment extends Fragment {
 
-    TextView tv_title;
-    TextView tv_description;
-    Button bt_fieldMode;
-    Button bt_new_metadata;
-    ImageButton bt_edit_view;
-    //Buttons to switch between data and metadata views
-    Button bt_meta_view;
-    Button bt_data_view;
+    private TextView tv_title;
+    private TextView tv_description;
+    private ImageButton bt_edit_view;
 
-    ImageButton bt_edit_title;
-    ImageButton bt_edit_description;
-    ListView lv_metadata;
-    MetadataListAdapter mMetadataAdapter;
-    DataListAdapter mDataAdapter;
+    //Buttons to switch between data and metadata views
+    private Button bt_meta_view;
+    private Button bt_data_view;
+
+    private ListView lv_metadata;
     private boolean isMetadataVisible;
     private ArrayList<Descriptor> itemDescriptors;
+    private ArrayList<DataItem> dataItems;
     private String favoriteName;
 
     @Override
@@ -74,25 +72,27 @@ public class FavoriteDetailsFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        Button bt_new_metadata = (Button) rootView.findViewById(R.id.bt_new_metadata);
+        Button bt_fieldMode = (Button) rootView.findViewById(R.id.bt_field_mode);
+        ImageButton bt_edit_title = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_title);
+
         tv_title = (TextView) rootView.findViewById(R.id.tv_title);
         tv_description = (TextView) rootView.findViewById(R.id.tv_description);
-        bt_fieldMode = (Button) rootView.findViewById(R.id.bt_field_mode);
+
         lv_metadata = (ListView) rootView.findViewById(R.id.lv_favorite_metadata);
-        bt_new_metadata = (Button) rootView.findViewById(R.id.bt_new_metadata);
-        bt_edit_description = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_description);
-        bt_edit_title = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_title);
+
         bt_meta_view = (Button) rootView.findViewById(R.id.tab_metadata);
         bt_data_view = (Button) rootView.findViewById(R.id.tab_data);
         bt_edit_view = (ImageButton) rootView.findViewById(R.id.bt_edit_metadata);
 
         bt_edit_title.setTag(Utils.TITLE_TAG);
-        bt_edit_description.setTag(Utils.DESCRIPTION_TAG);
-
 
         if (savedInstanceState != null) {
             favoriteName = savedInstanceState.getString("favorite_name");
+            isMetadataVisible = savedInstanceState.getBoolean("metadata_visible");
         } else {
             favoriteName = this.getArguments().getString("favorite_name");
+            isMetadataVisible = true;
         }
 
         tv_title.setText(favoriteName);
@@ -109,22 +109,30 @@ public class FavoriteDetailsFragment extends Fragment {
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
+        itemDescriptors = FavoriteMgr.getDescriptors(favoriteName, getActivity());
+        //dataItems = DBCon.getDataDescriptionItems(getActivity(), favoriteName);
+
 
         for (Descriptor desc : itemDescriptors) {
-            if (desc.getDescriptor().contains("description")) {
+            if (desc.getDescriptor() == null)
+                break;
+            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
                 tv_description.setText(desc.getValue());
             }
-            if (desc.getDescriptor().contains("title")) {
+            if (desc.getTag().equals(Utils.TITLE_TAG)) {
                 tv_title.setText(desc.getValue());
             }
         }
 
-        loadMetadataView();
+        if (isMetadataVisible) {
+            loadMetadataView();
+        } else {
+            loadDataView();
+        }
+
 
         dcClickListener mClickListener = new dcClickListener();
         bt_edit_title.setOnClickListener(mClickListener);
-        bt_edit_description.setOnClickListener(mClickListener);
 
         bt_fieldMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,47 +190,27 @@ public class FavoriteDetailsFragment extends Fragment {
         return rootView;
     }
 
-    public void loadMetadataView() {
+    private void loadMetadataView() {
         bt_data_view.setEnabled(true);
         bt_meta_view.setEnabled(false);
         isMetadataVisible = true;
         bt_edit_view.setVisibility(View.VISIBLE);
 
-        lv_metadata.setDividerHeight(0);
-        itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
-        mMetadataAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
+        itemDescriptors = FavoriteMgr.getDescriptors(favoriteName, getActivity());
+
+        MetadataListAdapter mMetadataAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
         lv_metadata.setAdapter(mMetadataAdapter);
     }
 
-    public void loadDataView() {
+    private void loadDataView() {
         bt_data_view.setEnabled(false);
         bt_meta_view.setEnabled(true);
         bt_edit_view.setVisibility(View.INVISIBLE);
 
         isMetadataVisible = false;
-        itemDescriptors = new ArrayList<Descriptor>();
+        dataItems = DataResourcesMgr.getDataDescriptionItems(getActivity(), favoriteName);
 
-        String path = Environment.getExternalStorageDirectory().toString() + "/"
-                + getResources().getString(R.string.app_name) + "/"
-                + favoriteName;
-
-        File f = new File(path);
-        File[] files = f.listFiles();
-        itemDescriptors.clear();
-
-        for (File inFile : files) {
-            if (inFile.isFile()) {
-                Descriptor newItem = new Descriptor();
-                newItem.setDescriptor("");
-                newItem.setFilePath(inFile.getAbsolutePath());
-                newItem.setDateModified(new Date(inFile.lastModified()).toString());
-                newItem.setName(inFile.getName());
-                newItem.setValue(FileMgr.getMimeType(inFile.getAbsolutePath()));
-                itemDescriptors.add(newItem);
-            }
-        }
-
-        mDataAdapter = new DataListAdapter(getActivity(), itemDescriptors, favoriteName);
+        DataListAdapter mDataAdapter = new DataListAdapter(getActivity(), dataItems, favoriteName);
         lv_metadata.setAdapter(mDataAdapter);
     }
 
@@ -237,7 +225,7 @@ public class FavoriteDetailsFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (data == null)
@@ -251,7 +239,7 @@ public class FavoriteDetailsFragment extends Fragment {
             String descriptorJson = data.getStringExtra("descriptor");
             Descriptor newDescriptor = new Gson().fromJson(descriptorJson, Descriptor.class);
             itemDescriptors.add(newDescriptor);
-            FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+            FavoriteMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
 
             this.onResume();
 
@@ -261,38 +249,66 @@ public class FavoriteDetailsFragment extends Fragment {
 
             String descriptorsJson = data.getStringExtra("descriptors");
             itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
-            FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+            FavoriteMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
 
             this.onResume();
 
         } else if (requestCode == Utils.PICK_FILE_INTENT) {
 
-            final ProgressDialog pd = new ProgressDialog(getActivity());
-            pd.setTitle(getString(R.string.loading));
-            pd.setCancelable(false);
-            pd.setIndeterminate(false);
-            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pd.setMax(100);
-            pd.show();
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.dialog_import_file);
+            dialog.setTitle(getResources().getString(R.string.importing_file));
 
-            new AsyncFileImporter(new AsyncTaskHandler<String>() {
+            final EditText importDescription = (EditText) dialog.findViewById(R.id.import_file_description);
+            final ProgressBar importProgress = (ProgressBar) dialog.findViewById(R.id.import_file_progress);
+            final Button importSubmit = (Button) dialog.findViewById(R.id.import_file_submit);
+            final TextView importHeader = (TextView) dialog.findViewById(R.id.import_file_header);
+
+            importSubmit.setEnabled(false);
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+            dialog.show();
+
+            new AsyncFileImporter(new AsyncTaskHandler<DataItem>() {
                 @Override
-                public void onSuccess(String result) {
-                    onResume();
-                    pd.dismiss();
+                public void onSuccess(final DataItem result) {
+
+                    importSubmit.setEnabled(true);
+                    importHeader.setText(getString(R.string.file_imported_description));
+                    importSubmit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String value = importDescription.getText().toString();
+
+                            if (!value.equals("")) {
+                                ArrayList<Descriptor> itemLevelDescriptors = result.getFileLevelMetadata();
+                                for (Descriptor desc : itemLevelDescriptors) {
+                                    if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                                        desc.setValue(value);
+                                    }
+                                }
+                            }
+
+                            DataResourcesMgr.addDataItem(getActivity(), result, favoriteName);
+                            dialog.dismiss();
+                            onResume();
+                            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                        }
+                    });
+
                 }
 
                 @Override
                 public void onFailure(Exception error) {
                     Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
                     onResume();
-                    pd.dismiss();
+                    dialog.dismiss();
                 }
 
                 @Override
                 public void onProgressUpdate(int value) {
-                    pd.setProgress(value);
-                    pd.setMessage("" + value + "%");
+                    importProgress.setProgress(value);
+                    importHeader.setText("" + value + "%");
                 }
             }).execute(getActivity(), data, favoriteName);
         }
@@ -302,6 +318,7 @@ public class FavoriteDetailsFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("favorite_name", favoriteName);
+        outState.putBoolean("metadata_visible", isMetadataVisible);
     }
 
     @Override
@@ -330,13 +347,8 @@ public class FavoriteDetailsFragment extends Fragment {
 
             Intent mIntent = new Intent(getActivity(), SubmissionValidationActivity.class);
             mIntent.putExtra("favorite_name", favoriteName);
-
             getActivity().startActivityForResult(mIntent, Utils.SUBMISSION_VALIDATION);
-            FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-            getActivity().getFragmentManager().popBackStack();
-            transaction.remove(FavoriteDetailsFragment.this);
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            transaction.commit();
+
         } else if (item.getItemId() == R.id.action_favorite_delete) {
             //remove this favorite
             new AlertDialog.Builder(getActivity())
@@ -355,9 +367,11 @@ public class FavoriteDetailsFragment extends Fragment {
                             ChangelogManager.addLog(log, getActivity());
 
                             FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-                            getActivity().getFragmentManager().popBackStack();
-                            transaction.remove(FavoriteDetailsFragment.this);
-                            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                            //getActivity().getFragmentManager().popBackStack();
+
+                            //transaction.replace(R.id.frame_container, new ListFavoritesFragment());
+                            getFragmentManager().popBackStack();
+
                             transaction.commit();
                         }
                     })
@@ -384,6 +398,12 @@ public class FavoriteDetailsFragment extends Fragment {
             builder.setView(input);
             builder.setMessage(getResources().getString(R.string.update_name_instructions));
 
+            if (mView.getTag().equals(Utils.TITLE_TAG)) {
+                input.setText(favoriteName);
+            } else {
+                input.setText(tv_description.getText().toString());
+            }
+
             // Set up the buttons
             builder.setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
                 @Override
@@ -393,6 +413,7 @@ public class FavoriteDetailsFragment extends Fragment {
                         return;
                     }
 
+                    //Update favorite's name (and DB entries ofc)
                     if (mView.getTag().equals(Utils.TITLE_TAG)) {
                         if (!favoriteName.equals(input.getText().toString())) {
                             if (FileMgr.renameFavorite(favoriteName,
@@ -403,17 +424,6 @@ public class FavoriteDetailsFragment extends Fragment {
                                 tv_title.setText(favoriteName);
                             }
                         }
-
-                    } else if (mView.getTag().equals(Utils.DESCRIPTION_TAG)) {
-                        tv_description.setText(input.getText().toString());
-
-                        itemDescriptors = FileMgr.getDescriptors(favoriteName, getActivity());
-                        for (Descriptor desc : itemDescriptors) {
-                            if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
-                                desc.setValue(input.getText().toString());
-                            }
-                        }
-                        FileMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
                     }
                     onResume();
                     dialog.dismiss();

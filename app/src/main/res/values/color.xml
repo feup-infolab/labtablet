@@ -11,4 +11,10 @@
     <color name="second_grey">#ff999999</color>
     <color name="card_white">#ffffffff</color>
     <color name="card_shadow">#8c666666</color>
+
+    <!-- Orange button resources -->
+    <color name="orange_button_start">#a11005</color> <!-- Darker than the next one -->
+    <color name="orange_button_end">#d62608</color>
+    <color name="orange_button_stroke">#d62608</color>
+    <color name="orange_button_solid_color">#e0341e</color>
 </resources>

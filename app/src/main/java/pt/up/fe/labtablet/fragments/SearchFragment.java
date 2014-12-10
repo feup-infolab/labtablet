@@ -18,17 +18,15 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.FavoriteListAdapter;
-import pt.up.fe.labtablet.api.AsyncSearchTask;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
+import pt.up.fe.labtablet.async.AsyncSearchTask;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.FavoriteItem;
 
 public class SearchFragment extends Fragment {
 
 
     public SearchFragment(){}
-    private ListView lv_results;
     private EditText et_query;
-    private Button bt_submit;
     private ProgressDialog progress;
     private FavoriteListAdapter mAdapter;
 
@@ -38,9 +36,9 @@ public class SearchFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
 
-        lv_results = (ListView) rootView.findViewById(R.id.lv_results);
+        ListView lv_results = (ListView) rootView.findViewById(R.id.lv_results);
+        Button bt_submit = (Button) rootView.findViewById(R.id.bt_search);
         et_query = (EditText) rootView.findViewById(R.id.et_search_query);
-        bt_submit = (Button) rootView.findViewById(R.id.bt_search);
 
         mAdapter = new FavoriteListAdapter(getActivity(), new ArrayList<FavoriteItem>());
 

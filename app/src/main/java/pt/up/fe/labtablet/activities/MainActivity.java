@@ -9,6 +9,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.net.Uri;
@@ -26,7 +27,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Map;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.NavDrawerListAdapter;
@@ -35,6 +39,7 @@ import pt.up.fe.labtablet.fragments.ConfigurationFragment;
 import pt.up.fe.labtablet.fragments.HomeFragment;
 import pt.up.fe.labtablet.fragments.ListChangelogFragment;
 import pt.up.fe.labtablet.fragments.ListFavoritesFragment;
+import pt.up.fe.labtablet.fragments.ListFormFragment;
 import pt.up.fe.labtablet.fragments.NewFavoriteBaseFragment;
 import pt.up.fe.labtablet.fragments.SearchFragment;
 import pt.up.fe.labtablet.models.ChangelogItem;
@@ -55,11 +60,45 @@ public class MainActivity extends Activity {
     // slide menu items
     private String[] navMenuTitles;
 
+    private boolean wasDrawerShown;
+
+    private void saveSharedPreferences()
+    {
+        // create some junk data to populate the shared preferences
+        SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+
+        // BEGIN EXAMPLE
+
+        File myPath = new File(Environment.getExternalStorageDirectory().toString());
+        File myFile = new File(myPath, "MySharedPreferences");
+
+        try {
+            FileWriter fw = new FileWriter(myFile);
+            PrintWriter pw = new PrintWriter(fw);
+
+            Map<String,?> prefsMap = prefs.getAll();
+
+            for(Map.Entry<String,?> entry : prefsMap.entrySet()) {
+                pw.println(entry.getKey() + ": " + entry.getValue().toString());
+            }
+
+            pw.close();
+            fw.close();
+
+        } catch (Exception e) {
+            // what a terrible failure...
+            Log.wtf(getClass().getName(), e.toString());
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        saveSharedPreferences();
+
         //create base folder
         final File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),
                 getResources().getString(R.string.app_name));
@@ -89,8 +128,9 @@ public class MainActivity extends Activity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1), true, "10+"));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(6, -1)));
         navMenuIcons.recycle();
 
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
@@ -132,18 +172,11 @@ public class MainActivity extends Activity {
 
         if (savedInstanceState == null) {
             displayView(0);
+            mDrawerLayout.openDrawer(mDrawerList);
+            wasDrawerShown = true;
+        } else {
+            wasDrawerShown = savedInstanceState.getBoolean("was_drawer_shown");
         }
-        mDrawerLayout.openDrawer(mDrawerList);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -168,19 +201,8 @@ public class MainActivity extends Activity {
         }
     }
 
-    /* *
-     * Called when invalidateOptionsMenu() is triggered
-     */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // if nav drawer is opened, hide the action items
-        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        //menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     /**
-     * Diplaying fragment view for selected nav drawer list item
+     * Displaying fragment view for selected nav drawer list item
      */
     private void displayView(int position) {
         // remove the main content by replacing fragments
@@ -204,10 +226,14 @@ public class MainActivity extends Activity {
                 tag = "LISTFAV";
                 break;
             case 4:
+                fragment = new ListFormFragment();
+                tag = "LISTFORM";
+                break;
+            case 5:
                 fragment = new ListChangelogFragment();
                 tag = "LOG";
                 break;
-            case 5:
+            case 6:
                 fragment = new ConfigurationFragment();
                 tag = "CONF";
                 break;
@@ -216,6 +242,8 @@ public class MainActivity extends Activity {
         }
 
         if (fragment != null) {
+            //the favorite creation view should never be added to the back stack
+
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.frame_container, fragment, tag)
@@ -272,32 +300,25 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.i("", "REQ:" + requestCode + " RES:" + resultCode);
         if (requestCode == Utils.SUBMISSION_VALIDATION) {
 
             if (data == null)
                 return;
 
             Toast.makeText(this, getString(R.string.uploaded_successfully), Toast.LENGTH_SHORT).show();
-            //Remove favorite is now disabled
-            /*
-            FileMgr.removeFavorite(data.getStringExtra("favoriteName"), this);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
-            ListFavoritesFragment favoriteList = new ListFavoritesFragment();
-            transaction.replace(R.id.frame_container, favoriteList);
-            transaction.commit();
-            */
         }
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean("was_drawer_shown", wasDrawerShown);
         super.onSaveInstanceState(outState);
     }
 
+
     @Override
     public void onBackPressed() {
+
         Fragment displayedFragment = getFragmentManager().findFragmentByTag("HOME");
 
         if (displayedFragment.isVisible()) {
@@ -314,18 +335,15 @@ public class MainActivity extends Activity {
                     .setNegativeButton(R.string.cancel, null)
                     .show();
         } else {
-
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+            //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
             transaction.replace(R.id.frame_container, displayedFragment);
             transaction.addToBackStack("HOME");
             transaction.commit();
         }
     }
 
-    /**
-     * Slide menu item click listener
-     */
+
     private class SlideMenuClickListener implements
             ListView.OnItemClickListener {
         @Override
@@ -335,5 +353,7 @@ public class MainActivity extends Activity {
             displayView(position);
         }
     }
+
+
 }
 

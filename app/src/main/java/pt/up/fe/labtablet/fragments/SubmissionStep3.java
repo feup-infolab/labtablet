@@ -1,6 +1,5 @@
 package pt.up.fe.labtablet.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -14,23 +13,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
-import pt.up.fe.labtablet.api.AsyncDendroDirectoryFetcher;
-import pt.up.fe.labtablet.api.AsyncProjectListFetcher;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
+import pt.up.fe.labtablet.adapters.DendroFolderAdapter;
 import pt.up.fe.labtablet.api.SubmissionStepHandler;
+import pt.up.fe.labtablet.async.AsyncDendroDirectoryFetcher;
+import pt.up.fe.labtablet.async.AsyncProjectListFetcher;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.labtablet.models.Dendro.Project;
@@ -41,28 +37,28 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class SubmissionStep3 extends Fragment {
 
-    static SubmissionStepHandler mHandler;
+    private static SubmissionStepHandler mHandler;
     private static String projectName;
-    MenuItem actionRefresh;
-    MenuItem actionUp;
+    private MenuItem actionRefresh;
+    private MenuItem actionUp;
     private ListView dendroDirList;
     private DendroFolderAdapter mAdapter;
-    private ProgressBar progressBar;
-    private Button selectFolder;
-    private String path;
-    private TextView tv_instructions;
     private TextView tv_empty;
+    private Button selectFolder;
+    private Button btInstructions;
+
     private AsyncProjectListFetcher mProjectFetcher;
     private AsyncDendroDirectoryFetcher mDirectoryFetcher;
     private ArrayList<DendroFolderItem> folders;
     private ArrayList<Project> availableProjects;
 
+    private String path;
 
     public SubmissionStep3() {
         this.path = "/data";
     }
 
-    public static SubmissionStep3 newInstance(String projectName, SubmissionStepHandler handler) {
+    public static SubmissionStep3 newInstance(SubmissionStepHandler handler) {
         SubmissionStep3 fragment = new SubmissionStep3();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -85,12 +81,17 @@ public class SubmissionStep3 extends Fragment {
 
         dendroDirList = (ListView) rootView.findViewById(R.id.dendro_folders_list);
         selectFolder = (Button) rootView.findViewById(R.id.dendro_folders_select);
-        progressBar = (ProgressBar) rootView.findViewById(R.id.dendro_folders_progress);
-        tv_instructions = (TextView) rootView.findViewById(R.id.step3_instructions);
+        btInstructions = (Button) rootView.findViewById(R.id.step3_instructions);
         tv_empty = (TextView) rootView.findViewById(R.id.step3_empty);
-        progressBar.setVisibility(View.GONE);
-        tv_instructions.setVisibility(View.VISIBLE);
+        btInstructions.setVisibility(View.VISIBLE);
         tv_empty.setVisibility(View.GONE);
+
+        btInstructions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSearchProjects();
+            }
+        });
 
         selectFolder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +110,6 @@ public class SubmissionStep3 extends Fragment {
             }
         });
 
-
         dendroDirList.setDividerHeight(0);
         dendroDirList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -117,7 +117,9 @@ public class SubmissionStep3 extends Fragment {
                 DendroFolderItem item = folders.get(position);
                 if (item.getDdr().getFileExtension().equals(Utils.DENDRO_FOLDER_EXTENSION)) {
                     path += "/" + item.getNie().getTitle();
+
                     //items.get((Integer) view.getTag()).getNie().getTitle();
+                    selectFolder.setVisibility(View.VISIBLE);
                     selectFolder.setEnabled(true);
                     refreshFoldersList();
                 } else {
@@ -129,17 +131,20 @@ public class SubmissionStep3 extends Fragment {
         return rootView;
     }
 
+    private void onSearchProjects() {
+        initDialog();
+        mProjectFetcher.execute(getActivity());
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.e("Step3", "Received intent, but didn't launch anything. Request: " + requestCode + " Result: " + resultCode);
     }
 
-    public void refreshFoldersList() {
-        progressBar.setVisibility(View.VISIBLE);
+    private void refreshFoldersList() {
         initDirectoryFetcher();
         mDirectoryFetcher.execute(projectName + path, getActivity());
-
     }
 
     @Override
@@ -164,8 +169,7 @@ public class SubmissionStep3 extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.action_dendro_search) {
-            initDialog();
-            mProjectFetcher.execute(getActivity());
+            onSearchProjects();
         } else if (item.getItemId() == R.id.action_dendro_refresh) {
             if (!path.equals("/data")) {
                 initDirectoryFetcher();
@@ -185,7 +189,7 @@ public class SubmissionStep3 extends Fragment {
 
     }
 
-    public void initDirectoryFetcher() {
+    private void initDirectoryFetcher() {
         mDirectoryFetcher = new AsyncDendroDirectoryFetcher(new AsyncTaskHandler<ArrayList<DendroFolderItem>>() {
             @Override
             public void onSuccess(ArrayList<DendroFolderItem> result) {
@@ -203,7 +207,7 @@ public class SubmissionStep3 extends Fragment {
                 mAdapter.notifyDataSetChanged();
                 actionUp.setVisible(true);
                 actionRefresh.setVisible(true);
-                progressBar.setVisibility(View.INVISIBLE);
+                dendroDirList.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -224,8 +228,12 @@ public class SubmissionStep3 extends Fragment {
         });
     }
 
-    public void initDialog() {
-        progressBar.setVisibility(View.VISIBLE);
+    private void initDialog() {
+        btInstructions.setText("Loading. Please stand by...");
+        btInstructions.setEnabled(false);
+        btInstructions.setVisibility(View.VISIBLE);
+        btInstructions.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_wait, 0, 0);
+
         mProjectFetcher = new AsyncProjectListFetcher(new AsyncTaskHandler<ProjectListResponse>() {
             @Override
             public void onSuccess(ProjectListResponse result) {
@@ -233,8 +241,9 @@ public class SubmissionStep3 extends Fragment {
                     return;
                 }
                 availableProjects = result.getProjects();
-
+                (getActivity().findViewById(R.id.dendro_folders_buttons)).setVisibility(View.VISIBLE);
                 CharSequence values[] = new CharSequence[result.getProjects().size()];
+
                 for (int i = 0; i < result.getProjects().size(); ++i) {
                     values[i] = result.getProjects().get(i).getDcterms().getTitle();
                 }
@@ -254,9 +263,9 @@ public class SubmissionStep3 extends Fragment {
                     }
                 });
 
-                tv_instructions.setVisibility(View.GONE);
+                btInstructions.setEnabled(true);
+                btInstructions.setVisibility(View.GONE);
                 tv_empty.setVisibility(View.GONE);
-                progressBar.setVisibility(View.GONE);
                 builder.show();
 
             }
@@ -266,9 +275,12 @@ public class SubmissionStep3 extends Fragment {
                 if (getActivity() == null) {
                     return;
                 }
-                tv_instructions.setVisibility(View.GONE);
+
+                btInstructions.setText(getString(R.string.unable_load_projects));
+                btInstructions.setEnabled(true);
+                btInstructions.setVisibility(View.VISIBLE);
+                btInstructions.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ab_cross, 0, 0);
                 tv_empty.setVisibility(View.GONE);
-                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -276,59 +288,5 @@ public class SubmissionStep3 extends Fragment {
 
             }
         });
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    public class DendroFolderAdapter extends ArrayAdapter<DendroFolderItem> {
-        private final Activity context;
-        private final List<DendroFolderItem> items;
-
-        public DendroFolderAdapter(Activity context, List<DendroFolderItem> srcItems) {
-            super(context, R.layout.item_dendro_folder, srcItems);
-            this.context = context;
-            this.items = srcItems;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View rowView = convertView;
-            // reuse views
-            if (rowView == null) {
-                LayoutInflater inflater = context.getLayoutInflater();
-                rowView = inflater.inflate(R.layout.item_dendro_folder, null);
-                // configure view holder
-                ViewHolder viewHolder = new ViewHolder();
-                viewHolder.mFolderName = (TextView) rowView.findViewById(R.id.folder_item_title);
-                viewHolder.mFolderDate = (TextView) rowView.findViewById(R.id.folder_item_date);
-                viewHolder.mFolderUri = (TextView) rowView.findViewById(R.id.folder_item_size);
-                viewHolder.mFolderType = (ImageView) rowView.findViewById(R.id.folder_item_type);
-                rowView.setTag(viewHolder);
-            }
-
-            // fill data
-            ViewHolder holder = (ViewHolder) rowView.getTag();
-            final DendroFolderItem item = items.get(position);
-            holder.mFolderName.setText(item.getNie().getTitle());
-            holder.mFolderDate.setText(item.getDcterms().getModified());
-            holder.mFolderUri.setText(item.getUri());
-
-            if (item.getDdr().getFileExtension().equals("folder")) {
-                holder.mFolderType.setImageDrawable(getResources().getDrawable(R.drawable.ic_folder));
-            } else {
-                holder.mFolderType.setImageDrawable(getResources().getDrawable(R.drawable.ic_file));
-            }
-            return rowView;
-        }
-
-        class ViewHolder {
-            public TextView mFolderName;
-            public TextView mFolderDate;
-            public TextView mFolderUri;
-            public ImageView mFolderType;
-        }
     }
 }

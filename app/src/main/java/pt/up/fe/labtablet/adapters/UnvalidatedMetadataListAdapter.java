@@ -5,9 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,22 +19,27 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.io.File;
 import java.util.List;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.DescriptorPickerActivity;
+import pt.up.fe.labtablet.async.AsyncImageLoader;
 import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
+/**
+ * Handles the metadata records that are still to be validated
+ * eg to be associated with a descriptor
+ */
 public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
     private final Activity context;
     private final List<Descriptor> items;
     private final Context mContext;
     private final List<AssociationItem> associations;
     private final String favoriteName;
-    private unvalidatedMetadataInterface mInterface;
+    private final unvalidatedMetadataInterface mInterface;
 
     public UnvalidatedMetadataListAdapter(Activity context, List<Descriptor> srcItems, List<AssociationItem> associations, String favoriteName, unvalidatedMetadataInterface actInterface) {
         super(context, R.layout.item_unvalidated_metadata, srcItems);
@@ -52,7 +54,8 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
-        // reuse views
+
+        // let us all reuse these amazing views
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
             rowView = inflater.inflate(R.layout.item_unvalidated_metadata, null);
@@ -71,7 +74,7 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
             rowView.setTag(viewHolder);
         }
 
-        // fill data
+        // put some data on them
         final ViewHolder holder = (ViewHolder) rowView.getTag();
 
         holder.bt_remove.setTag(position);
@@ -87,12 +90,17 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
         holder.mMetadataPreview.setTag(item.getFilePath());
         holder.bt_edit_value.setTag(position);
 
-        new LoadImage(holder.mMetadataPreview).execute();
+        if (item.hasFile()
+                && Utils.knownImageMimeTypes.contains(FileMgr.getMimeType(item.getFilePath()))) {
+            new AsyncImageLoader(holder.mMetadataPreview, context).execute();
+        } else {
+            holder.mMetadataPreview.setImageResource(R.drawable.ic_file);
+        }
 
         for (AssociationItem association : associations) {
             Descriptor chosenOne = association.getDescriptor();
 
-            //there is no context associated
+            //there is no context associated, reject take off
             if (chosenOne.getTag() == null) {
                 break;
             }
@@ -105,12 +113,28 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
             }
         }
 
-        if (item.getTag().equals(Utils.TITLE_TAG) || item.getTag().equals(Utils.DESCRIPTION_TAG)) {
-            holder.bt_remove.setVisibility(View.INVISIBLE);
-            holder.bt_make_it_data.setVisibility(View.INVISIBLE);
-        } else if (item.hasFile()) {
+        // ------ Special descriptors handling ------
+        //Can't be edited or removed, descriptor can't change
+        if (item.getTag().equals(Utils.TITLE_TAG)) {
+            holder.bt_edit.setEnabled(false);
+            holder.bt_edit_value.setEnabled(false);
+        }
+        //Can be edited, but not removed nor change its descriptor
+        else if (item.getTag().equals(Utils.DESCRIPTION_TAG)) {
+            holder.bt_edit.setEnabled(false);
+            holder.bt_edit_value.setEnabled(true);
+        }
+        //Can edit both value and descriptor
+
+        //------- File handling -----
+        //Can't change its value
+        if (item.hasFile()) {
+            holder.bt_edit_value.setEnabled(false);
+            holder.bt_edit.setEnabled(true);
             holder.bt_remove.setVisibility(View.VISIBLE);
             holder.bt_make_it_data.setVisibility(View.VISIBLE);
+
+        //can change everything or be removed
         } else {
             holder.bt_remove.setVisibility(View.VISIBLE);
             holder.bt_make_it_data.setVisibility(View.INVISIBLE);
@@ -129,7 +153,7 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
                                 int pos = (Integer) view.getTag();
                                 if (items.get(pos).hasFile()) {
                                     //Add file for deletion
-                                    mInterface.onDataConvertion(items.get(pos));
+                                    mInterface.onDataMigration(items.get(pos));
                                 }
                                 //remove the descriptor
                                 items.remove(pos);
@@ -158,7 +182,6 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
                                 }
                                 //remove the descriptor
                                 items.remove(pos);
-
                                 notifyDataSetChanged();
                             }
                         })
@@ -218,13 +241,15 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
         return rowView;
     }
 
-    //Queue to process items as soon as the changes are applied
+    /**
+     * Queue to process items as soon as the changes are applied
+     */
     public interface unvalidatedMetadataInterface {
         //called whenever a file is selected for removal
         public void onFileDeletion(Descriptor desc);
 
         //When a metadata record is migrated to the data folder
-        public void onDataConvertion(Descriptor desc);
+        public void onDataMigration(Descriptor desc);
     }
 
     static class ViewHolder {
@@ -239,50 +264,5 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
         public ImageButton bt_make_it_data;
     }
 
-    class LoadImage extends AsyncTask<Object, Void, Bitmap> {
 
-        private ImageView imv;
-        private String path;
-
-        public LoadImage(ImageView imv) {
-            this.imv = imv;
-            this.path = imv.getTag().toString();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected Bitmap doInBackground(Object... params) {
-            Bitmap bitmap = null;
-            File file = new File(path);
-
-            if (file.exists()) {
-                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-            }
-
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if (!imv.getTag().toString().equals(path)) {
-               /* The path is not same. This means that this
-                  image view is handled by some other async task.
-                  We don't do anything and return. */
-                return;
-            }
-
-            if (result != null && imv != null) {
-                imv.setVisibility(View.VISIBLE);
-                imv.setImageBitmap(result);
-            } else {
-                imv.setImageResource(R.drawable.ic_metadata);
-            }
-        }
-
-    }
 }

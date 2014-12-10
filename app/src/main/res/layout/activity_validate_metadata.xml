@@ -4,7 +4,7 @@
     >
 
     <TextView
-        android:text="Below is the metadata gathered during this session. Select which records you want to keep and confirm the best descriptor."
+        android:text="@string/collected_metadata"
         android:background="@drawable/card"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:padding="20dp"

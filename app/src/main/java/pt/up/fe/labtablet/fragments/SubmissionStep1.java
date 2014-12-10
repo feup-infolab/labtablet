@@ -22,20 +22,21 @@ import android.widget.Toast;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.SubmissionStepHandler;
+import pt.up.fe.labtablet.async.AsyncGenericChecker;
+import pt.up.fe.labtablet.async.AsyncTaskHandler;
 
-
+/**
+ * Summarizes the device conditions (if there is enough battery, internet connection, and if the records
+ * follow the intended validations)
+ */
 public class SubmissionStep1 extends Fragment {
 
-
-    private TextView batteryLevel;
     private TextView wifiState;
-    private TextView metadataState;
-    private TextView title;
     private Drawable good;
     private Drawable bad;
     private Drawable meh;
     private ConnectionChangeReceiver mReceiver;
-    static SubmissionStepHandler mHandler;
+    private static SubmissionStepHandler mHandler;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -56,12 +57,12 @@ public class SubmissionStep1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_submission_step1, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_submission_step1, container, false);
 
-        title = (TextView) rootView.findViewById(R.id.step1_title);
-        batteryLevel = (TextView) rootView.findViewById(R.id.step1_battery_tv);
+        TextView title = (TextView) rootView.findViewById(R.id.step1_title);
+        TextView batteryLevel = (TextView) rootView.findViewById(R.id.step1_battery_tv);
+        TextView metadataState = (TextView) rootView.findViewById(R.id.step1_metadata_state);
         wifiState = (TextView) rootView.findViewById(R.id.step1_wifi_tv);
-        metadataState = (TextView) rootView.findViewById(R.id.step1_metadata_state);
 
         setHasOptionsMenu(true);
         if (savedInstanceState == null) {
@@ -84,11 +85,33 @@ public class SubmissionStep1 extends Fragment {
         } else {
             batteryLevel.setCompoundDrawablesWithIntrinsicBounds(null, null, good, null);
         }
+
+        new AsyncGenericChecker(new AsyncTaskHandler<Integer>() {
+            @Override
+            public void onSuccess(Integer result) {
+                if (result != 0) {
+                    //oh no you didn't just used generic descriptors
+                    ((TextView) rootView.findViewById(R.id.step1_metadata_state))
+                            .setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_warning, 0);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception error) {
+
+            }
+
+            @Override
+            public void onProgressUpdate(int value) {
+
+            }
+        }).execute(getActivity(), getArguments().getString("favorite_name"));
         return rootView;
     }
 
-    public float getBatteryLevel() {
+    private float getBatteryLevel() {
         Intent batteryIntent = getActivity().registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
         int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
@@ -100,7 +123,7 @@ public class SubmissionStep1 extends Fragment {
         return ((float)level / (float)scale) * 100.0f;
     }
 
-    public class ConnectionChangeReceiver extends BroadcastReceiver
+    private class ConnectionChangeReceiver extends BroadcastReceiver
     {
         @Override
         public void onReceive( Context context, Intent intent )

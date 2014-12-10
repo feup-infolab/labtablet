@@ -1,10 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/action_dendro_search"
         android:title="@string/action_select_project"
-        android:icon="@drawable/ab_box"
+        android:icon="@drawable/ic_pick"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom|withText"
-
+        android:showAsAction="never"
         />
     <item android:id="@+id/action_dendro_go_up"
         android:title="@string/goUp"

@@ -14,8 +14,9 @@ import android.widget.Toast;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
-import pt.up.fe.labtablet.api.AsyncTaskHandler;
-import pt.up.fe.labtablet.api.AsyncUploader;
+import pt.up.fe.labtablet.async.AsyncCustomTaskHandler;
+import pt.up.fe.labtablet.async.AsyncUploader;
+import pt.up.fe.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.labtablet.utils.Utils;
 
 
@@ -83,7 +84,7 @@ public class SubmissionStep4 extends Fragment {
                 pbStatus.setIndeterminate(false);
                 pbStatus.setProgress(0);
 
-                mUploadTask = new AsyncUploader(new AsyncTaskHandler<Void>() {
+                mUploadTask = new AsyncUploader(new AsyncCustomTaskHandler<Void>() {
                     @Override
                     public void onSuccess(Void result) {
                         if (getActivity() == null) {
@@ -109,44 +110,15 @@ public class SubmissionStep4 extends Fragment {
                     }
 
                     @Override
-                    public void onProgressUpdate(int value) {
+                    public void onProgressUpdate(ProgressUpdateItem value) {
                         if (getActivity() == null) {
                             return;
                         }
+                        tv_progress_status.setText(value.getMessage());
+                        pbStatus.setProgress(value.getProgress());
 
-
-                        if (value > 100) {
-                            tv_progress_status.setText(getResources().getString(R.string.uploading));
-                            pbStatus.setProgress(value - 100);
-                            return;
-                        }
-                        pbStatus.setProgress(value);
-                        switch (value) {
-                            case 10:
-                                tv_progress_status.setText(getResources().getString(R.string.creating_package));
-                                break;
-                            case 20:
-                                tv_progress_status.setText(getResources().getString(R.string.authenticating));
-                                break;
-                            case 25:
-                                tv_progress_status.setText(getResources().getString(R.string.uploading));
-                                break;
-                            case 50:
-                                tv_progress_status.setText(getResources().getString(R.string.creating_metadata_package));
-                                break;
-                            case 70:
-                                tv_progress_status.setText(getResources().getString(R.string.sending_metadata));
-                                break;
-                            case 90:
-                                tv_progress_status.setText(getResources().getString(R.string.deleting_temp_files));
-                                break;
-                            case 100:
-                                tv_progress_status.setText(getResources().getString(R.string.finished));
-                                break;
-                            default:
-                                break;
-                        }
                     }
+
                 });
                 projectName = SubmissionValidationActivity.getProjectName();
                 destUri = SubmissionValidationActivity.getDestUri();

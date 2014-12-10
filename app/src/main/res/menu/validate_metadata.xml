@@ -11,7 +11,7 @@
         android:title="@string/action_save"
         android:orderInCategory="100"
         android:showAsAction="always|withText"
-        android:icon="@drawable/ab_save"
+        android:icon="@drawable/ab_validate"
         />
 
 

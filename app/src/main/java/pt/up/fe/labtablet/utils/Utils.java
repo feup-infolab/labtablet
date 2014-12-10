@@ -4,14 +4,19 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroDescriptor;
 import pt.up.fe.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.models.FormQuestion;
 
 public class Utils {
 
@@ -26,13 +31,19 @@ public class Utils {
     public static final String TITLE_TAG = "title";
     public static final String DESCRIPTION_TAG = "description";
     public static final String GENERIC_TAG = "generic";
+    public static final String CREATED_TAG = "created";
+
     //Extension used to state a certain file is a folder (when ls)
     public static final String DENDRO_FOLDER_EXTENSION = "folder";
     public static final String DENDRO_RESPONSE_ERROR = "error";
     public static final String DENDRO_RESPONSE_ERROR_2 = "Error";
     public static final String DENDRO_CONFS_ENTRY = "dendro_configurations";
+    public static final String DATA_DESCRIPTOR_ENTRY = "_data";
     public static final int DESCRIPTOR_STATE_VALIDATED = 1;
     public static final int DESCRIPTOR_STATE_NOT_VALIDATED = 0;
+
+    public static final List<String> knownImageMimeTypes = Arrays.asList("image/jpeg", "image/png");
+
     //When calling metadatavalidationActivity and in return geting an array with the
     //validated records;
     public static final int METADATA_VALIDATION = 2;
@@ -45,7 +56,18 @@ public class Utils {
     //Launch sketchActivity
     public static final int SKETCH_INTENT_REQUEST = 6;
     //When the metadata edition changed the title
-    public static final int RESULT_TITLE_CHANGED = 8;
+    public static final int BUILD_FORM_QUESTION = 8;
+    //When the form solver activity is launched
+    public static final int SOLVE_FORM = 9;
+
+    public static final int VIEW_TYPE_TEXT = 0;
+
+    public static final int VIEW_NUMBER_PICKER = 1;
+
+    public static final int VIEW_TYPE_CLOSED_VOCAB = 2;
+
+
+
     public static Type ARRAY_ASSOCIATION_ITEM = new TypeToken<ArrayList<AssociationItem>>() {
     }.getType();
     public static Type ARRAY_CHANGELOG_ITEM = new TypeToken<ArrayList<ChangelogItem>>() {
@@ -56,15 +78,21 @@ public class Utils {
     }.getType();
     public static Type ARRAY_DENDRO_METADATA_RECORD = new TypeToken<ArrayList<DendroMetadataRecord>>() {
     }.getType();
+    public static Type ARRAY_FORM = new TypeToken<ArrayList<Form>>() {
+    }.getType();
+    public static Type ARRAY_DATA_DESCRIPTOR_ITEMS = new TypeToken<ArrayList<DataItem>>(){}.getType();
 
     // ---- Activities Results ---------
     public static Type ARRAY_DENDRO_DESCRIPTORS = new TypeToken<ArrayList<DendroDescriptor>>() {
     }.getType();
     //Configuration entries. If updated, the application must be completely reinstalled
-    //can't use previous instances
+    //should not use previous instances
     public static String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
     public static String ASSOCIATIONS_CONFIG_ENTRY = "associations";
+
     public static String DESCRIPTORS_CONFIG_ENTRY = "base_descriptors";
+    public static String BASE_FORMS_ENTRY = "base_forms";
+
     public static String CHANGELOG_CONFIG_ENTRY = "changelogs";
     public static long SAMPLE_MILLIS = 5000;
     //Select a descriptor and return it

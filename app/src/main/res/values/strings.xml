@@ -23,6 +23,7 @@
         <item>Search</item>
         <item>New Project</item>
         <item>Favorites</item>
+        <item>Forms</item>
         <item>Updates</item>
         <item>Configurations</item>
     </string-array>
@@ -34,9 +35,19 @@
         <item>@drawable/ic_ic_search</item>
         <item>@android:drawable/ic_input_add</item>
         <item>@android:drawable/btn_star_big_on</item>
+        <item>@drawable/ic_communities</item>
         <item>@drawable/ic_whats_hot</item>
         <item>@drawable/ic_pages</item>
     </array>
+
+    <string-array name="question_types">
+        <item>Select type</item>
+        <item>Free Text</item> //
+        <item>Number</item> //
+        <item>Yes/No</item> //MC{Y,N}
+        <item>Closed Vocabulary</item> //MC{a,b,c}
+        <item>Range</item> //MC{1-3}
+    </string-array>
 
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
@@ -78,7 +89,7 @@
     <string name="submission_initial_instructions">Check internet connectivity and battery level\n\nValidate metadata records to submit.\n\nProceed to the upload stage.</string>
     <string name="size">Size</string>
     <string name="modified">Modified</string>
-    <string name="wait">Waiting</string>
+    <string name="wait">Ready to start</string>
     <string name="progress_update_dir_exists">Checking if the project exists&#8230;</string>
     <string name="title_get_project_name">Please provide the name of the project where this favorite will be deposited.</string>
     <string name="title_section4">Section4</string>
@@ -116,7 +127,7 @@
     <string name="easily_manage">Easily manage opened projects and metadata</string>
     <string name="upload_and_make_accessible">Upload metadata to the repository and make it available to your team</string>
     <string name="swipe_to_menu">Swipe to open the menu</string>
-    <string name="launch_field_mode">Launch field mode</string>
+    <string name="launch_field_mode">Field mode</string>
     <string name="metadata_validated">Metadata validated</string>
     <string name="swipe_to_next">Swipe to the next step</string>
     <string name="stop">Stop</string>
@@ -178,13 +189,15 @@
     <string name="at_least_undefined_descriptor">There is at least one record without an associated descriptor.</string>
     <string name="created_folder">Created folder</string>
     <string name="dest_folder_undefined">The destination folder is not defined yet. Please select it in the previous step</string>
-    <string name="creating_package">Creating upload package</string>
-    <string name="authenticating">Authenticating</string>
-    <string name="uploading">Uploading&#8230;</string>
-    <string name="creating_metadata_package">Building metadata package</string>
-    <string name="sending_metadata">Sending metadata&#8230;</string>
-    <string name="deleting_temp_files">Deleting temporary files</string>
-    <string name="finished">Upload completed!</string>
+
+    <string name="upload_progress_creating_package">Creating upload package</string>
+    <string name="upload_progress_authenticating">Authenticating</string>
+    <string name="upload_progress_uploading">Uploading&#8230;</string>
+    <string name="upload_progress_creating_metadata_package">Building metadata package</string>
+    <string name="upload_progress_sending_metadata">Sending metadata&#8230;</string>
+    <string name="upload_progress_deleting_temp_files">Deleting temporary files</string>
+    <string name="upload_progress_finished">Upload completed!</string>
+
     <string name="selected_folder">Folder selected</string>
     <string name="pick_color">Color</string>
     <string name="developer_error">Developer error</string>
@@ -201,4 +214,52 @@
     <string name="remove_file_title">Remove file</string>
     <string name="metadata">Metadata</string>
     <string name="data">Data</string>
+    <string name="title_activity_form_creator">FormCreatorActivity</string>
+    <string name="action_new_form">New Form</string>
+    <string name="get_form_name">Form name</string>
+    <string name="form_editor_top">These are the questions associated with this form. You can edit them or add new ones.</string>
+    <string name="empty_form_rl">There are no items associated with this form. To add a new one, tap the button below.</string>
+    <string name="title_activity_form_question_creator">FormQuestionCreatorActivity</string>
+    <string name="form_already_exists">This form already exists in your list. Please provide a different name</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="form_description_goes_here">Your form\'s description goes here</string>
+    <string name="collected_metadata">Below is the metadata gathered during this session. Select which records you want to keep and confirm the best descriptor.</string>
+    <string name="write_text_for_question">Write below the text for this question</string>
+    <string name="input_goes_here">Your input goes here</string>
+    <string name="choose_expected_type">Now, choose below the expected type of answer</string>
+    <string name="choose_range">Select the range to restrict the answer</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="give_allowed_values">Add the allowed values to the list below</string>
+    <string name="question_created">OK! Your question was created! Tap the button below to add it to the form and conclude this process. If you wish, you can specify the expected time for the user to answer this question.</string>
+    <string name="expected_duration">Expected duration (optional, in minutes)</string>
+    <string name="want_to_give_form_description">Would you like to provide a description for this form?</string>
+    <string name="select_form_solve">Select the form to fill from the list bellow</string>
+    <string name="form_solver_intro">You are about to start a questionaire that has X questions and is estimated to take Y minutes. Tap the button below to start.</string>
+    <string name="form">Form</string>
+    <string name="is_question_mandatory">Is this question mandatory?</string>
+    <string name="success">Success!</string>
+    <string name="fail">Operation failed</string>
+    <string name="pick_allowed_values">Pick an item</string>
+    <string name="empty_questions_exist">There is at least one unanswered question that is mandatory.</string>
+    <string name="pick_from_spinner">Select an option</string>
+    <string name="create_form_question_head">Create question</string>
+    <string name="could_not_get_extension">Could not find the file extension.</string>
+    <string name="undo">Start over</string>
+    <string name="new_folder">New folder</string>
+    <string name="unable_load_projects">Unable to load folders. Try again?</string>
+    <string name="resource_description">Resource description</string>
+    <string name="give_file_description">If you want to include any description for this resource, please write it down below. This will appear along the imported file.</string>
+    <string name="back">Back</string>
+    <string name="add_metadata">Add record</string>
+    <string name="action_test">Test</string>
+    <string name="drawer_close"></string>
+    <string name="edit_metadata_item_title">Edit record</string>
+    <string name="edit_metadata_records">Edit gathered records</string>
+    <string name="end_session">End</string>
+    <string name="finished">Finished!</string>
+    <string name="upload_progress_describing_imported_data">Describing imported resources</string>
+    <string name="new_favorite_create">Create</string>
+    <string name="file_imported_description">Successfully imported file.</string>
 </resources>

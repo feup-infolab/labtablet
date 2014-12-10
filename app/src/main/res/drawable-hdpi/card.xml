@@ -19,10 +19,10 @@
         </shape>
     </item>
     <item
-        android:bottom="12dp"
-        android:left="10dp"
-        android:right="10dp"
-        android:top="10dp">
+        android:bottom="11dp"
+        android:left="11dp"
+        android:right="11dp"
+        android:top="11dp">
         <shape android:shape="rectangle" >
             <corners android:radius="3dp" />
 

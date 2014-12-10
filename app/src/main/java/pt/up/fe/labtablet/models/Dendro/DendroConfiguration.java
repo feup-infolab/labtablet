@@ -2,10 +2,9 @@ package pt.up.fe.labtablet.models.Dendro;
 
 
 public class DendroConfiguration {
-    public String username;
-    public String password;
-    public String address;
-
+    private String username;
+    private String password;
+    private String address;
     public boolean validated;
 
     public DendroConfiguration() {

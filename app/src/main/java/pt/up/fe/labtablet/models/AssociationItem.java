@@ -23,10 +23,6 @@ public class AssociationItem {
         this.descriptor = descriptor;
     }
 
-    public String getExtensionDescription() {
-        return this.extensionDescription;
-    }
-
     public void setExtensionDescription(String description) {
         this.extensionDescription = description;
     }
