@@ -128,15 +128,6 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/lv_favorite_metadata"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".CountryActivity"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        />
-    <!--
     <ListView
         android:id="@+id/lv_favorite_metadata"
         android:dividerHeight="10dp"
@@ -149,7 +140,6 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/ll_view_tabs"
         android:layout_gravity="center" />
--->
 
     <Button
         android:id="@+id/bt_new_metadata"
