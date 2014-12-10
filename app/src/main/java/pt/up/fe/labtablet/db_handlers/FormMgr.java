@@ -49,10 +49,7 @@ public class FormMgr {
                 Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = settings.edit();
-        if (settings.contains(Utils.BASE_FORMS_ENTRY)) {
-            editor.remove(Utils.BASE_FORMS_ENTRY);
-        }
-
+        editor.remove(Utils.BASE_FORMS_ENTRY);
         editor.putString(Utils.BASE_FORMS_ENTRY, new Gson().toJson(inputItems));
         editor.apply();
     }

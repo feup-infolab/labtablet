@@ -178,13 +178,11 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                     public void onClick(DialogInterface dialog, int which) {
                         ArrayList<Form> forms = FormMgr.getCurrentBaseForms(getActivity());
 
-                        for (Form f : forms) {
-                            if (f.getFormName().equals(currentForm.getFormName())) {
-                                forms.remove(f);
-                                FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
-                                break;
-                            }
+                        if (!forms.contains(currentForm)) {
+                            Toast.makeText(getActivity(), "FAIL", Toast.LENGTH_SHORT).show();
                         }
+                        forms.remove(currentForm);
+                        FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
 
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
@@ -210,10 +208,12 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
 
     @Override
     public void onPause() {
+        /*
         ArrayList<Form> forms = FormMgr.getCurrentBaseForms(getActivity());
         forms.remove(currentForm);
         forms.add(currentForm);
         FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
+        */
         super.onPause();
     }
 }
