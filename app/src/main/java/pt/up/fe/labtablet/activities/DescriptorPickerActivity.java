@@ -14,8 +14,10 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.DescriptorsListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
@@ -34,7 +37,6 @@ import pt.up.fe.labtablet.utils.Utils;
 public class DescriptorPickerActivity extends Activity implements ActionBar.OnNavigationListener {
 
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
-    private TextView tv_header;
     private DescriptorsListAdapter mAdapter;
     private SharedPreferences settings;
     private ArrayList<Descriptor> mDescriptors;
@@ -48,32 +50,19 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_descriptor_picker);
-        tv_header = (TextView) findViewById(R.id.tv_select);
         mBundle = getIntent().getExtras();
         returnMode = mBundle.getInt("returnMode");
         favoriteName = mBundle.getString("favoriteName");
-
-        if (favoriteName.equals("")) {
-            Toast.makeText(this, "Empty fav name", Toast.LENGTH_SHORT).show();
-        }
 
         settings = getSharedPreferences(
                 getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
 
-        if (!settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
+        if (!settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
             Toast.makeText(getApplication(),
                     getResources().getString(R.string.base_configuration_not_found),
                     Toast.LENGTH_LONG).show();
             return;
-        }
-
-        if (returnMode.equals(Utils.DESCRIPTOR_GET)) {
-            tv_header.setText(getResources().getString(R.string.select_descriptor_return));
-        } else if (returnMode.equals(Utils.DESCRIPTOR_DEFINE)) {
-            tv_header.setText(getResources().getString(R.string.select_descriptor_new));
-        } else if (returnMode.equals(Utils.DESCRIPTOR_ASSOCIATE)) {
-            tv_header.setText(getResources().getString(R.string.select_descriptor_association));
         }
 
         if (!mBundle.containsKey("file_extension")) {
@@ -111,12 +100,10 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
 
         ListView lv_descriptors;
         lv_descriptors = (ListView) findViewById(R.id.lv_descriptors);
-        lv_descriptors.setDividerHeight(0);
 
         displayedDescriptors = new ArrayList<Descriptor>();
 
-        mDescriptors = new Gson().fromJson(settings.getString(Utils.DESCRIPTORS_CONFIG_ENTRY, ""),
-                Utils.ARRAY_DESCRIPTORS);
+        mDescriptors = FavoriteMgr.getBaseDescriptors(this);
 
         //set list adapter
         mAdapter = new DescriptorsListAdapter(this, displayedDescriptors);
@@ -162,20 +149,27 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                     AlertDialog.Builder builder = new AlertDialog.Builder(DescriptorPickerActivity.this);
                     builder.setTitle(selectedDescriptor.getName());
 
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(DescriptorPickerActivity.this,
+                            android.R.layout.simple_dropdown_item_1line,
+                            selectedDescriptor.getAllowed_values()
+                                    .toArray(new String[selectedDescriptor.getAllowed_values().size()]));
+
+                    final MultiAutoCompleteTextView autoCompleteTextView = new MultiAutoCompleteTextView(DescriptorPickerActivity.this);
+                    autoCompleteTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+                    autoCompleteTextView.setAdapter(adapter);
+                    autoCompleteTextView.setThreshold(0);
+
                     // Set up the input
-                    final EditText input = new EditText(DescriptorPickerActivity.this);
-                    // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                    builder.setView(input);
+                    builder.setView(autoCompleteTextView);
 
                     // Set up the buttons
                     builder.setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (input.getText().toString().equals("")) {
-                                input.setError("The value shall not be empty.");
+                            if (autoCompleteTextView.getText().toString().equals("")) {
+                                autoCompleteTextView.setError("The value shall not be empty.");
                             } else {
-                                selectedDescriptor.setValue(input.getText().toString());
+                                selectedDescriptor.setValue(autoCompleteTextView.getText().toString());
                                 Intent returnIntent = new Intent();
                                 returnIntent.putExtra("descriptor", new Gson().toJson(selectedDescriptor, Descriptor.class));
                                 setResult(RESULT_OK, returnIntent);
@@ -198,7 +192,6 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                 }
             }
         });
-
     }
 
     @Override
@@ -216,6 +209,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
             getActionBar().setSelectedNavigationItem(
                     savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
         }
+        mDescriptors = FavoriteMgr.getBaseDescriptors(this);
     }
 
     @Override
@@ -251,7 +245,6 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
         switch (position) {
             case 0: //recommended
                 displayedDescriptors = new ArrayList<Descriptor>();
-                tv_header.setText(getResources().getString(R.string.pick_recommended_descriptors));
                 for (Descriptor d : mDescriptors) {
                     if (d.getTag().equals(extension)) {
                         displayedDescriptors.add(d);
@@ -292,7 +285,6 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                     break;
                 }
 
-                tv_header.setText(getResources().getString(R.string.picker_dendro_suggestions));
                 displayedDescriptors = new Gson().fromJson(
                         settings.getString(favoriteName + "_dendro", ""), Utils.ARRAY_DESCRIPTORS);
                 mAdapter.clear();
@@ -300,7 +292,6 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                 mAdapter.notifyDataSetChanged();
                 break;
             case 2: //ALL
-                tv_header.setText(getResources().getString(R.string.picker_all));
                 displayedDescriptors = mDescriptors;
                 mAdapter.clear();
                 mAdapter.addAll(displayedDescriptors);

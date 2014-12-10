@@ -22,18 +22,19 @@ import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncQueueProcessor;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.db_handlers.DBCon;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class ValidateMetadataActivity extends Activity {
 
     private ProgressDialog mProgressDialog;
-    private ArrayList<Descriptor> descriptors;
+    private FavoriteItem fItem;
     private ArrayList<Descriptor> deletionQueue;
     private ArrayList<Descriptor> conversionQueue;
     private UnvalidatedMetadataListAdapter mAdapter;
-    private String favoriteName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class ValidateMetadataActivity extends Activity {
         ActionBar mActionBar = getActionBar();
         if (mActionBar == null) {
             ChangelogItem item = new ChangelogItem();
-            item.setMessage("ValidateMetadata" + "Couldn't get actionbar. Compatibility mode layout");
+            item.setMessage("ValidateMetadata" + "Couldn't get actionbar.");
             item.setTitle(getResources().getString(R.string.developer_error));
             item.setDate(Utils.getDate());
             ChangelogManager.addLog(item, ValidateMetadataActivity.this);
@@ -53,16 +54,14 @@ public class ValidateMetadataActivity extends Activity {
         }
 
         if (savedInstanceState == null) {
-            String descriptorsJson = getIntent().getStringExtra("descriptors");
-            favoriteName = getIntent().getStringExtra("favorite_name");
-            descriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
+            String descriptorsJson = getIntent().getStringExtra("favorite");
+            fItem = new Gson().fromJson(descriptorsJson, FavoriteItem.class);
             deletionQueue = new ArrayList<Descriptor>();
             conversionQueue = new ArrayList<Descriptor>();
         } else {
-            descriptors = new Gson().fromJson(savedInstanceState.getString("descriptors"), Utils.ARRAY_DESCRIPTORS);
+            fItem = new Gson().fromJson(savedInstanceState.getString("favorite"), FavoriteItem.class);
             deletionQueue = new Gson().fromJson(savedInstanceState.getString("deletionQueue"), Utils.ARRAY_DESCRIPTORS);
             conversionQueue = new Gson().fromJson(savedInstanceState.getString("convertionQueue"), Utils.ARRAY_DESCRIPTORS);
-            favoriteName = savedInstanceState.getString("favorite_name");
         }
 
         ListView lv_unvalidated_metadata = (ListView) findViewById(R.id.lv_unvalidated_metadata);
@@ -82,7 +81,10 @@ public class ValidateMetadataActivity extends Activity {
                 };
 
         mAdapter = new UnvalidatedMetadataListAdapter(this,
-                descriptors, DBCon.getAssociations(this), favoriteName, mInterface);
+                fItem.getMetadataItems(),
+                DBCon.getAssociations(this),
+                fItem.getTitle(),
+                mInterface);
 
         lv_unvalidated_metadata.setAdapter(mAdapter);
     }
@@ -98,10 +100,10 @@ public class ValidateMetadataActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_metadata_save) {
-            if (!descriptors.isEmpty()) {
+            if (!fItem.getMetadataItems().isEmpty()) {
                 mAdapter.notifyDataSetChanged();
 
-                for (Descriptor desc : descriptors) {
+                for (Descriptor desc : fItem.getMetadataItems()) {
                     if (desc.getState() == Utils.DESCRIPTOR_STATE_NOT_VALIDATED) {
                         Toast.makeText(getApplication(), getResources().getString(R.string.at_least_undefined_descriptor), Toast.LENGTH_LONG).show();
                         return false;
@@ -119,7 +121,7 @@ public class ValidateMetadataActivity extends Activity {
                 public void onSuccess(Void result) {
                     mProgressDialog.dismiss();
                     Intent returnIntent = new Intent();
-                    returnIntent.putExtra("descriptors", new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
+                    returnIntent.putExtra("favorite", new Gson().toJson(fItem));
                     setResult(RESULT_OK, returnIntent);
                     finish();
                 }
@@ -133,13 +135,13 @@ public class ValidateMetadataActivity extends Activity {
                 public void onProgressUpdate(int value) {
                     mProgressDialog.setProgress(value);
                 }
-            }).execute(favoriteName, ValidateMetadataActivity.this, deletionQueue, conversionQueue);
+            }).execute(fItem, ValidateMetadataActivity.this, deletionQueue, conversionQueue);
 
         } else if (item.getItemId() == R.id.action_metadata_cancel) {
             deletionQueue.clear();
-
+            conversionQueue.clear();
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("descriptors", new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
+            returnIntent.putExtra("favorite", new Gson().toJson(fItem));
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -149,10 +151,11 @@ public class ValidateMetadataActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //Update descriptor to the picked one
         try {
             String descriptorJson = data.getStringExtra("descriptor");
             Descriptor newMetadata = new Gson().fromJson(descriptorJson, Descriptor.class);
-            for (Descriptor desc : descriptors) {
+            for (Descriptor desc : fItem.getMetadataItems()) {
                 if (desc.getValue().equals(newMetadata.getValue())) {
                     desc.setName(newMetadata.getName());
                     desc.setDescription(newMetadata.getDescription());
@@ -173,8 +176,7 @@ public class ValidateMetadataActivity extends Activity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putString("favorite_name", favoriteName);
-        outState.putString("descriptors", new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
+        outState.putString("favorite", new Gson().toJson(fItem));
         outState.putString("deletionQueue", new Gson().toJson(deletionQueue, Utils.ARRAY_DESCRIPTORS));
         outState.putString("convertionQueue", new Gson().toJson(conversionQueue, Utils.ARRAY_DESCRIPTORS));
         super.onSaveInstanceState(outState);
@@ -185,14 +187,14 @@ public class ValidateMetadataActivity extends Activity {
         deletionQueue.clear();
 
         //remove unwanted files
-        for (Descriptor desc : descriptors) {
-            if (desc.hasFile()) {
+        for (Descriptor desc : fItem.getMetadataItems()) {
+            if (desc.hasFile() && desc.getState() == Utils.DESCRIPTOR_STATE_NOT_VALIDATED) {
                 new File(desc.getFilePath()).delete();
             }
         }
-        descriptors = new ArrayList<Descriptor>();
+
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("descriptors", new Gson().toJson(descriptors, Utils.ARRAY_DESCRIPTORS));
+        returnIntent.putExtra("favorite", new Gson().toJson(fItem));
         setResult(RESULT_CANCELED, returnIntent);
         finish();
         super.onBackPressed();

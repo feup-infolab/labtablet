@@ -1,9 +1,4 @@
-package pt.up.fe.labtablet.async;
-
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Environment;
-import android.util.Log;
+package pt.up.fe.labtablet.utils;
 
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BaseColor;
@@ -17,136 +12,24 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
-import pt.up.fe.labtablet.models.DataItem;
-import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormQuestion;
-import pt.up.fe.labtablet.utils.FileMgr;
-import pt.up.fe.labtablet.utils.Utils;
 
 /**
- * Transforms the received data to a pdf file and saves it to
- * the intended path
+ * Created by ricardo on 17-11-2014.
  */
-public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
+public class PDFTools {
 
-    private Exception error;
-    private final AsyncTaskHandler<String> mHandler;
     private static final Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
     private static final Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
     private static final Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
     private static final Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 
-    public AsyncFormPDFGenerator(AsyncTaskHandler<String> mHandler) {
-        this.mHandler = mHandler;
-    }
-
-    @Override
-    protected String doInBackground(Object... params) {
-
-        //Form, Favorite Name, Context
-        if (! (params[0] instanceof Form
-                || params[1] instanceof String
-                || params[2] instanceof Context)) {
-            Log.e("PDF", "Wrong object types received!");
-            return null;
-        }
-
-        Context mContext = (Context) params[2];
-        String favoriteName = (String) params[1];
-        Form form = (Form) params[0];
-        form.setParent(form.getFormName());
-        form.setFormName(form.getFormName() + "_" + new Date().getTime());
-
-
-        String path = Environment.getExternalStorageDirectory()
-                + "/" + mContext.getString(R.string.app_name)
-                + "/" + favoriteName + "/"
-                + form.getFormName() + ".pdf" ;
-
-        form.setLinkedResourcePath(path);
-
-        try {
-            Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(path));
-            document.open();
-
-            addMetaData(document, form);
-            addTitlePage(document, form);
-            addContent(document, form);
-
-            document.close();
-        } catch (Exception e) {
-            error = e;
-        }
-
-        //Add data items to the favorite
-        DataItem dataItem = new DataItem();
-        dataItem.setParent(favoriteName);
-
-        File file = new File(path);
-
-        dataItem.setLocalPath(path);
-        dataItem.setHumanReadableSize(FileMgr.humanReadableByteCount(file.length(), false));
-        dataItem.setMimeType(FileMgr.getMimeType(file.getPath()));
-
-        ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
-
-        ArrayList<Descriptor> loadedDescriptors =
-                FavoriteMgr.getBaseDescriptors(mContext);
-
-        //If additional metadata is available, it should be added here
-        for (Descriptor desc : loadedDescriptors) {
-            String tag = desc.getTag();
-            if (tag.equals(Utils.TITLE_TAG)) {
-                desc.setValue(file.getName());
-                itemLevelMetadata.add(desc);
-            } else if (tag.equals(Utils.CREATED_TAG)) {
-                desc.setValue("" + new Date());
-                itemLevelMetadata.add(desc);
-            } else if (tag.equals(Utils.DESCRIPTION_TAG)) {
-                desc.setValue("");
-                itemLevelMetadata.add(desc);
-            }
-        }
-
-        dataItem.setFileLevelMetadata(itemLevelMetadata);
-
-        FavoriteItem item = FavoriteMgr.getFavorite(mContext, favoriteName);
-        item.addDataItem(dataItem);
-        item.addFormItem(form);
-        FavoriteMgr.updateFavoriteEntry(favoriteName, item, mContext);
-
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-        if (error != null) {
-            mHandler.onFailure(error);
-        } else {
-            mHandler.onSuccess(result);
-        }
-    }
-
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        super.onProgressUpdate(values);
-        mHandler.onProgressUpdate(values[0]);
-    }
-
-    private static void addMetaData(Document document, Form form) {
+    public static void addMetaData(Document document, Form form) {
         document.addTitle(form.getFormName());
         document.addSubject(form.getFormDescription());
         //document.addKeywords("Java, PDF, iText");
@@ -154,7 +37,7 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         document.addCreator("LabTablet");
     }
 
-    private static void addTitlePage(Document document, Form form)
+    public static void addTitlePage(Document document, Form form)
             throws DocumentException {
         Paragraph preface = new Paragraph();
         preface.setAlignment(Element.ALIGN_CENTER);
@@ -188,7 +71,7 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         document.newPage();
     }
 
-    private static void addContent(Document document, Form form) throws DocumentException {
+    public static void addContent(Document document, Form form) throws DocumentException {
         Anchor anchor = new Anchor("Answers", catFont);
         anchor.setName("Answers");
 
@@ -221,7 +104,7 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         document.add(catPart);
     }
 
-    private static void createMetrics(Section subCatPart, Form form) {
+    public static void createMetrics(Section subCatPart, Form form) {
 
         PdfPTable table = new PdfPTable(3);
         PdfPCell c1 = new PdfPCell(new Phrase("Metric"));
@@ -256,11 +139,11 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         ArrayList<FormQuestion> formQuestions = form.getFormQuestions();
         int answeredCount = 0;
         for (FormQuestion fq : formQuestions) {
-                if (fq.getValue() != null &&
-                        !fq.getValue().equals("")) {
+            if (fq.getValue() != null &&
+                    !fq.getValue().equals("")) {
 
-                    ++answeredCount;
-                }
+                ++answeredCount;
+            }
         }
 
         table.addCell("# Answered questions");
@@ -270,9 +153,10 @@ public class AsyncFormPDFGenerator extends AsyncTask<Object, Integer, String> {
         subCatPart.add(table);
     }
 
-    private static void addEmptyLine(Paragraph paragraph, int number) {
+    public static void addEmptyLine(Paragraph paragraph, int number) {
         for (int i = 0; i < number; i++) {
             paragraph.add(new Paragraph(" "));
         }
     }
+
 }

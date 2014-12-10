@@ -3,6 +3,11 @@ package pt.up.fe.labtablet.async;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
+
+import com.google.gson.Gson;
+
+import junit.framework.Assert;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,11 +15,11 @@ import java.util.Date;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
-import pt.up.fe.labtablet.db_handlers.DataResourcesMgr;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -38,7 +43,7 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
                 || params[2] == null || params[3] == null) {
             error = new Exception("Params for this asynctaks were not provided");
             return null;
-        } else if (!(params[0] instanceof String ||
+        } else if (!(params[0] instanceof FavoriteItem ||
                 params[1] instanceof Activity ||
                 params[2] instanceof ArrayList ||
                 params[3] instanceof ArrayList)) {
@@ -46,14 +51,27 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
             return null;
         }
 
-        String favoriteName = (String) params[0];
         Activity mContext = (Activity) params[1];
         ArrayList<Descriptor> deletionQueue = (ArrayList<Descriptor>) params[2];
         ArrayList<Descriptor> migrationQueue = (ArrayList<Descriptor>) params[3];
 
+        //Item to be updated
+        FavoriteItem fItem = (FavoriteItem) params[0];
+        ArrayList<Descriptor> itemMetadata = fItem.getMetadataItems();
+        ArrayList<DataItem> itemData = fItem.getDataItems();
+
         //Delete descriptors
-        if (deletionQueue != null && deletionQueue.size() > 0) {
+        if (deletionQueue.size() > 0) {
             for (Descriptor desc : deletionQueue) {
+                //remove entries
+
+                int i = itemMetadata.size();
+                itemMetadata.remove(desc);
+                if (itemMetadata.size() < i) {
+                    throw new AssertionError();
+                }
+
+                //if there is a file associated, remove it
                 if (!desc.getFilePath().equals("")) {
                     if (!(new File(desc.getFilePath()).delete())) {
                         ChangelogItem item = new ChangelogItem();
@@ -68,11 +86,15 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
 
         //Move resources to the root folder, and add them as DataItems
         //TO THE DATA KINGDOM!
-        if (migrationQueue != null && migrationQueue.size() > 0) {
+        if (migrationQueue.size() > 0) {
             for (Descriptor desc : migrationQueue) {
+
+                //Remove metadata resource
+                itemMetadata.remove(desc);
+
                 String destinationPath = Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + "/" + mContext.getResources().getString(R.string.app_name)
-                        + "/" + favoriteName + "/"
+                        + File.separator + mContext.getResources().getString(R.string.app_name)
+                        + File.separator + fItem.getTitle() + File.separator
                         + desc.getValue();
 
                 File src = new File(desc.getFilePath());
@@ -83,21 +105,22 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
                     error = e;
                 }
 
-                DataItem item = new DataItem();
-                item.setResourceName(dst.getName());
-                item.setParent(favoriteName);
-                item.setLocalPath(dst.getPath());
-                item.setHumanReadableSize(FileMgr.humanReadableByteCount(dst.length(), false));
-                item.setMimeType(FileMgr.getMimeType(dst.getPath()));
+                //create data item entry
+                DataItem dataItem = new DataItem();
+                dataItem.setResourceName(dst.getName());
+                dataItem.setParent(fItem.getTitle());
+                dataItem.setLocalPath(dst.getPath());
+                dataItem.setHumanReadableSize(FileMgr.humanReadableByteCount(dst.length(), false));
+                dataItem.setMimeType(FileMgr.getMimeType(dst.getPath()));
 
                 ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
 
                 ArrayList<Descriptor> loadedDescriptors =
-                        FavoriteMgr.getDescriptors(Utils.DESCRIPTORS_CONFIG_ENTRY, mContext);
+                        FavoriteMgr.getBaseDescriptors(mContext);
 
                 //If additional metadata is available, it should me added here
                 for (Descriptor dataDesc : loadedDescriptors) {
-                    String tag = desc.getTag();
+                    String tag = dataDesc.getTag();
                     if (tag.equals(Utils.TITLE_TAG)) {
                         dataDesc.setValue(dst.getName());
                         itemLevelMetadata.add(dataDesc);
@@ -109,11 +132,14 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
                         itemLevelMetadata.add(dataDesc);
                     }
                 }
-
-                item.setFileLevelMetadata(itemLevelMetadata);
-                DataResourcesMgr.addDataItem(mContext, item, favoriteName);
+                dataItem.setFileLevelMetadata(itemLevelMetadata);
+                itemData.add(dataItem);
             }
         }
+
+        fItem.setDataItems(itemData);
+        fItem.setMetadataItems(itemMetadata);
+        FavoriteMgr.updateFavoriteEntry(fItem.getTitle(), fItem, mContext);
         return null;
     }
 

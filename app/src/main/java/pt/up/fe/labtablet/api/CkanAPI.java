@@ -28,7 +28,7 @@ public class CkanAPI {
             Dataset.SearchResults search_results = mClient.findDatasets(query);
             for (Dataset dataset : search_results.results) {
 
-                FavoriteItem item = new FavoriteItem();
+                FavoriteItem item = new FavoriteItem("");
                 item.setDate_modified(dataset.getMetadata_created().substring(0, 10));
                 item.setTitle(dataset.getName() == null ? "" : dataset.getName());
                 items.add(item);

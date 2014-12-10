@@ -5,79 +5,83 @@
     android:animateLayoutChanges="true"
     >
 
-    <LinearLayout
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/ll_set_form_description"
-        android:visibility="gone"
-        android:layout_alignParentTop="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/card"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="5sp"
+        android:animateLayoutChanges="true"
         >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-            android:padding="20dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/want_to_give_form_description"
-            />
-
         <LinearLayout
+
+            android:layout_alignParentTop="true"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
             >
-            <Button
-                android:id="@+id/set_form_description_no"
-                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                android:text="@string/no"
-                android:textSize="25sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
-            <Button
-                android:id="@+id/set_form_description_yes"
-                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                android:text="@string/yes"
-                android:textSize="25sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/want_to_give_form_description"
+                />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                >
+                <Button
+                    android:id="@+id/set_form_description_no"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:text="@string/no"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/set_form_description_yes"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:text="@string/yes"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_set_form_description_lower_view"
-            android:visibility="gone"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            >
-        <EditText
-            android:id="@+id/et_set_form_description"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/form_description_goes_here"
-            />
+            <LinearLayout
+                android:id="@+id/ll_set_form_description_lower_view"
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                >
+                <EditText
+                    android:id="@+id/et_set_form_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/form_description_goes_here"
+                    />
 
-        <Button
-            android:text="@string/action_save"
-            android:textSize="25sp"
-            android:id="@+id/bt_form_description_submit"
-            style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-            android:layout_marginBottom="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+                <Button
+                    android:text="@string/action_save"
+                    android:textSize="20sp"
+                    android:id="@+id/bt_form_description_submit"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -85,20 +89,21 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="5sp"
-        >
-    <TextView
-        android:id="@+id/form_view_instructions"
         android:layout_below="@id/ll_set_form_description"
-        android:text="@string/form_editor_top"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:fontFamily="sans-serif"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-       />
-</android.support.v7.widget.CardView>
+        card_view:cardElevation="5sp"
+        android:layout_marginTop="5dp"
+        >
+        <TextView
+            android:id="@+id/form_view_instructions"
+            android:text="@string/form_editor_top"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:fontFamily="sans-serif"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+    </android.support.v7.widget.CardView>
 
 
     <ListView
@@ -123,10 +128,12 @@
             android:text="@string/empty_form_rl"
             android:textColor="@color/second_grey"
             android:gravity="center"
-            android:textSize="35sp"
+            android:textSize="25sp"
+            android:layout_marginTop="50dp"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+            android:drawableTop="@drawable/ab_cross"
             />
-        </RelativeLayout>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/bt_form_new_question"

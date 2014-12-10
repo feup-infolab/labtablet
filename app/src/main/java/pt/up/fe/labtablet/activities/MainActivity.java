@@ -62,42 +62,11 @@ public class MainActivity extends Activity {
 
     private boolean wasDrawerShown;
 
-    private void saveSharedPreferences()
-    {
-        // create some junk data to populate the shared preferences
-        SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
-
-        // BEGIN EXAMPLE
-
-        File myPath = new File(Environment.getExternalStorageDirectory().toString());
-        File myFile = new File(myPath, "MySharedPreferences");
-
-        try {
-            FileWriter fw = new FileWriter(myFile);
-            PrintWriter pw = new PrintWriter(fw);
-
-            Map<String,?> prefsMap = prefs.getAll();
-
-            for(Map.Entry<String,?> entry : prefsMap.entrySet()) {
-                pw.println(entry.getKey() + ": " + entry.getValue().toString());
-            }
-
-            pw.close();
-            fw.close();
-
-        } catch (Exception e) {
-            // what a terrible failure...
-            Log.wtf(getClass().getName(), e.toString());
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        saveSharedPreferences();
 
         //create base folder
         final File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),

@@ -66,19 +66,36 @@ public class DataItem {
         return "";
     }
 
+
+
     public String getLocalPath() {
         return localPath;
     }
 
     public void setLocalPath(String filePath) {
-        this.localPath = filePath;
+        this.localPath = filePath.toLowerCase();
     }
 
     public void setDescription(String description) {
+
+        if (fileLevelMetadata.size() == 0) {
+         return;
+        }
+
         for (Descriptor desc : fileLevelMetadata) {
             if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
                 desc.setValue(description);
             }
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof DataItem)) {
+            return false;
+        }
+
+        return ((DataItem) o).getLocalPath().equals(this.localPath);
+    }
+
 }

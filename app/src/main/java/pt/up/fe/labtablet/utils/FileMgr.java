@@ -16,25 +16,29 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Descriptor;
-
-import static pt.up.fe.labtablet.db_handlers.DataResourcesMgr.getDataDescriptionItems;
-import static pt.up.fe.labtablet.db_handlers.FavoriteMgr.getDescriptors;
+import pt.up.fe.labtablet.models.FavoriteItem;
+import pt.up.fe.labtablet.models.Form;
 
 public class FileMgr {
 
     /**
-     * Converts the lenght of a file to a more readable format (eg 23.5Mb)
+     * Converts the lenght of a file to a more readable format (eg 23.5Kb)
      * @param bytes
      * @param si
      * @return
@@ -57,7 +61,7 @@ public class FileMgr {
                 .getSingleton()
                 .getMimeTypeFromExtension(MimeTypeMap
                         .getFileExtensionFromUrl(url.substring(
-                                url.lastIndexOf("."))));
+                                url.toLowerCase().lastIndexOf("."))));
     }
 
     /**
@@ -179,8 +183,8 @@ public class FileMgr {
 
     /**
      * Removes a favorite from the records and deletes its data
-     * @param favoriteName
-     * @param mContext
+     * @param favoriteName entry to remove
+     * @param mContext context to get the settings
      */
     public static void removeFavorite(String favoriteName, Context mContext) {
         ProgressDialog dialog = ProgressDialog.show(mContext, "",
@@ -211,17 +215,6 @@ public class FileMgr {
 
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(favoriteName);
-
-        //Remove recommendations from this favorite
-        if (settings.contains(favoriteName + Utils.ASSOCIATIONS_CONFIG_ENTRY)) {
-           editor.remove(favoriteName + "_dendro");
-        }
-
-        //Remove data entries
-        if (settings.contains(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY)) {
-            editor.remove(favoriteName + Utils.DATA_DESCRIPTOR_ENTRY);
-        }
-
         editor.apply();
         dialog.dismiss();
     }
@@ -230,11 +223,6 @@ public class FileMgr {
      * Updates both favorite name and its metadata (location + value)
      */
     public static boolean renameFavorite(String src, String dst, Context mContext) {
-        String basePath = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/" + mContext.getResources().getString(R.string.app_name)
-                + "/";
-        File file = new File(basePath + src);
-        File file2 = new File(basePath + dst);
 
         SharedPreferences settings = mContext.getSharedPreferences(
                 mContext.getResources().getString(R.string.app_name),
@@ -245,39 +233,51 @@ public class FileMgr {
             return false;
         }
 
-        ArrayList<Descriptor> baseMetadataRecords = getDescriptors(src, mContext);
-        for (Descriptor desc : baseMetadataRecords) {
+        String basePath = Environment.getExternalStorageDirectory().getAbsolutePath()
+                + File.separator + mContext.getResources().getString(R.string.app_name)
+                + File.separator;
+
+
+        FavoriteItem item = FavoriteMgr.getFavorite(mContext, src);
+        FavoriteMgr.removeFavoriteEntry(mContext, item, false);
+
+        //Change entry name
+        item.setTitle(dst);
+
+        //Update metadata records that have an associated file
+        ArrayList<Descriptor> metadataRecords = item.getMetadataItems();
+        for (Descriptor desc : metadataRecords) {
             if (desc.getTag().equals(Utils.TITLE_TAG)) {
                 desc.setValue(dst);
             }
-            if (!desc.getFilePath().equals("")) {
-                //Update the file path
-                desc.setFilePath(basePath + dst + "/meta/" + desc.getValue());
+            if (desc.hasFile()) {
+                desc.setFilePath(basePath +
+                        dst + File.separator +
+                        "meta" + File.separator +
+                        desc.getValue());
             }
         }
 
-        ArrayList<DataItem> baseDataRecords = getDataDescriptionItems(mContext, src);
-        for (DataItem desc : baseDataRecords) {
+        //Update linked data resources
+        ArrayList<DataItem> dataRecords = item.getDataItems();
+        for (DataItem desc : dataRecords) {
 
-            desc.setParent(src);
+            desc.setParent(dst);
+            desc.setLocalPath(basePath + dst + File.separator + new File(desc.getLocalPath()).getName());
             ArrayList<Descriptor> dataLevelDecriptors = desc.getFileLevelMetadata();
-            for (Descriptor metadataRecord : dataLevelDecriptors) {
-                metadataRecord.setFilePath(
-                        basePath + dst + File.separator + new File(desc.getLocalPath()).getName());
-            }
             desc.setFileLevelMetadata(dataLevelDecriptors);
         }
 
-        SharedPreferences.Editor editor = settings.edit();
-        editor.remove(src);
-        editor.remove(src + Utils.DATA_DESCRIPTOR_ENTRY);
-        editor.remove(src + Utils.ASSOCIATIONS_CONFIG_ENTRY);
+        item.setMetadataItems(metadataRecords);
+        item.setDataItems(dataRecords);
 
-        editor.putString(dst, new Gson().toJson(baseMetadataRecords, Utils.ARRAY_DESCRIPTORS));
-        editor.putString(dst + Utils.DATA_DESCRIPTOR_ENTRY, new Gson().toJson(baseDataRecords, Utils.ARRAY_DATA_DESCRIPTOR_ITEMS));
-        editor.apply();
+        //Move folder
+        File from = new File(basePath, src);
+        File to = new File(basePath, dst);
 
-        return file.renameTo(file2);
+        FavoriteMgr.registerFavorite(mContext, item);
+
+        return from.renameTo(to);
     }
 
     /**

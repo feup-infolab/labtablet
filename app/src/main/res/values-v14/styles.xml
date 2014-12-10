@@ -7,7 +7,10 @@
     -->
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
         <!-- API 14 theme customizations can go here. -->
-        <item name="android:windowBackground">@color/light_gray</item>
+        <!--TODO: translucent action bar can be enabled here -->
+        <!--<item name="android:windowBackground">@color/light_gray</item>-->
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <!--<item name="android:windowTranslucentNavigation">true</item>-->
     </style>
 
 </resources>

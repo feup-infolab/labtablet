@@ -17,11 +17,11 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.activities.ValidateMetadataActivity;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.api.SubmissionStepHandler;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.Utils;
 
 
@@ -29,9 +29,9 @@ public class SubmissionStep2 extends Fragment {
 
     private ListView lvMetadata;
     private MetadataListAdapter mAdapter;
-    private ArrayList<Descriptor> itemDescriptors;
     private String favoriteName;
     private static SubmissionStepHandler mHandler;
+    private FavoriteItem favoriteItem;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -61,11 +61,11 @@ public class SubmissionStep2 extends Fragment {
             favoriteName = savedInstanceState.getString("favorite_name");
         }
 
-        itemDescriptors = FavoriteMgr.getDescriptors(favoriteName, getActivity());
+        favoriteItem = FavoriteMgr.getFavorite(getActivity(), favoriteName);
 
         lvMetadata = (ListView) rootView.findViewById(R.id.submission_validation_metadata_list);
         lvMetadata.setDividerHeight(0);
-        mAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
+        mAdapter = new MetadataListAdapter(getActivity(), favoriteItem.getMetadataItems(), favoriteName);
         lvMetadata.setAdapter(mAdapter);
 
         return rootView;
@@ -86,10 +86,13 @@ public class SubmissionStep2 extends Fragment {
             Toast.makeText(getActivity(), "No descriptors received", Toast.LENGTH_SHORT).show();
         } else {
             String descriptorsJson = data.getStringExtra("descriptors");
-            itemDescriptors = new Gson().fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
-            mAdapter = new MetadataListAdapter(getActivity(), itemDescriptors, favoriteName);
+            ArrayList<Descriptor> receivedRecords =new Gson()
+                    .fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
+
+            favoriteItem.setMetadataItems(receivedRecords);
+            mAdapter = new MetadataListAdapter(getActivity(), favoriteItem.getMetadataItems(), favoriteName);
             lvMetadata.setAdapter(mAdapter);
-            FavoriteMgr.overwriteDescriptors(favoriteName, itemDescriptors, getActivity());
+            FavoriteMgr.updateFavoriteEntry(favoriteName, favoriteItem, getActivity());
             Toast.makeText(getActivity(), "Updated", Toast.LENGTH_SHORT).show();
         }
     }
@@ -108,12 +111,7 @@ public class SubmissionStep2 extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId() == R.id.dendro_metadata_edit) {
-            Intent intent = new Intent(getActivity(), ValidateMetadataActivity.class);
-            intent.putExtra("descriptors", new Gson().toJson(itemDescriptors, Utils.ARRAY_DESCRIPTORS));
-            intent.putExtra("favorite_name", getArguments().getString("favorite_name"));
-            startActivityForResult(intent, Utils.METADATA_VALIDATION);
-        } else if (item.getItemId() == R.id.action_dendro_metadata_confirm) {
+        if (item.getItemId() == R.id.action_dendro_metadata_confirm) {
             mHandler.nextStep(2);
         }
         return super.onOptionsItemSelected(item);

@@ -1,6 +1,7 @@
 package pt.up.fe.labtablet.models;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
@@ -18,6 +19,10 @@ public class Descriptor {
     private String description;
     private String tag;
 
+
+
+    private ArrayList<String> allowed_values;
+
     private String filePath;
     private String dateModified;
     private int state;
@@ -31,6 +36,7 @@ public class Descriptor {
         this.state = Utils.DESCRIPTOR_STATE_NOT_VALIDATED;
         this.dateModified = Utils.getDate();
         this.size = "";
+        this.allowed_values = new ArrayList<String>();
     }
 
     public Descriptor(String name, String descriptor, String value, String tag) {
@@ -39,6 +45,7 @@ public class Descriptor {
         this.value = value;
         this.tag = tag;
         this.state = Utils.DESCRIPTOR_STATE_NOT_VALIDATED;
+        this.allowed_values = new ArrayList<String>();
     }
 
     public boolean hasFile() {
@@ -105,6 +112,14 @@ public class Descriptor {
         this.dateModified = dateModified;
     }
 
+    public ArrayList<String> getAllowed_values() {
+        return allowed_values;
+    }
+
+    public void setAllowed_values(ArrayList<String> allowed_values) {
+        this.allowed_values = allowed_values;
+    }
+
     public String getFilePath() {
         return filePath;
     }
@@ -123,4 +138,22 @@ public class Descriptor {
     public void setSize(String size) {
         this.size = size;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (! (o instanceof Descriptor)) {
+            return false;
+        }
+
+        //Compare by the file path in the first place
+        Descriptor desc = (Descriptor) o;
+        if (!desc.getFilePath().equals("")) {
+            return desc.getFilePath().equals(this.getFilePath());
+        } else {
+            return desc.getValue().equals(this.value);
+        }
+
+    }
+
+
 }

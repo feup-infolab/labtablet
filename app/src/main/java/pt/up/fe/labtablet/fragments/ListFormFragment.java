@@ -41,7 +41,7 @@ public class ListFormFragment extends ListFragment {
             }
 
         } else {
-            items = FormMgr.getBaseForms(getActivity());
+            items = FormMgr.getCurrentBaseForms(getActivity());
         }
         getListView().setDividerHeight(0);
         getListView().setBackgroundColor(0);
@@ -104,7 +104,10 @@ public class ListFormFragment extends ListFragment {
                 }
 
                 items.add(new Form(input.getText().toString(), ""));
-                FormMgr.registerBaseForm(getActivity(), new Form(input.getText().toString(), ""));
+                ArrayList<Form> forms = FormMgr.getCurrentBaseForms(getActivity());
+                forms.add(new Form(input.getText().toString(), ""));
+                FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
+
                 mAdapter = new FormListAdapter(getActivity(), items);
                 getListView().setAdapter(mAdapter);
                 Toast.makeText(getActivity(), getString(android.R.string.ok), Toast.LENGTH_SHORT).show();

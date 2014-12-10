@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
-import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormEnumType;

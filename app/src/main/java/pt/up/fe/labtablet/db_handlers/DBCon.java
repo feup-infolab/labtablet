@@ -39,4 +39,8 @@ public class DBCon {
                 settings.getString(Utils.ASSOCIATIONS_CONFIG_ENTRY, ""),
                 Utils.ARRAY_ASSOCIATION_ITEM);
     }
+
+    /**
+     *
+     */
 }

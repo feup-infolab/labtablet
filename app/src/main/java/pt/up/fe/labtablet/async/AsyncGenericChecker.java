@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.Utils;
 
 /**
@@ -53,14 +54,17 @@ public class AsyncGenericChecker extends AsyncTask<Object, Void, Integer> {
                             + File.separator + mContext.getString(R.string.app_name));
             for (File f : file.listFiles()) {
                 if (f.isDirectory()) {
-                    worldDescriptors.addAll(FavoriteMgr.getDescriptors(f.getName(), mContext));
+                    FavoriteItem item = FavoriteMgr.getFavorite(mContext, f.getName());
+                    worldDescriptors.addAll(item.getMetadataItems());
                 }
             }
             return countGenerics(worldDescriptors);
         }
 
         //get for this particular one
-        return countGenerics(FavoriteMgr.getDescriptors(favoriteName, mContext));
+        return countGenerics(FavoriteMgr
+                .getFavorite(mContext, favoriteName)
+                .getMetadataItems());
     }
 
     private int countGenerics(ArrayList<Descriptor> descriptors) {

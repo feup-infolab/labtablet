@@ -27,7 +27,6 @@ public class Form {
         this.linkedResourcePath = "";
     }
 
-
     public String getParent() {
         return parent;
     }
@@ -89,5 +88,36 @@ public class Form {
 
     public String getElapsedTime() {
         return this.elapsedTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (! (o instanceof Form)) {
+            return false;
+        }
+
+        Form f = (Form) o;
+        return f.getFormName().equals(formName);
+    }
+
+    public String[] getQuestions() {
+        String[] questionsSet = new String[formQuestions.size()];
+
+        for (int i = 0; i < formQuestions.size(); ++i) {
+            questionsSet[i] = formQuestions.get(i).getQuestion();
+        }
+
+        return questionsSet;
+    }
+
+    public String[] getAnswers() {
+        String[] answerSet = new String[formQuestions.size()];
+
+
+        for (int i = 0; i < formQuestions.size(); ++i) {
+            answerSet[i] = formQuestions.get(i).getValue();
+        }
+
+        return answerSet;
     }
 }

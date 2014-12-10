@@ -80,7 +80,6 @@ public class Utils {
     }.getType();
     public static Type ARRAY_FORM = new TypeToken<ArrayList<Form>>() {
     }.getType();
-    public static Type ARRAY_DATA_DESCRIPTOR_ITEMS = new TypeToken<ArrayList<DataItem>>(){}.getType();
 
     // ---- Activities Results ---------
     public static Type ARRAY_DENDRO_DESCRIPTORS = new TypeToken<ArrayList<DendroDescriptor>>() {
@@ -90,10 +89,10 @@ public class Utils {
     public static String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
     public static String ASSOCIATIONS_CONFIG_ENTRY = "associations";
 
-    public static String DESCRIPTORS_CONFIG_ENTRY = "base_descriptors";
+    public static String BASE_DESCRIPTORS_ENTRY = "base_descriptors";
     public static String BASE_FORMS_ENTRY = "base_forms";
-
     public static String CHANGELOG_CONFIG_ENTRY = "changelogs";
+
     public static long SAMPLE_MILLIS = 5000;
     //Select a descriptor and return it
     public static int DESCRIPTOR_GET = 0;

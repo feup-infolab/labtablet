@@ -18,8 +18,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Map;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.async.AsyncGenericChecker;
@@ -80,7 +84,7 @@ public class HomeFragment extends Fragment {
 
 
         SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
-        if (settings.contains(Utils.DESCRIPTORS_CONFIG_ENTRY)) {
+        if (settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
             tvProfileState.setText(getResources().getString(R.string.profile_already_loaded));
             tvProfileState.setCompoundDrawablesRelativeWithIntrinsicBounds(null,
                     yes, null, null);
@@ -140,6 +144,15 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        btConfigurations.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                saveSharedPreferences();
+                Toast.makeText(getActivity(), "Exported to device root", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
         btNewProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,6 +175,35 @@ public class HomeFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    private void saveSharedPreferences()
+    {
+        // create some junk data to populate the shared preferences
+        SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+
+        // BEGIN EXAMPLE
+
+        File myPath = new File(Environment.getExternalStorageDirectory().toString());
+        File myFile = new File(myPath, "MySharedPreferences");
+
+        try {
+            FileWriter fw = new FileWriter(myFile);
+            PrintWriter pw = new PrintWriter(fw);
+
+            Map<String,?> prefsMap = prefs.getAll();
+
+            for(Map.Entry<String,?> entry : prefsMap.entrySet()) {
+                pw.println(entry.getKey() + ": " + entry.getValue().toString());
+            }
+
+            pw.close();
+            fw.close();
+
+        } catch (Exception e) {
+            // what a terrible failure...
+            Log.wtf(getClass().getName(), e.toString());
+        }
     }
 
 

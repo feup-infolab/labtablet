@@ -7,6 +7,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -24,23 +26,31 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.DendroAPI;
+import pt.up.fe.labtablet.db_handlers.DBCon;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
+import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.models.ProgressUpdateItem;
+import pt.up.fe.labtablet.utils.PDFTools;
 import pt.up.fe.labtablet.utils.Utils;
 import pt.up.fe.labtablet.utils.Zipper;
 
-import static pt.up.fe.labtablet.db_handlers.DataResourcesMgr.getDataDescriptionItems;
-import static pt.up.fe.labtablet.db_handlers.FavoriteMgr.getDescriptors;
+import static pt.up.fe.labtablet.utils.CSVHandler.generateCSV;
 
 public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
     //input, remove, output
@@ -70,14 +80,12 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         Context mContext;
         String favoriteName;
 
-
         if (params[0] instanceof String
                 && params[1] instanceof String
                 && params[2] instanceof String
                 && params[3] instanceof Context) {
 
             favoriteName = (String) params[0];
-            //projectName = (String) params[1];
             destUri = (String) params[2];
             mContext = (Context) params[3];
 
@@ -90,6 +98,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             error = new Exception("Type mismatch");
             return null;
         }
+
         HttpClient httpclient;
         HttpPost httppost;
 
@@ -106,6 +115,29 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             error = e;
             return null;
         }
+
+        // ***** FAVORITE ITEM IS HERE ******
+
+        FavoriteItem item = FavoriteMgr.getFavorite(mContext, favoriteName);
+
+        // ***********************************
+
+        //Generate forms and forms' csv file
+        if (item.getLinkedForms().size() > 0) {
+            String progress = mContext.getString(R.string.upload_generating_forms);
+
+            HashMap<String, ArrayList<Form>> linkedForms = item.getLinkedForms();
+
+            publishProgress(new ProgressUpdateItem(15, progress + "0/" + linkedForms.size()));
+
+            try {
+                generateCSV(mContext, linkedForms, favoriteName);
+            } catch (IOException e) {
+                error = e;
+                return null;
+            }
+        }
+
 
         //if there are any files to upload, zip them
         publishProgress(new ProgressUpdateItem(20, mContext.getResources().getString(R.string.upload_progress_creating_package)));
@@ -152,12 +184,15 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 DendroResponse response = new Gson().fromJson(EntityUtils.toString(resEntity), DendroResponse.class);
 
                 if (response.result.equals(Utils.DENDRO_RESPONSE_ERROR)) {
-                    error = new Exception(response.result + ": " + response.message);
+                    error = new Exception(response.result +
+                            ": " + response.message);
                     return null;
                 }
 
                 if (!file.delete()) {
-                    Toast.makeText(mContext, mContext.getResources().getString(R.string.upload_progress_deleting_temp_files), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,
+                            mContext.getResources().getString(R.string.upload_progress_deleting_temp_files),
+                            Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 Log.e("POST", e.getMessage());
@@ -170,7 +205,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         publishProgress(new ProgressUpdateItem(
                 50, mContext.getString(R.string.upload_progress_creating_metadata_package)));
 
-        ArrayList<Descriptor> descriptors = getDescriptors(favoriteName, mContext);
+        ArrayList<Descriptor> descriptors = item.getMetadataItems();
         ArrayList<DendroMetadataRecord> metadataRecords = new ArrayList<DendroMetadataRecord>();
 
         if (descriptors.size() == 0) {
@@ -204,7 +239,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                     metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD), HTTP.UTF_8);
             Log.e("metadata", new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD));
             httppost.setEntity(se);
-            Log.e("META", se.toString());
 
             HttpResponse resp = httpclient.execute(httppost);
             HttpEntity ent = resp.getEntity();
@@ -215,7 +249,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 error = new Exception(metadataResponse.result + ": " + metadataResponse.message);
                 return null;
             }
-
 
         } catch (Exception e) {
             error = e;
@@ -229,16 +262,16 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         //check if there are any file-dependant descriptions
         //if so, upload them
         ArrayList<DataItem> dataDescriptionItems =
-                getDataDescriptionItems(mContext, favoriteName);
+                item.getDataItems();
 
         if (dataDescriptionItems == null) {
             return null;
         }
 
-        for (DataItem item : dataDescriptionItems) {
+        for (DataItem dataItem : dataDescriptionItems) {
 
             metadataRecords = new ArrayList<DendroMetadataRecord>();
-            for (Descriptor desc : item.getFileLevelMetadata()) {
+            for (Descriptor desc : dataItem.getFileLevelMetadata()) {
                 metadataRecords.add(
                         new DendroMetadataRecord(desc.getDescriptor(), desc.getValue())
                 );
@@ -246,7 +279,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
             try {
                 httpclient = new DefaultHttpClient();
-                String destPath = destUri + File.separator + item.getResourceName() + "?update_metadata";
+                String destPath = destUri + File.separator + dataItem.getResourceName() + "?update_metadata";
                 httppost = new HttpPost(destPath.replace(" ", "%20"));
                 httppost.setHeader("Accept", "application/json");
                 httppost.setHeader("Content-Type", "application/json");
@@ -255,7 +288,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 StringEntity se = new StringEntity(new Gson().toJson(
                         metadataRecords, Utils.ARRAY_DENDRO_DESCRIPTORS), HTTP.UTF_8);
 
-                Log.e("DATA", se.toString());
                 httppost.setEntity(se);
 
                 HttpResponse resp = httpclient.execute(httppost);

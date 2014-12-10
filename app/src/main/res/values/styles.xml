@@ -7,6 +7,7 @@
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <item name="android:windowBackground">@color/light_gray</item>
+
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to

@@ -18,14 +18,14 @@ android {
     }
     defaultConfig {
         applicationId "pt.up.fe.labtablet"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 19
         versionCode 1
         versionName "1.0"
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -45,4 +45,5 @@ dependencies {
     compile files('libs/httpmime-4.3.4.jar')
     compile files('libs/acra-4.3.0.jar')
     compile files('libs/itextpdf-5.5.3.jar')
+    compile files('libs/opencsv-3.1.jar')
 }
