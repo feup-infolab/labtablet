@@ -78,4 +78,22 @@ public class FormMgr {
         editor.putString(Utils.BASE_FORMS_ENTRY, new Gson().toJson(baseForms));
         editor.apply();
     }
+
+    public static void removeBaseFormEntry(Context context, Form form) {
+        SharedPreferences settings = context.getSharedPreferences(
+                context.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = settings.edit();
+        ArrayList<Form> baseForms = new Gson().fromJson(
+                settings.getString(Utils.BASE_FORMS_ENTRY, ""),
+                Utils.ARRAY_FORM);
+
+        //Equals operator looks for the name, so we can do this
+        baseForms.remove(form);
+
+        editor.remove(Utils.BASE_FORMS_ENTRY);
+        editor.putString(Utils.BASE_FORMS_ENTRY, new Gson().toJson(baseForms));
+        editor.apply();
+    }
 }

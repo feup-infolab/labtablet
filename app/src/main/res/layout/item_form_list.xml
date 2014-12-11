@@ -4,14 +4,19 @@
     android:id="@+id/form_view_instructions_card"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="0dp"
-    card_view:cardElevation="5sp"
+    card_view:cardCornerRadius="5dp"
+    android:layout_margin="8dp"
+
+    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:background="?android:attr/selectableItemBackground"
     >
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="5dp"
+        android:padding="6dp"
         >
 
         <Button
@@ -68,6 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_note"
+                android:textColor="@color/second_grey"
                 android:gravity="center"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:text="12 Questions"
@@ -82,6 +88,7 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_wait"
                 android:gravity="center"
+                android:textColor="@color/second_grey"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:text="15min"
                 />

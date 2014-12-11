@@ -2,14 +2,21 @@ package pt.up.fe.labtablet.fragments;
 
 
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -19,19 +26,28 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.adapters.FormListAdapter;
+import pt.up.fe.labtablet.adapters.BaseFormListAdapter;
 import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.utils.Utils;
 
-public class ListFormFragment extends ListFragment {
+/**
+ * Fragment to display the list of registered base forms
+ */
+public class ListFormFragment extends Fragment {
 
     private ArrayList<Form> items;
-    private FormListAdapter mAdapter;
+
+    private RecyclerView itemList;
+    private BaseFormListAdapter adapter;
+
+    private BaseFormListAdapter.OnItemClickListener itemClickListener;
+
+
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_base_form_list, container, false);
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("items")) {
@@ -44,17 +60,47 @@ public class ListFormFragment extends ListFragment {
             items = FormMgr.getCurrentBaseForms(getActivity());
         }
 
-        getListView().setDividerHeight(10);
-        getListView().setBackgroundColor(0);
+        itemClickListener = new BaseFormListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                FormViewFragment formDetail = new FormViewFragment();
+                Bundle args = new Bundle();
+                args.putString("form", new Gson().toJson(items.get(position)));
+                formDetail.setArguments(args);
+                transaction.replace(R.id.frame_container, formDetail);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                FormMgr.removeBaseFormEntry(getActivity(), items.get(position));
+                items.remove(position);
+                itemList.animate();
+                adapter.notifyItemRemoved(position);
+
+            }
+        };
+
+        adapter = new BaseFormListAdapter(getActivity(),
+                items,
+                R.layout.item_form_list,
+                itemClickListener);
+
+        itemList = (RecyclerView) rootView.findViewById(R.id.base_form_list);
+        itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        itemList.setItemAnimator(new DefaultItemAnimator());
+        itemList.setAdapter(adapter);
+        itemList.animate();
+
+
         setHasOptionsMenu(true);
 
-        mAdapter = new FormListAdapter(getActivity(), items);
-        setListAdapter(mAdapter);
-    }
+        //Any other layout data insertion can go here
 
-    @Override
-    public void onListItemClick(ListView l, View v, final int position, long id) {
-
+        return rootView;
     }
 
     @Override
@@ -109,8 +155,13 @@ public class ListFormFragment extends ListFragment {
                 forms.add(new Form(input.getText().toString(), ""));
                 FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
 
-                mAdapter = new FormListAdapter(getActivity(), items);
-                getListView().setAdapter(mAdapter);
+                adapter = new BaseFormListAdapter(getActivity(),
+                        items,
+                        R.layout.item_form_list,
+                        itemClickListener);
+
+                itemList.setAdapter(adapter);
+
                 Toast.makeText(getActivity(), getString(android.R.string.ok), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }

@@ -6,6 +6,9 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.FormQuestionCreatorActivity;
-import pt.up.fe.labtablet.adapters.FormItemListAdapter;
+import pt.up.fe.labtablet.adapters.QuestionItemListAdapter;
 import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.FormQuestion;
@@ -32,13 +34,13 @@ import pt.up.fe.labtablet.utils.Utils;
 /**
  * Fragment for the form view with the associated questions
  */
-public class FormViewFragment extends Fragment implements FormItemListAdapter.formListAdapterInterface {
+public class FormViewFragment extends Fragment {
 
-    private ListView lvFormItems;
+    private RecyclerView lvFormItems;
+    private QuestionItemListAdapter mAdapter;
+
     private Form currentForm;
     private RelativeLayout rlEmptyForm;
-    private FormItemListAdapter mAdapter;
-    private FormItemListAdapter.formListAdapterInterface mInterface;
 
     public FormViewFragment(){}
 
@@ -66,12 +68,15 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
             getActivity().getActionBar().setTitle(currentForm.getFormName());
         }
 
-        lvFormItems = (ListView) rootView.findViewById(R.id.lv_form_items);
+        lvFormItems = (RecyclerView) rootView.findViewById(R.id.lv_form_items);
         rlEmptyForm = (RelativeLayout) rootView.findViewById(R.id.empty_form_view);
-        mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions(), this);
+        mAdapter = new QuestionItemListAdapter(getActivity(),
+                currentForm.getFormQuestions(),
+                R.layout.item_question);
 
+        lvFormItems.setLayoutManager(new LinearLayoutManager(getActivity()));
+        lvFormItems.setItemAnimator(new DefaultItemAnimator());
         lvFormItems.setAdapter(mAdapter);
-        lvFormItems.setDividerHeight(0);
 
         (rootView.findViewById(R.id.bt_form_new_question)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +161,10 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                 FormQuestion.class);
 
         currentForm.addQuestion(recFQ);
-        mAdapter = new FormItemListAdapter(getActivity(), currentForm.getFormQuestions(), mInterface);
+        mAdapter = new QuestionItemListAdapter(getActivity(),
+                currentForm.getFormQuestions(),
+                R.layout.item_question);
+
         lvFormItems.setAdapter(mAdapter);
     }
 
@@ -206,11 +214,6 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
                 .show();
 
         return true;
-    }
-
-    @Override
-    public void onItemRemoval(FormQuestion q) {
-        currentForm.getFormQuestions().remove(q);
     }
 
     @Override
