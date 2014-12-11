@@ -167,8 +167,15 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() != R.id.action_edit_form_delete) {
-            return false;
+        if(item.getItemId() == R.id.action_edit_form_save ) {
+            //Update db entry
+
+            FormMgr.updateFormEntry(currentForm, getActivity());
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+            transaction.replace(R.id.frame_container, new ListFormFragment());
+            transaction.commit();
+            return true;
         }
 
         new AlertDialog.Builder(getActivity())
@@ -208,12 +215,6 @@ public class FormViewFragment extends Fragment implements FormItemListAdapter.fo
 
     @Override
     public void onPause() {
-        /*
-        ArrayList<Form> forms = FormMgr.getCurrentBaseForms(getActivity());
-        forms.remove(currentForm);
-        forms.add(currentForm);
-        FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
-        */
         super.onPause();
     }
 }

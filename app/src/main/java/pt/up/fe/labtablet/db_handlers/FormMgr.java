@@ -1,6 +1,7 @@
 package pt.up.fe.labtablet.db_handlers;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -51,6 +52,30 @@ public class FormMgr {
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(Utils.BASE_FORMS_ENTRY);
         editor.putString(Utils.BASE_FORMS_ENTRY, new Gson().toJson(inputItems));
+        editor.apply();
+    }
+
+    /**
+     * Updates a form entry (replaces it with the new one)
+     * @param currentForm
+     * @param context
+     */
+    public static void updateFormEntry(Form currentForm, Context context) {
+        SharedPreferences settings = context.getSharedPreferences(
+                context.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = settings.edit();
+        ArrayList<Form> baseForms = new Gson().fromJson(
+                settings.getString(Utils.BASE_FORMS_ENTRY, ""),
+                Utils.ARRAY_FORM);
+
+        //Equals operator looks for the name, so we can do this
+        baseForms.remove(currentForm);
+        baseForms.add(currentForm);
+
+        editor.remove(Utils.BASE_FORMS_ENTRY);
+        editor.putString(Utils.BASE_FORMS_ENTRY, new Gson().toJson(baseForms));
         editor.apply();
     }
 }

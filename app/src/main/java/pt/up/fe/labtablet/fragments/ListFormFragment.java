@@ -43,7 +43,8 @@ public class ListFormFragment extends ListFragment {
         } else {
             items = FormMgr.getCurrentBaseForms(getActivity());
         }
-        getListView().setDividerHeight(0);
+
+        getListView().setDividerHeight(10);
         getListView().setBackgroundColor(0);
         setHasOptionsMenu(true);
 
