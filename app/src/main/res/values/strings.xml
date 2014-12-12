@@ -101,7 +101,7 @@
     <string name="action_upload">Upload</string>
     <string name="action_cancel">Cancel</string>
     <string name="form_really_delete">Really delete this record?</string>
-    <string name="action_delete">delete</string>
+    <string name="action_delete">Delete</string>
     <string name="form_really_delete_favorite">Are you sure you want to delete this favorite. After this step, all the enclosed (meta)data will be permanently lost.</string>
     <string name="no_projects">You have no active projects. To create a new one and start collecting metadata, press the button below</string>
     <string name="new_project">Create project</string>

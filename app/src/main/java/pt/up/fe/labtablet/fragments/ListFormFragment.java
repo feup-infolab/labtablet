@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +27,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.activities.FormSolverActivity;
 import pt.up.fe.labtablet.adapters.BaseFormListAdapter;
 import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.Form;
@@ -37,13 +39,9 @@ import pt.up.fe.labtablet.utils.Utils;
 public class ListFormFragment extends Fragment {
 
     private ArrayList<Form> items;
-
     private RecyclerView itemList;
     private BaseFormListAdapter adapter;
-
     private BaseFormListAdapter.OnItemClickListener itemClickListener;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,11 +73,22 @@ public class ListFormFragment extends Fragment {
             }
 
             @Override
-            public void onItemLongClick(View view, int position) {
-                FormMgr.removeBaseFormEntry(getActivity(), items.get(position));
-                items.remove(position);
-                itemList.animate();
-                adapter.notifyItemRemoved(position);
+            public void onItemLongClick(View view, final int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(getResources().getString(R.string.form_really_delete));
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        //"é para avançar, by bcp"
+                        FormMgr.removeBaseFormEntry(getActivity(), items.get(position));
+                        items.remove(position);
+                        itemList.animate();
+                        adapter.notifyItemRemoved(position);
+                    }
+                });
+                builder.setCancelable(true);
+                builder.show();
 
             }
         };

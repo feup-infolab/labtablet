@@ -12,28 +12,15 @@
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:background="?android:attr/selectableItemBackground"
     >
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="6dp"
         >
 
-        <Button
-            android:id="@+id/form_item_delete"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/ic_recycle"
-            style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-            android:visibility="gone"
-            />
-
         <LinearLayout
             android:id="@+id/ll_question"
-            android:layout_toStartOf="@id/form_item_delete"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -50,7 +37,6 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_below="@id/ll_question"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -93,5 +79,37 @@
                 android:text="15min"
                 />
         </RelativeLayout>
-    </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/item_form_list_expanded_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:visibility="visible"
+            >
+
+            <Button
+                android:id="@+id/action_form_item_delete_cancel"
+                style="@android:style/Widget.Holo.Button.Borderless"
+                android:textColor="@android:color/black"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="wrap_content"
+                android:text="@string/action_cancel"
+                />
+
+            <Button
+                android:id="@+id/action_form_item_delete"
+                style="@android:style/Widget.Holo.Button.Borderless"
+                android:textColor="@android:color/black"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="wrap_content"
+                android:text="@string/action_delete"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
 </android.support.v7.widget.CardView>
