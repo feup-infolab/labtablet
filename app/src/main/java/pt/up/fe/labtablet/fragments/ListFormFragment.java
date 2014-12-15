@@ -31,6 +31,7 @@ import pt.up.fe.labtablet.activities.FormSolverActivity;
 import pt.up.fe.labtablet.adapters.BaseFormListAdapter;
 import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.utils.OnItemClickListener;
 import pt.up.fe.labtablet.utils.Utils;
 
 /**
@@ -39,9 +40,9 @@ import pt.up.fe.labtablet.utils.Utils;
 public class ListFormFragment extends Fragment {
 
     private ArrayList<Form> items;
-    private RecyclerView itemList;
+            private RecyclerView itemList;
     private BaseFormListAdapter adapter;
-    private BaseFormListAdapter.OnItemClickListener itemClickListener;
+    private OnItemClickListener itemClickListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class ListFormFragment extends Fragment {
             items = FormMgr.getCurrentBaseForms(getActivity());
         }
 
-        itemClickListener = new BaseFormListAdapter.OnItemClickListener() {
+        itemClickListener = new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
@@ -93,8 +94,7 @@ public class ListFormFragment extends Fragment {
             }
         };
 
-        adapter = new BaseFormListAdapter(getActivity(),
-                items,
+        adapter = new BaseFormListAdapter(items,
                 R.layout.item_form_list,
                 itemClickListener);
 
@@ -164,8 +164,7 @@ public class ListFormFragment extends Fragment {
                 forms.add(new Form(input.getText().toString(), ""));
                 FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
 
-                adapter = new BaseFormListAdapter(getActivity(),
-                        items,
+                adapter = new BaseFormListAdapter(items,
                         R.layout.item_form_list,
                         itemClickListener);
 

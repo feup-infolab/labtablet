@@ -4,7 +4,7 @@
     <color name="light_gray">#e0e0e0</color>
     <color name="list_item_title">#fff</color>
     <color name="list_background">#303030</color>
-    <color name="list_background_pressed">#992416</color>
+    <color name="list_background_pressed">#ff6a4a3e</color>
     <color name="list_divider">#272727</color>
     <color name="counter_text_bg">#626262</color>
     <color name="counter_text_color">#c5c4c4</color>
@@ -17,4 +17,10 @@
     <color name="orange_button_end">#d62608</color>
     <color name="orange_button_stroke">#d62608</color>
     <color name="orange_button_solid_color">#e0341e</color>
+
+    <color name="primary">#ff7a5649</color>
+    <color name="primary_dark">#ff6a4a3e</color>
+    <color name="text_primary">#D9FFFFFF</color>
+    <color name="text_secondary">#D9000000</color>
+
 </resources>

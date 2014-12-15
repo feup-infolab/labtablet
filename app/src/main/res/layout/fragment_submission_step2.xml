@@ -5,27 +5,10 @@
     tools:context="pt.up.fe.labtablet.fragments.SubmissionStep2"
     >
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+    <ListView
+        android:id="@+id/submission_validation_metadata_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-
-        <TextView
-            android:id="@+id/tv_submission_validation_instruction"
-            android:layout_alignParentTop="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/submission_metadata_confirm"
-            android:padding="20dp"/>
-
-
-        <ListView
-            android:id="@+id/submission_validation_metadata_list"
-            android:layout_below="@id/tv_submission_validation_instruction"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
-    </RelativeLayout>
 </FrameLayout>

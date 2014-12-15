@@ -40,9 +40,9 @@ public class SearchFragment extends Fragment {
         Button bt_submit = (Button) rootView.findViewById(R.id.bt_search);
         et_query = (EditText) rootView.findViewById(R.id.et_search_query);
 
-        mAdapter = new FavoriteListAdapter(getActivity(), new ArrayList<FavoriteItem>());
+        //mAdapter = new FavoriteListAdapter(getActivity(), new ArrayList<FavoriteItem>());
 
-        lv_results.setAdapter(mAdapter);
+        //lv_results.setAdapter(mAdapter);
         lv_results.setDividerHeight(0);
 
         bt_submit.setOnClickListener(new OnClickListener() {
@@ -65,10 +65,10 @@ public class SearchFragment extends Fragment {
                         if (getActivity() == null) {
                             return;
                         }
-                        mAdapter.notifyDataSetInvalidated();
-                        mAdapter.clear();
-                        mAdapter.addAll(result);
-                        mAdapter.notifyDataSetChanged();
+                        //mAdapter.notifyDataSetInvalidated();
+                        //mAdapter.clear();
+                        //mAdapter.addAll(result);
+                        //mAdapter.notifyDataSetChanged();
                         // To dismiss the dialog
                         progress.dismiss();
                     }

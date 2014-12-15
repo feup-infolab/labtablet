@@ -5,7 +5,7 @@
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
 
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
+    <style name="AppBaseTheme" parent="android:Theme.Material.Light">
         <item name="android:windowBackground">@color/light_gray</item>
 
         <!--
@@ -32,7 +32,6 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">0.6</item>
         <item name="android:background">@drawable/custom_btn_orange_left</item>
-
     </style>
 
     <style name="btnStyleOrangeRight" parent="@android:style/Widget.Button">

@@ -25,22 +25,20 @@ import pt.up.fe.labtablet.activities.MainActivity;
 import pt.up.fe.labtablet.fragments.FormViewFragment;
 import pt.up.fe.labtablet.fragments.ListFormFragment;
 import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.utils.OnItemClickListener;
 
 /**
  * Created by ricardo on 11-12-2014.
  */
 public class BaseFormListAdapter extends RecyclerView.Adapter<BaseFormListAdapter.BaseFormVH> {
 
-    private final Context context;
     private final ArrayList<Form> items;
     private int rowLayout;
     private static OnItemClickListener listener;
 
-    public BaseFormListAdapter(Activity context,
-                                   ArrayList<Form> srcItems,
+    public BaseFormListAdapter(ArrayList<Form> srcItems,
                                    int rowLayout,
                                    OnItemClickListener clickListener) {
-        this.context = context;
         this.items = srcItems;
         this.rowLayout = rowLayout;
 
@@ -94,7 +92,6 @@ public class BaseFormListAdapter extends RecyclerView.Adapter<BaseFormListAdapte
 
         @Override
         public void onClick(View view) {
-            //Notify clickListener
             listener.onItemClick(view, getPosition());
         }
 
@@ -123,8 +120,5 @@ public class BaseFormListAdapter extends RecyclerView.Adapter<BaseFormListAdapte
         }
     }
 
-    public interface OnItemClickListener {
-        public void onItemClick(View view , int position);
-        public void onItemLongClick(View view, int position);
-    }
+
 }

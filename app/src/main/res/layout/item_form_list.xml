@@ -6,11 +6,7 @@
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="5dp"
     android:layout_margin="8dp"
-
-    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
-    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:background="?android:attr/selectableItemBackground"
+    android:foreground="?android:attr/selectableItemBackground"
     >
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
@@ -27,6 +23,7 @@
 
             <TextView
                 android:id="@+id/form_name"
+                android:textColor="@android:color/black"
                 android:layout_width="0dp"
                 android:layout_weight="0.98"
                 android:layout_height="wrap_content"
@@ -86,7 +83,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:visibility="visible"
+            android:visibility="gone"
             >
 
             <Button
@@ -97,6 +94,8 @@
                 android:layout_weight=".5"
                 android:layout_height="wrap_content"
                 android:text="@string/action_cancel"
+
+                android:background="@drawable/ripple"
                 />
 
             <Button

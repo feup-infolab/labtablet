@@ -377,6 +377,7 @@
             <EditText
                 android:id="@+id/dendro_configurations_address"
                 android:layout_width="fill_parent"
+                android:textColor="@android:color/black"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/dendro_configurations_description"
                 android:drawableStart="@android:drawable/ic_menu_directions"
@@ -387,6 +388,7 @@
             <EditText
                 android:id="@+id/dendro_configurations_username"
                 android:layout_width="fill_parent"
+                android:textColor="@android:color/black"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/dendro_configurations_address"
                 android:drawableStart="@android:drawable/ic_menu_myplaces"
@@ -396,6 +398,7 @@
             <EditText
                 android:id="@+id/dendro_configurations_password"
                 android:layout_width="fill_parent"
+                android:textColor="@android:color/black"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/dendro_configurations_username"
                 android:hint="Password"
