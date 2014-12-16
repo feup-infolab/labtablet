@@ -19,6 +19,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
+            android:textColor="@color/text_blue_grey"
             android:text="@string/welcome"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"

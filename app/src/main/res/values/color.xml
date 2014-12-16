@@ -13,14 +13,15 @@
     <color name="card_shadow">#8c666666</color>
 
     <!-- Orange button resources -->
-    <color name="orange_button_start">#a11005</color> <!-- Darker than the next one -->
-    <color name="orange_button_end">#d62608</color>
-    <color name="orange_button_stroke">#d62608</color>
-    <color name="orange_button_solid_color">#e0341e</color>
+    <color name="orange_button_start">#263238</color> <!-- Darker than the next one -->
+    <color name="orange_button_end">#ff2c3b44</color>
+    <color name="orange_button_stroke">#ff2c3b44</color>
+    <color name="orange_button_solid_color">#ff384b55</color>
 
-    <color name="primary">#ff7a5649</color>
-    <color name="primary_dark">#ff6a4a3e</color>
-    <color name="text_primary">#D9FFFFFF</color>
-    <color name="text_secondary">#D9000000</color>
+    <color name="primary">#ff2c3b44</color>
+    <color name="primary_dark">#263238</color>
+    <color name="text_primary">#ffffffff</color>
+    <color name="text_secondary">#ff000000</color>
+    <color name="text_blue_grey">#37474F</color>
 
 </resources>

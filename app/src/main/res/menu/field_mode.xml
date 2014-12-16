@@ -5,8 +5,8 @@
     <item android:id="@+id/action_field_mode_end"
         android:title="@string/action_end_field_mode"
         android:orderInCategory="100"
-        android:showAsAction="always|withText"
-        android:icon="@android:drawable/ic_menu_send"
+        android:showAsAction="always"
+        android:icon="@drawable/ab_validate"
         />
 
 </menu>

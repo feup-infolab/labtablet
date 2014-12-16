@@ -174,6 +174,7 @@ public class HomeFragment extends Fragment {
                 transaction.commit();
             }
         });
+
         return rootView;
     }
 

@@ -4,6 +4,6 @@
     android:id="@+id/action_new_dataset"
     android:icon="@drawable/ab_plus"
     android:title="@string/new_dataset_item"
-    android:showAsAction="always|withText"
+    android:showAsAction="always"
     />
 </menu>

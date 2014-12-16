@@ -4,9 +4,9 @@
 
     <item
         android:id="@+id/action_edit_form_save"
-        android:icon="@drawable/ab_save"
+        android:icon="@drawable/ab_validate"
         android:orderInCategory="20"
-        android:showAsAction="always|withText"
+        android:showAsAction="always"
         android:title="@string/action_save"/>
 
     <item

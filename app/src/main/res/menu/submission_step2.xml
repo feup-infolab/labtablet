@@ -10,5 +10,5 @@
         android:title="@string/next"
         android:icon="@drawable/ab_forward"
         android:orderInCategory="100"
-        android:showAsAction="always|withText" />
+        android:showAsAction="always" />
 </menu>
