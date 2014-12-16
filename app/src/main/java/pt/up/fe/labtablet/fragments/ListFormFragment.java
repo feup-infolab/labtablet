@@ -40,7 +40,7 @@ import pt.up.fe.labtablet.utils.Utils;
 public class ListFormFragment extends Fragment {
 
     private ArrayList<Form> items;
-            private RecyclerView itemList;
+    private RecyclerView itemList;
     private BaseFormListAdapter adapter;
     private OnItemClickListener itemClickListener;
 

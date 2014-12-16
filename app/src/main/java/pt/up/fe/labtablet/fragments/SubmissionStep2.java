@@ -65,8 +65,8 @@ public class SubmissionStep2 extends Fragment {
 
         lvMetadata = (ListView) rootView.findViewById(R.id.submission_validation_metadata_list);
         lvMetadata.setDividerHeight(0);
-        mAdapter = new MetadataListAdapter(getActivity(), favoriteItem.getMetadataItems(), favoriteName);
-        lvMetadata.setAdapter(mAdapter);
+        //mAdapter = new MetadataListAdapter(favoriteItem.getMetadataItems(), getActivity() );
+        //lvMetadata.setAdapter(mAdapter);
 
         return rootView;
     }
@@ -90,8 +90,8 @@ public class SubmissionStep2 extends Fragment {
                     .fromJson(descriptorsJson, Utils.ARRAY_DESCRIPTORS);
 
             favoriteItem.setMetadataItems(receivedRecords);
-            mAdapter = new MetadataListAdapter(getActivity(), favoriteItem.getMetadataItems(), favoriteName);
-            lvMetadata.setAdapter(mAdapter);
+            //mAdapter = new MetadataListAdapter(getActivity(), favoriteItem.getMetadataItems(), favoriteName);
+            //lvMetadata.setAdapter(mAdapter);
             FavoriteMgr.updateFavoriteEntry(favoriteName, favoriteItem, getActivity());
             Toast.makeText(getActivity(), "Updated", Toast.LENGTH_SHORT).show();
         }

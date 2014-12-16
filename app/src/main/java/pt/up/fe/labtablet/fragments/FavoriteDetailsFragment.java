@@ -11,6 +11,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,6 +38,7 @@ import pt.up.fe.labtablet.activities.DescriptorPickerActivity;
 import pt.up.fe.labtablet.activities.FieldModeActivity;
 import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.labtablet.activities.ValidateMetadataActivity;
+import pt.up.fe.labtablet.adapters.BaseFormListAdapter;
 import pt.up.fe.labtablet.adapters.DataListAdapter;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
@@ -46,6 +50,7 @@ import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.OnItemClickListener;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class FavoriteDetailsFragment extends Fragment {
@@ -58,11 +63,13 @@ public class FavoriteDetailsFragment extends Fragment {
     private Button bt_meta_view;
     private Button bt_data_view;
 
-    private ListView lv_metadata;
     private boolean isMetadataVisible;
 
     private FavoriteItem currentItem;
     private String favoriteName;
+
+    private RecyclerView itemList;
+    private OnItemClickListener itemClickListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,12 +86,9 @@ public class FavoriteDetailsFragment extends Fragment {
         tv_title = (TextView) rootView.findViewById(R.id.tv_title);
         tv_description = (TextView) rootView.findViewById(R.id.tv_description);
 
-        lv_metadata = (ListView) rootView.findViewById(R.id.lv_favorite_metadata);
-
         bt_meta_view = (Button) rootView.findViewById(R.id.tab_metadata);
         bt_data_view = (Button) rootView.findViewById(R.id.tab_data);
         bt_edit_view = (ImageButton) rootView.findViewById(R.id.bt_edit_metadata);
-
         bt_edit_title.setTag(Utils.TITLE_TAG);
 
         if (savedInstanceState != null) {
@@ -110,6 +114,24 @@ public class FavoriteDetailsFragment extends Fragment {
 
         tv_description.setText(currentItem.getDescription());
         tv_title.setText(currentItem.getTitle());
+
+        itemList = (RecyclerView) rootView.findViewById(R.id.lv_favorite_metadata);
+        itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        itemList.setItemAnimator(new DefaultItemAnimator());
+
+        itemList.animate();
+
+        itemClickListener = new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                //TODO launch preview activity
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                //TODO show option to delete, maybe?
+            }
+        };
 
 
         if (isMetadataVisible) {
@@ -185,14 +207,16 @@ public class FavoriteDetailsFragment extends Fragment {
 
         MetadataListAdapter mMetadataAdapter =
                 new MetadataListAdapter(
-                        getActivity(),
                         currentItem.getMetadataItems(),
-                        favoriteName);
+                        R.layout.item_metadata_list,
+                        itemClickListener,
+                        getActivity());
 
-        lv_metadata.setAdapter(mMetadataAdapter);
+        itemList.setAdapter(mMetadataAdapter);
     }
 
     private void loadDataView() {
+
         bt_data_view.setEnabled(false);
         bt_meta_view.setEnabled(true);
         bt_edit_view.setVisibility(View.INVISIBLE);
@@ -200,11 +224,13 @@ public class FavoriteDetailsFragment extends Fragment {
         isMetadataVisible = false;
 
         DataListAdapter mDataAdapter = new DataListAdapter(
-                getActivity(),
-                currentItem,
-                favoriteName);
+                currentItem.getDataItems(),
+                        R.layout.item_data_list,
+                        itemClickListener,
+                        getActivity());
 
-        lv_metadata.setAdapter(mDataAdapter);
+        itemList.setAdapter(mDataAdapter);
+
     }
 
     @Override

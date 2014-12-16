@@ -1,35 +1,19 @@
 package pt.up.fe.labtablet.adapters;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.activities.MainActivity;
-import pt.up.fe.labtablet.fragments.FormViewFragment;
-import pt.up.fe.labtablet.fragments.ListFormFragment;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.utils.OnItemClickListener;
 
-/**
- * Created by ricardo on 11-12-2014.
- */
 public class BaseFormListAdapter extends RecyclerView.Adapter<BaseFormListAdapter.BaseFormVH> {
 
     private final ArrayList<Form> items;

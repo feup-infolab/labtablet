@@ -1,12 +1,10 @@
 package pt.up.fe.labtablet.adapters;
 
-import android.app.Activity;
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,56 +12,44 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.async.AsyncImageLoader;
-import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.FileMgr;
+import pt.up.fe.labtablet.utils.OnItemClickListener;
 import pt.up.fe.labtablet.utils.Utils;
 
 /**
  * Handles each metadata item and shows additional info
  * such as its value and associated descriptor
  */
-public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
+public class MetadataListAdapter extends RecyclerView.Adapter<MetadataListAdapter.MetadataListVH> {
 
-    private final Activity context;
-    private final String favoriteName;
+    private final Context context;
+
     private final ArrayList<Descriptor> items;
+    private int rowLayout;
+    private static OnItemClickListener listener;
 
 
-    public MetadataListAdapter(Activity context, ArrayList<Descriptor> srcItems, String favoriteName) {
-        super(context, R.layout.item_metadata_list, srcItems);
+    public MetadataListAdapter(ArrayList<Descriptor> srcItems,
+                               int rowLayout,
+                               OnItemClickListener clickListener,
+                               Context context) {
+
         this.context = context;
+        this.rowLayout = rowLayout;
         this.items = srcItems;
-        this.favoriteName = favoriteName;
+
+        listener = clickListener;
     }
 
     @Override
-    public void notifyDataSetChanged() {
-        items.clear();
-        items.addAll(FavoriteMgr
-                .getFavorite(context, favoriteName)
-                .getMetadataItems());
-        super.notifyDataSetChanged();
+    public MetadataListVH onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        return new MetadataListVH(v);
     }
 
     @Override
-    public View getView(int position, final View convertView, ViewGroup parent) {
-        View rowView = convertView;
-        // reuse views
-        if (rowView == null) {
-            LayoutInflater inflater = context.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.item_metadata_list, parent, false);
-            // configure view holder
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.mDescriptorName = (TextView) rowView.findViewById(R.id.metadata_item_title);
-            viewHolder.mDescriptorType = (ImageView) rowView.findViewById(R.id.metadata_item_type);
-            viewHolder.mDescriptorDate = (TextView) rowView.findViewById(R.id.metadata_item_date);
-            viewHolder.mDescriptorValue = (TextView) rowView.findViewById(R.id.metadata_item_value);
-            rowView.setTag(viewHolder);
-        }
-
-        // fill data
-        ViewHolder holder = (ViewHolder) rowView.getTag();
+    public void onBindViewHolder(MetadataListVH holder, int position) {
         final Descriptor item = items.get(position);
 
         holder.mDescriptorDate.setText(item.getDateModified());
@@ -71,24 +57,49 @@ public class MetadataListAdapter extends ArrayAdapter<Descriptor> {
         holder.mDescriptorName.setText(item.getName());
         holder.mDescriptorType.setTag(item.getFilePath());
 
-
         if (item.hasFile()
                 && Utils.knownImageMimeTypes.contains(FileMgr.getMimeType(item.getFilePath()))) {
             new AsyncImageLoader(holder.mDescriptorType, context).execute();
         } else {
             holder.mDescriptorType.setImageResource(R.drawable.ic_file);
         }
-
-        Animation animation = AnimationUtils.makeInAnimation(context, false);
-        rowView.startAnimation(animation);
-        return rowView;
     }
 
-    static class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return items == null ? 0 : items.size();
+    }
+
+    static class MetadataListVH extends RecyclerView.ViewHolder
+            implements View.OnClickListener, View.OnLongClickListener {
+
         public TextView mDescriptorName;
         public TextView mDescriptorValue;
         public ImageView mDescriptorType;
         public TextView mDescriptorDate;
+
+        public MetadataListVH(View rowView) {
+            super(rowView);
+            mDescriptorName = (TextView) rowView.findViewById(R.id.metadata_item_title);
+            mDescriptorType = (ImageView) rowView.findViewById(R.id.metadata_item_type);
+            mDescriptorDate = (TextView) rowView.findViewById(R.id.metadata_item_date);
+            mDescriptorValue = (TextView) rowView.findViewById(R.id.metadata_item_value);
+
+            rowView.setOnClickListener(this);
+            rowView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            listener.onItemClick(view, getPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            listener.onItemLongClick(view, getPosition());
+            return true;
+        }
     }
 
 }

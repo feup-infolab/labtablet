@@ -122,7 +122,7 @@
 
         </LinearLayout>
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/lv_favorite_metadata"
             android:scrollbars="none"
             android:dividerHeight="10dp"
