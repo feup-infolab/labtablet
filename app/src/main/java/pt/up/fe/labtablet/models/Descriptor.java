@@ -19,8 +19,6 @@ public class Descriptor {
     private String description;
     private String tag;
 
-
-
     private ArrayList<String> allowed_values;
 
     private String filePath;
@@ -85,7 +83,7 @@ public class Descriptor {
     }
 
     public String getDescription() {
-        return this.description;
+        return this.description == null ? "" : this.description;
     }
 
     public void setDescription(String description) {

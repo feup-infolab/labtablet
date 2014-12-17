@@ -5,8 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -83,11 +85,10 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataLi
 
         if (item.getMimeType() != null
                 && Utils.knownImageMimeTypes.contains(item.getMimeType())) {
-            new AsyncImageLoader(holder.mDescriptorType, context).execute();
+            new AsyncImageLoader(holder.mDescriptorType, context, true).execute();
         } else {
             holder.mDescriptorType.setImageResource(R.drawable.ic_file);
         }
-
 
     }
 
@@ -104,6 +105,8 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataLi
         public ImageView mDescriptorType;
         public TextView mDescriptorSize;
 
+        public LinearLayout mDataItemDeleteView;
+
         public DataListVH(View rowView) {
             super(rowView);
 
@@ -112,6 +115,7 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataLi
             mDescriptorValue = (TextView) rowView.findViewById(R.id.metadata_item_value);
             mDescriptorSize = (TextView) rowView.findViewById(R.id.metadata_item_size);
             mDescriptorDescription = (TextView) rowView.findViewById(R.id.metadata_item_description);
+            mDataItemDeleteView = (LinearLayout) rowView.findViewById(R.id.ll_data_item_delete_view);
 
             rowView.setOnClickListener(this);
             rowView.setOnLongClickListener(this);
@@ -124,7 +128,24 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataLi
 
         @Override
         public boolean onLongClick(View view) {
-            listener.onItemLongClick(view, getPosition());
+            mDataItemDeleteView.animate();
+            mDataItemDeleteView.setVisibility(View.VISIBLE);
+            Button actionDelete = (Button) view.findViewById(R.id.action_data_item_delete);
+            Button actionCancel = (Button) view.findViewById(R.id.action_data_item_delete_cancel);
+
+            actionCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mDataItemDeleteView.setVisibility(View.GONE);
+                }
+            });
+
+            actionDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemLongClick(view, getPosition());
+                }
+            });
             return true;
         }
     }

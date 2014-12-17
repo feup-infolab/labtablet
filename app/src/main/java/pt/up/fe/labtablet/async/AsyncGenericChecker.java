@@ -71,7 +71,8 @@ public class AsyncGenericChecker extends AsyncTask<Object, Void, Integer> {
         int counter = 0;
 
         for (Descriptor desc : descriptors) {
-            if (desc.getTag().equals(Utils.GENERIC_TAG)) {
+            if (desc != null
+                    && desc.getTag().equals(Utils.GENERIC_TAG)) {
                 counter ++;
             }
         }

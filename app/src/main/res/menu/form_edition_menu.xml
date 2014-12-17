@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/action_edit_form_delete"
-        android:icon="@drawable/ab_cross"
+        android:icon="@drawable/ic_trash_white"
         android:orderInCategory="20"
         android:showAsAction="ifRoom"
         android:title="@string/action_delete"/>

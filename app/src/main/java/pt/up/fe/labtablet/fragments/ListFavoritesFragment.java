@@ -74,7 +74,7 @@ public class ListFavoritesFragment extends Fragment {
                 FavoriteItem selectedItem = items.get(position);
 
                 FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
 
                 //switch to the favorite view
                 FavoriteDetailsFragment favoriteDetails = new FavoriteDetailsFragment();

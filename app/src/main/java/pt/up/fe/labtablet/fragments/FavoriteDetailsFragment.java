@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,11 +32,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.DescriptorPickerActivity;
 import pt.up.fe.labtablet.activities.FieldModeActivity;
+import pt.up.fe.labtablet.activities.ItemPreviewActivity;
 import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.labtablet.activities.ValidateMetadataActivity;
 import pt.up.fe.labtablet.adapters.BaseFormListAdapter;
@@ -44,7 +47,9 @@ import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncFileImporter;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.labtablet.db_handlers.DBCon;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
+import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
@@ -70,6 +75,9 @@ public class FavoriteDetailsFragment extends Fragment {
 
     private RecyclerView itemList;
     private OnItemClickListener itemClickListener;
+
+    private MetadataListAdapter metadataListAdapter;
+    private DataListAdapter dataListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,18 +126,62 @@ public class FavoriteDetailsFragment extends Fragment {
         itemList = (RecyclerView) rootView.findViewById(R.id.lv_favorite_metadata);
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
         itemList.setItemAnimator(new DefaultItemAnimator());
-
         itemList.animate();
 
         itemClickListener = new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                //TODO launch preview activity
+
+                Intent intent = new Intent(getActivity(), ItemPreviewActivity.class);
+                if (isMetadataVisible) {
+                    intent.putExtra("metadata_item",
+                            new Gson().toJson(currentItem.getMetadataItems().get(position)));
+                } else {
+                    intent.putExtra("data_item",
+                            new Gson().toJson(currentItem.getDataItems().get(position)));
+                }
+
+                startActivityForResult(intent, Utils.ITEM_PREVIEW);
             }
 
             @Override
-            public void onItemLongClick(View view, int position) {
-                //TODO show option to delete, maybe?
+            public void onItemLongClick(View view, final int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(getResources().getString(R.string.form_really_delete));
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        //remove entry and associated file (if any)
+                        if (isMetadataVisible) {
+                            Descriptor deletionItem = currentItem.getMetadataItems().get(position);
+                            if (deletionItem.hasFile()) {
+                                if (new File(deletionItem.getFilePath()).delete()) {
+                                    currentItem.getMetadataItems().remove(position);
+                                    metadataListAdapter.notifyItemRemoved(position);
+                                } else {
+                                    Toast.makeText(getActivity(), "Failed to remove resource ", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                currentItem.getMetadataItems().remove(position);
+                                metadataListAdapter.notifyItemRemoved(position);
+                            }
+
+                        } else {
+                            if ((new File(currentItem.getDataItems().get(position).getLocalPath())).delete()) {
+                                currentItem.getDataItems().remove(position);
+                                dataListAdapter.notifyItemRemoved(position);
+
+                            } else {
+                                Toast.makeText(getActivity(), "Failed to remove resource ", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, getActivity());
+                    }
+                });
+                builder.setCancelable(true);
+                builder.show();
             }
         };
 
@@ -205,14 +257,14 @@ public class FavoriteDetailsFragment extends Fragment {
         isMetadataVisible = true;
         bt_edit_view.setVisibility(View.VISIBLE);
 
-        MetadataListAdapter mMetadataAdapter =
+        metadataListAdapter =
                 new MetadataListAdapter(
                         currentItem.getMetadataItems(),
                         R.layout.item_metadata_list,
                         itemClickListener,
                         getActivity());
 
-        itemList.setAdapter(mMetadataAdapter);
+        itemList.setAdapter(metadataListAdapter);
     }
 
     private void loadDataView() {
@@ -223,13 +275,13 @@ public class FavoriteDetailsFragment extends Fragment {
 
         isMetadataVisible = false;
 
-        DataListAdapter mDataAdapter = new DataListAdapter(
+        dataListAdapter = new DataListAdapter(
                 currentItem.getDataItems(),
-                        R.layout.item_data_list,
-                        itemClickListener,
-                        getActivity());
+                R.layout.item_data_list,
+                itemClickListener,
+                getActivity());
 
-        itemList.setAdapter(mDataAdapter);
+        itemList.setAdapter(dataListAdapter);
 
     }
 
@@ -335,6 +387,35 @@ public class FavoriteDetailsFragment extends Fragment {
                     importHeader.setText("" + value + "%");
                 }
             }).execute(getActivity(), data, favoriteName);
+        } else if (requestCode == Utils.ITEM_PREVIEW) {
+
+            if (resultCode == Utils.DATA_ITEM_CHANGED) {
+                if (data.getExtras() == null ||
+                        !data.getExtras().containsKey("data_item")) {
+                    throw new AssertionError("Received no data from item preview");
+                }
+
+                DataItem item = new Gson()
+                        .fromJson(data.getStringExtra("data_item"), DataItem.class);
+
+                currentItem.getDataItems().remove(item);
+                currentItem.addDataItem(item);
+
+            } else if (resultCode == Utils.METADATA_ITEM_CHANGED) {
+                if (data.getExtras() == null ||
+                        !data.getExtras().containsKey("metadata_item")) {
+                    throw new AssertionError("Received no data from item preview");
+                }
+
+                Descriptor item = new Gson()
+                        .fromJson(data.getStringExtra("metadata_item"), Descriptor.class);
+
+                currentItem.getMetadataItems().remove(item);
+                currentItem.addMetadataItem(item);
+            }
+
+            FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, getActivity());
+            onResume();
         }
     }
 

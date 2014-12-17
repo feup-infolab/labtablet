@@ -10,7 +10,7 @@
         android:title="@string/action_upload" />
     <item
         android:id="@+id/action_favorite_delete"
-        android:icon="@drawable/ab_cross"
+        android:icon="@drawable/ic_trash_white"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:title="@string/action_delete" />

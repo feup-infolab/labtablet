@@ -3,7 +3,7 @@
     tools:context="pt.up.fe.labtablet.activities.FingerPaintActivity" >
     <item
         android:id="@+id/action_changelog_clear"
-        android:icon="@android:drawable/ic_menu_delete"
+        android:icon="@drawable/ic_trash_white"
         android:orderInCategory="20"
         android:showAsAction="ifRoom"
         android:title="@string/action_clear"/>

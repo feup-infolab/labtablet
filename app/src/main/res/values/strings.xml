@@ -263,4 +263,5 @@
     <string name="new_favorite_create">Create</string>
     <string name="file_imported_description">Successfully imported file.</string>
     <string name="upload_generating_forms">Generating forms...</string>
+    <string name="title_activity_item_preview">itemPreviewActivity</string>
 </resources>

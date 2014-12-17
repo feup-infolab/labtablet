@@ -7,79 +7,120 @@
     android:layout_margin="8dp"
     android:foreground="?android:attr/selectableItemBackground"
     >
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/metadata_item_value"
-            android:visibility="visible"
-            android:layout_width="wrap_content"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="start"
-            android:maxWidth="200dp"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:background="#b0f5361c"
-            android:text="mime type"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:textSize="14sp" />
+            >
+
+            <TextView
+                android:id="@+id/metadata_item_value"
+                android:visibility="visible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="start"
+                android:maxWidth="200dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:background="#b0f5361c"
+                android:text="mime type"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:textSize="14sp" />
 
 
-        <ImageView
-            android:id="@+id/metadata_item_type"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_file"
-            />
+            <ImageView
+                android:id="@+id/metadata_item_type"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_file"
+                />
 
-        <TextView
-            android:id="@+id/metadata_item_title"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/metadata_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="15dp"
+                android:layout_toEndOf="@id/metadata_item_type"
+                android:ellipsize="start"
+                android:text="File name value"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                />
+
+            <TextView
+                android:id="@+id/metadata_item_description"
+                android:layout_below="@id/metadata_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/metadata_item_type"
+                android:ellipsize="start"
+                android:text="File description"
+                android:visibility="visible"
+                android:textColor="@color/second_grey"
+                android:textSize="16sp"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                />
+
+            <TextView
+                android:id="@+id/metadata_item_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/metadata_item_description"
+                android:layout_toEndOf="@id/metadata_item_type"
+                android:layout_marginBottom="15dp"
+                android:ellipsize="start"
+                android:maxWidth="200dp"
+                android:singleLine="true"
+                android:text="16MB"
+                android:textColor="@color/second_grey"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_data_item_delete_view"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="15dp"
-            android:layout_toEndOf="@id/metadata_item_type"
-            android:ellipsize="start"
-            android:text="File name value"
-            android:textAppearance="@android:style/TextAppearance.Medium"
-            />
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            >
 
-        <TextView
-            android:id="@+id/metadata_item_description"
-            android:layout_below="@id/metadata_item_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/metadata_item_type"
-            android:ellipsize="start"
-            android:text="File description"
-            android:visibility="visible"
-            android:textColor="@color/second_grey"
-            android:textSize="16sp"
-            android:textAppearance="@android:style/TextAppearance.Medium"
-            />
+            <Button
+                android:id="@+id/action_data_item_delete_cancel"
+                style="@android:style/Widget.Holo.Button.Borderless"
+                android:textColor="@android:color/black"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="wrap_content"
+                android:text="@string/action_cancel"
 
-        <TextView
-            android:id="@+id/metadata_item_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/metadata_item_description"
-            android:layout_toEndOf="@id/metadata_item_type"
-            android:layout_marginBottom="15dp"
-            android:ellipsize="start"
-            android:maxWidth="200dp"
-            android:singleLine="true"
-            android:text="16MB"
-            android:textColor="@color/second_grey"
-            android:textSize="16sp" />
+                android:background="@drawable/ripple"
+                />
 
-    </RelativeLayout>
+            <Button
+                android:id="@+id/action_data_item_delete"
+                style="@android:style/Widget.Holo.Button.Borderless"
+                android:textColor="@android:color/black"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="wrap_content"
+                android:text="@string/action_delete"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
 </android.support.v7.widget.CardView>

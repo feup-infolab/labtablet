@@ -92,7 +92,7 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
 
         if (item.hasFile()
                 && Utils.knownImageMimeTypes.contains(FileMgr.getMimeType(item.getFilePath()))) {
-            new AsyncImageLoader(holder.mMetadataPreview, context).execute();
+            new AsyncImageLoader(holder.mMetadataPreview, context, true).execute();
         } else {
             holder.mMetadataPreview.setImageResource(R.drawable.ic_file);
         }

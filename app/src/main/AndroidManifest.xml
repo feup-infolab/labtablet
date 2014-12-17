@@ -65,6 +65,11 @@
             android:label="@string/title_activity_form_question_creator"
             >
         </activity>
+        <activity
+            android:name="pt.up.fe.labtablet.activities.ItemPreviewActivity"
+            android:label="@string/title_activity_item_preview"
+            >
+        </activity>
     </application>
 
 </manifest>

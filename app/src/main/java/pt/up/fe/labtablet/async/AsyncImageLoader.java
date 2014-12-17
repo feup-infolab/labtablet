@@ -26,11 +26,13 @@ public class AsyncImageLoader extends AsyncTask<Object, Void, Bitmap> {
     private final ImageView imv;
     private final String path;
     private final Context mContext;
+    private final boolean compression;
 
-    public AsyncImageLoader(ImageView imv, Context context) {
+    public AsyncImageLoader(ImageView imv, Context context, boolean imgCompressionEnabled) {
         this.imv = imv;
         this.path = imv.getTag().toString();
         this.mContext = context;
+        this.compression = imgCompressionEnabled;
     }
 
     @Override
@@ -54,8 +56,11 @@ public class AsyncImageLoader extends AsyncTask<Object, Void, Bitmap> {
 
             //Optimal scale value - Should be a power of 2
             int scale = 1;
-            while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
-                scale *= 2;
+            if (compression) {
+                while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
+                    scale *= 2;
+            }
+
 
             //Decode with inSampleSize
             BitmapFactory.Options o2 = new BitmapFactory.Options();
