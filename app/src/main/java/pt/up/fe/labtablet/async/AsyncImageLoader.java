@@ -56,11 +56,15 @@ public class AsyncImageLoader extends AsyncTask<Object, Void, Bitmap> {
 
             //Optimal scale value - Should be a power of 2
             int scale = 1;
-            if (compression) {
-                while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
-                    scale *= 2;
+            int scaleFactor = 2;
+
+            if (!compression) {
+                scaleFactor = 16;
             }
 
+            while (o.outWidth / scale / scaleFactor >= REQUIRED_SIZE
+                    && o.outHeight / scale / scaleFactor >= REQUIRED_SIZE)
+                scale *= 2;
 
             //Decode with inSampleSize
             BitmapFactory.Options o2 = new BitmapFactory.Options();

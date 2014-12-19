@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -83,6 +84,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
+            actionBar.setDisplayHomeAsUpEnabled(true);
             // Set up the dropdown list navigation in the action bar.
             actionBar.setListNavigationCallbacks(
                     // Specify a SpinnerAdapter to populate the dropdown list.
@@ -101,14 +103,13 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
         ListView lv_descriptors;
         lv_descriptors = (ListView) findViewById(R.id.lv_descriptors);
 
-        displayedDescriptors = new ArrayList<Descriptor>();
+        displayedDescriptors = new ArrayList<>();
 
         mDescriptors = FavoriteMgr.getBaseDescriptors(this);
 
         //set list adapter
         mAdapter = new DescriptorsListAdapter(this, displayedDescriptors);
         lv_descriptors.setAdapter(mAdapter);
-
 
         lv_descriptors.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -303,4 +304,14 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return false;
+    }
 }

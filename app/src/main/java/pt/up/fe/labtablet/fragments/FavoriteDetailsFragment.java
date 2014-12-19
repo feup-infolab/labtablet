@@ -141,6 +141,7 @@ public class FavoriteDetailsFragment extends Fragment {
                             new Gson().toJson(currentItem.getDataItems().get(position)));
                 }
 
+                intent.putExtra("position", position);
                 startActivityForResult(intent, Utils.ITEM_PREVIEW);
             }
 
@@ -389,28 +390,32 @@ public class FavoriteDetailsFragment extends Fragment {
             }).execute(getActivity(), data, favoriteName);
         } else if (requestCode == Utils.ITEM_PREVIEW) {
 
+            Bundle extras = data.getExtras();
+
             if (resultCode == Utils.DATA_ITEM_CHANGED) {
-                if (data.getExtras() == null ||
-                        !data.getExtras().containsKey("data_item")) {
+                if (extras == null
+                        || !extras.containsKey("data_item")
+                        || !extras.containsKey("position")) {
                     throw new AssertionError("Received no data from item preview");
                 }
 
                 DataItem item = new Gson()
                         .fromJson(data.getStringExtra("data_item"), DataItem.class);
 
-                currentItem.getDataItems().remove(item);
+                currentItem.getDataItems().remove(extras.getInt("position"));
                 currentItem.addDataItem(item);
 
             } else if (resultCode == Utils.METADATA_ITEM_CHANGED) {
-                if (data.getExtras() == null ||
-                        !data.getExtras().containsKey("metadata_item")) {
+                if (extras == null
+                        || !extras.containsKey("metadata_item")
+                        || !extras.containsKey("position")) {
                     throw new AssertionError("Received no data from item preview");
                 }
 
                 Descriptor item = new Gson()
                         .fromJson(data.getStringExtra("metadata_item"), Descriptor.class);
 
-                currentItem.getMetadataItems().remove(item);
+                currentItem.getMetadataItems().remove(extras.getInt("position"));
                 currentItem.addMetadataItem(item);
             }
 

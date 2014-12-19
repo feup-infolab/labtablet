@@ -18,6 +18,10 @@
         <item name="android:textColorHint">@color/second_grey</item>
         <item name="android:textColorHighlight">@color/text_blue_grey</item>
         <item name="android:textColor">@color/text_blue_grey</item>
+        <item name="android:textColorAlertDialogListItem">@color/primary_dark</item>
+        <item name="android:editTextColor">@color/text_blue_grey</item>
+        <item name="android:colorMultiSelectHighlight">@color/white</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
         <!--<item name="android:navigationBarColor">@color/primary_dark</item>-->
     </style>
 
