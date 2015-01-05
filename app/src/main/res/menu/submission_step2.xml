@@ -1,10 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/dendro_metadata_edit"
-        android:title="@string/edit"
-        android:icon="@drawable/ab_edit"
-        android:orderInCategory="100"
-        android:showAsAction="always|withText"
-        />
+
 
     <item android:id="@+id/action_dendro_metadata_confirm"
         android:title="@string/next"

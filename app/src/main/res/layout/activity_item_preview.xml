@@ -23,17 +23,19 @@
             >
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true">
 
             <ImageView
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/item_preview_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="300dp"
                 android:maxHeight="400dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_file_color"
+                android:src="@drawable/ic_clock"
                 />
 
                 <TextView

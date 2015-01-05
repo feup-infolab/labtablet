@@ -88,7 +88,7 @@ public class ListFavoritesFragment extends Fragment {
 
             @Override
             public void onItemLongClick(View view, int position) {
-                //TODO anything here?
+                // anything to consider here?
             }
         };
 

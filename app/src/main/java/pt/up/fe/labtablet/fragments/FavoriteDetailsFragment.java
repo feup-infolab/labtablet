@@ -480,7 +480,6 @@ public class FavoriteDetailsFragment extends Fragment {
 
         }
         return super.onOptionsItemSelected(item);
-
     }
 
     private class dcClickListener implements View.OnClickListener {

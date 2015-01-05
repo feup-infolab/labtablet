@@ -5,10 +5,15 @@
     tools:context="pt.up.fe.labtablet.fragments.SubmissionStep2"
     >
 
-    <ListView
-        android:id="@+id/submission_validation_metadata_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/submission_validation_metadata_list"
+        android:dividerHeight="10dp"
+        android:scrollbars="none"
+        android:divider="@android:color/transparent"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center" />
 </FrameLayout>
