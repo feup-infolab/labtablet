@@ -262,7 +262,7 @@ public class SubmissionStep3 extends Fragment {
                         refreshFoldersList();
                     }
                 });
-
+                builder.setCancelable(false);
                 btInstructions.setEnabled(true);
                 btInstructions.setVisibility(View.GONE);
                 tv_empty.setVisibility(View.GONE);
