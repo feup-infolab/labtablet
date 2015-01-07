@@ -43,7 +43,7 @@ public class Descriptor {
         this.value = value;
         this.tag = tag;
         this.state = Utils.DESCRIPTOR_STATE_NOT_VALIDATED;
-        this.allowed_values = new ArrayList<String>();
+        this.allowed_values = new ArrayList<>();
     }
 
     public boolean hasFile() {

@@ -14,16 +14,18 @@
         android:id="@+id/tv_step1_header"
         />
 
-    <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lv_unvalidate_metadata"
         android:layout_below="@id/tv_step1_header"
-        android:id="@+id/lv_unvalidated_metadata"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:clickable="false"
-        >
-    </ListView>
+        android:dividerHeight="10dp"
+        android:scrollbars="none"
+        android:divider="@android:color/transparent"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center" />
 
 
 

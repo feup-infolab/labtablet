@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -45,7 +46,9 @@ import pt.up.fe.labtablet.adapters.BaseFormListAdapter;
 import pt.up.fe.labtablet.adapters.DataListAdapter;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.async.AsyncCustomTaskHandler;
 import pt.up.fe.labtablet.async.AsyncFileImporter;
+import pt.up.fe.labtablet.async.AsyncPackageCreator;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.db_handlers.DBCon;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
@@ -54,6 +57,7 @@ import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
+import pt.up.fe.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.OnItemClickListener;
 import pt.up.fe.labtablet.utils.Utils;
@@ -62,7 +66,6 @@ public class FavoriteDetailsFragment extends Fragment {
 
     private TextView tv_title;
     private TextView tv_description;
-    private ImageButton bt_edit_view;
 
     //Buttons to switch between data and metadata views
     private Button bt_meta_view;
@@ -96,7 +99,6 @@ public class FavoriteDetailsFragment extends Fragment {
 
         bt_meta_view = (Button) rootView.findViewById(R.id.tab_metadata);
         bt_data_view = (Button) rootView.findViewById(R.id.tab_data);
-        bt_edit_view = (ImageButton) rootView.findViewById(R.id.bt_edit_metadata);
         bt_edit_title.setTag(Utils.TITLE_TAG);
 
         if (savedInstanceState != null) {
@@ -225,17 +227,6 @@ public class FavoriteDetailsFragment extends Fragment {
             }
         });
 
-        bt_edit_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isMetadataVisible) {
-                    Intent myIntent = new Intent(getActivity(), ValidateMetadataActivity.class);
-                    myIntent.putExtra("favorite", new Gson().toJson(currentItem));
-                    startActivityForResult(myIntent, Utils.METADATA_VALIDATION);
-                }
-            }
-        });
-
         bt_data_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -256,7 +247,6 @@ public class FavoriteDetailsFragment extends Fragment {
         bt_data_view.setEnabled(true);
         bt_meta_view.setEnabled(false);
         isMetadataVisible = true;
-        bt_edit_view.setVisibility(View.VISIBLE);
 
         metadataListAdapter =
                 new MetadataListAdapter(
@@ -272,7 +262,6 @@ public class FavoriteDetailsFragment extends Fragment {
 
         bt_data_view.setEnabled(false);
         bt_meta_view.setEnabled(true);
-        bt_edit_view.setVisibility(View.INVISIBLE);
 
         isMetadataVisible = false;
 
@@ -478,6 +467,31 @@ public class FavoriteDetailsFragment extends Fragment {
                     .setNegativeButton(R.string.cancel, null)
                     .show();
 
+        } else if (item.getItemId() == R.id.action_favorite_zip) {
+
+            final ProgressDialog dialog = ProgressDialog.show(getActivity(),
+                    getString(R.string.upload_progress_creating_package),
+                    getString(R.string.wait_queue_processing), false);
+
+            new AsyncPackageCreator(new AsyncCustomTaskHandler<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(Exception error) {
+                    Toast.makeText(getActivity(), "FAILED", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onProgressUpdate(ProgressUpdateItem progress) {
+                    dialog.setProgress(progress.getProgress());
+                    dialog.setMessage(progress.getMessage());
+                }
+            }).execute(favoriteName, getActivity());
         }
         return super.onOptionsItemSelected(item);
     }

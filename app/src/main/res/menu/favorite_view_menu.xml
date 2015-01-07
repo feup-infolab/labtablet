@@ -6,12 +6,20 @@
         android:id="@+id/action_favorite_upload"
         android:icon="@drawable/ab_upload"
         android:orderInCategory="100"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/action_upload" />
+
+    <item
+        android:id="@+id/action_favorite_zip"
+        android:icon="@drawable/ab_zip"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_zip" />
+
     <item
         android:id="@+id/action_favorite_delete"
         android:icon="@drawable/ic_trash_white"
         android:orderInCategory="100"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/action_delete" />
 </menu>

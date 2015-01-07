@@ -104,6 +104,8 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     private ProgressBar pb_update;
     private ProgressBar pb_location;
 
+    private ArrayList<Descriptor> gatheredMetadata;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +115,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         Intent intent = getIntent();
         favorite_name = intent.getStringExtra("favorite_name");
         sensorClickListener = new SensorsOnClickListener();
+        gatheredMetadata = new ArrayList<>();
 
         path = Environment.getExternalStorageDirectory().getAbsolutePath()
                 + "/" + getResources().getString(R.string.app_name)
@@ -148,7 +151,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         LTLocationListener.kmlCreatedInterface interfaceKml = new LTLocationListener.kmlCreatedInterface() {
             @Override
             public void kmlCreated(Descriptor kmlDescriptor) {
-                currentFavoriteItem.addMetadataItem(kmlDescriptor);
+                gatheredMetadata.add(kmlDescriptor);
             }
         };
 
@@ -209,7 +212,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         Descriptor desc = new Descriptor();
                         desc.setValue(input.getText().toString());
                         desc.setTag(Utils.TEXT_TAGS);
-                        currentFavoriteItem.addMetadataItem(desc);
+                        gatheredMetadata.add(desc);
                     }
                 });
                 builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -239,7 +242,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         mDesc.setTag(Utils.AUDIO_TAGS);
                         mDesc.setValue(Uri.parse(audio_filename).getLastPathSegment());
                         mDesc.setFilePath(audio_filename);
-                        currentFavoriteItem.addMetadataItem(mDesc);
+                        gatheredMetadata.add(mDesc);
                     } catch (Exception e) {
                         ChangelogItem item = new ChangelogItem();
                         item.setMessage("FieldMode audio recorder: " + e.toString() + "When stopping the recorder. Device stopped working.");
@@ -511,7 +514,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 desc.setValue(Uri.parse(filePath).getLastPathSegment());
                 desc.setFilePath(filePath);
                 desc.setTag(Utils.PICTURE_TAGS);
-                currentFavoriteItem.addMetadataItem(desc);
+                gatheredMetadata.add(desc);
                 break;
 
             case Utils.CAMERA_INTENT_REQUEST:
@@ -519,7 +522,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 desc2.setFilePath(capturedImageUri.getPath());
                 desc2.setValue(capturedImageUri.getLastPathSegment());
                 desc2.setTag(Utils.PICTURE_TAGS);
-                currentFavoriteItem.addMetadataItem(desc2);
+                gatheredMetadata.add(desc2);
                 break;
 
             case Utils.METADATA_VALIDATION:
@@ -580,6 +583,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         //Proceed to validate collected metadata
         Intent intent = new Intent(FieldModeActivity.this, ValidateMetadataActivity.class);
         intent.putExtra("favorite", new Gson().toJson(currentFavoriteItem));
+        intent.putExtra("unvalidated_metadata", new Gson().toJson(gatheredMetadata));
         startActivityForResult(intent, Utils.METADATA_VALIDATION);
 
         return super.onOptionsItemSelected(item);
@@ -615,7 +619,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     desc = new Descriptor();
                     desc.setValue(bt_network_temperature_sample.getText().toString());
                     desc.setTag(Utils.TEMP_TAGS);
-                    currentFavoriteItem.addMetadataItem(desc);
+                    gatheredMetadata.add(desc);
                     Toast.makeText(getApplication(),
                             getResources().getString(R.string.net_temp_saved),
                             Toast.LENGTH_SHORT).show();
@@ -625,7 +629,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     desc = new Descriptor();
                     desc.setValue(bt_temperature_sample.getText().toString());
                     desc.setTag(Utils.TEMP_TAGS);
-                    currentFavoriteItem.addMetadataItem(desc);
+                    gatheredMetadata.add(desc);
                     Toast.makeText(getApplication(),
                             getResources().getString(R.string.temp_saved),
                             Toast.LENGTH_SHORT).show();
@@ -635,7 +639,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     desc = new Descriptor();
                     desc.setValue(real_magnetic_value);
                     desc.setTag(Utils.MAGNETIC_TAGS);
-                    currentFavoriteItem.addMetadataItem(desc);
+                    gatheredMetadata.add(desc);
                     Toast.makeText(getApplication(),
                             getResources().getString(R.string.mag_saved),
                             Toast.LENGTH_SHORT).show();
@@ -645,7 +649,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     desc = new Descriptor();
                     desc.setValue(bt_luminosity_sample.getText().toString());
                     desc.setTag(Utils.TEXT_TAGS);
-                    currentFavoriteItem.addMetadataItem(desc);
+                    gatheredMetadata.add(desc);
                     Toast.makeText(getApplication(),
                             getResources().getString(R.string.lum_saved),
                             Toast.LENGTH_SHORT).show();
@@ -692,7 +696,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             Descriptor desc = new Descriptor();
             desc.setValue(latitude + "," + longitude);
             desc.setTag(Utils.GEO_TAGS);
-            currentFavoriteItem.addMetadataItem(desc);
+            gatheredMetadata.add(desc);
 
             Toast.makeText(FieldModeActivity.this,
                     "LAT:" + latitude + " LNG:" + longitude,

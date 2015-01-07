@@ -110,9 +110,8 @@ public class ItemPreviewActivity extends Activity {
                 ivItemPreview.setTag(metadataItem.getFilePath());
                 new AsyncImageLoader(ivItemPreview, this, false).execute();
             } else {
-                ivItemPreview.setImageDrawable(getDrawable(R.drawable.ic_folder));
+                (findViewById(R.id.item_preview_card)).setVisibility(View.GONE);
             }
-
         } else {
             ivItemPreview.setTag(dataItem.getLocalPath());
             new AsyncImageLoader(ivItemPreview, this, false).execute();
@@ -129,7 +128,9 @@ public class ItemPreviewActivity extends Activity {
 
         alert.setPositiveButton(getString(R.string.action_save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                if (isMetadataVisible){
+
+                //FIXME this will overwrite the previously made changes!
+                if (isMetadataVisible) {
                     draftMetadataItem = metadataItem;
                     draftMetadataItem.setValue(input.getText().toString());
                     onResume();
@@ -183,8 +184,13 @@ public class ItemPreviewActivity extends Activity {
         itemMimeType.setText(mime);
         tvItemDescription.setText(currentItem.getValue());
 
-        tvItemDescriptor.setText(currentItem.getDescriptor());
-        tvItemDescriptorDescription.setText(currentItem.getDescription());
+        if (currentItem.getDescriptor() == null) {
+            tvItemDescriptor.setText("No associated descriptor");
+            tvItemDescriptorDescription.setText("Tap here to choose a descriptor from the available set.");
+        } else {
+            tvItemDescriptor.setText(currentItem.getDescriptor());
+            tvItemDescriptorDescription.setText(currentItem.getDescription());
+        }
 
         CardView metadataDescriptorCard = (CardView) findViewById(R.id.item_preview_metadata_card);
 
@@ -286,6 +292,7 @@ public class ItemPreviewActivity extends Activity {
         Intent returnIntent = new Intent();
         if (isMetadataVisible) {
 
+            draftMetadataItem.setState(Utils.DESCRIPTOR_STATE_VALIDATED);
             returnIntent.putExtra("metadata_item",
                     new Gson().toJson(draftMetadataItem));
             setResult(Utils.METADATA_ITEM_CHANGED, returnIntent);
