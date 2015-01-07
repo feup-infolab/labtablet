@@ -199,7 +199,7 @@ public class ItemPreviewActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent pickDescriptorIntent = new Intent(ItemPreviewActivity.this, DescriptorPickerActivity.class);
-                pickDescriptorIntent.putExtra("file_extension", "");
+                pickDescriptorIntent.putExtra("file_extension", currentItem.getTag() == null ? "" : currentItem.getTag());
                 pickDescriptorIntent.putExtra("descriptor", new Gson().toJson(currentItem));
                 pickDescriptorIntent.putExtra("favoriteName", "");
                 pickDescriptorIntent.putExtra("returnMode", Utils.DESCRIPTOR_GET);

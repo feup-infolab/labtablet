@@ -245,9 +245,9 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
         // container view.
         switch (position) {
             case 0: //recommended
-                displayedDescriptors = new ArrayList<Descriptor>();
+                displayedDescriptors = new ArrayList<>();
                 for (Descriptor d : mDescriptors) {
-                    if (d.getTag().equals(extension)) {
+                    if (d.getTag().contains(extension)) {
                         displayedDescriptors.add(d);
                     }
                 }
