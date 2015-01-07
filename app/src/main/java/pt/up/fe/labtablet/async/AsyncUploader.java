@@ -7,8 +7,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.PdfWriter;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -26,27 +24,22 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.DendroAPI;
-import pt.up.fe.labtablet.db_handlers.DBCon;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.models.Form;
-import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.models.ProgressUpdateItem;
-import pt.up.fe.labtablet.utils.PDFTools;
 import pt.up.fe.labtablet.utils.Utils;
 import pt.up.fe.labtablet.utils.Zipper;
 

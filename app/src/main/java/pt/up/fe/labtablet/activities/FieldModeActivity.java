@@ -231,7 +231,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             public void onClick(View view) {
                 if (recording) {
                     try {
-                        pb_update.setIndeterminate(false);
+                        pb_update.setVisibility(View.INVISIBLE);
                         bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_voice, 0, 0, 0);
                         recording = false;
                         bt_audio.setText(getResources().getString(R.string.record));
@@ -252,8 +252,8 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     }
                 } else {
                     recording = true;
-                    pb_update.setIndeterminate(true);
                     pb_update.setVisibility(View.VISIBLE);
+                    pb_update.setIndeterminate(true);
                     bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_voice_busy, 0, 0, 0);
                     bt_audio.setText(getResources().getString(R.string.stop));
 
@@ -275,7 +275,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
 
                         Toast.makeText(FieldModeActivity.this, "Device is busy. Close other applications in the background.", Toast.LENGTH_SHORT).show();
 
-                        pb_update.setIndeterminate(false);
+                        pb_update.setVisibility(View.INVISIBLE);
                         bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_voice, 0, 0, 0);
                         recording = false;
                         bt_audio.setText(getResources().getString(R.string.record));
@@ -720,7 +720,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
                 } catch (Exception e) {
-                    pb_update.setIndeterminate(false);
+                    pb_location.setIndeterminate(false);
                     Toast.makeText(getApplicationContext(),
                             "Unable to get Location"
                             , Toast.LENGTH_LONG).show();

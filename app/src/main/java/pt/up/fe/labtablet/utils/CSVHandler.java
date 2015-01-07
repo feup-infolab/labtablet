@@ -2,26 +2,22 @@ package pt.up.fe.labtablet.utils;
 
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 
 import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.db_handlers.DBCon;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.models.Form;
-import pt.up.fe.labtablet.models.FormQuestion;
 
 /**
  * Handles different events when exporting records to csv files

@@ -3,11 +3,6 @@ package pt.up.fe.labtablet.async;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
-
-import com.google.gson.Gson;
-
-import junit.framework.Assert;
 
 import java.io.File;
 import java.util.ArrayList;

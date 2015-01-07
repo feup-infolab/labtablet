@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/second_grey">
+    >
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -38,6 +38,7 @@
             </RelativeLayout>
 
 
+
             <LinearLayout
                 android:id="@+id/rl_top_buttons"
                 android:layout_width="fill_parent"
@@ -66,7 +67,7 @@
 
                     <Button
                         style="@style/btnStyleBeige"
-                        android:drawableStart="@drawable/ab_box"
+                        android:drawableStart="@drawable/ic_file"
                         android:layout_width="0dp"
                         android:layout_weight="0.3"
                         android:layout_height="wrap_content"
@@ -92,14 +93,12 @@
                             />
 
                         <ProgressBar
+                            style="@android:style/Widget.Material.ProgressBar.Horizontal"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="100dp"
                             android:layout_width="fill_parent"
                             android:layout_centerHorizontal="true"
-                            android:layout_height="wrap_content"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:indeterminate="false"
                             android:layout_alignParentBottom="true"
-                            android:progress="0"
                             android:visibility="visible"
                             android:id="@+id/pb_recording"
                             />

@@ -4,9 +4,7 @@ package pt.up.fe.labtablet.fragments;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.ListFragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -27,7 +24,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.activities.FormSolverActivity;
 import pt.up.fe.labtablet.adapters.BaseFormListAdapter;
 import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.Form;

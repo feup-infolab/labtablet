@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,7 +80,7 @@ public class ItemPreviewActivity extends Activity {
                     .fromJson(extras.getString("data_item"), DataItem.class);
 
             isMetadataVisible = false;
-            atatchDataItemView();
+            attachDataItemView();
         } else if (extras.containsKey("metadata_item")) {
             metadataItem = new Gson()
                     .fromJson(extras.getString("metadata_item"), Descriptor.class);
@@ -151,7 +152,7 @@ public class ItemPreviewActivity extends Activity {
         alert.show();
     }
 
-    private void atatchDataItemView() {
+    private void attachDataItemView() {
 
         final DataItem currentItem
                 = draftDataItem == null ? dataItem : draftDataItem;
@@ -230,12 +231,12 @@ public class ItemPreviewActivity extends Activity {
         if (isMetadataVisible) {
             atatchMetadataItemView();
         } else {
-            atatchDataItemView();
+            attachDataItemView();
         }
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putInt("position", position);

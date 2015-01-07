@@ -1,19 +1,14 @@
 package pt.up.fe.labtablet.db_handlers;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.utils.Utils;
 

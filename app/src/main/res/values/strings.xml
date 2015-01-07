@@ -82,10 +82,10 @@
     <string name="next">Next</string>
     <string name="submission_metadata_confirm">Below is the metadata associated with this favorite. Confirm the records and proceed to the upload stage.</string>
     <string name="submission_loading">LabTablet is now uploading data to the repository and this <b>can take some time</b>. Please stand by.</string>
-    <string name="submission_effect">After this process, the gathered metadata will be available at your repository and associated with the data inside the folder. This favorite will no longer be available for edition after this proccess is completed.</string>
+    <string name="submission_effect">After this process, the gathered metadata will be available at your repository and associated with the data inside the folder. This favorite will no longer be available for edition after this process is completed.</string>
     <string name="start_process">Start upload</string>
     <string name="cancel_process">Cancel</string>
-    <string name="submission_instructions">Uploading metadata to the repository will associate it with the previously created folder and its contents. Before proceding to the upload, make sure you have enough battery life and that your device has an active internet connection.</string>
+    <string name="submission_instructions">Uploading metadata to the repository will associate it with the previously created folder and its contents. Before proceeding to the upload, make sure you have enough battery life and that your device has an active internet connection.</string>
     <string name="submission_initial_instructions">Check internet connectivity and battery level\n\nValidate metadata records to submit.\n\nProceed to the upload stage.</string>
     <string name="size">Size</string>
     <string name="modified">Modified</string>
@@ -262,7 +262,7 @@
     <string name="upload_progress_describing_imported_data">Describing imported resources</string>
     <string name="new_favorite_create">Create</string>
     <string name="file_imported_description">Successfully imported file.</string>
-    <string name="upload_generating_forms">Generating forms...</string>
+    <string name="upload_generating_forms">Generating forms&#8230;</string>
     <string name="title_activity_item_preview">itemPreviewActivity</string>
     <string name="action_zip">Create a zip file</string>
 </resources>

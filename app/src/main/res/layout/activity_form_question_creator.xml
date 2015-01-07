@@ -24,7 +24,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/write_text_for_question"
                 android:gravity="center"
-                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@color/text_blue_grey"
+                android:textSize="20sp"
                 android:drawableTop="@drawable/ab_edit"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -33,13 +34,16 @@
                 />
             <EditText
                 android:id="@+id/question_specify_text"
+                android:textColor="@color/text_blue_grey"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences|textMultiLine"
-                android:hint="@string/input_goes_here"/>
+                android:hint="@string/input_goes_here">
+                <requestFocus/>
+            </EditText>
 
             <View
                 android:layout_width="fill_parent"
@@ -76,7 +80,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/choose_expected_type"
                 android:gravity="center"
-                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@color/text_blue_grey"
+                android:textSize="20sp"
                 android:drawableTop="@drawable/ic_location"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -118,7 +123,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/choose_range"
                 android:gravity="center"
-                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@color/text_blue_grey"
+                android:textSize="20sp"
                 android:drawableTop="@android:drawable/btn_star"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -192,7 +198,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/give_allowed_values"
                 android:gravity="center"
-                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@color/text_blue_grey"
+                android:textSize="20sp"
                 android:drawableTop="@android:drawable/ic_menu_share"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -224,7 +231,7 @@
                     android:layout_weight="0.1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ab_plus"
+                    android:src="@android:drawable/ic_input_add"
                     />
             </LinearLayout>
 
@@ -268,7 +275,8 @@
             >
 
             <TextView
-                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@color/text_blue_grey"
+                android:textSize="20sp"
                 android:padding="20dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
@@ -334,7 +342,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:textColor="@color/text_blue_grey"
+                android:textSize="20sp"
                 android:drawableTop="@drawable/ic_check"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"

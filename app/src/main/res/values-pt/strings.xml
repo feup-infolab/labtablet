@@ -100,8 +100,8 @@
     <string name="title_section4">Section4</string>
     <string name="form_check">Verificar</string>
     <string name="select_dendro_folder">Indique a pasta onde os metadados serão depositados</string>
-    <string name="root_impossible_to_select">A raíz do projeto está reservada. Indique outra pasta ou crie uma nova para o efeito.</string>
-    <string name="already_in_root_folder">Já se encontra na raíz do projeto.</string>
+    <string name="root_impossible_to_select">A raiz do projeto está reservada. Indique outra pasta ou crie uma nova para o efeito.</string>
+    <string name="already_in_root_folder">Já se encontra na raiz do projeto.</string>
     <string name="action_save">Gravar</string>
     <string name="action_upload">Enviar</string>
     <string name="action_cancel">Cancelar</string>
@@ -211,7 +211,7 @@
     <string name="gps_disabled">O GPS está atualmente desligado. Pretende ativa-lo?</string>
     <string name="dismiss">Apagar</string>
     <string name="update_name_instructions">Introduza o nome para o favorito. Todos os metadados associados serão transferidos para o novo favorito.</string>
-    <string name="form_convert_data">Depois de aprovar a migração, o ficheiro será incluído no pacote de dados e ficará visivel na sua raíz.</string>
+    <string name="form_convert_data">Depois de aprovar a migração, o ficheiro será incluído no pacote de dados e ficará visivel na sua raiz.</string>
     <string name="form_convert_data_title">Migrar registo para dados?</string>
     <string name="wait_queue_processing">Aguarde enquanto o LabTablet atualiza o favorito</string>
     <string name="wait_queue_processing_title">A processar atualizações</string>
@@ -263,7 +263,7 @@
     <string name="new_favorite_create">Create</string>
     <string name="give_imported_file_description">If you want to describe the imported file, please do so in the box below.</string>
     <string name="file_imported_description">Successfully imported file.</string>
-    <string name="upload_generating_forms">Generating forms...</string>
+    <string name="upload_generating_forms">Generating forms&#8230;</string>
     <string name="title_activity_item_preview">itemPreviewActivity</string>
     <string name="action_zip">Create a zip file</string>
 </resources>

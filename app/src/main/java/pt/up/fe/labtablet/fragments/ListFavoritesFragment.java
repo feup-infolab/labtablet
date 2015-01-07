@@ -4,7 +4,6 @@ package pt.up.fe.labtablet.fragments;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.ListFragment;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -17,10 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +24,6 @@ import java.util.Date;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.FavoriteListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
-import pt.up.fe.labtablet.db_handlers.FormMgr;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.FileMgr;

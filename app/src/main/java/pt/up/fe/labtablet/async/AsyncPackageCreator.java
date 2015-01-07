@@ -27,7 +27,7 @@ import static pt.up.fe.labtablet.utils.CSVHandler.generateCSV;
 public class AsyncPackageCreator extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
 
-    private AsyncCustomTaskHandler<Void> mHandler;
+    private final AsyncCustomTaskHandler<Void> mHandler;
     private Exception error;
 
     public AsyncPackageCreator(AsyncCustomTaskHandler<Void> mHandler) {
