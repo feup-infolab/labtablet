@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -154,7 +155,17 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                     final MultiAutoCompleteTextView autoCompleteTextView = new MultiAutoCompleteTextView(DescriptorPickerActivity.this);
                     autoCompleteTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
                     autoCompleteTextView.setAdapter(adapter);
-                    autoCompleteTextView.setThreshold(0);
+                    autoCompleteTextView.setThreshold(1);
+
+                    autoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
+
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event)
+                        {
+                            autoCompleteTextView.showDropDown();
+                            return false;
+                        }
+                    });
 
                     // Set up the input
                     builder.setView(autoCompleteTextView);
