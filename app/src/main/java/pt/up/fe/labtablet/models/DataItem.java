@@ -91,11 +91,9 @@ public class DataItem {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof DataItem)) {
-            return false;
-        }
+        return o instanceof DataItem
+                && ((DataItem) o).getLocalPath().equals(this.localPath);
 
-        return ((DataItem) o).getLocalPath().equals(this.localPath);
     }
 
 }

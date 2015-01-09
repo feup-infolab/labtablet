@@ -61,7 +61,6 @@ public class SubmissionStep1 extends Fragment {
 
         TextView title = (TextView) rootView.findViewById(R.id.step1_title);
         TextView batteryLevel = (TextView) rootView.findViewById(R.id.step1_battery_tv);
-        TextView metadataState = (TextView) rootView.findViewById(R.id.step1_metadata_state);
         wifiState = (TextView) rootView.findViewById(R.id.step1_wifi_tv);
 
         setHasOptionsMenu(true);
@@ -112,8 +111,8 @@ public class SubmissionStep1 extends Fragment {
     private float getBatteryLevel() {
         Intent batteryIntent = getActivity().registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-        int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        int level = batteryIntent == null ? 0 : batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryIntent == null ? 0 : batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
         // Error checking that probably isn't needed but I added just in case.
         if(level == -1 || scale == -1) {

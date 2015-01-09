@@ -41,7 +41,7 @@
         <EditText
             android:id="@+id/data_item_description_edit"
             android:visibility="gone"
-            android:text="item description"
+            android:text="Item description"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:gravity="center"
@@ -49,7 +49,9 @@
             android:textSize="20sp"
             android:textColor="@android:color/black"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textAutoComplete"
+            />
 
         <Button
             android:id="@+id/data_item_submit_changes"

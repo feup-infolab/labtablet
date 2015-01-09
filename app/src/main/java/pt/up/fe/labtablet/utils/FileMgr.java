@@ -111,7 +111,10 @@ public class FileMgr {
         FileChannel inChannel = inStream.getChannel();
         FileChannel outChannel = outStream.getChannel();
         inChannel.transferTo(0, inChannel.size(), outChannel);
-        src.delete();
+        if (!src.delete()){
+            Log.e("moveFile", "Failed to delete file");
+        }
+
         inStream.close();
         outStream.close();
     }
@@ -166,8 +169,8 @@ public class FileMgr {
                 for (File f : files) {
                     if (f.isDirectory()) {
                         deleteDirectory(f);
-                    } else {
-                        f.delete();
+                    } else if (!f.delete()){
+                        Log.e("deleteDirectory", "Failed to delete file " + f.getName());
                     }
                 }
             }

@@ -103,7 +103,6 @@
 
                 <Button
                     style="@style/btnStyleBeige"
-                    android:layout_toEndOf="@id/bt_text"
                     android:drawableStart="@drawable/ic_file"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

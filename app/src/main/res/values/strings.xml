@@ -254,7 +254,7 @@
     <string name="back">Back</string>
     <string name="add_metadata">Add record</string>
     <string name="action_test">Test</string>
-    <string name="drawer_close"></string>
+    <string name="drawer_close">Close</string>
     <string name="edit_metadata_item_title">Edit record</string>
     <string name="edit_metadata_records">Edit gathered records</string>
     <string name="end_session">End</string>
@@ -265,4 +265,5 @@
     <string name="upload_generating_forms">Generating forms&#8230;</string>
     <string name="title_activity_item_preview">itemPreviewActivity</string>
     <string name="action_zip">Create a zip file</string>
+    <string name="image_placeholder">Image Placeholder</string>
 </resources>

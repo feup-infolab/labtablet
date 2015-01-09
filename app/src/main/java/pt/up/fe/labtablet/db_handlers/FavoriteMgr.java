@@ -1,5 +1,6 @@
 package pt.up.fe.labtablet.db_handlers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -130,6 +131,7 @@ public class FavoriteMgr {
      * @param item
      * @param context
      */
+    @SuppressLint("CommitPrefEdits")
     public static void updateFavoriteEntry(String entryName, FavoriteItem item, Context context) {
             SharedPreferences settings = context.getSharedPreferences(
                     context.getResources().getString(R.string.app_name),

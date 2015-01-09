@@ -45,7 +45,7 @@
              >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="FieldModeActivity" />
+                android:value="pt.up.fe.labtablet.activities.FieldModeActivity" />
         </activity>
         <activity
             android:name="pt.up.fe.labtablet.activities.SubmissionValidationActivity"
