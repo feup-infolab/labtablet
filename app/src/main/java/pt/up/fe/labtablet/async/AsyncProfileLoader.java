@@ -15,7 +15,7 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class AsyncProfileLoader extends AsyncTask<File, Integer, ArrayList<Descriptor>> {
     //input, remove, output
-    private AsyncTaskHandler<ArrayList<Descriptor>> mHandler;
+    private final AsyncTaskHandler<ArrayList<Descriptor>> mHandler;
     private Exception error;
 
     public AsyncProfileLoader(AsyncTaskHandler<ArrayList<Descriptor>> mHandler) {

@@ -4,13 +4,12 @@ import android.os.AsyncTask;
 
 import java.util.ArrayList;
 
-import pt.up.fe.labtablet.api.CkanAPI;
 import pt.up.fe.labtablet.models.FavoriteItem;
 
 
 public class AsyncSearchTask extends AsyncTask<String, Integer, ArrayList<FavoriteItem>> {
 
-	private AsyncTaskHandler<ArrayList<FavoriteItem>> mHandler;
+	private final AsyncTaskHandler<ArrayList<FavoriteItem>> mHandler;
 	private Exception error;
 	
 	public AsyncSearchTask(AsyncTaskHandler<ArrayList<FavoriteItem>> mHandler) {
@@ -21,8 +20,7 @@ public class AsyncSearchTask extends AsyncTask<String, Integer, ArrayList<Favori
 	@Override
 	protected ArrayList<FavoriteItem> doInBackground(String... params) {
 		try {
-			CkanAPI.Connect();
-			return CkanAPI.Search(params[0]);
+			Thread.sleep(2000);
 		} catch (Exception e) {
 			error = e;
 		}
@@ -30,7 +28,6 @@ public class AsyncSearchTask extends AsyncTask<String, Integer, ArrayList<Favori
 	}
 
 
-	
 	@Override
 	protected void onPostExecute(ArrayList<FavoriteItem> result) {
 		super.onPostExecute(result);

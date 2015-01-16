@@ -5,7 +5,7 @@ public class DendroConfiguration {
     private String username;
     private String password;
     private String address;
-    public boolean validated;
+    private boolean validated;
 
     public DendroConfiguration() {
         this.address = "";
@@ -37,7 +37,7 @@ public class DendroConfiguration {
         this.password = password;
     }
 
-    public boolean getValidated() {
+    public boolean isValidated() {
         return validated;
     }
 

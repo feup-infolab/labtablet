@@ -75,8 +75,9 @@ public class SubmissionStep2 extends Fragment implements OnItemClickListener {
         lvMetadata.setLayoutManager(new LinearLayoutManager(getActivity()));
         lvMetadata.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new MetadataListAdapter(favoriteItem.getMetadataItems(),
-                R.layout.item_metadata_list, this, getActivity() );
+        mAdapter = new MetadataListAdapter(
+                favoriteItem.getMetadataItems(),
+                this, getActivity() );
         lvMetadata.setAdapter(mAdapter);
 
         return rootView;
@@ -202,7 +203,6 @@ public class SubmissionStep2 extends Fragment implements OnItemClickListener {
         mAdapter =
                 new MetadataListAdapter(
                         favoriteItem.getMetadataItems(),
-                        R.layout.item_metadata_list,
                         this,
                         getActivity());
 

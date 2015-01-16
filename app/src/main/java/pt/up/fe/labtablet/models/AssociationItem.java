@@ -4,7 +4,6 @@ package pt.up.fe.labtablet.models;
 public class AssociationItem {
 
     private String fileExtension;
-    private String extensionDescription;
     private Descriptor descriptor;
 
     public String getFileExtension() {
@@ -22,9 +21,4 @@ public class AssociationItem {
     public void setDescriptor(Descriptor descriptor) {
         this.descriptor = descriptor;
     }
-
-    public void setExtensionDescription(String description) {
-        this.extensionDescription = description;
-    }
-
 }

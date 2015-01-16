@@ -245,7 +245,6 @@ public class FavoriteDetailsFragment extends Fragment {
         metadataListAdapter =
                 new MetadataListAdapter(
                         currentItem.getMetadataItems(),
-                        R.layout.item_metadata_list,
                         itemClickListener,
                         getActivity());
 
@@ -261,12 +260,10 @@ public class FavoriteDetailsFragment extends Fragment {
 
         dataListAdapter = new DataListAdapter(
                 currentItem.getDataItems(),
-                R.layout.item_data_list,
                 itemClickListener,
                 getActivity());
 
         itemList.setAdapter(dataListAdapter);
-
     }
 
     @Override

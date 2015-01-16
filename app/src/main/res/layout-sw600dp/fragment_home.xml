@@ -201,6 +201,7 @@
                 />
             <ImageView
                 android:id="@+id/iv_metadata_state"
+                android:contentDescription="@string/image_placeholder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_check"

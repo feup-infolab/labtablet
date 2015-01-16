@@ -84,7 +84,7 @@ public class Zipper {
      * Example: getLastPathComponent("downloads/example/fileToZip");
      * Result: "fileToZip"
      */
-    public String getLastPathComponent(String filePath) {
+    private String getLastPathComponent(String filePath) {
         String[] segments = filePath.split("/");
         return segments[segments.length - 1];
     }

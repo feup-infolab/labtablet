@@ -29,29 +29,24 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataLi
 
     private final ArrayList<DataItem> items;
 
-    private int rowLayout;
     private static OnItemClickListener listener;
 
-
     public DataListAdapter( ArrayList<DataItem> items,
-            int rowLayout,
             OnItemClickListener clickListener,
             Context context
             ) {
 
         this.context = context;
         this.items = items;
-        this.rowLayout = rowLayout;
 
         listener = clickListener;
-
-
     }
 
 
     @Override
     public DataListVH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.item_data_list, parent, false);
         return new DataListVH(v);
     }
 

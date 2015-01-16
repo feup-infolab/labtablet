@@ -106,7 +106,6 @@ public class LTLocationListener implements LocationListener {
             public void onProgressUpdate(int value) {
             }
         }).execute(mLocations, path);
-
     }
 
     public boolean notifyCollectStarted() {

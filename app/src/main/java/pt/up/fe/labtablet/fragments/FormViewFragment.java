@@ -71,8 +71,7 @@ public class FormViewFragment extends Fragment {
         lvFormItems = (RecyclerView) rootView.findViewById(R.id.lv_form_items);
         rlEmptyForm = (RelativeLayout) rootView.findViewById(R.id.empty_form_view);
         mAdapter = new QuestionItemListAdapter(getActivity(),
-                currentForm.getFormQuestions(),
-                R.layout.item_question);
+                currentForm.getFormQuestions());
 
         lvFormItems.setLayoutManager(new LinearLayoutManager(getActivity()));
         lvFormItems.setItemAnimator(new DefaultItemAnimator());
@@ -162,8 +161,7 @@ public class FormViewFragment extends Fragment {
 
         currentForm.addQuestion(recFQ);
         mAdapter = new QuestionItemListAdapter(getActivity(),
-                currentForm.getFormQuestions(),
-                R.layout.item_question);
+                currentForm.getFormQuestions());
 
         lvFormItems.setAdapter(mAdapter);
     }

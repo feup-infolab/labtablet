@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/solver_question_status"
+        android:contentDescription="@string/image_placeholder"
         android:visibility="invisible"
         android:src="@drawable/ic_warning"
         android:layout_alignParentEnd="true"

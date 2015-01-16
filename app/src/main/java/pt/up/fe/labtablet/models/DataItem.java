@@ -10,7 +10,6 @@ import pt.up.fe.labtablet.utils.Utils;
  */
 public class DataItem {
 
-    private String resourceName;
     private String localPath;
     private String parent;
     private String humanReadableSize;
@@ -19,10 +18,6 @@ public class DataItem {
 
     public String getResourceName() {
         return new File(getLocalPath()).getName();
-    }
-
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
     }
 
     public String getParent() {

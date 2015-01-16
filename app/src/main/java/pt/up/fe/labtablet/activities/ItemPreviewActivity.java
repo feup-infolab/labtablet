@@ -135,7 +135,6 @@ public class ItemPreviewActivity extends Activity {
                     draftMetadataItem = metadataItem;
                     draftMetadataItem.setValue(input.getText().toString());
                     onResume();
-
                 } else {
                     draftDataItem = dataItem;
                     draftDataItem.setDescription(input.getText().toString());
@@ -167,7 +166,6 @@ public class ItemPreviewActivity extends Activity {
                 } catch (IOException e) {
                     Toast.makeText(ItemPreviewActivity.this, "Unable to open associated file", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
@@ -178,7 +176,6 @@ public class ItemPreviewActivity extends Activity {
                 = draftMetadataItem == null ? metadataItem : draftMetadataItem;
 
         String mime = metadataItem.hasFile() ? FileMgr.getMimeType(metadataItem.getFilePath()) : "";
-
         TextView tvItemDescriptor = (TextView) findViewById(R.id.item_preview_descriptor);
         TextView tvItemDescriptorDescription = (TextView) findViewById(R.id.item_preview_descriptor_details);
 
@@ -186,8 +183,8 @@ public class ItemPreviewActivity extends Activity {
         tvItemDescription.setText(currentItem.getValue());
 
         if (currentItem.getDescriptor() == null) {
-            tvItemDescriptor.setText("No associated descriptor");
-            tvItemDescriptorDescription.setText("Tap here to choose a descriptor from the available set.");
+            tvItemDescriptor.setText(getString(R.string.undefined));
+            tvItemDescriptorDescription.setText(R.string.tap_to_pick_descriptor);
         } else {
             tvItemDescriptor.setText(currentItem.getDescriptor());
             tvItemDescriptorDescription.setText(currentItem.getDescription());
@@ -220,7 +217,6 @@ public class ItemPreviewActivity extends Activity {
                 } catch (IOException e) {
                     Toast.makeText(ItemPreviewActivity.this, "Unable to open associated file", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }

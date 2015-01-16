@@ -28,25 +28,22 @@ public class MetadataListAdapter extends RecyclerView.Adapter<MetadataListAdapte
     private final Context context;
 
     private final ArrayList<Descriptor> items;
-    private int rowLayout;
     private static OnItemClickListener listener;
 
 
     public MetadataListAdapter(ArrayList<Descriptor> srcItems,
-                               int rowLayout,
                                OnItemClickListener clickListener,
                                Context context) {
 
         this.context = context;
-        this.rowLayout = rowLayout;
         this.items = srcItems;
-
         listener = clickListener;
     }
 
     @Override
     public MetadataListVH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.item_metadata_list, parent, false);
         return new MetadataListVH(v);
     }
 

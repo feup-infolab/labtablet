@@ -17,6 +17,7 @@
         <ImageView
             android:id="@+id/changelog_item_type"
             android:layout_width="wrap_content"
+            android:contentDescription="@string/image_placeholder"
             android:layout_height="wrap_content"
             android:src="@drawable/ab_plus"
             android:layout_alignParentStart="true"

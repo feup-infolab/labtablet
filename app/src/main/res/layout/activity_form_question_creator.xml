@@ -150,6 +150,7 @@
 
                 <ImageView
                     android:rotationX="180"
+                    android:contentDescription="@string/image_placeholder"
                     android:layout_width="0dp"
                     android:layout_weight="0.1"
                     android:layout_height="fill_parent"
@@ -225,6 +226,7 @@
 
                 <ImageButton
                     android:id="@+id/question_add_word"
+                    android:contentDescription="@string/image_placeholder"
                     style="@android:style/Holo.ButtonBar.AlertDialog"
                     android:layout_gravity="center"
                     android:layout_marginEnd="10dp"

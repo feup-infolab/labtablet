@@ -102,8 +102,6 @@ public class Utils {
     public static int SUBMISSION_VALIDATION = 7;
     //Pick a file from the storage
     public static int PICK_FILE_INTENT = 8;
-    //public static String search_repo = "http://demo.ckan.org";
-    public static String search_repo = "http://datahub.io";
 
 
     public static String getDate() {

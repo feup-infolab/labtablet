@@ -3,6 +3,8 @@ package pt.up.fe.labtablet.models;
 import java.io.File;
 import java.util.ArrayList;
 
+import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.application.LabTablet;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
@@ -29,12 +31,12 @@ public class Descriptor {
     private String size;
 
     public Descriptor() {
-        this.name = "Undefined";
+        this.name = LabTablet.getContext().getString(R.string.undefined);
         this.filePath = "";
         this.state = Utils.DESCRIPTOR_STATE_NOT_VALIDATED;
         this.dateModified = Utils.getDate();
         this.size = "";
-        this.allowed_values = new ArrayList<String>();
+        this.allowed_values = new ArrayList<>();
     }
 
     public Descriptor(String name, String descriptor, String value, String tag) {

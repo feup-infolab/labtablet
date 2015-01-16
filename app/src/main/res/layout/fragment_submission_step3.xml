@@ -1,81 +1,75 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pt.up.fe.labtablet.fragments.SubmissionStep3">
+    tools:context="pt.up.fe.labtablet.fragments.SubmissionStep3"
+    android:animateLayoutChanges="true"
+    >
 
+    <Button
+        android:id="@+id/step3_instructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_project_above"
+        android:drawableTop="@drawable/ic_pick"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_centerInParent="true"
+        android:enabled="true"
+        style="@android:style/Widget.Material.Light.Button"
+        />
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/step3_empty"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_folder"
+        android:drawableTop="@drawable/ic_folder"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/second_grey"
+        android:layout_centerInParent="true"/>
+
+    <ProgressBar
+        android:id="@+id/dendro_folders_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"/>
+
+    <ListView
+        android:id="@+id/dendro_folders_list"
+        android:layout_alignParentTop="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        >
+        android:layout_above="@+id/dendro_folders_buttons"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:id="@+id/dendro_folders_buttons"
+        android:visibility="invisible"
+        android:layout_alignParentBottom="true"
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:id="@+id/dendro_separator"
+            />
 
         <Button
-            android:id="@+id/step3_instructions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/select_project_above"
-            android:drawableTop="@drawable/ic_pick"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_centerInParent="true"
-            android:enabled="true"
-            style="@android:style/Widget.Material.Light.Button"
-            />
-
-        <TextView
-            android:id="@+id/step3_empty"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/empty_folder"
-            android:drawableTop="@drawable/ic_folder"
-            android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/second_grey"
-            android:layout_centerInParent="true"/>
-
-        <ProgressBar
-            android:id="@+id/dendro_folders_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="invisible"/>
-
-        <ListView
-            android:id="@+id/dendro_folders_list"
-            android:layout_alignParentTop="true"
+            android:drawableEnd="@drawable/ab_forward"
+            android:id="@+id/dendro_folders_select"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:layout_above="@+id/dendro_folders_buttons"
-            android:visibility="gone"
-            />
+            android:layout_height="0dp"
+            style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+            android:text="@string/place_files_here"
+            android:enabled="false"
+            android:layout_weight="1"/>
 
-        <LinearLayout
-            android:id="@+id/dendro_folders_buttons"
-            android:visibility="invisible"
-            android:layout_alignParentBottom="true"
-            android:layout_width="fill_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"
-                android:id="@+id/dendro_separator"
-                />
-
-                <Button
-                    android:drawableEnd="@drawable/ab_forward"
-                    android:id="@+id/dendro_folders_select"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:text="@string/place_files_here"
-                    android:enabled="false"
-                    android:layout_weight="1"/>
-
-        </LinearLayout>
-    </RelativeLayout>
-</FrameLayout>
+    </LinearLayout>
+</RelativeLayout>

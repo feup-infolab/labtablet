@@ -50,7 +50,6 @@ public class CSVHandler {
             csvItem.setDescription("Exported on " + Utils.getDate());
             csvItem.setLocalPath(basePath + entryName + ".csv");
             csvItem.setParent(favoriteName);
-            csvItem.setResourceName(entryName + ".csv");
 
             FavoriteItem favorite = FavoriteMgr.getFavorite(context, favoriteName);
             favorite.addDataItem(csvItem);

@@ -1,101 +1,94 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context="pt.up.fe.labtablet.fragments.SubmissionStep1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card"
+    android:padding="20dp"
     >
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/step1_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card"
-        android:padding="20dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        />
+
+    <TextView
+        android:id="@+id/step1_instructions"
+        android:layout_below="@id/step1_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/submission_instructions"
+        />
+
+    <RelativeLayout
+        android:id="@+id/submission_hardware_status_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/step1_instructions"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         >
 
         <TextView
-            android:id="@+id/step1_title"
-            android:layout_width="fill_parent"
+            android:id="@+id/step1_wifi_tv"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            />
-
-        <TextView
-            android:id="@+id/step1_instructions"
-            android:layout_below="@id/step1_title"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
+            android:text="WiFi"
             android:layout_marginTop="20dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/submission_instructions"
-            />
+            android:drawableEnd="@drawable/ic_check"/>
 
-        <RelativeLayout
-            android:id="@+id/submission_hardware_status_rl"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/step1_battery_tv"
+            android:layout_below="@id/step1_wifi_tv"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/step1_instructions"
             android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Battery"
             android:layout_marginTop="20dp"
-            >
-
-            <TextView
-                android:id="@+id/step1_wifi_tv"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:text="WiFi"
-                android:layout_marginTop="20dp"
-                android:drawableRight="@drawable/ic_check"/>
-
-            <TextView
-                android:id="@+id/step1_battery_tv"
-                android:layout_below="@id/step1_wifi_tv"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:text="Battery"
-                android:layout_marginTop="20dp"
-                android:drawableRight="@drawable/ic_check"/>
-
-            <TextView
-                android:layout_below="@id/step1_battery_tv"
-                android:id="@+id/step1_metadata_state"
-                android:gravity="center"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:drawableRight="@drawable/ic_check"
-                android:text="@string/metadata_validated"/>
-        </RelativeLayout>
+            android:drawableEnd="@drawable/ic_check"/>
 
         <TextView
-            android:id="@+id/step1_step_by_step"
-            android:layout_below="@id/submission_hardware_status_rl"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_below="@id/step1_battery_tv"
+            android:id="@+id/step1_metadata_state"
             android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceButton"
-            android:text="@string/submission_initial_instructions"/>
-
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:gravity="center"
-            android:drawableStart="@android:drawable/ic_media_rew"
-            android:text="@string/swipe_to_next"
-            android:textColor="@color/second_grey"
-            />
+            android:layout_marginTop="20dp"
+            android:drawableEnd="@drawable/ic_check"
+            android:text="@string/metadata_validated"/>
     </RelativeLayout>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/step1_step_by_step"
+        android:layout_below="@id/submission_hardware_status_rl"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceButton"
+        android:text="@string/submission_initial_instructions"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:drawableStart="@android:drawable/ic_media_rew"
+        android:text="@string/swipe_to_next"
+        android:textColor="@color/second_grey"
+        />
+</RelativeLayout>

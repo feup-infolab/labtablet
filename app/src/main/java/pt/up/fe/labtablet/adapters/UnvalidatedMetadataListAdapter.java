@@ -58,7 +58,7 @@ public class UnvalidatedMetadataListAdapter extends ArrayAdapter<Descriptor> {
         // let us all reuse these amazing views
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.item_unvalidated_metadata, null);
+            rowView = inflater.inflate(R.layout.item_unvalidated_metadata, parent, false);
             // configure view holder
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.mItemValue = (TextView) rowView.findViewById(R.id.unvalidated_meta_value);

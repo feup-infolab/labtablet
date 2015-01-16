@@ -18,25 +18,21 @@ import pt.up.fe.labtablet.utils.OnItemClickListener;
  */
 public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapter.FavoriteItemVH>{
 	private final List<FavoriteItem> items;
-    private int rowLayout;
     private static OnItemClickListener listener;
 
 	public FavoriteListAdapter(
                                List<FavoriteItem> srcItems,
-                               int rowLayout,
                                OnItemClickListener clickListener) {
 
 		this.items = srcItems;
-        this.rowLayout = rowLayout;
-
         listener = clickListener;
 	}
 
 
     @Override
     public FavoriteItemVH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(rowLayout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.item_favorite_list, parent, false);
 
         return new FavoriteItemVH(v);
     }

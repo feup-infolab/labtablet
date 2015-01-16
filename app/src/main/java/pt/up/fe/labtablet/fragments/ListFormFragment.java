@@ -91,7 +91,6 @@ public class ListFormFragment extends Fragment {
         };
 
         adapter = new BaseFormListAdapter(items,
-                R.layout.item_form_list,
                 itemClickListener);
 
         itemList = (RecyclerView) rootView.findViewById(R.id.base_form_list);
@@ -161,7 +160,6 @@ public class ListFormFragment extends Fragment {
                 FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
 
                 adapter = new BaseFormListAdapter(items,
-                        R.layout.item_form_list,
                         itemClickListener);
 
                 itemList.setAdapter(adapter);

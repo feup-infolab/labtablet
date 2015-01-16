@@ -9,6 +9,7 @@
         >
         <ImageView
             android:id="@+id/metadata_item_type"
+            android:contentDescription="@string/image_placeholder"
             android:layout_alignParentStart="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

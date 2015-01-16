@@ -30,7 +30,7 @@ public class DescriptorsListAdapter extends ArrayAdapter<Descriptor> {
         // reuse views
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.item_descriptor_list, null);
+            rowView = inflater.inflate(R.layout.item_descriptor_list, parent, false);
             // configure view holder
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.mDescriptorName = (TextView) rowView.findViewById(R.id.item_title);

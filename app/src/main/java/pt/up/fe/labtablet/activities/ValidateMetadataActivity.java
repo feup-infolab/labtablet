@@ -43,7 +43,6 @@ public class ValidateMetadataActivity extends Activity implements OnItemClickLis
     private ArrayList<Descriptor> conversionQueue;
 
 
-    private RecyclerView itemList;
     private MetadataListAdapter metadataListAdapter;
 
 
@@ -80,7 +79,7 @@ public class ValidateMetadataActivity extends Activity implements OnItemClickLis
             unvalidatedQueue = new Gson().fromJson(savedInstanceState.getString("unvalidated_metadata"), Utils.ARRAY_DESCRIPTORS);
         }
 
-        itemList = (RecyclerView) findViewById(R.id.lv_unvalidate_metadata);
+        RecyclerView itemList = (RecyclerView) findViewById(R.id.lv_unvalidate_metadata);
         itemList.setLayoutManager(new LinearLayoutManager(this));
         itemList.setItemAnimator(new DefaultItemAnimator());
         itemList.animate();
@@ -89,7 +88,6 @@ public class ValidateMetadataActivity extends Activity implements OnItemClickLis
         metadataListAdapter =
                 new MetadataListAdapter(
                         unvalidatedQueue,
-                        R.layout.item_metadata_list,
                         this,
                         this);
 

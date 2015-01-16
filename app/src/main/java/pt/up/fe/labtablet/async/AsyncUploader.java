@@ -263,7 +263,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
         for (DataItem dataItem : dataDescriptionItems) {
 
-            metadataRecords = new ArrayList<DendroMetadataRecord>();
+            metadataRecords = new ArrayList<>();
             for (Descriptor desc : dataItem.getFileLevelMetadata()) {
                 metadataRecords.add(
                         new DendroMetadataRecord(desc.getDescriptor(), desc.getValue())

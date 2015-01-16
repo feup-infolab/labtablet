@@ -20,7 +20,7 @@ public class Form {
     }
 
     public Form(String name, String parent) {
-        formQuestions = new ArrayList<FormQuestion>();
+        formQuestions = new ArrayList<>();
         this.parent = parent;
         this.formDescription = "";
         this.formName = name;

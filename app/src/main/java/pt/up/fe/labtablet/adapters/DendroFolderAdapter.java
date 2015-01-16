@@ -34,7 +34,7 @@ public class DendroFolderAdapter extends ArrayAdapter<DendroFolderItem> {
         // reuse views
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.item_dendro_folder, null);
+            rowView = inflater.inflate(R.layout.item_dendro_folder, parent, false);
             // configure view holder
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.mFolderName = (TextView) rowView.findViewById(R.id.folder_item_title);

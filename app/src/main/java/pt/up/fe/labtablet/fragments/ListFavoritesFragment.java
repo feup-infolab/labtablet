@@ -36,10 +36,8 @@ import pt.up.fe.labtablet.utils.Utils;
 public class ListFavoritesFragment extends Fragment {
 
     private ArrayList<FavoriteItem> items;
-    private RecyclerView itemList;
 
     private FavoriteListAdapter adapter;
-    private OnItemClickListener itemClickListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,8 +59,7 @@ public class ListFavoritesFragment extends Fragment {
         }
 
 
-
-        itemClickListener = new OnItemClickListener() {
+        OnItemClickListener itemClickListener = new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 FavoriteItem selectedItem = items.get(position);
@@ -87,10 +84,9 @@ public class ListFavoritesFragment extends Fragment {
         };
 
         adapter = new FavoriteListAdapter(items,
-                R.layout.item_favorite_list,
                 itemClickListener);
 
-        itemList = (RecyclerView) rootView.findViewById(R.id.favorite_list);
+        RecyclerView itemList = (RecyclerView) rootView.findViewById(R.id.favorite_list);
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
         itemList.setItemAnimator(new DefaultItemAnimator());
         itemList.setAdapter(adapter);

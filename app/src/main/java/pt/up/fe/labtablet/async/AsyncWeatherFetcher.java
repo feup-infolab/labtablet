@@ -23,7 +23,7 @@ import pt.up.fe.labtablet.utils.Utils;
  */
 public class AsyncWeatherFetcher extends AsyncTask<Context, Void, Integer> {
     //input, remove, output
-    private AsyncTaskHandler<Integer> mHandler;
+    private final AsyncTaskHandler<Integer> mHandler;
     private Exception error;
 
     public AsyncWeatherFetcher(AsyncTaskHandler<Integer> mHandler) {

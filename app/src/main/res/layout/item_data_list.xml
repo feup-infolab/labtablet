@@ -37,6 +37,7 @@
 
             <ImageView
                 android:id="@+id/metadata_item_type"
+                android:contentDescription="@string/image_placeholder"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginBottom="5dp"

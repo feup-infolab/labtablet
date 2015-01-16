@@ -21,7 +21,6 @@
     <color name="primary">#ff2c3b44</color>
     <color name="primary_dark">#263238</color>
     <color name="text_primary">#ffffffff</color>
-    <color name="text_secondary">#ff000000</color>
     <color name="text_blue_grey">#37474F</color>
 
 </resources>

@@ -11,27 +11,25 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.application.LabTablet;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.utils.OnItemClickListener;
 
 public class BaseFormListAdapter extends RecyclerView.Adapter<BaseFormListAdapter.BaseFormVH> {
 
     private final ArrayList<Form> items;
-    private int rowLayout;
     private static OnItemClickListener listener;
 
     public BaseFormListAdapter(ArrayList<Form> srcItems,
-                                   int rowLayout,
                                    OnItemClickListener clickListener) {
         this.items = srcItems;
-        this.rowLayout = rowLayout;
-
         listener = clickListener;
     }
 
     @Override
     public BaseFormVH onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(rowLayout, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(
+                R.layout.item_form_list, viewGroup, false);
         return new BaseFormVH(v);
     }
 
@@ -39,7 +37,9 @@ public class BaseFormListAdapter extends RecyclerView.Adapter<BaseFormListAdapte
     public void onBindViewHolder(BaseFormVH holder, int i) {
         Form item = items.get(i);
 
-        holder.mFormItemQuestions.setText(item.getFormQuestions().size() + " Questions");
+        holder.mFormItemQuestions.setText(item.getFormQuestions().size() + " " +
+                LabTablet.getContext().getString(R.string.questions));
+
         holder.mFormItemDuration.setText(item.getDuration() + " min");
         if (item.getFormDescription().equals("")) {
             holder.mFormItemDescription.setVisibility(View.GONE);

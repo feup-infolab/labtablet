@@ -187,7 +187,7 @@ public class ConfigurationFragment extends Fragment {
             et_conf_password.setText(conf.getPassword());
             et_conf_username.setText(conf.getUsername());
 
-            if(conf.validated) {
+            if(conf.isValidated()) {
                 bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                         null, getResources().getDrawable(R.drawable.ic_check), null, null);
             }
@@ -370,17 +370,14 @@ public class ConfigurationFragment extends Fragment {
 
         AssociationItem gps = new AssociationItem();
         gps.setFileExtension(Utils.GEO_TAGS);
-        gps.setExtensionDescription(getResources().getString(R.string.gps_description));
         gps.setDescriptor(genericDesc);
 
         AssociationItem image = new AssociationItem();
         image.setFileExtension(Utils.PICTURE_TAGS);
-        image.setExtensionDescription(getResources().getString(R.string.jpg_description));
         image.setDescriptor(genericDesc);
 
         AssociationItem audio = new AssociationItem();
         audio.setFileExtension(Utils.AUDIO_TAGS);
-        audio.setExtensionDescription(getResources().getString(R.string.mp3_description));
         audio.setDescriptor(genericDesc);
 
         mItems.add(gps);

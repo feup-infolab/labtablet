@@ -23,7 +23,7 @@ import pt.up.fe.labtablet.utils.Utils;
  */
 public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
 
-    private AsyncTaskHandler<Void> mHandler;
+    private final AsyncTaskHandler<Void> mHandler;
     private Exception error;
 
     public AsyncQueueProcessor(AsyncTaskHandler<Void> mHandler) {
@@ -102,7 +102,6 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
 
                 //create data item entry
                 DataItem dataItem = new DataItem();
-                dataItem.setResourceName(dst.getName());
                 dataItem.setParent(fItem.getTitle());
                 dataItem.setLocalPath(dst.getPath());
                 dataItem.setHumanReadableSize(FileMgr.humanReadableByteCount(dst.length(), false));

@@ -23,19 +23,17 @@ public class QuestionItemListAdapter extends RecyclerView.Adapter<QuestionItemLi
 
     private final Activity context;
     private final ArrayList<FormQuestion> items;
-    private int rowLayout;
 
     public QuestionItemListAdapter(Activity context,
-                                   ArrayList<FormQuestion> srcItems,
-                                   int rowLayout) {
+                                   ArrayList<FormQuestion> srcItems) {
         this.context = context;
         this.items = srcItems;
-        this.rowLayout = rowLayout;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(rowLayout, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(
+                R.layout.item_question, viewGroup, false);
         return new ViewHolder(v);
     }
 
