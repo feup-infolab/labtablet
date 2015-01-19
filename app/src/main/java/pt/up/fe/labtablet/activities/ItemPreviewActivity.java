@@ -130,7 +130,6 @@ public class ItemPreviewActivity extends Activity {
         alert.setPositiveButton(getString(R.string.action_save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
-                //FIXME this will overwrite the previously made changes!
                 if (isMetadataVisible) {
                     draftMetadataItem = metadataItem;
                     draftMetadataItem.setValue(input.getText().toString());

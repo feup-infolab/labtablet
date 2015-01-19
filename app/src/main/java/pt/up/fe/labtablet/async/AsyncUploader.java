@@ -74,7 +74,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         String favoriteName;
 
         if (params[0] instanceof String
-                && params[1] instanceof String
                 && params[2] instanceof String
                 && params[3] instanceof Context) {
 

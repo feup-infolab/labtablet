@@ -469,6 +469,7 @@ public class FavoriteDetailsFragment extends Fragment {
                 public void onSuccess(Void result) {
                     Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
+                    onResume();
                 }
 
                 @Override

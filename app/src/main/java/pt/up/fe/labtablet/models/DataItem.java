@@ -73,7 +73,7 @@ public class DataItem {
 
     public void setDescription(String description) {
 
-        if (fileLevelMetadata.size() == 0) {
+        if (fileLevelMetadata == null || fileLevelMetadata.size() == 0) {
          return;
         }
 

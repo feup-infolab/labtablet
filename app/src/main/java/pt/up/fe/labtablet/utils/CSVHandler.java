@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -46,13 +47,38 @@ public class CSVHandler {
 
             //Add data resource to this favorite
             DataItem csvItem = new DataItem();
-            csvItem.setFileLevelMetadata(new ArrayList<Descriptor>());
+
+
+            //Build metadata for this file
+            ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
+
+            ArrayList<Descriptor> loadedDescriptors =
+                    FavoriteMgr.getBaseDescriptors(context);
+
+            //If additional metadata is available, it should me added here
+            for (Descriptor desc : loadedDescriptors) {
+                String tag = desc.getTag();
+                if (tag.equals(Utils.TITLE_TAG)) {
+                    desc.setValue(entryName + ".csv");
+                    itemLevelMetadata.add(desc);
+                } else if (tag.equals(Utils.CREATED_TAG)) {
+                    desc.setValue("" + new Date());
+                    itemLevelMetadata.add(desc);
+                } else if (tag.equals(Utils.DESCRIPTION_TAG)) {
+                    desc.setValue("");
+                    itemLevelMetadata.add(desc);
+                }
+            }
+
+            csvItem.setFileLevelMetadata(itemLevelMetadata);
             csvItem.setDescription("Exported on " + Utils.getDate());
             csvItem.setLocalPath(basePath + entryName + ".csv");
             csvItem.setParent(favoriteName);
 
             FavoriteItem favorite = FavoriteMgr.getFavorite(context, favoriteName);
-            favorite.addDataItem(csvItem);
+            if (!favorite.getDataItems().contains(csvItem)) {
+                favorite.addDataItem(csvItem);
+            }
             FavoriteMgr.updateFavoriteEntry(favoriteName, favorite, context);
         }
 
