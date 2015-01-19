@@ -4,9 +4,11 @@ package pt.up.fe.labtablet.fragments;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -23,11 +25,21 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.async.AsyncGenericChecker;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
+import pt.up.fe.labtablet.db_handlers.FormMgr;
+import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
+import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.models.FormEnumType;
+import pt.up.fe.labtablet.models.FormQuestion;
+import pt.up.fe.labtablet.utils.RandomHandler;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class HomeFragment extends Fragment {
@@ -153,6 +165,15 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        btNewProject.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                generateDummyData();
+                Toast.makeText(getActivity(), "Exported to device root", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
         btNewProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -208,4 +229,52 @@ public class HomeFragment extends Fragment {
     }
 
 
+    private void generateDummyData() {
+        Random rand = new Random();
+
+        ArrayList<Descriptor> baseDescriptors =
+                FavoriteMgr.getBaseDescriptors(getActivity());
+
+        for (int i = 0; i < 10; ++i) {
+            RandomHandler rh = new RandomHandler(rand.nextInt(30));
+            FavoriteItem item = new FavoriteItem(rh.nextString());
+            ArrayList<Descriptor> itemMetadata = new ArrayList<>();
+
+            for (int u = 0; u < 25; ++u) {
+                int randomNum = rand.nextInt((baseDescriptors.size()));
+                Descriptor desc = baseDescriptors.get(randomNum);
+                desc.setValue(rh.nextString());
+                itemMetadata.add(desc);
+            }
+
+            item.setMetadataItems(itemMetadata);
+            final File favoriteFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/" + getResources().getString(R.string.app_name) + "/"
+                    + item.getTitle());
+
+            if (!favoriteFolder.exists()) {
+                Log.i("Make dir", "" + favoriteFolder.mkdir());
+                getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(favoriteFolder)));
+            }
+            FavoriteMgr.registerFavorite(getActivity(), item);
+        }
+
+        Toast.makeText(getActivity(), "Dummy favorites generated successfully", Toast.LENGTH_SHORT).show();
+
+        //Generate dummy forms
+        ArrayList<Form> forms  = new ArrayList<>();
+        for (int i = 0; i < 10; ++i) {
+            RandomHandler rh = new RandomHandler(rand.nextInt(30));
+            Form f = new Form(rh.nextString(), "");
+            f.setDescription(rh.nextString());
+
+            for (int u = 0; u < 25; ++u) {
+                FormQuestion fq = new FormQuestion(FormEnumType.FREE_TEXT, rh.nextString(), new ArrayList<String>());
+                fq.setDuration(rand.nextInt(15));
+                f.addQuestion(fq);
+            }
+            forms.add(f);
+        }
+        FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
+    }
 }

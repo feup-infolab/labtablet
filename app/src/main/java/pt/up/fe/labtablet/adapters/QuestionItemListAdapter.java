@@ -5,9 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -49,12 +47,6 @@ public class QuestionItemListAdapter extends RecyclerView.Adapter<QuestionItemLi
             holder.mFormItemAllowedValues.setVisibility(View.GONE);
         }
 
-        holder.mFormItemRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "TO BE CONTINUED...", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
@@ -66,14 +58,12 @@ public class QuestionItemListAdapter extends RecyclerView.Adapter<QuestionItemLi
         public TextView mFormItemQuestion;
         public TextView mFormItemAllowedValues;
         public TextView mFormItemType;
-        public Button mFormItemRemove;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mFormItemQuestion = (TextView) itemView.findViewById(R.id.form_item_question);
             mFormItemAllowedValues = (TextView) itemView.findViewById(R.id.form_item_values);
             mFormItemType = (TextView) itemView.findViewById(R.id.form_item_type);
-            mFormItemRemove = (Button) itemView.findViewById(R.id.form_item_delete);
         }
     }
 }

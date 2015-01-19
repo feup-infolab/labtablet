@@ -65,7 +65,7 @@ public class FormViewFragment extends Fragment {
         }
 
         if (getActivity().getActionBar() != null) {
-            getActivity().getActionBar().setTitle(currentForm.getFormName());
+            getActivity().getActionBar().setSubtitle(currentForm.getFormName());
         }
 
         lvFormItems = (RecyclerView) rootView.findViewById(R.id.lv_form_items);

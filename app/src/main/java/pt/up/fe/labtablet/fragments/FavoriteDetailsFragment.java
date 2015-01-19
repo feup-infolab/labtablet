@@ -270,6 +270,10 @@ public class FavoriteDetailsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        if (getActivity().getActionBar() != null) {
+            getActivity().getActionBar().setSubtitle(currentItem.getTitle());
+        }
+
         if (favoriteName != null) {
             currentItem = FavoriteMgr.getFavorite(getActivity(), favoriteName);
             tv_description.setText(currentItem.getDescription());

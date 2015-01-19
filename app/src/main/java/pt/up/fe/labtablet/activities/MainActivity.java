@@ -172,6 +172,10 @@ public class MainActivity extends Activity {
     private void displayView(int position) {
         // remove the main content by replacing fragments
         Fragment fragment = null;
+        if (getActionBar() != null) {
+            getActionBar().setSubtitle("");
+        }
+        
         String tag = "";
         switch (position) {
             case 0:
