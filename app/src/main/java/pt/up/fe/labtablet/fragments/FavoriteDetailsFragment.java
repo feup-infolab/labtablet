@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Outline;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -88,6 +90,7 @@ public class FavoriteDetailsFragment extends Fragment {
         Button bt_fieldMode = (Button) rootView.findViewById(R.id.bt_field_mode);
         ImageButton bt_edit_title = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_title);
 
+
         tv_title = (TextView) rootView.findViewById(R.id.tv_title);
         tv_description = (TextView) rootView.findViewById(R.id.tv_description);
 
@@ -123,6 +126,24 @@ public class FavoriteDetailsFragment extends Fragment {
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
         itemList.setItemAnimator(new DefaultItemAnimator());
         itemList.animate();
+
+
+        Outline mOutlineCircle;
+        int shapeSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
+        mOutlineCircle = new Outline();
+        mOutlineCircle.setRoundRect(0, 0, shapeSize, shapeSize, shapeSize / 2);
+
+        ViewOutlineProvider viewOutlineProvider = new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                // Or read size directly from the view's width/height
+                int size = getResources().getDimensionPixelSize(R.dimen.fab_size);
+                outline.setOval(0, 0, size, size);
+            }
+        };
+
+        bt_new_metadata.setOutlineProvider(viewOutlineProvider);
+        bt_new_metadata.setClipToOutline(true);
 
         itemClickListener = new OnItemClickListener() {
             @Override
@@ -239,6 +260,8 @@ public class FavoriteDetailsFragment extends Fragment {
 
     private void loadMetadataView() {
         bt_data_view.setEnabled(true);
+        bt_data_view.setBackgroundColor(getResources().getColor(R.color.text_blue_grey));
+        bt_meta_view.setBackgroundColor(getResources().getColor(R.color.text_blue_grey_darker));
         bt_meta_view.setEnabled(false);
         isMetadataVisible = true;
 
@@ -255,6 +278,8 @@ public class FavoriteDetailsFragment extends Fragment {
 
         bt_data_view.setEnabled(false);
         bt_meta_view.setEnabled(true);
+        bt_data_view.setBackgroundColor(getResources().getColor(R.color.text_blue_grey_darker));
+        bt_meta_view.setBackgroundColor(getResources().getColor(R.color.text_blue_grey));
 
         isMetadataVisible = false;
 
