@@ -100,6 +100,7 @@ public class FavoriteDetailsFragment extends Fragment {
 
         if (savedInstanceState != null) {
             currentItem = new Gson().fromJson(savedInstanceState.getString("current_item"), FavoriteItem.class);
+            favoriteName = savedInstanceState.getString("favorite_name");
             isMetadataVisible = savedInstanceState.getBoolean("metadata_visible");
         } else {
             favoriteName = this.getArguments().getString("favorite_name");

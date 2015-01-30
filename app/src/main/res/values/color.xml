@@ -23,5 +23,5 @@
     <color name="text_primary">#ffffffff</color>
     <color name="text_blue_grey">#37474F</color>
     <color name="text_blue_grey_darker">#ff202c34</color>
-    <color name="fab_color">#ff6a4a3e</color>
+    <color name="fab_color">#ffb20800</color>
 </resources>

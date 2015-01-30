@@ -94,30 +94,24 @@
 
             <Button
                 android:id="@+id/tab_metadata"
-                style="@style/btnStyleOrangeLeft"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="@string/metadata"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:textColor="@color/white" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="fill_parent"
-                android:background="@color/second_grey" />
+                android:background="@color/white" />
 
             <Button
                 android:id="@+id/tab_data"
-                style="@style/btnStyleOrangeRight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="@string/data"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:textColor="@color/white" />
 
 
         </LinearLayout>
