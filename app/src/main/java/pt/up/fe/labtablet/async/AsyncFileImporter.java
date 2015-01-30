@@ -109,13 +109,12 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, DataItem> {
         }
 
         DataItem dataItem = new DataItem();
-        dataItem.setParent(favoriteName);
         dataItem.setLocalPath(destPath.toLowerCase());
         dataItem.setHumanReadableSize(FileMgr.humanReadableByteCount(destFile.length(), false));
         dataItem.setMimeType(FileMgr.getMimeType(destPath));
 
         //Build metadata for this file
-        ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
+        ArrayList<Descriptor> itemLevelMetadata = new ArrayList<>();
 
         ArrayList<Descriptor> loadedDescriptors =
                 FavoriteMgr.getBaseDescriptors(mContext);
@@ -123,15 +122,19 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, DataItem> {
         //If additional metadata is available, it should me added here
         for (Descriptor desc : loadedDescriptors) {
             String tag = desc.getTag();
-            if (tag.equals(Utils.TITLE_TAG)) {
-                desc.setValue(destFile.getName());
-                itemLevelMetadata.add(desc);
-            } else if (tag.equals(Utils.CREATED_TAG)) {
-                desc.setValue("" + new Date());
-                itemLevelMetadata.add(desc);
-            } else if (tag.equals(Utils.DESCRIPTION_TAG)) {
-                desc.setValue("");
-                itemLevelMetadata.add(desc);
+            switch (tag) {
+                case Utils.TITLE_TAG:
+                    desc.setValue(destFile.getName());
+                    itemLevelMetadata.add(desc);
+                    break;
+                case Utils.CREATED_TAG:
+                    desc.setValue("" + new Date());
+                    itemLevelMetadata.add(desc);
+                    break;
+                case Utils.DESCRIPTION_TAG:
+                    desc.setValue("");
+                    itemLevelMetadata.add(desc);
+                    break;
             }
         }
 

@@ -256,7 +256,7 @@ public class NewFavoriteBaseFragment extends Fragment {
 
         //Load default configuration
         ArrayList<Descriptor> baseCfg = FavoriteMgr.getBaseDescriptors(getActivity());
-        ArrayList<Descriptor> folderMetadata = new ArrayList<Descriptor>();
+        ArrayList<Descriptor> folderMetadata = new ArrayList<>();
 
         newFavorite.setTitle(itemName);
 

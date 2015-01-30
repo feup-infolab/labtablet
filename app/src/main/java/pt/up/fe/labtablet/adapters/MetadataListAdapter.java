@@ -72,12 +72,11 @@ public class MetadataListAdapter extends RecyclerView.Adapter<MetadataListAdapte
     static class MetadataListVH extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener {
 
-        public TextView mDescriptorName;
-        public TextView mDescriptorValue;
-        public ImageView mDescriptorType;
-        public TextView mDescriptorDate;
-
-        public LinearLayout mItemDeleteView;
+        public final TextView mDescriptorName;
+        public final TextView mDescriptorValue;
+        public final ImageView mDescriptorType;
+        public final TextView mDescriptorDate;
+        private final LinearLayout mItemDeleteView;
 
         public MetadataListVH(View rowView) {
             super(rowView);

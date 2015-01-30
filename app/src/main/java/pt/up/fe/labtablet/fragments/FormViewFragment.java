@@ -56,7 +56,7 @@ public class FormViewFragment extends Fragment {
 
         } else if (!this.getArguments().containsKey("form")) {
             Toast.makeText(getActivity(), "No form received", Toast.LENGTH_SHORT).show();
-            return super.onCreateView(inflater, container, savedInstanceState);
+            return super.onCreateView(inflater, container, null);
 
         } else {
             currentForm = new Gson().fromJson(
@@ -212,10 +212,5 @@ public class FormViewFragment extends Fragment {
                 .show();
 
         return true;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 }

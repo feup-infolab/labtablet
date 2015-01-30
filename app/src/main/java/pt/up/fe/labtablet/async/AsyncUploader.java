@@ -47,7 +47,7 @@ import static pt.up.fe.labtablet.utils.CSVHandler.generateCSV;
 
 public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
     //input, remove, output
-    private AsyncCustomTaskHandler<Void> mHandler;
+    private final AsyncCustomTaskHandler<Void> mHandler;
     private Exception error;
 
     public AsyncUploader(AsyncCustomTaskHandler<Void> mHandler) {
@@ -198,7 +198,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 50, mContext.getString(R.string.upload_progress_creating_metadata_package)));
 
         ArrayList<Descriptor> descriptors = item.getMetadataItems();
-        ArrayList<DendroMetadataRecord> metadataRecords = new ArrayList<DendroMetadataRecord>();
+        ArrayList<DendroMetadataRecord> metadataRecords = new ArrayList<>();
 
         if (descriptors.size() == 0) {
             error = new Exception("No metadata found!");
@@ -327,8 +327,8 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
      */
     class LabTabletUploadEntity implements HttpEntity {
 
-        private HttpEntity mEntity;
-        private long totalSize;
+        private final HttpEntity mEntity;
+        private final long totalSize;
 
         public LabTabletUploadEntity(HttpEntity mEntity, long size) {
             this.totalSize = size;

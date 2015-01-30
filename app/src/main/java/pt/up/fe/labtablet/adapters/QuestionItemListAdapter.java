@@ -55,9 +55,9 @@ public class QuestionItemListAdapter extends RecyclerView.Adapter<QuestionItemLi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView mFormItemQuestion;
-        public TextView mFormItemAllowedValues;
-        public TextView mFormItemType;
+        public final TextView mFormItemQuestion;
+        public final TextView mFormItemAllowedValues;
+        public final TextView mFormItemType;
 
         public ViewHolder(View itemView) {
             super(itemView);

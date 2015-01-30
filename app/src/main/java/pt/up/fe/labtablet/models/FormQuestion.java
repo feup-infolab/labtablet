@@ -6,11 +6,11 @@ public class FormQuestion {
 
     private FormEnumType type;
     private String value;
-    private String question;
+    private final String question;
     private boolean mandatory;
 
     private int duration;
-    private ArrayList<String> allowedValues;
+    private final ArrayList<String> allowedValues;
 
     public FormQuestion(FormEnumType type, String question, ArrayList<String> allowedValues) {
         this.type = type;

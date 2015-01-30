@@ -52,9 +52,9 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
 
     static class FavoriteItemVH  extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        public TextView mFavoriteName;
-        public TextView mFavoriteDate;
-        public TextView mFavoriteSize;
+        public final TextView mFavoriteName;
+        public final TextView mFavoriteDate;
+        public final TextView mFavoriteSize;
 
         public FavoriteItemVH(View itemView) {
             super(itemView);

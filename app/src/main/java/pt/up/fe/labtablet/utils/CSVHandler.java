@@ -50,7 +50,7 @@ public class CSVHandler {
 
 
             //Build metadata for this file
-            ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
+            ArrayList<Descriptor> itemLevelMetadata = new ArrayList<>();
 
             ArrayList<Descriptor> loadedDescriptors =
                     FavoriteMgr.getBaseDescriptors(context);
@@ -73,7 +73,6 @@ public class CSVHandler {
             csvItem.setFileLevelMetadata(itemLevelMetadata);
             csvItem.setDescription("Exported on " + Utils.getDate());
             csvItem.setLocalPath(basePath + entryName + ".csv");
-            csvItem.setParent(favoriteName);
 
             FavoriteItem favorite = FavoriteMgr.getFavorite(context, favoriteName);
             if (!favorite.getDataItems().contains(csvItem)) {

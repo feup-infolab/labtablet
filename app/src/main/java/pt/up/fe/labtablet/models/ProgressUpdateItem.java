@@ -1,7 +1,7 @@
 package pt.up.fe.labtablet.models;
 
 /**
- * Created by ricardo on 10/22/14.
+ * Item to represent a progress info
  */
 public class ProgressUpdateItem {
 
@@ -18,15 +18,7 @@ public class ProgressUpdateItem {
         return progress;
     }
 
-    public void setProgress(int progress) {
-        this.progress = progress;
-    }
-
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }

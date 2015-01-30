@@ -85,7 +85,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
             // Set up the dropdown list navigation in the action bar.
             actionBar.setListNavigationCallbacks(
                     // Specify a SpinnerAdapter to populate the dropdown list.
-                    new ArrayAdapter<String>(
+                    new ArrayAdapter<>(
                             actionBar.getThemedContext(),
                             android.R.layout.simple_list_item_1,
                             android.R.id.text1,
@@ -147,7 +147,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                     AlertDialog.Builder builder = new AlertDialog.Builder(DescriptorPickerActivity.this);
                     builder.setTitle(selectedDescriptor.getName());
 
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(DescriptorPickerActivity.this,
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(DescriptorPickerActivity.this,
                             android.R.layout.simple_dropdown_item_1line,
                             selectedDescriptor.getAllowed_values()
                                     .toArray(new String[selectedDescriptor.getAllowed_values().size()]));

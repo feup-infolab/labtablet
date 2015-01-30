@@ -35,14 +35,6 @@ public class Form {
         this.parent = parent;
     }
 
-    public String getLinkedResourcePath() {
-        return linkedResourcePath;
-    }
-
-    public void setLinkedResourcePath(String linkedResourcePath) {
-        this.linkedResourcePath = linkedResourcePath;
-    }
-
     public void setDescription(String description) {
         this.formDescription = description;
         descriptionSet = true;
@@ -56,10 +48,6 @@ public class Form {
 
     public ArrayList<FormQuestion> getFormQuestions() {
         return formQuestions;
-    }
-
-    public void setFormQuestions(ArrayList<FormQuestion> formQuestions) {
-        this.formQuestions = formQuestions;
     }
 
     public void addQuestion(FormQuestion fq) {
@@ -84,10 +72,6 @@ public class Form {
 
     public void setElapsedTime(String elapsedTime) {
         this.elapsedTime = elapsedTime;
-    }
-
-    public String getElapsedTime() {
-        return this.elapsedTime;
     }
 
     @Override

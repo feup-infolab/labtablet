@@ -45,7 +45,7 @@ public class AsyncGenericChecker extends AsyncTask<Object, Void, Integer> {
             return 0;
         }
 
-        ArrayList<Descriptor> worldDescriptors = new ArrayList<Descriptor>();
+        ArrayList<Descriptor> worldDescriptors = new ArrayList<>();
 
 
         if (favoriteName.equals("")) {

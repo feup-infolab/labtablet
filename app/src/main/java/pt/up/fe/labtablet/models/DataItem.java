@@ -11,21 +11,12 @@ import pt.up.fe.labtablet.utils.Utils;
 public class DataItem {
 
     private String localPath;
-    private String parent;
     private String humanReadableSize;
     private String mimeType;
     private ArrayList<Descriptor> fileLevelMetadata;
 
     public String getResourceName() {
         return new File(getLocalPath()).getName();
-    }
-
-    public String getParent() {
-        return parent;
-    }
-
-    public void setParent(String parent) {
-        this.parent = parent;
     }
 
     public ArrayList<Descriptor> getFileLevelMetadata() {

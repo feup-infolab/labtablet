@@ -16,8 +16,7 @@ public class FormMgr {
 
     /**
      * Returns the currently registered form items (if any), or an empty set otherwise
-     * @param context
-     * @return
+     * @param context used to access the preference manager
      */
     public static ArrayList<Form> getCurrentBaseForms(Context context) {
         SharedPreferences settings = context.getSharedPreferences(
@@ -31,13 +30,13 @@ public class FormMgr {
                     Utils.ARRAY_FORM);
         }
 
-        return new ArrayList<Form>();
+        return new ArrayList<>();
     }
 
     /**
      * Replaces the current entry with the new items
-     * @param context
-     * @param inputItems
+     * @param context used to access the preference manager
+     * @param inputItems entry items
      */
     public static void overwriteBaseFormsEntry(Context context, ArrayList<Form> inputItems) {
         SharedPreferences settings = context.getSharedPreferences(
@@ -52,8 +51,8 @@ public class FormMgr {
 
     /**
      * Updates a form entry (replaces it with the new one)
-     * @param currentForm
-     * @param context
+     * @param currentForm entry to update
+     * @param context used to access the preference manager
      */
     public static void updateFormEntry(Form currentForm, Context context) {
         SharedPreferences settings = context.getSharedPreferences(

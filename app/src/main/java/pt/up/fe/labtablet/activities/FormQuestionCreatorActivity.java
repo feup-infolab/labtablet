@@ -55,7 +55,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_form_question_creator);
-        allowedValues = new ArrayList<String>();
+        allowedValues = new ArrayList<>();
 
         if (getActionBar() != null) {
             getActionBar().setTitle(getString(R.string.create_form_question_head));
@@ -162,7 +162,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 viewQuestionRange.setVisibility(View.GONE);
                 viewQuestionVocabularies.setVisibility(View.GONE);
 
-                allowedValues = new ArrayList<String>();
+                allowedValues = new ArrayList<>();
                 allowedValues.add(getString(R.string.yes));
                 allowedValues.add(getString(R.string.no));
                 enableMandatoryView();
@@ -174,8 +174,8 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 (findViewById(R.id.question_add_word)).setEnabled(true);
 
                 ListView lv_allowed_word = (ListView) findViewById(R.id.list_allowed_vocabulary);
-                allowedValues = new ArrayList<String>();
-                mAdapter = new ArrayAdapter<String>(this,
+                allowedValues = new ArrayList<>();
+                mAdapter = new ArrayAdapter<>(this,
                         android.R.layout.simple_list_item_1, allowedValues);
                 lv_allowed_word.setAdapter(mAdapter);
 
@@ -228,7 +228,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
 
                         from = Integer.parseInt(etFrom.getText().toString());
                         to = Integer.parseInt(etTo.getText().toString());
-                        allowedValues = new ArrayList<String>();
+                        allowedValues = new ArrayList<>();
                         allowedValues.add("" +from);
                         allowedValues.add("" +to);
                         questionType = FormEnumType.RANGE;

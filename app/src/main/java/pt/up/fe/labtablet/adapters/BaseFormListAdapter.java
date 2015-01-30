@@ -57,11 +57,11 @@ public class BaseFormListAdapter extends RecyclerView.Adapter<BaseFormListAdapte
     }
 
     static class BaseFormVH extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        public TextView mFormTitle;
-        public TextView mFormItemDescription;
-        public TextView mFormItemQuestions;
-        public TextView mFormItemDuration;
-        public LinearLayout mFormItemDeleteView;
+        public final TextView mFormTitle;
+        public final TextView mFormItemDescription;
+        public final TextView mFormItemQuestions;
+        public final TextView mFormItemDuration;
+        public final LinearLayout mFormItemDeleteView;
 
         public BaseFormVH(View itemView) {
             super(itemView);

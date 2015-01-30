@@ -12,9 +12,6 @@ import android.content.Context;
 )*/
 public class LabTablet extends Application {
 
-    public static final String TAG = LabTablet.class
-            .getSimpleName();
-
     private static Context mContext;
     //private static LabTablet mInstance;
 

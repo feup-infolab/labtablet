@@ -118,7 +118,7 @@ public class FormSolverActivity extends Activity {
                 baseView = inflater.inflate(R.layout.solver_item_spinner, null, false);
                 ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
                 Spinner spValues = (Spinner) baseView.findViewById(R.id.solver_question_spinner);
-                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<>
                         (FormSolverActivity.this,
                                 android.R.layout.simple_spinner_dropdown_item,
                                 fq.getAllowedValues());

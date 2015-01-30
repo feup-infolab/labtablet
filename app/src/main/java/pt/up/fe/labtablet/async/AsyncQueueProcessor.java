@@ -102,7 +102,6 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
 
                 //create data item entry
                 DataItem dataItem = new DataItem();
-                dataItem.setParent(fItem.getTitle());
                 dataItem.setLocalPath(dst.getPath());
                 dataItem.setHumanReadableSize(FileMgr.humanReadableByteCount(dst.length(), false));
                 dataItem.setMimeType(FileMgr.getMimeType(dst.getPath()));

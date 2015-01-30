@@ -31,7 +31,7 @@ public class LTLocationListener implements LocationListener {
     final private String path;
     final private kmlCreatedInterface mKmlInterface;
 
-    private ArrayList<Location> mLocations;
+    private final ArrayList<Location> mLocations;
     private LocationManager locationManager;
 
     public LTLocationListener(Context context, String path, kmlCreatedInterface kmlInterface) {

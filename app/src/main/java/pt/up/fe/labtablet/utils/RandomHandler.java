@@ -3,7 +3,7 @@ package pt.up.fe.labtablet.utils;
 import java.util.Random;
 
 /**
- * Created by ricardo on 19-01-2015.
+ * Class to generate dummy data.
  */
 public class RandomHandler {
 

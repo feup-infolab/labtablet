@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.File;
-import java.io.IOException;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.async.AsyncImageLoader;
@@ -162,7 +161,7 @@ public class ItemPreviewActivity extends Activity {
             public void onClick(View view) {
                 try {
                     Utils.openFile(ItemPreviewActivity.this, new File(currentItem.getLocalPath()));
-                } catch (IOException e) {
+                } catch (Exception e) {
                     Toast.makeText(ItemPreviewActivity.this, "Unable to open associated file", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -213,7 +212,7 @@ public class ItemPreviewActivity extends Activity {
 
                 try {
                     Utils.openFile(ItemPreviewActivity.this, new File(currentItem.getFilePath()));
-                } catch (IOException e) {
+                } catch (Exception e) {
                     Toast.makeText(ItemPreviewActivity.this, "Unable to open associated file", Toast.LENGTH_SHORT).show();
                 }
             }

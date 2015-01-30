@@ -7,7 +7,6 @@ import android.net.Uri;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +41,6 @@ public class Utils {
     public static final String DENDRO_RESPONSE_ERROR = "error";
     public static final String DENDRO_RESPONSE_ERROR_2 = "Error";
     public static final String DENDRO_CONFS_ENTRY = "dendro_configurations";
-    public static final String DATA_DESCRIPTOR_ENTRY = "_data";
     public static final int DESCRIPTOR_STATE_VALIDATED = 1;
     public static final int DESCRIPTOR_STATE_NOT_VALIDATED = 0;
 
@@ -68,40 +66,40 @@ public class Utils {
     public static final int DATA_ITEM_CHANGED = 1;
     public static final int METADATA_ITEM_CHANGED = 0;
 
-    public static Type ARRAY_ASSOCIATION_ITEM = new TypeToken<ArrayList<AssociationItem>>() {
+    public static final Type ARRAY_ASSOCIATION_ITEM = new TypeToken<ArrayList<AssociationItem>>() {
     }.getType();
-    public static Type ARRAY_CHANGELOG_ITEM = new TypeToken<ArrayList<ChangelogItem>>() {
+    public static final Type ARRAY_CHANGELOG_ITEM = new TypeToken<ArrayList<ChangelogItem>>() {
     }.getType();
-    public static Type ARRAY_DESCRIPTORS = new TypeToken<ArrayList<Descriptor>>() {
+    public static final Type ARRAY_DESCRIPTORS = new TypeToken<ArrayList<Descriptor>>() {
     }.getType();
-    public static Type ARRAY_DIRECTORY_LISTING = new TypeToken<ArrayList<DendroFolderItem>>() {
+    public static final Type ARRAY_DIRECTORY_LISTING = new TypeToken<ArrayList<DendroFolderItem>>() {
     }.getType();
-    public static Type ARRAY_DENDRO_METADATA_RECORD = new TypeToken<ArrayList<DendroMetadataRecord>>() {
+    public static final Type ARRAY_DENDRO_METADATA_RECORD = new TypeToken<ArrayList<DendroMetadataRecord>>() {
     }.getType();
-    public static Type ARRAY_FORM = new TypeToken<ArrayList<Form>>() {
+    public static final Type ARRAY_FORM = new TypeToken<ArrayList<Form>>() {
     }.getType();
 
     // ---- Activities Results ---------
-    public static Type ARRAY_DENDRO_DESCRIPTORS = new TypeToken<ArrayList<DendroDescriptor>>() {
+    public static final Type ARRAY_DENDRO_DESCRIPTORS = new TypeToken<ArrayList<DendroDescriptor>>() {
     }.getType();
     //Configuration entries. If updated, the application must be completely reinstalled
     //should not use previous instances
-    public static String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
-    public static String ASSOCIATIONS_CONFIG_ENTRY = "associations";
+    public static final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
+    public static final String ASSOCIATIONS_CONFIG_ENTRY = "associations";
 
-    public static String BASE_DESCRIPTORS_ENTRY = "base_descriptors";
-    public static String BASE_FORMS_ENTRY = "base_forms";
-    public static String CHANGELOG_CONFIG_ENTRY = "changelogs";
+    public static final String BASE_DESCRIPTORS_ENTRY = "base_descriptors";
+    public static final String BASE_FORMS_ENTRY = "base_forms";
+    public static final String CHANGELOG_CONFIG_ENTRY = "changelogs";
 
-    public static long SAMPLE_MILLIS = 5000;
+    public static final long SAMPLE_MILLIS = 5000;
     //Select a descriptor and return it
-    public static int DESCRIPTOR_GET = 0;
+    public static final int DESCRIPTOR_GET = 0;
     //Select a descriptor, define its value and return it
-    public static int DESCRIPTOR_DEFINE = 1;
+    public static final int DESCRIPTOR_DEFINE = 1;
     //Upload proccess
-    public static int SUBMISSION_VALIDATION = 7;
+    public static final int SUBMISSION_VALIDATION = 7;
     //Pick a file from the storage
-    public static int PICK_FILE_INTENT = 8;
+    public static final int PICK_FILE_INTENT = 8;
 
 
     public static String getDate() {
@@ -120,7 +118,7 @@ public class Utils {
         return (int) l;
     }
 
-    public static void openFile(Context context, File url) throws IOException {
+    public static void openFile(Context context, File url) {
         // Create URI
         Uri uri = Uri.fromFile(url);
 

@@ -15,8 +15,8 @@ import android.view.View;
 
 public class ColorPickerDialog extends Dialog {
 
-    private OnColorChangedListener mListener;
-    private int mInitialColor;
+    private final OnColorChangedListener mListener;
+    private final int mInitialColor;
 
     public ColorPickerDialog(Context context,
                              OnColorChangedListener listener,
@@ -52,9 +52,9 @@ public class ColorPickerDialog extends Dialog {
         private static final int CENTER_RADIUS = 32;
         private static final float PI = 3.1415926f;
         private final int[] mColors;
-        private Paint mPaint;
-        private Paint mCenterPaint;
-        private OnColorChangedListener mListener;
+        private final Paint mPaint;
+        private final Paint mCenterPaint;
+        private final OnColorChangedListener mListener;
         private boolean mTrackingCenter;
         private boolean mHighlightCenter;
 

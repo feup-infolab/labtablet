@@ -40,7 +40,7 @@ public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, Arra
     @Override
     protected ArrayList<DendroFolderItem> doInBackground(Object... params) {
 
-        ArrayList<DendroFolderItem> dendroFolderItems = new ArrayList<DendroFolderItem>();
+        ArrayList<DendroFolderItem> dendroFolderItems = new ArrayList<>();
         if (params[0] == null || params[1] == null) {
             error = new Exception("Params for this asynctaks were not provided");
             return dendroFolderItems;
@@ -95,7 +95,7 @@ public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, Arra
 
         } catch (Exception e) {
             error = e;
-            return new ArrayList<DendroFolderItem>();
+            return new ArrayList<>();
         }
     }
 

@@ -17,7 +17,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.adapters.FavoriteListAdapter;
 import pt.up.fe.labtablet.async.AsyncSearchTask;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.FavoriteItem;
@@ -28,7 +27,6 @@ public class SearchFragment extends Fragment {
     public SearchFragment(){}
     private EditText et_query;
     private ProgressDialog progress;
-    private FavoriteListAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

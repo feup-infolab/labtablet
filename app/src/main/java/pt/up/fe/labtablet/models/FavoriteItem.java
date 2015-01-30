@@ -20,14 +20,10 @@ public class FavoriteItem {
 
     public FavoriteItem(String title) {
         this.title = title;
-        this.dataItems = new ArrayList<DataItem>();
-        this.metadataItems = new ArrayList<Descriptor>();
-        this.linkedForms = new HashMap<String, ArrayList<Form>>();
-        this.metadataRecommendations = new ArrayList<Descriptor>();
-    }
-
-    public ArrayList<Descriptor> getMetadataRecommendations() {
-        return metadataRecommendations;
+        this.dataItems = new ArrayList<>();
+        this.metadataItems = new ArrayList<>();
+        this.linkedForms = new HashMap<>();
+        this.metadataRecommendations = new ArrayList<>();
     }
 
     public void setMetadataRecommendations(ArrayList<Descriptor> metadataRecommendations) {
@@ -36,18 +32,6 @@ public class FavoriteItem {
 
     public HashMap<String, ArrayList<Form>> getLinkedForms() {
         return linkedForms;
-    }
-
-    public void setLinkedForms(HashMap<String, ArrayList<Form>> linkedForms) {
-        this.linkedForms = linkedForms;
-    }
-
-    public ArrayList<Form> getChildForms(String parentForm) {
-        return linkedForms.get(parentForm);
-    }
-
-    public int getFormsCount() {
-        return linkedForms.size();
     }
 
     public ArrayList<DataItem> getDataItems() {
@@ -80,14 +64,6 @@ public class FavoriteItem {
 
     public void setSize(String size) {
         this.size = size;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public String getDate_modified() {

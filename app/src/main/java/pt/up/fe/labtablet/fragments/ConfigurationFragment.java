@@ -364,7 +364,7 @@ public class ConfigurationFragment extends Fragment {
     }
 
     private ArrayList<AssociationItem> createBaseAssociations() {
-        mItems = new ArrayList<AssociationItem>();
+        mItems = new ArrayList<>();
 
         Descriptor genericDesc = new Descriptor();
 

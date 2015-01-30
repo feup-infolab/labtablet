@@ -26,7 +26,7 @@ public class AsyncProfileLoader extends AsyncTask<File, Integer, ArrayList<Descr
     protected ArrayList<Descriptor> doInBackground(File... params) {
 
         publishProgress(1);
-        ArrayList<Descriptor> mResult = new ArrayList<Descriptor>();
+        ArrayList<Descriptor> mResult = new ArrayList<>();
 
         try {
             File inputFile = params[0];

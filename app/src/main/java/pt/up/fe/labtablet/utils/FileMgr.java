@@ -34,9 +34,8 @@ public class FileMgr {
 
     /**
      * Converts the lenght of a file to a more readable format (eg 23.5Kb)
-     * @param bytes
-     * @param si
-     * @return
+     * @param bytes length
+     * @param si 1000 vs 1024
      */
     public static String humanReadableByteCount(long bytes, boolean si) {
         int unit = si ? 1000 : 1024;
@@ -49,7 +48,7 @@ public class FileMgr {
     /**
      * Tries to match the file extension with a mime type
      * @param url Path to the file
-     * @return
+     * @return the mime type found
      */
     public static String getMimeType(String url) {
         return MimeTypeMap
@@ -62,9 +61,9 @@ public class FileMgr {
     /**
      * This function tries to get the real path, when decoding an image or other media files inside
      * the DCIM folder or the gallery
-     * @param context
-     * @param contentUri
-     * @return
+     * @param context used to access the preference manager
+     * @param contentUri file uri
+     * @return the path for the file
      */
     public static String getRealPathFromURI(Context context, Uri contentUri) {
         String[] projection = {MediaStore.Images.Media.DATA};
@@ -76,8 +75,8 @@ public class FileMgr {
 
     /**
      * Copy a file to another location
-     * @param src
-     * @param dst
+     * @param src source
+     * @param dst destination
      * @throws IOException
      */
     public static void copy(File src, File dst) throws IOException {
@@ -97,8 +96,8 @@ public class FileMgr {
 
     /**
      * Moves a file to another location
-     * @param src
-     * @param dst
+     * @param src source
+     * @param dst destination
      * @throws IOException
      */
     public static void moveFile(File src, File dst) throws IOException {
@@ -123,8 +122,8 @@ public class FileMgr {
 
     /**
      * Calculates the size of a folder, taking into account its contents
-     * @param directory
-     * @return
+     * @param directory directory to analyse
+     * @return the length of the directory
      */
     public static long folderSize(File directory) {
         long length = 0;
@@ -139,8 +138,8 @@ public class FileMgr {
 
     /**
      * Creates the folder for the metadata
-     * @param mContext
-     * @param path
+     * @param mContext to boradcast the created file
+     * @param path path to the directory
      */
     public static void makeMetaDir(Context mContext, String path) {
 
@@ -159,7 +158,7 @@ public class FileMgr {
 
     /**
      * Recursively follows the contents of the directory and deletes them
-     * @param file
+     * @param file directory to delete
      */
     private static boolean deleteDirectory(File file) {
         boolean result = false;
@@ -259,8 +258,6 @@ public class FileMgr {
         //Update linked data resources
         ArrayList<DataItem> dataRecords = item.getDataItems();
         for (DataItem desc : dataRecords) {
-
-            desc.setParent(dst);
             desc.setLocalPath(basePath + dst + File.separator + new File(desc.getLocalPath()).getName());
             ArrayList<Descriptor> dataLevelDecriptors = desc.getFileLevelMetadata();
             desc.setFileLevelMetadata(dataLevelDecriptors);

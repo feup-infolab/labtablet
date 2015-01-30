@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
-        navDrawerItems = new ArrayList<NavDrawerItem>();
+        navDrawerItems = new ArrayList<>();
 
         //HOME, SEARCH, NEW PROJECT ,MY FAVORITES, UPDATES, CONFIGURATIONS
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));

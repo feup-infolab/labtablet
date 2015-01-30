@@ -93,11 +93,11 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataLi
 
     static class DataListVH extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener {
-        public TextView mDescriptorName;
-        public TextView mDescriptorDescription;
-        public TextView mDescriptorValue;
-        public ImageView mDescriptorType;
-        public TextView mDescriptorSize;
+        public final TextView mDescriptorName;
+        public final TextView mDescriptorDescription;
+        public final TextView mDescriptorValue;
+        public final ImageView mDescriptorType;
+        public final TextView mDescriptorSize;
 
         public LinearLayout mDataItemDeleteView;
 

@@ -143,11 +143,11 @@ public class FingerPaintActivity extends Activity implements ColorPickerDialog.O
     public class MyView extends View {
 
         private static final float TOUCH_TOLERANCE = 4;
-        Context context;
+        final Context context;
         private Bitmap mBitmap;
         private Canvas mCanvas;
-        private Path mPath;
-        private Paint mBitmapPaint;
+        private final Path mPath;
+        private final Paint mBitmapPaint;
         private float mX, mY;
 
         public MyView(Context c) {

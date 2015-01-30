@@ -108,16 +108,8 @@ public class Descriptor {
         return dateModified;
     }
 
-    public void setDateModified(String dateModified) {
-        this.dateModified = dateModified;
-    }
-
     public ArrayList<String> getAllowed_values() {
         return allowed_values;
-    }
-
-    public void setAllowed_values(ArrayList<String> allowed_values) {
-        this.allowed_values = allowed_values;
     }
 
     public String getFilePath() {
@@ -133,10 +125,6 @@ public class Descriptor {
 
     public String getSize() {
         return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
     }
 
     @Override

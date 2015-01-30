@@ -43,7 +43,7 @@ public class AsyncRecommendationsLoader extends AsyncTask<Object, Integer, Array
 
         if (params[0] == null || params[1] == null) {
             error = new Exception("Expected Context, String, String; Got nulls");
-            return new ArrayList<Descriptor>();
+            return new ArrayList<>();
         }
 
         if (!(params[0] instanceof Context &&
@@ -52,7 +52,7 @@ public class AsyncRecommendationsLoader extends AsyncTask<Object, Integer, Array
                     + params[0].getClass() + ", " +
                     params[1].getClass());
 
-            return new ArrayList<Descriptor>();
+            return new ArrayList<>();
         }
 
         Context mContext = (Context) params[0];
@@ -74,7 +74,7 @@ public class AsyncRecommendationsLoader extends AsyncTask<Object, Integer, Array
             ArrayList<DendroDescriptor> recommendedDendroDescriptors =
                     new Gson().fromJson(respObject.get("descriptors").toString(), Utils.ARRAY_DENDRO_DESCRIPTORS);
 
-            ArrayList<Descriptor> recommendedDescriptors = new ArrayList<Descriptor>();
+            ArrayList<Descriptor> recommendedDescriptors = new ArrayList<>();
             for (DendroDescriptor dDesc : recommendedDendroDescriptors) {
                 Descriptor desc = new Descriptor();
                 desc.setDescriptor(dDesc.getUri());
@@ -96,7 +96,7 @@ public class AsyncRecommendationsLoader extends AsyncTask<Object, Integer, Array
 
         } catch (Exception e) {
             error = e;
-            return new ArrayList<Descriptor>();
+            return new ArrayList<>();
         }
     }
 

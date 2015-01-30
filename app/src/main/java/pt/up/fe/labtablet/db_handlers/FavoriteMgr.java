@@ -24,8 +24,7 @@ public class FavoriteMgr {
 
     /**
      * Returns the base config loaded from the application profile
-     * @param mContext
-     * @return
+     * @param mContext used to access the preference manager
      */
     public static ArrayList<Descriptor> getBaseDescriptors(Context mContext) {
         SharedPreferences settings = mContext.getSharedPreferences(
@@ -34,7 +33,7 @@ public class FavoriteMgr {
 
         if (!settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
             Toast.makeText(mContext, "No metadata was found. Default configuration loaded.", Toast.LENGTH_SHORT).show();
-            return new ArrayList<Descriptor>();
+            return new ArrayList<>();
         }
         return new Gson().fromJson(
                 settings.getString(Utils.BASE_DESCRIPTORS_ENTRY, ""),
@@ -43,9 +42,8 @@ public class FavoriteMgr {
 
     /**
      * Loads and returns a favorite with the specified title (or a new one if non-existing)
-     * @param context
-     * @param favoriteName
-     * @return
+     * @param context used to access the preference manager
+     * @param favoriteName entry
      */
     public static FavoriteItem getFavorite(Context context, String favoriteName) {
 
@@ -65,8 +63,8 @@ public class FavoriteMgr {
 
     /**
      * Adds a new favorite record entry
-     * @param context
-     * @param favorite
+     * @param context used to access the preference manager
+     * @param favorite the object to register
      */
     public static void registerFavorite(Context context, FavoriteItem favorite) {
 
@@ -87,8 +85,8 @@ public class FavoriteMgr {
 
     /**
      * Removes entry from the DB including the linked files (if any)
-     * @param context
-     * @param favorite
+     * @param context used to access the preference manager
+     * @param favorite the object to remove
      */
     public static void removeFavoriteEntry(Context context, FavoriteItem favorite, boolean removeData) {
         SharedPreferences settings = context.getSharedPreferences(
@@ -127,9 +125,9 @@ public class FavoriteMgr {
 
     /**
      * Updates the selected favorite's attributes
-     * @param entryName
-     * @param item
-     * @param context
+     * @param entryName db entry
+     * @param item the item to update
+     * @param context used to access the preference manager
      */
     @SuppressLint("CommitPrefEdits")
     public static void updateFavoriteEntry(String entryName, FavoriteItem item, Context context) {

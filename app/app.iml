@@ -91,7 +91,6 @@
     <orderEntry type="library" exported="" name="httpcore-4.3.2" level="project" />
     <orderEntry type="library" exported="" name="jdom-2.0.2" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-21.0.2" level="project" />
-    <orderEntry type="library" exported="" name="fab-0.0.5" level="project" />
     <orderEntry type="library" exported="" name="support-v13-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="httpclient-cache-4.3.4" level="project" />
     <orderEntry type="library" exported="" name="acra-4.3.0" level="project" />

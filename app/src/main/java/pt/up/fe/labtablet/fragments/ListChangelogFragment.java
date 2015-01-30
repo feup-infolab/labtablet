@@ -79,7 +79,7 @@ public class ListChangelogFragment extends ListFragment {
 
         if (item.getItemId() == R.id.action_changelog_clear) {
             ChangelogManager.clearLogs(getActivity());
-            items = new ArrayList<ChangelogItem>();
+            items = new ArrayList<>();
             mAdapter = new ChangelogListAdapter(getActivity(), items);
             getListView().setAdapter(mAdapter);
         }
