@@ -5,13 +5,19 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
+import pt.up.fe.labtablet.models.DataItem;
+import pt.up.fe.labtablet.models.Dendro.DendroMetadataRecord;
+import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.models.Form;
 import pt.up.fe.labtablet.models.ProgressUpdateItem;
@@ -77,8 +83,39 @@ public class AsyncPackageCreator extends AsyncTask<Object, ProgressUpdateItem, V
             }
         }
 
+        //Generate metadata file
         String from = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/" + favoriteName;
         String to = Environment.getExternalStorageDirectory() + "/" + favoriteName + ".zip";
+
+        ArrayList<DendroMetadataRecord> dendroStyleRecords = new ArrayList<>();
+        ArrayList<Descriptor> descriptors = item.getMetadataItems();
+
+        for (Descriptor desc : descriptors) {
+            dendroStyleRecords.add(
+                    new DendroMetadataRecord(desc.getDescriptor(), desc.getValue()));
+        }
+
+        try {
+            File metadataRecord = new File(from, "metadata.json");
+            String metadata = new Gson().toJson(dendroStyleRecords);
+            FileOutputStream stream = new FileOutputStream(metadataRecord);
+            stream.write(metadata.getBytes());
+            stream.close();
+
+            DataItem dataItem = new DataItem();
+            dataItem.setLocalPath(metadataRecord.getPath());
+            dataItem.setFileLevelMetadata(new ArrayList<Descriptor>());
+            dataItem.setDescription("Generated metadata record (JSON package)");
+
+            item.addDataItem(dataItem);
+            FavoriteMgr.updateFavoriteEntry(favoriteName, item, mContext);
+
+        } catch (IOException e) {
+            error = e;
+            return null;
+        }
+
+
 
         publishProgress(new ProgressUpdateItem(40, mContext.getResources().getString(R.string.upload_progress_creating_package)));
         if (new File(from).listFiles().length > 0) {

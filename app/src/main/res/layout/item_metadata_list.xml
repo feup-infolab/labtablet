@@ -80,19 +80,17 @@
 
             <Button
                 android:id="@+id/action_metadata_item_delete_cancel"
-                style="@android:style/Widget.Holo.Button.Borderless"
+                style="@android:style/Widget.Material.Button.Borderless"
                 android:textColor="@android:color/black"
                 android:layout_width="0dp"
                 android:layout_weight=".5"
                 android:layout_height="wrap_content"
                 android:text="@string/action_cancel"
-
-                android:background="@drawable/ripple"
                 />
 
             <Button
                 android:id="@+id/action_metadata_item_delete"
-                style="@android:style/Widget.Holo.Button.Borderless"
+                style="@android:style/Widget.Material.Button.Borderless"
                 android:textColor="@android:color/black"
                 android:layout_width="0dp"
                 android:layout_weight=".5"
