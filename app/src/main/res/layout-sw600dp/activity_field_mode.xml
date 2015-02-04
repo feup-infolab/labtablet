@@ -51,36 +51,31 @@
                 android:orientation="horizontal"
                 >
                 <Button
-                    style="@style/btnStyleBeige"
                     android:drawableStart="@drawable/ic_camera"
                     android:layout_width="0dp"
                     android:layout_weight="0.3"
                     android:layout_height="wrap_content"
                     android:id="@+id/bt_camera"
                     android:text="@string/photo"
-                    android:layout_margin="2dp"
                     />
 
                 <Button
-                    style="@style/btnStyleBeige"
                     android:drawableStart="@drawable/ic_file"
                     android:layout_width="0dp"
                     android:layout_weight="0.3"
                     android:layout_height="wrap_content"
                     android:id="@+id/bt_form"
                     android:text="@string/form"
-                    android:layout_margin="2dp"
                     />
                 <RelativeLayout
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:layout_weight="0.3"
                     android:id="@+id/rl_record"
-                    android:layout_margin="2dp"
                     >
                     <Button
-                        style="@style/btnStyleBeige"
                         android:drawableStart="@drawable/ic_voice"
+                        android:elevation="6sp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/bt_audio"
@@ -110,38 +105,32 @@
                 >
 
                 <Button
-                    style="@style/btnStyleBeige"
                     android:drawableStart="@drawable/ic_photo"
                     android:layout_width="0dp"
                     android:layout_weight="0.3"
                     android:layout_height="wrap_content"
                     android:id="@+id/bt_sketch"
                     android:text="@string/sketch"
-                    android:layout_margin="2dp"
                     />
 
                 <Button
-                    style="@style/btnStyleBeige"
                     android:drawableStart="@drawable/ic_note"
                     android:layout_width="0dp"
                     android:layout_weight="0.3"
                     android:layout_height="wrap_content"
                     android:id="@+id/bt_text"
                     android:text="@string/note"
-                    android:layout_margin="2dp"
                     />
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_weight="0.3"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
                     >
 
                     <Button
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
-                        style="@style/btnStyleBeige"
                         android:id="@+id/bt_one_time_position"
                         android:drawableStart="@drawable/ic_location"
                         android:text="@string/position"
@@ -152,7 +141,7 @@
                         android:layout_width="fill_parent"
                         android:layout_centerHorizontal="true"
                         android:layout_height="wrap_content"
-                        style="?android:attr/progressBarStyleHorizontal"
+                        style="@android:style/Widget.Material.ProgressBar.Horizontal"
                         android:indeterminate="false"
                         android:layout_alignParentBottom="true"
                         android:progress="0"

@@ -35,7 +35,7 @@ public class LTLocationListener implements LocationListener {
     private LocationManager locationManager;
 
     public LTLocationListener(Context context, String path, kmlCreatedInterface kmlInterface) {
-        mLocations = new ArrayList<Location>();
+        mLocations = new ArrayList<>();
         this.path = path;
         this.mContext = context;
         this.mKmlInterface = kmlInterface;
