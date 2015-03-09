@@ -118,9 +118,9 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         gatheredMetadata = new ArrayList<>();
 
         path = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/" + getResources().getString(R.string.app_name)
-                + "/" + favorite_name + "/"
-                + "meta";
+                + File.separator + getResources().getString(R.string.app_name)
+                + File.separator + favorite_name
+                + File.separator + "meta";
 
         //Make meta directory
         FileMgr.makeMetaDir(getApplication(), path);
@@ -128,13 +128,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         attachButtons();
 
         ActionBar mActionBar = getActionBar();
-        if (mActionBar == null) {
-            ChangelogItem item = new ChangelogItem();
-            item.setMessage("ValidateMetadata" + "Couldn't get actionbar. Compatibility mode layout");
-            item.setTitle(getResources().getString(R.string.developer_error));
-            item.setDate(Utils.getDate());
-            ChangelogManager.addLog(item, FieldModeActivity.this);
-        } else {
+        if (mActionBar != null) {
             mActionBar.setTitle(favorite_name);
             mActionBar.setSubtitle(getResources().getString(R.string.title_activity_field_mode));
             mActionBar.setDisplayHomeAsUpEnabled(false);

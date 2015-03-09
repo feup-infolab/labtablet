@@ -57,7 +57,7 @@ public class FavoriteMgr {
             return new Gson().fromJson(jsonData, FavoriteItem.class);
         }
 
-        Toast.makeText(context, "No entry for that favorite was found", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "No entry for that favorite was found", Toast.LENGTH_SHORT).show();
         return new FavoriteItem("");
     }
 

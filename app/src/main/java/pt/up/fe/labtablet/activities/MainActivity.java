@@ -37,7 +37,6 @@ import pt.up.fe.labtablet.fragments.ListChangelogFragment;
 import pt.up.fe.labtablet.fragments.ListFavoritesFragment;
 import pt.up.fe.labtablet.fragments.ListFormFragment;
 import pt.up.fe.labtablet.fragments.NewFavoriteBaseFragment;
-import pt.up.fe.labtablet.fragments.SearchFragment;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.NavDrawerItem;
 import pt.up.fe.labtablet.utils.Utils;
@@ -88,14 +87,13 @@ public class MainActivity extends Activity {
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
         navDrawerItems = new ArrayList<>();
 
-        //HOME, SEARCH, NEW PROJECT ,MY FAVORITES, UPDATES, CONFIGURATIONS
+        //HOME, NEW PROJECT ,MY FAVORITES, UPDATES, CONFIGURATIONS
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(6, -1)));
         navMenuIcons.recycle();
 
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
@@ -183,26 +181,22 @@ public class MainActivity extends Activity {
                 tag = "HOME";
                 break;
             case 1:
-                fragment = new SearchFragment();
-                tag = "SEARCH";
-                break;
-            case 2:
                 fragment = new NewFavoriteBaseFragment();
                 tag = "NEWFAV";
                 break;
-            case 3:
+            case 2:
                 fragment = new ListFavoritesFragment();
                 tag = "LISTFAV";
                 break;
-            case 4:
+            case 3:
                 fragment = new ListFormFragment();
                 tag = "LISTFORM";
                 break;
-            case 5:
+            case 4:
                 fragment = new ListChangelogFragment();
                 tag = "LOG";
                 break;
-            case 6:
+            case 5:
                 fragment = new ConfigurationFragment();
                 tag = "CONF";
                 break;
