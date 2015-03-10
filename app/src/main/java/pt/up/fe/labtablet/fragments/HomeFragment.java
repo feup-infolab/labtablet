@@ -168,8 +168,6 @@ public class HomeFragment extends Fragment {
         btNewProject.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                generateDummyData();
-                Toast.makeText(getActivity(), "Exported to device root", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -223,58 +221,7 @@ public class HomeFragment extends Fragment {
             fw.close();
 
         } catch (Exception e) {
-            // what a terrible failure...
-            Log.wtf(getClass().getName(), e.toString());
+            Log.e(getClass().getName(), e.toString());
         }
-    }
-
-
-    private void generateDummyData() {
-        Random rand = new Random();
-
-        ArrayList<Descriptor> baseDescriptors =
-                FavoriteMgr.getBaseDescriptors(getActivity());
-
-        for (int i = 0; i < 10; ++i) {
-            RandomHandler rh = new RandomHandler(rand.nextInt(30));
-            FavoriteItem item = new FavoriteItem(rh.nextString());
-            ArrayList<Descriptor> itemMetadata = new ArrayList<>();
-
-            for (int u = 0; u < 25; ++u) {
-                int randomNum = rand.nextInt((baseDescriptors.size()));
-                Descriptor desc = baseDescriptors.get(randomNum);
-                desc.setValue(rh.nextString());
-                itemMetadata.add(desc);
-            }
-
-            item.setMetadataItems(itemMetadata);
-            final File favoriteFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + "/" + getResources().getString(R.string.app_name) + "/"
-                    + item.getTitle());
-
-            if (!favoriteFolder.exists()) {
-                Log.i("Make dir", "" + favoriteFolder.mkdir());
-                getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(favoriteFolder)));
-            }
-            FavoriteMgr.registerFavorite(getActivity(), item);
-        }
-
-        Toast.makeText(getActivity(), "Dummy favorites generated successfully", Toast.LENGTH_SHORT).show();
-
-        //Generate dummy forms
-        ArrayList<Form> forms  = new ArrayList<>();
-        for (int i = 0; i < 10; ++i) {
-            RandomHandler rh = new RandomHandler(rand.nextInt(30));
-            Form f = new Form(rh.nextString(), "");
-            f.setDescription(rh.nextString());
-
-            for (int u = 0; u < 25; ++u) {
-                FormQuestion fq = new FormQuestion(FormEnumType.FREE_TEXT, rh.nextString(), new ArrayList<String>());
-                fq.setDuration(rand.nextInt(15));
-                f.addQuestion(fq);
-            }
-            forms.add(f);
-        }
-        FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
     }
 }

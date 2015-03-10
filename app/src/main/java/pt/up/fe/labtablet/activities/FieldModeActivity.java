@@ -292,46 +292,61 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         bt_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar cal = Calendar.getInstance();
-                photo_filename = cal.getTimeInMillis() + ".jpg";
-                File file = new File(path, photo_filename);
-                if (!file.exists()) {
-                    try {
-                        if (!file.createNewFile()) {
-                            ChangelogItem item = new ChangelogItem();
-                            item.setMessage("FieldMode" + "Couldn't create file " + file.getAbsolutePath());
-                            item.setTitle(getResources().getString(R.string.developer_error));
-                            item.setDate(Utils.getDate());
-                            ChangelogManager.addLog(item, FieldModeActivity.this);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
 
-                    }
-                } else {
-                    if (!file.delete()) {
-                        ChangelogItem item = new ChangelogItem();
-                        item.setMessage("FieldMode" + "Failed to delete file " + file.getAbsolutePath());
-                        item.setTitle(getResources().getString(R.string.developer_error));
-                        item.setDate(Utils.getDate());
-                        ChangelogManager.addLog(item, FieldModeActivity.this);
-                    }
-                    try {
-                        if (!file.createNewFile()) {
-                            ChangelogItem item = new ChangelogItem();
-                            item.setMessage("FieldMode" + "Failed to create file " + file.getAbsolutePath());
-                            item.setTitle(getResources().getString(R.string.developer_error));
-                            item.setDate(Utils.getDate());
-                            ChangelogManager.addLog(item, FieldModeActivity.this);
+                CharSequence options[] = new CharSequence[] {"Photo", "Video"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(FieldModeActivity.this);
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // the user clicked on colors[which]
+                        if (which == 0) {
+                            Calendar cal = Calendar.getInstance();
+                            photo_filename = cal.getTimeInMillis() + ".jpg";
+                            File file = new File(path, photo_filename);
+                            if (!file.exists()) {
+                                try {
+                                    if (!file.createNewFile()) {
+                                        ChangelogItem item = new ChangelogItem();
+                                        item.setMessage("FieldMode" + "Couldn't create file " + file.getAbsolutePath());
+                                        item.setTitle(getResources().getString(R.string.developer_error));
+                                        item.setDate(Utils.getDate());
+                                        ChangelogManager.addLog(item, FieldModeActivity.this);
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                if (!file.delete()) {
+                                    ChangelogItem item = new ChangelogItem();
+                                    item.setMessage("FieldMode" + "Failed to delete file " + file.getAbsolutePath());
+                                    item.setTitle(getResources().getString(R.string.developer_error));
+                                    item.setDate(Utils.getDate());
+                                    ChangelogManager.addLog(item, FieldModeActivity.this);
+                                }
+                                try {
+                                    if (!file.createNewFile()) {
+                                        ChangelogItem item = new ChangelogItem();
+                                        item.setMessage("FieldMode" + "Failed to create file " + file.getAbsolutePath());
+                                        item.setTitle(getResources().getString(R.string.developer_error));
+                                        item.setDate(Utils.getDate());
+                                        ChangelogManager.addLog(item, FieldModeActivity.this);
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            capturedImageUri = Uri.fromFile(file);
+                            Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                            i.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
+                            startActivityForResult(i, Utils.CAMERA_INTENT_REQUEST);
+                        } else if (which == 1) {
+                            //TODO video inten
+                            dispatchTakeVideoIntent();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                }
-                capturedImageUri = Uri.fromFile(file);
-                Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                i.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
-                startActivityForResult(i, Utils.CAMERA_INTENT_REQUEST);
+                });
+                builder.show();
             }
         });
 
@@ -553,6 +568,14 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 FavoriteMgr.updateFavoriteEntry(
                         currentFavoriteItem.getTitle(), currentFavoriteItem, this);
                 break;
+            case Utils.VIDEO_CAPTURE_REQUEST:
+                if (!data.getExtras().containsKey("content")) {
+                    Toast.makeText(FieldModeActivity.this, "Unable to extract video, please import it manually from the folder\"CAMERA\" on your device", Toast.LENGTH_LONG).show();
+                } else {
+                    String uri = data.getStringExtra("content");
+                    Log.e("uri", uri);
+                }
+                break;
         }
     }
 
@@ -741,5 +764,19 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         }
     }
 
+    //Launch intent to record video
+    private void dispatchTakeVideoIntent() {
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 
+        String name = "" + new Date().getTime();
+        final String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                "/" + getResources().getString(R.string.app_name) +
+                "/" + favorite_name + "/meta/" + name;
+
+        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, path);
+
+        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takeVideoIntent, Utils.VIDEO_CAPTURE_REQUEST);
+        }
+    }
 }

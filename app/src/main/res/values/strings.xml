@@ -121,7 +121,7 @@
     <string name="temp_saved">Temperature saved</string>
     <string name="mag_saved">Magnetic field saved</string>
     <string name="lum_saved">Luminosity saved</string>
-    <string name="photo">Photo</string>
+    <string name="photo">Camera</string>
     <string name="sketch">Sketch</string>
     <string name="note">Note</string>
     <string name="position">Position</string>

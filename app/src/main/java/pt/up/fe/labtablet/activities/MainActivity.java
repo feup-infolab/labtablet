@@ -207,12 +207,18 @@ public class MainActivity extends Activity {
         if (fragment != null) {
             //the favorite creation view should never be added to the back stack
 
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            ft.replace(R.id.frame_container, fragment, tag);
+            ft.commit();
+
+            /*
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.frame_container, fragment, tag)
                     .addToBackStack(tag)
                     .commit();
-
+                    */
             // remove selected item and title, then close the drawer
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
@@ -281,28 +287,14 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-
-        Fragment displayedFragment = getFragmentManager().findFragmentByTag("HOME");
-
-        if (displayedFragment.isVisible()) {
-            new AlertDialog.Builder(this)
-                    .setIcon(R.drawable.ic_warning)
-                    .setTitle(R.string.exit)
-                    .setMessage(R.string.really_exit)
-                    .setPositiveButton(R.string.form_ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
-        } else {
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
-            transaction.replace(R.id.frame_container, displayedFragment);
-            transaction.addToBackStack("HOME");
-            transaction.commit();
+        try {
+            if (!mDrawerLayout.isDrawerOpen(mDrawerList)) {
+                mDrawerLayout.openDrawer(mDrawerList);
+            } else {
+                super.onBackPressed();
+            }
+        } catch (Exception e) {
+            super.onBackPressed();
         }
     }
 

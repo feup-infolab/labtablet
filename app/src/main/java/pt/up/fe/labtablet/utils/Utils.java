@@ -100,6 +100,8 @@ public class Utils {
     public static final int SUBMISSION_VALIDATION = 7;
     //Pick a file from the storage
     public static final int PICK_FILE_INTENT = 8;
+    //Record a video
+    public static final int VIDEO_CAPTURE_REQUEST = 10;
 
 
     public static String getDate() {
