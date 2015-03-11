@@ -103,6 +103,8 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     private ProgressBar pb_update;
     private ProgressBar pb_location;
 
+    private boolean formCollected;
+
     private ArrayList<Descriptor> gatheredMetadata;
 
     @Override
@@ -320,6 +322,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         bt_launch_form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                formCollected = true;
                 final ArrayList<Form> forms = FormMgr.getCurrentBaseForms(FieldModeActivity.this);
                 final CharSequence values[] = new CharSequence[forms.size()];
                 for (int i = 0; i < forms.size(); ++i) {
@@ -573,7 +576,8 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             return super.onOptionsItemSelected(item);
         }
 
-        if (gatheredMetadata.size() == 0) {
+        if (gatheredMetadata.size() == 0
+                && !formCollected) {
             Toast.makeText(this, getResources().getString(R.string.cancelled), Toast.LENGTH_LONG).show();
             finish();
             return super.onOptionsItemSelected(item);

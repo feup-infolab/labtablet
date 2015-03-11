@@ -129,9 +129,8 @@ public class FavoriteDetailsFragment extends Fragment {
         itemList.setItemAnimator(new DefaultItemAnimator());
         itemList.animate();
 
-
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // only for gingerbread and newer versions
+            // only for lollipop and newer versions
             Outline mOutlineCircle;
             int shapeSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
             mOutlineCircle = new Outline();
@@ -457,6 +456,10 @@ public class FavoriteDetailsFragment extends Fragment {
     public boolean onOptionsItemSelected(final MenuItem item) {
 
         if (item.getItemId() == R.id.action_favorite_upload) {
+
+            Toast.makeText(getActivity(), getString(R.string.disabled_action), Toast.LENGTH_SHORT).show();
+            return true;
+            /*
             SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
             if (!settings.contains(Utils.DENDRO_CONFS_ENTRY)) {
                 new AlertDialog.Builder(getActivity())
@@ -475,6 +478,7 @@ public class FavoriteDetailsFragment extends Fragment {
             Intent mIntent = new Intent(getActivity(), SubmissionValidationActivity.class);
             mIntent.putExtra("favorite_name", favoriteName);
             getActivity().startActivityForResult(mIntent, Utils.SUBMISSION_VALIDATION);
+            */
 
         } else if (item.getItemId() == R.id.action_favorite_delete) {
             //remove this favorite

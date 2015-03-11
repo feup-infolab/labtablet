@@ -3,6 +3,7 @@
     tools:context="pt.up.fe.labtablet.activities.ValidateMetadataActivity">
 
     <item
+        android:visible="false"
         android:id="@+id/action_favorite_upload"
         android:icon="@drawable/ab_upload"
         android:orderInCategory="100"

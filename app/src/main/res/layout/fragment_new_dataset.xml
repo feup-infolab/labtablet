@@ -106,6 +106,7 @@
         </GridLayout>
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/rl_proj_name"
             android:layout_width="fill_parent"
             android:layout_below="@id/gv_new_dataset_description"
