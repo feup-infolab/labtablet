@@ -291,8 +291,7 @@ public class NewFavoriteBaseFragment extends Fragment {
         args.putString("favorite_name", newFavorite.getTitle());
         favoriteDetail.setArguments(args);
         transaction.replace(R.id.frame_container, favoriteDetail);
-        transaction.addToBackStack(null);
-        getFragmentManager().popBackStack();
+        //getFragmentManager().popBackStack();
         transaction.commit();
         return true;
     }

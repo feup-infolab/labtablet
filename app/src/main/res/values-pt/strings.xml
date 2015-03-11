@@ -151,7 +151,7 @@
     <string name="from_dendro">Dendro</string>
     <string name="metadata_validation_title">Validar metadados</string>
     <string name="no_dendro_recommended_descriptors">Não existem sugestões disponíveis. Por favor selecione um descritor das restantes categorias.</string>
-    <string name="field_sensors_instructions">Os sensores disponíveis estão listados em baixo. Quando selecionar um sensor, o LabTablet guardará uma amostra do valor para associar posteriormente com um contexto. Para começar, clique no botão no centro para atualizar os valores.</string>
+    <string name="field_sensors_instructions">Os sensores disponíveis estão listados em baixo. Quando selecionar um sensor, o LabTablet guardará uma amostra do valor para associar posteriormente com um contexto.</string>
     <string name="log_added">Adicionado</string>
     <string name="action_clear">Limpar</string>
     <string name="new_favorite_recommendations">Se especificar o nome do projeto, descritores recomendados também serão importados. Esta associação pode ser alterada em qualquer altura.</string>
