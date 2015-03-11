@@ -46,19 +46,22 @@ public class AsyncKMLCreator extends AsyncTask<Object, Integer, String> {
             return null;
         }
 
+        //document - placemark - name[] - description[] - LineString - coordinates
+
         Element placemark = new Element("Placemark");
         Element name = new Element("name");
         name.setText(Utils.getDate());
         placemark.addContent(name);
 
+        Element lineString = new Element("LineString");
+        Element coordinates = new Element("coordinates");
+
         for (Location loc : locations) {
-            Element point = new Element("Point");
-            Element coordinates = new Element("coordinates");
-            coordinates.setText(loc.getLongitude() + "," + loc.getLatitude() + "," + loc.getAltitude());
-            point.addContent(coordinates);
-            placemark.addContent(point);
+            coordinates.addContent(loc.getLongitude() + "," + loc.getLatitude());
         }
 
+        lineString.addContent(coordinates);
+        placemark.addContent(lineString);
         kml.addContent(placemark);
         Log.i("XML", new XMLOutputter().outputString(kml));
 

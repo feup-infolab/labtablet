@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Outline;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -129,22 +130,27 @@ public class FavoriteDetailsFragment extends Fragment {
         itemList.animate();
 
 
-        Outline mOutlineCircle;
-        int shapeSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
-        mOutlineCircle = new Outline();
-        mOutlineCircle.setRoundRect(0, 0, shapeSize, shapeSize, shapeSize / 2);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // only for gingerbread and newer versions
+            Outline mOutlineCircle;
+            int shapeSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
+            mOutlineCircle = new Outline();
+            mOutlineCircle.setRoundRect(0, 0, shapeSize, shapeSize, shapeSize / 2);
 
-        ViewOutlineProvider viewOutlineProvider = new ViewOutlineProvider() {
-            @Override
-            public void getOutline(View view, Outline outline) {
-                // Or read size directly from the view's width/height
-                int size = getResources().getDimensionPixelSize(R.dimen.fab_size);
-                outline.setOval(0, 0, size, size);
-            }
-        };
+            ViewOutlineProvider viewOutlineProvider = new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    // Or read size directly from the view's width/height
+                    int size = getResources().getDimensionPixelSize(R.dimen.fab_size);
+                    outline.setOval(0, 0, size, size);
+                }
+            };
 
-        bt_new_metadata.setOutlineProvider(viewOutlineProvider);
-        bt_new_metadata.setClipToOutline(true);
+            bt_new_metadata.setOutlineProvider(viewOutlineProvider);
+            bt_new_metadata.setClipToOutline(true);
+        }
+
+
 
         itemClickListener = new OnItemClickListener() {
             @Override

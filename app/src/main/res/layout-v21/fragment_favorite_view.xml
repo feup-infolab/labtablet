@@ -42,7 +42,7 @@
 
                 <ImageButton
                     android:id="@+id/favorite_view_edit_title"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    style="@android:style/Widget.Material.Light.Button.Borderless.Small"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:contentDescription="@string/desc_list_item_icon"
@@ -73,8 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/launch_field_mode"
-                style="@android:style/Widget.Holo.Light.Button"
-                android:background="@android:color/transparent"
+                style="@android:style/Widget.Material.Light.Button.Borderless"
                 />
 
         </LinearLayout>
@@ -90,7 +89,7 @@
 
         <Button
             android:id="@+id/tab_metadata"
-            style="@android:style/Widget.Holo.Light.Button"
+            style="@android:style/Widget.Material.Light.Button.Borderless"
             android:drawableStart="@drawable/ab_pulse"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -107,7 +106,7 @@
         <Button
             android:id="@+id/tab_data"
             android:drawableEnd="@drawable/ab_box"
-            style="@android:style/Widget.Holo.Light.Button"
+            style="@android:style/Widget.Material.Light.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
@@ -134,7 +133,7 @@
     <Button
         android:id="@+id/bt_new_metadata"
         style="?android:attr/buttonStyleSmall"
-        android:background="@color/fab_color"
+        android:background="@drawable/ripple"
         android:elevation="3dp"
         android:paddingBottom="16dp"
         android:layout_width="56dp"

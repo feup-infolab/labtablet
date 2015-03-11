@@ -47,7 +47,7 @@
                 android:ellipsize="none"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:text="Form description"
-                android:textColor="@color/cardview_dark_background"
+
                 />
 
             <TextView
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/action_cancel"
 
-                android:background="@color/fab_color"
+                android:background="@drawable/ripple"
                 />
 
             <Button
