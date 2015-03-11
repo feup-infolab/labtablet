@@ -291,10 +291,10 @@ public class MainActivity extends Activity {
             if (!mDrawerLayout.isDrawerOpen(mDrawerList)) {
                 mDrawerLayout.openDrawer(mDrawerList);
             } else {
-                super.onBackPressed();
+                finish();
             }
         } catch (Exception e) {
-            super.onBackPressed();
+            finish();
         }
     }
 
