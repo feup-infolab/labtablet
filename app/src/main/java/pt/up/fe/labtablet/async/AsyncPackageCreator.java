@@ -115,6 +115,20 @@ public class AsyncPackageCreator extends AsyncTask<Object, ProgressUpdateItem, V
             return null;
         }
 
+        //Generate forms and forms' csv file
+        if (item.getLinkedForms().size() > 0) {
+            String progress = mContext.getString(R.string.upload_generating_forms);
+
+            HashMap<String, ArrayList<Form>> linkedForms = item.getLinkedForms();
+            publishProgress(new ProgressUpdateItem(15, progress));
+
+            try {
+                generateCSV(mContext, linkedForms, favoriteName);
+            } catch (IOException e) {
+                error = e;
+                return null;
+            }
+        }
 
 
         publishProgress(new ProgressUpdateItem(40, mContext.getResources().getString(R.string.upload_progress_creating_package)));
