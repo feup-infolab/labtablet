@@ -89,7 +89,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
 
     private String real_magnetic_value;
     private String audio_filename;
-    private String photo_filename;
 
     private boolean recording;
     private Uri capturedImageUri;
@@ -293,57 +292,25 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             @Override
             public void onClick(View view) {
 
-                CharSequence options[] = new CharSequence[] {"Photo", "Video"};
+                CharSequence options[] = new CharSequence[] {getString(R.string.photo), "Video"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(FieldModeActivity.this);
                 builder.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // the user clicked on colors[which]
+                        Calendar cal = Calendar.getInstance();
+                        String mediaFileName = "" + cal.getTimeInMillis();
+
                         if (which == 0) {
-                            Calendar cal = Calendar.getInstance();
-                            photo_filename = cal.getTimeInMillis() + ".jpg";
-                            File file = new File(path, photo_filename);
-                            if (!file.exists()) {
-                                try {
-                                    if (!file.createNewFile()) {
-                                        ChangelogItem item = new ChangelogItem();
-                                        item.setMessage("FieldMode" + "Couldn't create file " + file.getAbsolutePath());
-                                        item.setTitle(getResources().getString(R.string.developer_error));
-                                        item.setDate(Utils.getDate());
-                                        ChangelogManager.addLog(item, FieldModeActivity.this);
-                                    }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                if (!file.delete()) {
-                                    ChangelogItem item = new ChangelogItem();
-                                    item.setMessage("FieldMode" + "Failed to delete file " + file.getAbsolutePath());
-                                    item.setTitle(getResources().getString(R.string.developer_error));
-                                    item.setDate(Utils.getDate());
-                                    ChangelogManager.addLog(item, FieldModeActivity.this);
-                                }
-                                try {
-                                    if (!file.createNewFile()) {
-                                        ChangelogItem item = new ChangelogItem();
-                                        item.setMessage("FieldMode" + "Failed to create file " + file.getAbsolutePath());
-                                        item.setTitle(getResources().getString(R.string.developer_error));
-                                        item.setDate(Utils.getDate());
-                                        ChangelogManager.addLog(item, FieldModeActivity.this);
-                                    }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            capturedImageUri = Uri.fromFile(file);
-                            Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                            i.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
-                            startActivityForResult(i, Utils.CAMERA_INTENT_REQUEST);
+                            mediaFileName += ".jpg";
+                            dispatchCaptureMediaIntent(Utils.CAMERA_INTENT_REQUEST, mediaFileName);
                         } else if (which == 1) {
-                            //TODO video inten
-                            dispatchTakeVideoIntent();
+                            mediaFileName += ".mp4";
+                            dispatchCaptureMediaIntent(Utils.VIDEO_CAPTURE_REQUEST, mediaFileName);
                         }
+
+
                     }
                 });
                 builder.show();
@@ -512,12 +479,17 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
 
+        if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(FieldModeActivity.this, getString(R.string.cancelled), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         //get the picture filename and update records
         switch (requestCode) {
             case Utils.SKETCH_INTENT_REQUEST:
-                if (resultCode != RESULT_OK)
+                if (resultCode != RESULT_OK) {
                     return;
-
+                }
                 String filePath = data.getStringExtra("result");
                 Descriptor desc = new Descriptor();
                 desc.setValue(Uri.parse(filePath).getLastPathSegment());
@@ -551,6 +523,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 if (data == null) {
                     return;
                 }
+
                 if (!data.getExtras().containsKey("form")) {
                     ChangelogItem item = new ChangelogItem();
                     item.setMessage("No form was received after selection.");
@@ -569,12 +542,17 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         currentFavoriteItem.getTitle(), currentFavoriteItem, this);
                 break;
             case Utils.VIDEO_CAPTURE_REQUEST:
-                if (!data.getExtras().containsKey("content")) {
-                    Toast.makeText(FieldModeActivity.this, "Unable to extract video, please import it manually from the folder\"CAMERA\" on your device", Toast.LENGTH_LONG).show();
-                } else {
-                    String uri = data.getStringExtra("content");
-                    Log.e("uri", uri);
+                if (data == null || data.getData() == null) {
+                    Toast.makeText(FieldModeActivity.this, getString(R.string.cancelled), Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+                Descriptor desc3 = new Descriptor();
+                desc3.setFilePath(data.getDataString());
+                desc3.setValue(data.getData().getLastPathSegment());
+                desc3.setTag(Utils.PICTURE_TAGS);
+                gatheredMetadata.add(desc3);
+                Log.e("uri", data.getDataString());
                 break;
         }
     }
@@ -592,6 +570,12 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         }
         if (recording) {
             Toast.makeText(this, getResources().getString(R.string.cant_end_is_recording), Toast.LENGTH_LONG).show();
+            return super.onOptionsItemSelected(item);
+        }
+
+        if (gatheredMetadata.size() == 0) {
+            Toast.makeText(this, getResources().getString(R.string.cancelled), Toast.LENGTH_LONG).show();
+            finish();
             return super.onOptionsItemSelected(item);
         }
 
@@ -765,18 +749,61 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     }
 
     //Launch intent to record video
-    private void dispatchTakeVideoIntent() {
-        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+    private void dispatchCaptureMediaIntent(int which, String mediaPath) {
 
-        String name = "" + new Date().getTime();
-        final String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                "/" + getResources().getString(R.string.app_name) +
-                "/" + favorite_name + "/meta/" + name;
+        Intent captureMediaIntent;
+        File file = new File(path, mediaPath);
 
-        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, path);
+        if (file.exists() && !file.delete()) {
+            ChangelogItem item = new ChangelogItem();
+            item.setMessage("FieldMode" + "Failed to delete file " + file.getAbsolutePath());
+            item.setTitle(getResources().getString(R.string.developer_error));
+            item.setDate(Utils.getDate());
+            ChangelogManager.addLog(item, FieldModeActivity.this);
+            Toast.makeText(FieldModeActivity.this, "Check logs", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takeVideoIntent, Utils.VIDEO_CAPTURE_REQUEST);
+        //File either doesn't exist or was deleted - create a new one
+        try {
+            if (!file.createNewFile()) {
+                ChangelogItem item = new ChangelogItem();
+                item.setMessage("FieldMode" + "Couldn't create file " + file.getAbsolutePath());
+                item.setTitle(getResources().getString(R.string.developer_error));
+                item.setDate(Utils.getDate());
+                ChangelogManager.addLog(item, FieldModeActivity.this);
+                Toast.makeText(FieldModeActivity.this, "Check logs", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } catch (IOException e) {
+            Log.e("FIELD_MODE", e.toString());
+            return;
+        }
+
+        if (which == Utils.CAMERA_INTENT_REQUEST) {
+            capturedImageUri = Uri.fromFile(file);
+            captureMediaIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (captureMediaIntent.resolveActivity(getPackageManager()) == null) {
+                Toast.makeText(FieldModeActivity.this,
+                        "There are no applications to handle this action, please install one from the Play Store",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            captureMediaIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+            startActivityForResult(captureMediaIntent, Utils.CAMERA_INTENT_REQUEST);
+
+        } else if (which == Utils.VIDEO_CAPTURE_REQUEST) {
+            captureMediaIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            if (captureMediaIntent.resolveActivity(getPackageManager()) == null) {
+                Toast.makeText(FieldModeActivity.this,
+                        "There are no applications to handle this action, please install one from the Play Store",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            captureMediaIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+            startActivityForResult(captureMediaIntent, Utils.VIDEO_CAPTURE_REQUEST);
         }
     }
 }

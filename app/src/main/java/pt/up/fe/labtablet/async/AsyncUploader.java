@@ -291,18 +291,13 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                     error = new Exception(metadataResponse.result + ": " + metadataResponse.message);
                     return null;
                 }
-
-
             } catch (Exception e) {
                 error = e;
                 return null;
             }
-
-
         }
 
         publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
-
         return null;
     }
 
