@@ -210,16 +210,22 @@ public class ValidateMetadataActivity extends Activity implements OnItemClickLis
 
     @Override
     public void onItemClick(View view, int position) {
+        return;
+        /*
         Intent intent = new Intent(this, ItemPreviewActivity.class);
         intent.putExtra("metadata_item",
                 new Gson().toJson(unvalidatedQueue.get(position)));
 
         intent.putExtra("position", position);
         startActivityForResult(intent, Utils.ITEM_PREVIEW);
+        */
     }
+
 
     @Override
     public void onItemLongClick(View view, final int position) {
+        return;
+        /*
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.form_really_delete));
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -247,5 +253,7 @@ public class ValidateMetadataActivity extends Activity implements OnItemClickLis
 
         builder.setCancelable(true);
         builder.show();
+        */
     }
+
 }

@@ -457,9 +457,7 @@ public class FavoriteDetailsFragment extends Fragment {
 
         if (item.getItemId() == R.id.action_favorite_upload) {
 
-            Toast.makeText(getActivity(), getString(R.string.disabled_action), Toast.LENGTH_SHORT).show();
-            return true;
-            /*
+
             SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
             if (!settings.contains(Utils.DENDRO_CONFS_ENTRY)) {
                 new AlertDialog.Builder(getActivity())
@@ -478,7 +476,6 @@ public class FavoriteDetailsFragment extends Fragment {
             Intent mIntent = new Intent(getActivity(), SubmissionValidationActivity.class);
             mIntent.putExtra("favorite_name", favoriteName);
             getActivity().startActivityForResult(mIntent, Utils.SUBMISSION_VALIDATION);
-            */
 
         } else if (item.getItemId() == R.id.action_favorite_delete) {
             //remove this favorite

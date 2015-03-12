@@ -8,6 +8,7 @@
         android:icon="@drawable/ab_cross"
         />
     <item android:id="@+id/action_metadata_save"
+        android:visible="false"
         android:title="@string/action_save"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
