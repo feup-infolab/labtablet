@@ -1,0 +1,138 @@
+[
+   {
+      "description":"The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.",
+      "descriptor":"http://purl.org/dc/terms/coverage",
+      "name":"Coverage",
+      "tag":"position",
+      "value":"",
+      "allowed_values":["Porto", "Lisboa", "Barcelos", "Chaves", "Lagos", "Sagres", "Funchal", "Porto Santo", "Berlim", "Paris", "Karlsruhe", "London", "Madrid", "Rome", "Milan", "Florence"]
+   },
+   {
+      "description":"An entity responsible for making contributions to the resource.",
+      "descriptor":"http://purl.org/dc/terms/contributor",
+      "name":"Contributor",
+      "tag":"author",
+      "value":"",
+      "allowed_values":[]
+   },
+   {
+      "description":"An entity primarily responsible for making the resource.",
+      "descriptor":"http://purl.org/dc/terms/creator",
+      "name":"Creator",
+      "tag":"author",
+      "value":"",
+      "allowed_values":[]
+   },
+   {
+      "description":"A point or period of time associated with an event in the lifecycle of the resource.",
+      "descriptor":"http://purl.org/dc/terms/date",
+      "name":"Date",
+      "tag":"date",
+      "value":"",
+      "allowed_values":[]
+   },
+   {
+      "description":"An account of the resource.",
+      "descriptor":"http://purl.org/dc/terms/description",
+      "name":"Description",
+      "tag":"description",
+      "value":"",
+      "allowed_values":[]
+   },
+   {
+      "description":"A language of the resource.",
+      "descriptor":"http://purl.org/dc/terms/language",
+      "name":"Language",
+      "tag":"",
+      "value":"",
+      "allowed_values":[]
+   },
+   {
+      "description":"A related resource from which the described resource is derived.",
+      "descriptor":"http://purl.org/dc/terms/source",
+      "name":"Source",
+      "tag":"",
+      "value":"",
+      "allowed_values":[]
+   },
+   {
+      "description":"A name given to the resource.",
+      "descriptor":"http://purl.org/dc/terms/title",
+      "name":"Title",
+      "tag":"title",
+      "value":"",
+      "allowed_values":[]
+   },
+   {
+      "description":"Typically, the subject will be represented using keywords, key phrases, or classification codes.",
+      "descriptor":"http://purl.org/dc/terms/subject",
+      "name":"Subject",
+      "tag":"text",
+      "value":"",
+      "allowed_values":["Chemistry", "Geology", "Biology", "Engineering", "Bioengineering", "Hydrogenated fats", "Economic crisis", "Portuguese economy", "21st Century", "007 Classified Materials"]
+   },
+   {
+      "description":"An entity responsible for making the resource available.",
+      "descriptor":"http://purl.org/dc/terms/publisher",
+      "name":"Publisher",
+      "tag":"text",
+      "value":"",
+      "allowed_values":["Springer", "IEEE Computer Society", "IEEE Transports Society", "FEUP", "FBAUP", "Porto Editora"]
+   },
+   {
+      "description":"Generic descriptor that has no mean whatsoever and should only be used as a temporary measure.",
+      "descriptor":"http://dendro.fe.up.pt/ontology/0.1/generic",
+      "name":"Generic",
+      "tag":"generic",
+      "value":"",
+      "allowed_values":[]
+   },
+   {
+      "description":"A resource consisting primarily of words for reading.",
+      "descriptor":"http://www.isotc211.org/2005/gmd/language",
+      "name":"Language",
+      "tag":"text",
+      "value":"",
+      "allowed_values":["pt-PT", "pt-BR", "en-US", "en-UK", "fr", "es", "es-419", "de-DE", "JP"]
+   },
+   {
+      "description":"A language of the resource. Recommended best practice is to use a controlled vocabulary such as RFC 4646 [RFC4646].",
+      "descriptor":"http://purl.org/dc/terms/language",
+      "name":"Language",
+      "tag":"text",
+      "value":"",
+      "allowed_values":["pt-PT", "pt-BR", "en-US", "en-UK", "fr", "es", "es-419", "de-DE", "JP"]
+   },
+   {
+      "description":"Image resources",
+      "descriptor":"http://xmlns.com/foaf/0.1/depiction",
+      "name":"Depiction",
+      "tag":"image",
+      "value":"",
+      "allowed_values":[]
+   },
+   {
+      "description":"Date of creation of the resource.",
+      "descriptor":"http://purl.org/dc/terms/created",
+      "name":"Created",
+      "tag":"created",
+      "value":"",
+      "allowed_values":[]
+   },
+   {
+      "description":"A temperature measurement.",
+      "descriptor":"http://dendro.fe.up.pt/ontology/dcb/temperature",
+      "name":"Temperature",
+      "tag":"temperature",
+      "value":"",
+      "allowed_values":["C", "K", "F"]
+   },
+   {
+      "description":"An INSPIRE thematic category from the controlled list.",
+      "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#keywordINSPIRE",
+      "name":"Keyword INSPIRE",
+      "tag":"",
+      "value":"",
+      "allowed_values":["INSPIRE", "DOUBLE INSPIRE", "PARALLEL INSPIRE", "CROSSED INSPIRE"]
+   }
+]

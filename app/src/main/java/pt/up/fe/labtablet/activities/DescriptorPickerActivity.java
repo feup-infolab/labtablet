@@ -87,7 +87,7 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
                     // Specify a SpinnerAdapter to populate the dropdown list.
                     new ArrayAdapter<>(
                             actionBar.getThemedContext(),
-                            android.R.layout.simple_list_item_1,
+                            R.layout.solver_spinner_item,
                             android.R.id.text1,
                             new String[]{
                                     getResources().getString(R.string.recommended),

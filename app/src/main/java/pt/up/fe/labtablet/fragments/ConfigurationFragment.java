@@ -20,6 +20,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
@@ -34,7 +38,7 @@ import pt.up.fe.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
 
-public class ConfigurationFragment extends Fragment {
+public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<ArrayList<Descriptor>> {
 
     private ProgressDialog progress;
     private TextView tv_kml_descriptor;
@@ -60,7 +64,7 @@ public class ConfigurationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_configuration, container, false);
 
         progress = new ProgressDialog(getActivity());
@@ -105,6 +109,20 @@ public class ConfigurationFragment extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("file/*");
                 startActivityForResult(intent, Utils.PROFILE_PICK);
+            }
+        });
+
+        bt_file.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                try {
+                    InputStream stream = getActivity().getAssets().open("base_profile.json");
+                    new AsyncProfileLoader(ConfigurationFragment.this).execute(stream);
+                } catch (IOException e) {
+                    Log.e("IO", "READING ASSETS " +  e.toString());
+                }
+                return true;
             }
         });
 
@@ -300,38 +318,14 @@ public class ConfigurationFragment extends Fragment {
             progress.setMessage("Please wait while the profile is loaded.");
             progress.show();
 
-            new AsyncProfileLoader(new AsyncTaskHandler<ArrayList<Descriptor>>() {
-                @Override
-                public void onSuccess(ArrayList<Descriptor> result) {
-                    //save default descriptors to the preferences
-                    SharedPreferences.Editor editor = settings.edit();
+            try {
+                File profile = new File(data.getData().getPath());
+                new AsyncProfileLoader(ConfigurationFragment.this)
+                        .execute(new FileInputStream(profile));
+            } catch (FileNotFoundException e) {
+                Log.e("IO", "FILE NOT FOUND " + e.toString());
+            }
 
-                    if(settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
-                        editor.remove(Utils.BASE_DESCRIPTORS_ENTRY);
-                    }
-                    editor.putString(Utils.BASE_DESCRIPTORS_ENTRY, new Gson().toJson(
-                            result, Utils.ARRAY_DESCRIPTORS));
-                    editor.apply();
-                    bt_file.setText(getResources().getString(R.string.edit));
-                    progress.dismiss();
-
-                    ChangelogItem log = new ChangelogItem();
-                    log.setMessage("Application profile");
-                    log.setDate(Utils.getDate());
-                    log.setTitle(getResources().getString(R.string.log_loaded));
-                    ChangelogManager.addLog(log, getActivity());
-                    Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onFailure(Exception error) {
-                    Toast.makeText(getActivity(), "" + error.getMessage(), Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onProgressUpdate(int value) {
-                }
-            }).execute(new File(data.getData().getPath()));
         }
     }
 
@@ -388,5 +382,35 @@ public class ConfigurationFragment extends Fragment {
     }
 
 
+    @Override
+    public void onSuccess(ArrayList<Descriptor> result) {
+        //save default descriptors to the preferences
+        SharedPreferences.Editor editor = settings.edit();
 
+        if(settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
+            editor.remove(Utils.BASE_DESCRIPTORS_ENTRY);
+        }
+        editor.putString(Utils.BASE_DESCRIPTORS_ENTRY, new Gson().toJson(
+                result, Utils.ARRAY_DESCRIPTORS));
+        editor.apply();
+        bt_file.setText(getResources().getString(R.string.edit));
+        progress.dismiss();
+
+        ChangelogItem log = new ChangelogItem();
+        log.setMessage("Application profile");
+        log.setDate(Utils.getDate());
+        log.setTitle(getResources().getString(R.string.log_loaded));
+        ChangelogManager.addLog(log, getActivity());
+        Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFailure(Exception error) {
+        Toast.makeText(getActivity(), "" + error.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onProgressUpdate(int value) {
+
+    }
 }

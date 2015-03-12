@@ -34,6 +34,7 @@
                 android:layout_weight="0.98"
                 android:layout_height="wrap_content"
                 android:ellipsize="none"
+                android:textColor="@color/text_blue_grey_darker"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:text="Is this a question? because i really want to know if this is reaaaaally reaaaaaaly a question. Maybe mr saxobeat can help with this discovery."
                 />

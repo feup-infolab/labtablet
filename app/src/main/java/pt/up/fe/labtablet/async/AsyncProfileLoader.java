@@ -7,13 +7,14 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
 
-public class AsyncProfileLoader extends AsyncTask<File, Integer, ArrayList<Descriptor>> {
+public class AsyncProfileLoader extends AsyncTask<InputStream, Integer, ArrayList<Descriptor>> {
     //input, remove, output
     private final AsyncTaskHandler<ArrayList<Descriptor>> mHandler;
     private Exception error;
@@ -23,14 +24,13 @@ public class AsyncProfileLoader extends AsyncTask<File, Integer, ArrayList<Descr
     }
 
     @Override
-    protected ArrayList<Descriptor> doInBackground(File... params) {
+    protected ArrayList<Descriptor> doInBackground(InputStream... params) {
 
         publishProgress(1);
         ArrayList<Descriptor> mResult = new ArrayList<>();
 
         try {
-            File inputFile = params[0];
-            FileInputStream input = new FileInputStream(inputFile);
+            InputStream input = params[0];
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
             StringBuilder sb = new StringBuilder();

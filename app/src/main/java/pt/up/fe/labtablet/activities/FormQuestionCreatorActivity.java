@@ -85,9 +85,9 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 Spinner questionTypeSelection = (Spinner) findViewById(R.id.question_type_spinner);
 
                 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(FormQuestionCreatorActivity.this,
-                        R.array.question_types, android.R.layout.simple_spinner_item);
+                        R.array.question_types, R.layout.solver_spinner_item);
 
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                adapter.setDropDownViewResource(R.layout.solver_spinner_item);
 
                 // Apply the adapter to the spinner
                 questionTypeSelection.setAdapter(adapter);

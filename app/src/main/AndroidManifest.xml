@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_LOGS"/>
 
     <application
         android:allowBackup="true"
@@ -16,6 +17,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppBaseTheme"
         android:name="pt.up.fe.labtablet.application.LabTablet"
+        android:versionCode="2"
+        android:versionName="Ricardo"
         >
         <activity
             android:name="pt.up.fe.labtablet.activities.MainActivity"
