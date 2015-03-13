@@ -4,82 +4,86 @@
     android:layout_height="match_parent"
     tools:context="pt.up.fe.labtablet.fragments.SubmissionStep4">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/card_view"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        card_view:cardElevation="6sp"
-        android:layout_margin="15dp"
-        >
-        <LinearLayout
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/card_view"
             android:layout_width="fill_parent"
-            android:orientation="vertical"
             android:layout_height="wrap_content"
+            card_view:cardElevation="6sp"
+            android:layout_margin="15dp"
             >
-
-            <TextView
-                android:id="@+id/submission_loading_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:text="@string/submission_loading"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <ProgressBar
-                android:id="@+id/pb_submission_loading"
-                style="@android:style/Widget.Material.ProgressBar.Horizontal"
+            <LinearLayout
                 android:layout_width="fill_parent"
+                android:orientation="vertical"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:max="100"
-                android:visibility="visible" />
+                >
 
-            <TextView
-                android:id="@+id/submission_status_message"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:gravity="center"
-                android:text="@string/wait"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/light_gray" />
+                <TextView
+                    android:id="@+id/submission_loading_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="@string/submission_loading"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
-                android:text="@string/submission_effect"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <ProgressBar
+                    android:id="@+id/pb_submission_loading"
+                    style="@android:style/Widget.Material.ProgressBar.Horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:max="100"
+                    android:visibility="visible" />
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/second_grey"
-                />
+                <TextView
+                    android:id="@+id/submission_status_message"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center"
+                    android:text="@string/wait"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/light_gray" />
 
-            <Button
-                android:id="@+id/submission_start_upload"
-                style="@android:style/Widget.Holo.Button.Borderless"
-                android:textColor="@android:color/black"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawableEnd="@drawable/ab_upload"
-                android:text="@string/start_process"
-                android:textSize="20sp"
-                />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="@string/submission_effect"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/second_grey"
+                    />
+
+                <Button
+                    android:id="@+id/submission_start_upload"
+                    style="@android:style/Widget.Holo.Button.Borderless"
+                    android:textColor="@android:color/black"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableRight="@drawable/ab_upload"
+                    android:drawableEnd="@drawable/ab_upload"
+                    android:text="@string/start_process"
+                    android:textSize="20sp"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </ScrollView>
 
 </FrameLayout>

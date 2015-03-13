@@ -136,5 +136,4 @@ public class SubmissionStep4 extends Fragment {
         savedInstanceState.putString("project_name", getArguments().getString("project_name"));
         savedInstanceState.putString("dest_uri", getArguments().getString("dest_uri"));
     }
-
 }

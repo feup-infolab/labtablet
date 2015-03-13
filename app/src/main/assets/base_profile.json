@@ -40,14 +40,6 @@
       "allowed_values":[]
    },
    {
-      "description":"A language of the resource.",
-      "descriptor":"http://purl.org/dc/terms/language",
-      "name":"Language",
-      "tag":"",
-      "value":"",
-      "allowed_values":[]
-   },
-   {
       "description":"A related resource from which the described resource is derived.",
       "descriptor":"http://purl.org/dc/terms/source",
       "name":"Source",
@@ -69,7 +61,7 @@
       "name":"Subject",
       "tag":"text",
       "value":"",
-      "allowed_values":["Chemistry", "Geology", "Biology", "Engineering", "Bioengineering", "Hydrogenated fats", "Economic crisis", "Portuguese economy", "21st Century", "007 Classified Materials"]
+      "allowed_values":["Psychology", "Sociology", "Chemistry", "Geology", "Biology", "Engineering", "Bioengineering", "Hydrogenated fats", "Economic crisis", "Portuguese economy", "21st Century", "007 Classified Materials"]
    },
    {
       "description":"An entity responsible for making the resource available.",
@@ -86,14 +78,6 @@
       "tag":"generic",
       "value":"",
       "allowed_values":[]
-   },
-   {
-      "description":"A resource consisting primarily of words for reading.",
-      "descriptor":"http://www.isotc211.org/2005/gmd/language",
-      "name":"Language",
-      "tag":"text",
-      "value":"",
-      "allowed_values":["pt-PT", "pt-BR", "en-US", "en-UK", "fr", "es", "es-419", "de-DE", "JP"]
    },
    {
       "description":"A language of the resource. Recommended best practice is to use a controlled vocabulary such as RFC 4646 [RFC4646].",
@@ -117,7 +101,7 @@
       "name":"Created",
       "tag":"created",
       "value":"",
-      "allowed_values":[]
+      "allowed_values":["dd/mm/aaaa"]
    },
    {
       "description":"A temperature measurement.",
@@ -126,13 +110,5 @@
       "tag":"temperature",
       "value":"",
       "allowed_values":["C", "K", "F"]
-   },
-   {
-      "description":"An INSPIRE thematic category from the controlled list.",
-      "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#keywordINSPIRE",
-      "name":"Keyword INSPIRE",
-      "tag":"",
-      "value":"",
-      "allowed_values":["INSPIRE", "DOUBLE INSPIRE", "PARALLEL INSPIRE", "CROSSED INSPIRE"]
    }
 ]

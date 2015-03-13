@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:drawableEnd="@android:drawable/ic_menu_mapmode"
                 android:text="@string/launch_field_mode"
-                style="@android:style/Widget.Material.Light.Button.Borderless"
+                style="@android:style/Widget.Holo.Light.Button"
                 />
 
         </LinearLayout>
@@ -98,22 +98,6 @@
 
 
 
-    <Button
-        android:id="@+id/bt_new_metadata"
-        style="?android:attr/buttonStyleSmall"
-        android:paddingBottom="16dp"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:fontFamily="sans-serif-light"
-        android:gravity="center"
-        android:text="+"
-        android:textColor="@color/white"
-        android:textSize="40sp"
-        />
 
     <LinearLayout
         android:id="@+id/ll_view_tabs"
@@ -125,8 +109,7 @@
 
         <Button
             android:id="@+id/tab_metadata"
-            style="@android:style/Widget.Material.Light.Button.Borderless"
-            android:drawableStart="@drawable/ab_pulse"
+            style="@android:style/Widget.Holo.Light.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
@@ -141,8 +124,7 @@
 
         <Button
             android:id="@+id/tab_data"
-            android:drawableEnd="@drawable/ab_box"
-            style="@android:style/Widget.Material.Light.Button.Borderless"
+            style="@android:style/Widget.Holo.Light.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
@@ -151,6 +133,24 @@
             android:background="@color/text_blue_grey"
             />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_new_metadata"
+        style="?android:attr/buttonStyleSmall"
+        android:background="@color/fab_color"
+        android:paddingBottom="12dp"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:text="+"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        />
 
 
 </RelativeLayout>
