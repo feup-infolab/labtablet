@@ -138,6 +138,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         currentFavoriteItem = FavoriteMgr.getFavorite(this, favorite_name);
 
 
+
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         if (mBatInfoReceiver != null) {
             registerBatInforReceiver();
@@ -343,7 +344,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 builder.show();
             }
         });
-
     }
 
     private void registerBatInforReceiver() {
@@ -680,9 +680,16 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             mLocationManager =
                     (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+
             mLocationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, 0, 0,
                     mLocationListener);
+
+            if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                Toast.makeText(FieldModeActivity.this, getResources().getString(R.string.location_disabled), Toast.LENGTH_SHORT).show();
+                this.cancel(true);
+                return;
+            }
 
             pb_location.setIndeterminate(true);
             pb_location.setVisibility(View.VISIBLE);
@@ -710,6 +717,9 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
 
         @Override
         protected Void doInBackground(String... params) {
+
+
+
             while (this.latitude == 0.0) {
                 //empty block on purpose
             }

@@ -232,4 +232,5 @@
     <string name="questions">questões</string>
     <string name="tap_to_pick_descriptor">Tap here to choose a descriptor from the available set.</string>
     <string name="disabled_action">Action disabled by developer</string>
+    <string name="location_disabled">O acesso à localização está desativado. POr favor ativar primeiro nas definições do dispositivo.</string>
 </resources>

@@ -20,6 +20,7 @@
                 android:layout_centerVertical="true"
                 android:padding="10dp"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:src="@drawable/ic_pages" />
 
             <TextView
@@ -31,6 +32,7 @@
                 android:singleLine="true"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:layout_toRightOf="@id/folder_item_type"
                 android:layout_toEndOf="@id/folder_item_type"
                 android:text="Favorite name"
                 android:layout_height="wrap_content"
@@ -45,6 +47,7 @@
                 android:padding="2dp"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
+                android:layout_toRightOf="@id/folder_item_type"
                 android:layout_toEndOf="@id/folder_item_type"
                 android:layout_below="@id/folder_item_title"
                 android:textColor="@color/second_grey"
@@ -62,8 +65,10 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/second_grey"
                 android:text="@string/modified"
+                android:layout_marginRight="2dp"
                 android:layout_marginEnd="2dp"
                 android:padding="2dp"
+                android:layout_toRightOf="@id/folder_item_type"
                 android:layout_toEndOf="@id/folder_item_type"
                 />
 
@@ -78,6 +83,7 @@
                 android:gravity="center_vertical"
                 android:text="01-01-2015"
                 android:padding="2dp"
+                android:layout_toRightOf="@id/folder_item_date_desc"
                 android:layout_toEndOf="@id/folder_item_date_desc"
                 />
         </RelativeLayout>

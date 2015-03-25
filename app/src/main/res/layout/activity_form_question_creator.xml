@@ -218,6 +218,7 @@
                 <EditText
                     android:id="@+id/question_et_add_word"
                     android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_width="0dp"
                     android:layout_weight=".7"
                     android:layout_height="wrap_content"
@@ -230,6 +231,7 @@
                     style="@android:style/Holo.ButtonBar.AlertDialog"
                     android:layout_gravity="center"
                     android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="0.1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -309,6 +311,7 @@
                     android:text="@string/no"
                     android:textAllCaps="true"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     />
@@ -326,6 +329,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/yes"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginEnd="10dp"
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     />

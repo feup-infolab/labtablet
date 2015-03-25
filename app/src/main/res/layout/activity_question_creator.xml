@@ -138,6 +138,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="56dp"
         android:layout_height="56dp"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/activity_horizontal_margin"

@@ -46,6 +46,7 @@
             android:gravity="center"
             android:text="WiFi"
             android:layout_marginTop="20dp"
+            android:drawableRight="@drawable/ic_check"
             android:drawableEnd="@drawable/ic_check"/>
 
         <TextView
@@ -57,6 +58,7 @@
             android:gravity="center"
             android:text="Battery"
             android:layout_marginTop="20dp"
+            android:drawableRight="@drawable/ic_check"
             android:drawableEnd="@drawable/ic_check"/>
 
         <TextView
@@ -66,6 +68,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:drawableRight="@drawable/ic_check"
             android:drawableEnd="@drawable/ic_check"
             android:text="@string/metadata_validated"/>
     </RelativeLayout>
@@ -86,7 +89,9 @@
         android:layout_marginTop="30dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:gravity="center"
+        android:drawableLeft="@android:drawable/ic_media_rew"
         android:drawableStart="@android:drawable/ic_media_rew"
         android:text="@string/swipe_to_next"
         android:textColor="@color/second_grey"

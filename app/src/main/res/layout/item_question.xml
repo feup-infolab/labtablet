@@ -16,6 +16,7 @@
             android:id="@+id/ll_question"
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -23,6 +24,7 @@
             <View
                 android:layout_height="fill_parent"
                 android:layout_width="2dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/holo_red_dark"
                 />

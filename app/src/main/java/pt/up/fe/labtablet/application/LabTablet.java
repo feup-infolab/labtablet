@@ -12,7 +12,7 @@ import pt.up.fe.labtablet.R;
 
 @ReportsCrashes(
         formKey = "", // This is required for backward compatibility but not used
-        formUri = "http://paginas.fe.up.pt/~rcamorim/labtablet/acra_dump.php",
+        formUri = "http://paginas.fe.up.pt/~rcamorim/labtablet/acra_dump_v.php?vcode=" + 6,
         mode = ReportingInteractionMode.TOAST,
         deleteOldUnsentReportsOnApplicationStart = false,
         additionalSharedPreferences={"LabTablet"},

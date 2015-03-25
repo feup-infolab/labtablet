@@ -20,7 +20,7 @@ android {
         applicationId "pt.up.fe.labtablet"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 1
+        versionCode 6
         versionName "1.0"
     }
     buildTypes {

@@ -34,7 +34,7 @@
 
                 <ProgressBar
                     android:id="@+id/pb_submission_loading"
-                    style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+                    style="@android:style/Widget.Material.ProgressBar.Horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="50dp"
@@ -77,7 +77,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:drawableRight="@drawable/ab_upload"
                     android:drawableEnd="@drawable/ab_upload"
                     android:text="@string/start_process"
                     android:textSize="20sp"

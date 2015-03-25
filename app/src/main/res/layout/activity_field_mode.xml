@@ -20,6 +20,7 @@
                 android:id="@+id/tv_title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="12dp"
@@ -47,6 +48,7 @@
                     android:id="@+id/bt_camera"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_camera"
                     android:drawableStart="@drawable/ic_camera"
                     android:text="@string/photo"
                     android:layout_margin="1dp"
@@ -63,6 +65,7 @@
                         android:id="@+id/bt_audio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_voice"
                         android:drawableStart="@drawable/ic_voice"
                         android:text="@string/record"
 
@@ -85,6 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
+                    android:drawableLeft="@drawable/ic_photo"
                     android:drawableStart="@drawable/ic_photo"
                     android:text="@string/sketch"
                     />
@@ -94,10 +98,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="1dp"
+                    android:drawableLeft="@drawable/ic_note"
                     android:drawableStart="@drawable/ic_note"
                     android:text="@string/note" />
 
                 <Button
+                    android:drawableLeft="@drawable/ic_file"
                     android:drawableStart="@drawable/ic_file"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -115,6 +121,7 @@
                         android:id="@+id/bt_one_time_position"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_location"
                         android:drawableStart="@drawable/ic_location"
                         android:text="@string/position"
 
@@ -147,6 +154,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="12dp"
@@ -172,6 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginBottom="5dp"
+                android:drawableLeft="@drawable/ic_battery_temp"
                 android:drawableStart="@drawable/ic_battery_temp"
                 android:enabled="false"
                 android:text="@string/battery_temp" />
@@ -183,6 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/bt_temperature_sample"
                 android:layout_marginBottom="5dp"
+                android:drawableLeft="@drawable/ic_luminosity"
                 android:drawableStart="@drawable/ic_luminosity"
                 android:enabled="false"
                 android:text="@string/luminosity" />
@@ -194,6 +204,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/bt_luminosity"
                 android:layout_marginBottom="5dp"
+                android:drawableLeft="@drawable/ic_temperature"
                 android:drawableStart="@drawable/ic_temperature"
                 android:enabled="false"
                 android:text="@string/network_temp" />
@@ -207,6 +218,7 @@
                 android:layout_below="@id/bt_network_temperature_sample"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
+                android:drawableLeft="@drawable/ic_magnetic"
                 android:drawableStart="@drawable/ic_magnetic"
                 android:enabled="false"
                 android:text="@string/magnetic" />
@@ -228,6 +240,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="35dp"
+                android:layout_marginLeft="35dp"
                 android:layout_marginTop="15dp"
                 android:text="@string/continuous_gps" />
 

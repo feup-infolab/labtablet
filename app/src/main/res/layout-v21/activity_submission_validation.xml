@@ -11,7 +11,7 @@
         android:visibility="visible"
         android:progress="50"
         android:max="100"
-        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+        style="@android:style/Widget.Material.ProgressBar.Horizontal"
         android:progressDrawable="@drawable/alternative_progress_bar"
         />
     <android.support.v4.view.ViewPager

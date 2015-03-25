@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -152,6 +153,16 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         tv_mp3_descriptor = (TextView) rootView.findViewById(R.id.mp3_extension_descriptor);
         tv_mp3_descriptor_description = (TextView) rootView.findViewById(R.id.mp3_extension_description);
 
+
+        rootView.findViewById(R.id.bt_feedback).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://docs.google.com/forms/d/1JSUS-yidh6SQUyV4SmubDdPr9WIqay0PCbWDutpFkIc/viewform";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
         View.OnClickListener mClickListener = new View.OnClickListener() {
 
             String extension;

@@ -13,6 +13,7 @@
         android:visibility="invisible"
         android:src="@drawable/ic_warning"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +22,9 @@
     <TextView
         android:id="@+id/solver_question_body"
         android:layout_toStartOf="@id/solver_question_status"
+        android:layout_toLeftOf="@id/solver_question_status"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Question body goes here"

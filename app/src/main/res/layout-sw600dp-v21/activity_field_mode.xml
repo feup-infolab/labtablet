@@ -52,7 +52,7 @@
                 android:orientation="horizontal"
                 >
                 <Button
-                    android:drawableLeft="@drawable/ic_camera"
+                    android:drawableStart="@drawable/ic_camera"
                     android:layout_width="0dp"
                     android:layout_weight="0.3"
                     android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                     />
 
                 <Button
-                    android:drawableLeft="@drawable/ic_file"
+                    android:drawableStart="@drawable/ic_file"
                     android:layout_width="0dp"
                     android:layout_weight="0.3"
                     android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                     android:id="@+id/rl_record"
                     >
                     <Button
-                        android:drawableLeft="@drawable/ic_voice"
+                        android:drawableStart="@drawable/ic_voice"
                         android:elevation="6sp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -85,9 +85,9 @@
                         />
 
                     <ProgressBar
-                        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+                        style="@android:style/Widget.Material.ProgressBar.Horizontal"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="100dp"
+                        android:layout_marginStart="100dp"
                         android:layout_width="fill_parent"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentBottom="true"
@@ -106,7 +106,7 @@
                 >
 
                 <Button
-                    android:drawableLeft="@drawable/ic_photo"
+                    android:drawableStart="@drawable/ic_photo"
                     android:layout_width="0dp"
                     android:layout_weight="0.3"
                     android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                     />
 
                 <Button
-                    android:drawableLeft="@drawable/ic_note"
+                    android:drawableStart="@drawable/ic_note"
                     android:layout_width="0dp"
                     android:layout_weight="0.3"
                     android:layout_height="wrap_content"
@@ -133,16 +133,16 @@
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
                         android:id="@+id/bt_one_time_position"
-                        android:drawableLeft="@drawable/ic_location"
+                        android:drawableStart="@drawable/ic_location"
                         android:text="@string/position"
                         />
 
                     <ProgressBar
-                        android:layout_marginLeft="100dp"
+                        android:layout_marginStart="100dp"
                         android:layout_width="fill_parent"
                         android:layout_centerHorizontal="true"
                         android:layout_height="wrap_content"
-                        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+                        style="@android:style/Widget.Material.ProgressBar.Horizontal"
                         android:indeterminate="false"
                         android:layout_alignParentBottom="true"
                         android:progress="0"
@@ -165,7 +165,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
@@ -189,21 +189,21 @@
                 android:id="@+id/bt_temperature_sample"
                 android:enabled="false"
                 style="@style/btnStyleBeige"
-                android:drawableLeft="@drawable/ic_battery_temp"
+                android:drawableStart="@drawable/ic_battery_temp"
                 android:layout_width="220dp"
                 android:text="@string/battery_temp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="5dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="5dp"
                 />
 
             <Button
                 android:id="@+id/bt_luminosity"
                 style="@style/btnStyleBeige"
-                android:drawableLeft="@drawable/ic_luminosity"
+                android:drawableStart="@drawable/ic_luminosity"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:enabled="false"
                 android:text="@string/luminosity"
                 android:layout_width="220dp"
@@ -215,22 +215,22 @@
                 android:id="@+id/bt_network_temperature_sample"
                 android:enabled="false"
                 style="@style/btnStyleBeige"
-                android:drawableRight="@drawable/ic_temperature"
+                android:drawableEnd="@drawable/ic_temperature"
                 android:text="@string/network_temp"
                 android:layout_height="wrap_content"
                 android:layout_width="220dp"
-                android:layout_marginRight="5dp"
-                android:layout_toRightOf="@id/bt_temperature_sample"
+                android:layout_marginEnd="5dp"
+                android:layout_toEndOf="@id/bt_temperature_sample"
                 />
 
 
             <Button
                 android:id="@+id/bt_magnetic"
-                android:drawableLeft="@drawable/ic_magnetic"
+                android:drawableStart="@drawable/ic_magnetic"
                 android:layout_below="@id/bt_network_temperature_sample"
-                android:layout_toLeftOf="@id/bt_luminosity"
+                android:layout_toEndOf="@id/bt_luminosity"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 style="@style/btnStyleBeige"
                 android:enabled="false"
                 android:text="@string/magnetic"
@@ -252,7 +252,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/continuous_gps"
                 android:layout_marginTop="15dp"
-                android:layout_marginLeft="35dp"
+                android:layout_marginStart="35dp"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/sw_gps"
