@@ -24,6 +24,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.application.LabTablet;
 import pt.up.fe.labtablet.async.AsyncProjectListFetcher;
 import pt.up.fe.labtablet.async.AsyncRecommendationsLoader;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;

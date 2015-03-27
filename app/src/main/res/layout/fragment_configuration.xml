@@ -402,7 +402,6 @@
                     android:layout_below="@id/dendro_configurations_username"
                     android:hint="Password"
                     android:inputType="textPassword"
-
                     />
 
             </RelativeLayout>
@@ -415,7 +414,14 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"/>
+            />
+
+        <TextView
+            android:layout_gravity="center"
+            android:text="Juliana Guimaraes"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 

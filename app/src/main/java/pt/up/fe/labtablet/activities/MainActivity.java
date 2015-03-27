@@ -26,12 +26,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.NavDrawerListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.application.LabTablet;
 import pt.up.fe.labtablet.fragments.ConfigurationFragment;
 import pt.up.fe.labtablet.fragments.HomeFragment;
 import pt.up.fe.labtablet.fragments.ListChangelogFragment;
@@ -141,6 +146,19 @@ public class MainActivity extends Activity {
         } else {
             wasDrawerShown = savedInstanceState.getBoolean("was_drawer_shown");
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     @Override

@@ -16,11 +16,14 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.application.LabTablet;
 import pt.up.fe.labtablet.models.FormEnumType;
 import pt.up.fe.labtablet.models.FormQuestion;
 import pt.up.fe.labtablet.utils.Utils;
@@ -99,7 +102,6 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 (findViewById(R.id.question_text_submit)).setEnabled(false);
             }
         });
-
     }
 
     @Override

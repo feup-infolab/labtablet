@@ -20,7 +20,7 @@ android {
         applicationId "pt.up.fe.labtablet"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 6
+        versionCode 16
         versionName "1.0"
     }
     buildTypes {
@@ -39,6 +39,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:+'
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'org.jdom:jdom:2.0.2'
+    compile 'com.google.android.gms:play-services:7.0.0'
     compile files('libs/httpcore-4.3.2.jar')
     compile files('libs/httpclient-4.3.4.jar')
     compile files('libs/httpclient-cache-4.3.4.jar')

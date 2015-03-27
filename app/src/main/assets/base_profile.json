@@ -72,14 +72,6 @@
       "allowed_values":["Springer", "IEEE Computer Society", "IEEE Transports Society", "FEUP", "FBAUP", "Porto Editora"]
    },
    {
-      "description":"Generic descriptor that has no mean whatsoever and should only be used as a temporary measure.",
-      "descriptor":"http://dendro.fe.up.pt/ontology/0.1/generic",
-      "name":"Generic",
-      "tag":"generic",
-      "value":"",
-      "allowed_values":[]
-   },
-   {
       "description":"A language of the resource. Recommended best practice is to use a controlled vocabulary such as RFC 4646 [RFC4646].",
       "descriptor":"http://purl.org/dc/terms/language",
       "name":"Language",
@@ -102,13 +94,5 @@
       "tag":"created",
       "value":"",
       "allowed_values":["dd/mm/aaaa"]
-   },
-   {
-      "description":"A temperature measurement.",
-      "descriptor":"http://dendro.fe.up.pt/ontology/dcb/temperature",
-      "name":"Temperature",
-      "tag":"temperature",
-      "value":"",
-      "allowed_values":["C", "K", "F"]
    }
 ]
