@@ -35,8 +35,6 @@ public class LabTablet extends Application {
     }
 
     private static final String PROPERTY_ID = "UA-39850271-3";
-    private static final String TAG = "LabTablet";
-    public static int GENERAL_TRACKER = 0;
 
     HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
 
@@ -54,6 +52,11 @@ public class LabTablet extends Application {
         if (!mTrackers.containsKey(trackerId)) {
 
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+
+            //--DISABLE THIS FOR PRODUCTION---
+            analytics.setDryRun(true);
+            //----------------------------------
+
             Tracker t = analytics.newTracker(R.xml.app_tracker);
             mTrackers.put(trackerId, t);
 

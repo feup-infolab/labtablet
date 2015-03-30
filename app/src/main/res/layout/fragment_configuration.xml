@@ -418,12 +418,10 @@
 
         <TextView
             android:layout_gravity="center"
-            android:text="Juliana Guimaraes"
+            android:text="DEVELOPER"
             android:layout_marginBottom="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
-
 
 </ScrollView>
