@@ -97,7 +97,7 @@
     <string name="place_files_here">Enviar para esta pasta</string>
     <string name="select_project_above">Selecione o projeto</string>
     <string name="action_select_project">Projeto</string>
-    <string name="really_cancel_upload">Tem a certeza de que pretende saír da fase de upload? Pode lançar esta faze em qualquer altura.</string>
+    <string name="really_cancel_upload">Tem a certeza de que pretende sair da fase de upload? Pode lançar esta fase em qualquer altura.</string>
     <string name="cancel_submission">Cancelar submissão</string>
     <string name="no_recommended_descriptors">Não há descritores recomendados para este registo</string>
     <string name="exit">Sair</string>

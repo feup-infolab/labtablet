@@ -18,7 +18,7 @@
         android:theme="@style/AppBaseTheme"
         android:name="pt.up.fe.labtablet.application.LabTablet"
         android:versionCode="16"
-        android:versionName="Ricardo"
+        android:versionName="Zorg"
         >
 
         <meta-data android:name="com.google.android.gms.version"
