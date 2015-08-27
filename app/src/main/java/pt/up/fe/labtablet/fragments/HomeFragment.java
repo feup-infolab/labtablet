@@ -1,16 +1,14 @@
 package pt.up.fe.labtablet.fragments;
 
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,21 +23,12 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.Random;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.activities.FormQuestionCreatorActivity;
 import pt.up.fe.labtablet.async.AsyncGenericChecker;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
-import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
-import pt.up.fe.labtablet.db_handlers.FormMgr;
-import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.models.FavoriteItem;
-import pt.up.fe.labtablet.models.Form;
-import pt.up.fe.labtablet.models.FormEnumType;
-import pt.up.fe.labtablet.models.FormQuestion;
-import pt.up.fe.labtablet.utils.RandomHandler;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class HomeFragment extends Fragment {
@@ -191,6 +180,15 @@ public class HomeFragment extends Fragment {
                 transaction.replace(R.id.frame_container, new ListFavoritesFragment());
                 transaction.addToBackStack("nopes");
                 transaction.commit();
+            }
+        });
+
+        com.github.clans.fab.FloatingActionButton actionButton = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.home_action_button);
+        actionButton.show(true);
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "2015 Infolab", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -1,8 +1,9 @@
 package pt.up.fe.labtablet.fragments;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -178,7 +179,7 @@ public class FormViewFragment extends Fragment {
 
             FormMgr.updateFormEntry(currentForm, getActivity());
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+            //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
             transaction.replace(R.id.frame_container, new ListFormFragment());
             transaction.commit();
             return true;
@@ -198,7 +199,7 @@ public class FormViewFragment extends Fragment {
                         FormMgr.overwriteBaseFormsEntry(getActivity(), forms);
 
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                        //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                         transaction.replace(R.id.frame_container, new ListFormFragment());
                         transaction.commit();
                     }

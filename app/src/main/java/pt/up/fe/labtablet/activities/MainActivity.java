@@ -1,23 +1,16 @@
 package pt.up.fe.labtablet.activities;
 
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Application;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,42 +19,29 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import java.io.File;
-import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.adapters.NavDrawerListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
-import pt.up.fe.labtablet.application.LabTablet;
 import pt.up.fe.labtablet.fragments.ConfigurationFragment;
+import pt.up.fe.labtablet.fragments.DrawerFragment;
 import pt.up.fe.labtablet.fragments.HomeFragment;
 import pt.up.fe.labtablet.fragments.ListChangelogFragment;
 import pt.up.fe.labtablet.fragments.ListFavoritesFragment;
 import pt.up.fe.labtablet.fragments.ListFormFragment;
 import pt.up.fe.labtablet.fragments.NewFavoriteBaseFragment;
 import pt.up.fe.labtablet.models.ChangelogItem;
-import pt.up.fe.labtablet.models.NavDrawerItem;
 import pt.up.fe.labtablet.utils.Utils;
 
-public class MainActivity extends Activity {
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
-
-    // nav drawer title
-    private CharSequence mDrawerTitle;
+public class MainActivity extends AppCompatActivity implements DrawerFragment.FragmentDrawerListener {
 
     // used to store app title
     private CharSequence mTitle;
 
-    // slide menu items
-    private String[] navMenuTitles;
 
-    private boolean wasDrawerShown;
+    private Toolbar mToolbar;
+
+    private DrawerFragment drawerFragment;
 
 
     @Override
@@ -77,88 +57,30 @@ public class MainActivity extends Activity {
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(path)));
         }
 
-        mTitle = mDrawerTitle = getTitle();
-
-        TypedArray navMenuIcons;
-        ArrayList<NavDrawerItem> navDrawerItems;
-        NavDrawerListAdapter adapter;
-        // load slide menu items
-        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
-
-
-        navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
-        navDrawerItems = new ArrayList<>();
-
-        //HOME, NEW PROJECT ,MY FAVORITES, UPDATES, CONFIGURATIONS
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
-        navMenuIcons.recycle();
-
-        mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
-        adapter = new NavDrawerListAdapter(getApplicationContext(),
-                navDrawerItems);
-        mDrawerList.setAdapter(adapter);
-
         // enabling action bar app icon and behaving it as toggle button
-        ActionBar mActionBar = getActionBar();
-        if (mActionBar == null) {
-            ChangelogItem item = new ChangelogItem();
-            item.setMessage("MainActivity" + "Couldn't get actionbar. Compatibility mode layout");
-            item.setTitle(getResources().getString(R.string.developer_error));
-            item.setDate(Utils.getDate());
-            ChangelogManager.addLog(item, MainActivity.this);
-        } else {
-            mActionBar.setDisplayHomeAsUpEnabled(true);
-            mActionBar.setHomeButtonEnabled(true);
-        }
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_drawer, //nav menu toggle icon
-                R.string.app_name, // nav drawer open - description for accessibility
-                R.string.app_name // nav drawer close - description for accessibility
-        ) {
-            public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
-                // calling onPrepareOptionsMenu() to show action bar icons
-                invalidateOptionsMenu();
-            }
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mDrawerTitle);
-                // calling onPrepareOptionsMenu() to hide action bar icons
-                invalidateOptionsMenu();
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        drawerFragment = (DrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setDrawerListener(this);
 
-        if (savedInstanceState == null) {
-            displayView(0);
-            mDrawerLayout.openDrawer(mDrawerList);
-            wasDrawerShown = true;
-        } else {
-            wasDrawerShown = savedInstanceState.getBoolean("was_drawer_shown");
-        }
+        // display the first navigation drawer view on app launch
+        displayView(0);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     @Override
@@ -169,10 +91,6 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // toggle nav drawer on selecting action bar app icon/title
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
         // Handle action bar actions click
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -183,41 +101,46 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
+    public void onDrawerItemSelected(View view, int position) {
+        displayView(position);
+    }
+
     /**
      * Displaying fragment view for selected nav drawer list item
      */
     private void displayView(int position) {
         // remove the main content by replacing fragments
         Fragment fragment = null;
-        if (getActionBar() != null) {
-            getActionBar().setSubtitle("");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setSubtitle("");
         }
-        
+
         String tag = "";
         switch (position) {
             case 0:
                 fragment = new HomeFragment();
-                tag = "HOME";
+                tag = getString(R.string.title_home);
                 break;
             case 1:
                 fragment = new NewFavoriteBaseFragment();
-                tag = "NEWFAV";
+                tag = getString(R.string.title_new_favorite);
                 break;
             case 2:
                 fragment = new ListFavoritesFragment();
-                tag = "LISTFAV";
+                tag = getString(R.string.title_list);
                 break;
             case 3:
                 fragment = new ListFormFragment();
-                tag = "LISTFORM";
+                tag = getString(R.string.title_list_forms);
                 break;
             case 4:
                 fragment = new ListChangelogFragment();
-                tag = "LOG";
+                tag = getString(R.string.title_changelog);
                 break;
             case 5:
                 fragment = new ConfigurationFragment();
-                tag = "CONF";
+                tag = getString(R.string.title_configurations);
                 break;
             default:
                 break;
@@ -226,23 +149,18 @@ public class MainActivity extends Activity {
         if (fragment != null) {
             //the favorite creation view should never be added to the back stack
 
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.frame_container, fragment);
+            fragmentTransaction.commit();
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            //ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             ft.replace(R.id.frame_container, fragment, tag);
             ft.commit();
 
-            /*
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frame_container, fragment, tag)
-                    .addToBackStack(tag)
-                    .commit();
-                    */
-            // remove selected item and title, then close the drawer
-            mDrawerList.setItemChecked(position, true);
-            mDrawerList.setSelection(position);
-            setTitle(navMenuTitles[position]);
-            mDrawerLayout.closeDrawer(mDrawerList);
+
+            getSupportActionBar().setTitle(tag);
         } else {
             // error in creating fragment
             Log.e("MainActivity", "Error in creating fragment");
@@ -252,37 +170,22 @@ public class MainActivity extends Activity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        ActionBar mActionBar = getActionBar();
-        if (mActionBar == null) {
+
+        if (mTitle.equals(getString(R.string.app_name)))
+            mTitle = "";
+
+        if (getSupportActionBar() == null) {
             ChangelogItem item = new ChangelogItem();
             item.setMessage("MainActivity" + "Couldn't get actionbar. Compatibility mode layout");
             item.setTitle(getResources().getString(R.string.developer_error));
             item.setDate(Utils.getDate());
             ChangelogManager.addLog(item, MainActivity.this);
         } else {
-            mActionBar.setTitle(mTitle);
+            getSupportActionBar().setTitle(mTitle);
         }
 
     }
 
-    /**
-     * When using the ActionBarDrawerToggle, you must call it during
-     * onPostCreate() and onConfigurationChanged()...
-     */
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -296,38 +199,5 @@ public class MainActivity extends Activity {
             Toast.makeText(this, getString(R.string.uploaded_successfully), Toast.LENGTH_SHORT).show();
         }
     }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBoolean("was_drawer_shown", wasDrawerShown);
-        super.onSaveInstanceState(outState);
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        try {
-            if (!mDrawerLayout.isDrawerOpen(mDrawerList)) {
-                mDrawerLayout.openDrawer(mDrawerList);
-            } else {
-                finish();
-            }
-        } catch (Exception e) {
-            finish();
-        }
-    }
-
-
-    private class SlideMenuClickListener implements
-            ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            // display view for selected nav drawer item
-            displayView(position);
-        }
-    }
-
-
 }
 

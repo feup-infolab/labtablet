@@ -34,8 +34,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -47,7 +45,6 @@ import java.util.Date;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.api.LTLocationListener;
-import pt.up.fe.labtablet.application.LabTablet;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.async.AsyncWeatherFetcher;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
@@ -163,10 +160,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     return;
                 }
 
-                Tracker t = ((LabTablet) getApplication()).getTracker(
-                        LabTablet.TrackerName.APP_TRACKER);
-                t.setScreenName("FIELD_GPS_Follow");
-                t.send(new HitBuilders.ScreenViewBuilder().build());
 
                 if (!isCollecting) {
                     isCollecting = true;
@@ -226,10 +219,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     }
                 });
 
-                Tracker t = ((LabTablet) getApplication()).getTracker(
-                        LabTablet.TrackerName.APP_TRACKER);
-                t.setScreenName("FIELD_Note");
-                t.send(new HitBuilders.ScreenViewBuilder().build());
 
                 builder.show();
             }
@@ -240,10 +229,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             public void onClick(View view) {
                 if (recording) {
                     try {
-                        Tracker t = ((LabTablet) getApplication()).getTracker(
-                                LabTablet.TrackerName.APP_TRACKER);
-                        t.setScreenName("FIELD_Recorder");
-                        t.send(new HitBuilders.ScreenViewBuilder().build());
 
                         pb_update.setVisibility(View.INVISIBLE);
                         bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_voice, 0, 0, 0);
@@ -307,10 +292,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     Log.e("LOCATIONListener", "error staring service");
                 }
 
-                Tracker t = ((LabTablet) getApplication()).getTracker(
-                        LabTablet.TrackerName.APP_TRACKER);
-                t.setScreenName("FIELD_Location");
-                t.send(new HitBuilders.ScreenViewBuilder().build());
             }
         });
 
@@ -512,9 +493,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
             return;
         }
 
-        //get the picture filename and update records
-        Tracker t = ((LabTablet) getApplication()).getTracker(
-                LabTablet.TrackerName.APP_TRACKER);
 
         switch (requestCode) {
             case Utils.SKETCH_INTENT_REQUEST:
@@ -528,9 +506,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 desc.setTag(Utils.PICTURE_TAGS);
                 gatheredMetadata.add(desc);
 
-
-                t.setScreenName("FIELD_Sketch");
-                t.send(new HitBuilders.ScreenViewBuilder().build());
                 break;
 
             case Utils.CAMERA_INTENT_REQUEST:
@@ -540,8 +515,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 desc2.setTag(Utils.PICTURE_TAGS);
                 gatheredMetadata.add(desc2);
 
-                t.setScreenName("FIELD_Photo");
-                t.send(new HitBuilders.ScreenViewBuilder().build());
                 break;
 
             case Utils.METADATA_VALIDATION:
@@ -579,8 +552,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 FavoriteMgr.updateFavoriteEntry(
                         currentFavoriteItem.getTitle(), currentFavoriteItem, this);
 
-                t.setScreenName("FIELD_Form");
-                t.send(new HitBuilders.ScreenViewBuilder().build());
 
                 break;
             case Utils.VIDEO_CAPTURE_REQUEST:
@@ -596,8 +567,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                 gatheredMetadata.add(desc3);
                 Log.e("uri", data.getDataString());
 
-                t.setScreenName("FIELD_Video");
-                t.send(new HitBuilders.ScreenViewBuilder().build());
                 break;
         }
     }
@@ -660,8 +629,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
         public void onClick(View view) {
             Descriptor desc;
             int id = view.getId();
-            Tracker t = ((LabTablet) getApplication()).getTracker(
-                    LabTablet.TrackerName.APP_TRACKER);
 
             switch (id) {
                 case R.id.bt_network_temperature_sample:
@@ -673,8 +640,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                             getResources().getString(R.string.net_temp_saved),
                             Toast.LENGTH_SHORT).show();
 
-                    t.setScreenName("FIELD_temperature");
-                    t.send(new HitBuilders.ScreenViewBuilder().build());
                     break;
 
                 case R.id.bt_temperature_sample:
@@ -686,8 +651,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                             getResources().getString(R.string.temp_saved),
                             Toast.LENGTH_SHORT).show();
 
-                    t.setScreenName("FIELD_Bat_Temperature");
-                    t.send(new HitBuilders.ScreenViewBuilder().build());
                     break;
 
                 case R.id.bt_magnetic:
@@ -699,8 +662,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                             getResources().getString(R.string.mag_saved),
                             Toast.LENGTH_SHORT).show();
 
-                    t.setScreenName("FIELD_Magnetic");
-                    t.send(new HitBuilders.ScreenViewBuilder().build());
                     break;
 
                 case R.id.bt_luminosity:
@@ -712,8 +673,6 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                             getResources().getString(R.string.lum_saved),
                             Toast.LENGTH_SHORT).show();
 
-                    t.setScreenName("FIELD_Luminosity");
-                    t.send(new HitBuilders.ScreenViewBuilder().build());
                     break;
             }
         }

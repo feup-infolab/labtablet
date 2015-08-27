@@ -3,8 +3,9 @@ package pt.up.fe.labtablet.fragments;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -487,7 +488,7 @@ public class FavoriteDetailsFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             FileMgr.removeFavorite(favoriteName, getActivity());
-                            FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                             getFragmentManager().popBackStack();
                             transaction.commit();
                         }

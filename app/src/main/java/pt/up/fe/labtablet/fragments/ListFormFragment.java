@@ -2,8 +2,9 @@ package pt.up.fe.labtablet.fragments;
 
 
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -58,8 +59,8 @@ public class ListFormFragment extends Fragment {
         itemClickListener = new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                 FormViewFragment formDetail = new FormViewFragment();
                 Bundle args = new Bundle();
                 args.putString("form", new Gson().toJson(items.get(position)));

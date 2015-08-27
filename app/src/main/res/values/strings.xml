@@ -235,4 +235,10 @@
     <string name="tap_to_pick_descriptor">Tap here to choose a descriptor from the available set.</string>
     <string name="disabled_action">Action disabled by developer</string>
     <string name="location_disabled">Access to location services is disabled. Please enable them first</string>
+    <string name="title_home" />
+    <string name="title_list">Favorites</string>
+    <string name="title_new_favorite">New Project</string>
+    <string name="title_changelog">Updates</string>
+    <string name="title_configurations">Configurations</string>
+    <string name="title_list_forms">Forms</string>
 </resources>

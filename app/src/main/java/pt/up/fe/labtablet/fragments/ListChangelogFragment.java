@@ -2,9 +2,9 @@ package pt.up.fe.labtablet.fragments;
 
 
 import android.app.AlertDialog;
-import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;

@@ -3,14 +3,9 @@ package pt.up.fe.labtablet.application;
 import android.app.Application;
 import android.content.Context;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
-
-import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
-import java.util.HashMap;
 
 import pt.up.fe.labtablet.R;
 
@@ -30,40 +25,14 @@ public class LabTablet extends Application {
     private static Context mContext;
     //private static LabTablet mInstance;
 
-    public enum TrackerName {
-        APP_TRACKER,// Tracker used only in this app.
-    }
-
-    private static final String PROPERTY_ID = "UA-39850271-3";
-
-    HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
-
-
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
 
         // The following line triggers the initialization of ACRA
-        ACRA.init(this);
+        //ACRA.init(this);
     }
-
-    public synchronized Tracker getTracker(TrackerName trackerId) {
-        if (!mTrackers.containsKey(trackerId)) {
-
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-
-            //--DISABLE THIS FOR PRODUCTION---
-            analytics.setDryRun(true);
-            //----------------------------------
-
-            Tracker t = analytics.newTracker(R.xml.app_tracker);
-            mTrackers.put(trackerId, t);
-
-        }
-        return mTrackers.get(trackerId);
-    }
-
 
 
     public static Context getContext() {

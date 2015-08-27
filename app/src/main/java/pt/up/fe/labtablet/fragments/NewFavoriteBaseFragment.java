@@ -2,8 +2,9 @@ package pt.up.fe.labtablet.fragments;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,8 +25,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -33,7 +32,6 @@ import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
-import pt.up.fe.labtablet.application.LabTablet;
 import pt.up.fe.labtablet.async.AsyncProjectListFetcher;
 import pt.up.fe.labtablet.async.AsyncRecommendationsLoader;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
@@ -287,8 +285,8 @@ public class NewFavoriteBaseFragment extends Fragment {
             mDialog.dismiss();
         }
 
-        FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        //transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         FavoriteDetailsFragment favoriteDetail = new FavoriteDetailsFragment();
         Bundle args = new Bundle();
         args.putString("favorite_name", newFavorite.getTitle());

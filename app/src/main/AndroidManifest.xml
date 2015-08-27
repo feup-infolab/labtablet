@@ -21,12 +21,6 @@
         android:versionName="Zorg"
         >
 
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <!-- Google Analytics Version v4 needs this value for easy tracking -->
-        <meta-data android:name="com.google.android.gms.analytics.globalConfigResource"
-            android:resource="@xml/app_tracker" />
 
         <activity
             android:name="pt.up.fe.labtablet.activities.MainActivity"

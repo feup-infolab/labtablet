@@ -18,10 +18,15 @@
     <color name="orange_button_stroke">#ff2c3b44</color>
     <color name="orange_button_solid_color">#ff384b55</color>
 
-    <color name="primary">#ff2c3b44</color>
-    <color name="primary_dark">#263238</color>
-    <color name="text_primary">#ffffffff</color>
+    <color name="primary">#007667</color>
+    <color name="primary_dark">#005d4f</color>
+    <color name="primary_translucent">#d7005d4f</color>
+
+    <color name="text_primary">#212121</color>
     <color name="text_blue_grey">#37474F</color>
     <color name="text_blue_grey_darker">#ff202c34</color>
-    <color name="fab_color">#ffb20800</color>
+
+    <color name="fab_color">#FF5722</color>
+    <color name="fab_color_pressed">#a83b1c</color>
+    <color name="fab_color_ripple">#a83b1c</color>
 </resources>

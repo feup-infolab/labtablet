@@ -1,7 +1,9 @@
 package pt.up.fe.labtablet.fragments;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -216,6 +218,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
             et_conf_password.setText(conf.getPassword());
             et_conf_username.setText(conf.getUsername());
 
+            //TODO: address this issue
             if(conf.isValidated()) {
                 bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                         null, getResources().getDrawable(R.drawable.ic_check), null, null);
@@ -253,6 +256,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                 editor.putString(Utils.DENDRO_CONFS_ENTRY, new Gson().toJson(conf, DendroConfiguration.class));
                 editor.apply();
 
+                //TODO: address this issue
                 bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                         null, getResources().getDrawable(R.drawable.ic_wait), null, null);
 
@@ -279,6 +283,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                         editor.putString(Utils.DENDRO_CONFS_ENTRY, new Gson().toJson(conf, DendroConfiguration.class));
                         editor.apply();
 
+//TODO: address this issue
                         bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null, getResources().getDrawable(R.drawable.ic_check), null, null);
                         Toast.makeText(getActivity(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
@@ -292,6 +297,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
 
                         Log.e("AUTH", "" + error.getMessage());
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        //TODO: address this issue
                         bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null, getResources().getDrawable(R.drawable.ic_error), null, null);
                     }

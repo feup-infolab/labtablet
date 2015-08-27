@@ -2,8 +2,9 @@ package pt.up.fe.labtablet.fragments;
 
 
 import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -64,8 +65,8 @@ public class ListFavoritesFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 FavoriteItem selectedItem = items.get(position);
 
-                FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                //transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
 
                 //switch to the favorite view
                 FavoriteDetailsFragment favoriteDetails = new FavoriteDetailsFragment();
@@ -110,7 +111,7 @@ public class ListFavoritesFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_new_dataset:
                 FragmentTransaction transaction = super.getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                //ransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                 NewFavoriteBaseFragment favoriteDetails = new NewFavoriteBaseFragment();
                 Bundle args = new Bundle();
                 args.putString("favorite_name", "");

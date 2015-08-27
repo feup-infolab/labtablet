@@ -20,12 +20,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
-import pt.up.fe.labtablet.application.LabTablet;
 import pt.up.fe.labtablet.async.AsyncBitmapExporter;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.ChangelogItem;
