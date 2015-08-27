@@ -14,7 +14,6 @@
         <TextView
             android:id="@+id/tv_home"
             android:background="@color/primary"
-
             android:textSize="40sp"
             android:minHeight="150dp"
             android:layout_width="fill_parent"

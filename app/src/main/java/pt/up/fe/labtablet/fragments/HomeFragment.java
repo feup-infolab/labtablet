@@ -62,7 +62,6 @@ public class HomeFragment extends Fragment {
         final Drawable no = getResources().getDrawable(R.drawable.ic_error);
         final Drawable meh = getResources().getDrawable(R.drawable.ic_warning);
 
-
         File file = new File(Environment.getExternalStorageDirectory()
                 + File.separator +getResources().getString(R.string.app_name));
 
