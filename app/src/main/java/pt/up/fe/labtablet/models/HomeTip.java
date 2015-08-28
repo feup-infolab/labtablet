@@ -7,6 +7,7 @@ public class HomeTip {
 
     private String title;
     private String body;
+    private String resourceID;
 
     public String getTitle() {
         return title;
@@ -22,5 +23,13 @@ public class HomeTip {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getResourceID() {
+        return resourceID;
+    }
+
+    public void setResourceID(String resourceID) {
+        this.resourceID = resourceID;
     }
 }

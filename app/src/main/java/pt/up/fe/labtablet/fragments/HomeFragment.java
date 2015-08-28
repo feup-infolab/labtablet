@@ -8,9 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,10 +32,7 @@ import java.util.Map;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.HomeTipsAdapter;
-import pt.up.fe.labtablet.async.AsyncGenericChecker;
-import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.models.HomeTip;
-import pt.up.fe.labtablet.utils.Utils;
 
 public class HomeFragment extends Fragment {
 
@@ -56,20 +50,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-
-        Button btConfigurations = (Button) rootView.findViewById(R.id.home_bt_configurations);
-        Button btNewProject = (Button) rootView.findViewById(R.id.home_bt_create_project);
-        Button btMyProjects = (Button) rootView.findViewById(R.id.bt_home_list_projects);
-        TextView tvProjectCount = (TextView) rootView.findViewById(R.id.tv_project_state);
-        TextView tvProfileState = (TextView) rootView.findViewById(R.id.tv_profile_state);
-        tvMetadataQuality = (TextView) rootView.findViewById(R.id.tv_metadata_state);
-        ivMetadataQuality = (ImageView) rootView.findViewById(R.id.iv_metadata_state);
-        pbMetadataLoading = (ProgressBar) rootView.findViewById(R.id.pb_generic_progress);
-        rlMetadataQuality = (RelativeLayout) rootView.findViewById(R.id.rl_metadata_quality);
-
-        final Drawable yes = getResources().getDrawable(R.drawable.ic_check);
-        final Drawable no = getResources().getDrawable(R.drawable.ic_error);
-        final Drawable meh = getResources().getDrawable(R.drawable.ic_warning);
 
         File file = new File(Environment.getExternalStorageDirectory()
                 + File.separator +getResources().getString(R.string.app_name));
@@ -210,14 +190,53 @@ public class HomeFragment extends Fragment {
 
         ArrayList<HomeTip> items = new ArrayList<>();
 
-        for (int i = 0; i < 5 ; ++i) {
-            HomeTip tip = new HomeTip();
-            tip.setTitle("Super title");
-            tip.setBody("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.");
-            items.add(tip);
-        }
+        HomeTip tip = new HomeTip();
+        tip.setTitle("Describing data");
+        tip.setBody("When exploring research data, having access to information regarding their production circumstances is of utmost importance." +
+                " While basic datasets are easily understood without such information, the same doesn't happen if we consider modern research workflows." +
+                " To overcome this barrier, it is advisable to provide information that can help third parties fully understand how these datasets were produced," +
+                " which research institutions were involved along with other relevant aspects. \n\n With an improved data description, we can achieve higher reuse rates," +
+                "higher chances of data being preserved on the long run, and create mechanisms that help validating published research.");
+        tip.setResourceID("describing_data");
+        items.add(tip);
 
-        HomeTipsAdapter adapter = new HomeTipsAdapter(items);
+        tip = new HomeTip();
+        tip.setTitle("LabTablet");
+        tip.setBody("In some cases, researchers are already describing their data in a systematic approach, even without noticing it. They often resort to paper-based" +
+                "laboratory notebooks to do so which, as you can understand, can be a frail support for such an important asset. LabTablet is designed to quickly gather " +
+                "important insights about research data. It is similar to an electronic laboratory notebook, offering diverse digital support for all kinds of descriptions." +
+                " Text-based notes can be a good starting point, but LabTablet can use the integrated sensors to automatically record the available information.");
+        tip.setResourceID("labtablet");
+        items.add(tip);
+
+        tip = new HomeTip();
+        tip.setTitle("Taking advantage of built-in sensors");
+        tip.setBody("<p>LabTablet can read the device's built-in sensors, provided you find them useful." +
+                "The available sources are entirely dependant on the platform, but it is quite common to find devices with:</p>\n" +
+                "  &#8226; GPS<br/>\n" +
+                "  &#8226; Temperature<br/>\n" +
+                "  &#8226; Luminosity<br/>\n" +
+                "  &#8226; Magnetic field<br/>\n" +
+                "  &#8226; Other proprietary sensors<br/>" +
+                " <p>For quick memos, for instance, you can make short voice recordings that you can later " +
+                "translate into other formats. This feature can also be used if you look forward to record an interview or any other event that you feel should be kept." +
+                "With this in mind, LabTablet lets you record from these sources:</p>" +
+                "   &#8226; Voice<br/>" +
+                "   &#8226; Video<br/>" +
+                "   &#8226; Depictions or photos<br/>" +
+                "   &#8226; Sketches<br/>" +
+                "<p>As soon as you finish the field session, the correspondent files are stored locally in appropriate formats.</p>");
+        tip.setResourceID("field_mode");
+        items.add(tip);
+
+        tip = new HomeTip();
+        tip.setTitle("Tracking");
+        tip.setBody("In some research fields, such as the ecological domain, researchers may want to represent their route or geographical coverage during an species sightseeing. For this purpose, you can turn on the" +
+                " GPS tracking, that will record your position throughout the session. This is later exported to a file that can be easily viewed in known platforms such as Google or Bing Maps.");
+        tip.setResourceID("maps");
+        items.add(tip);
+
+        HomeTipsAdapter adapter = new HomeTipsAdapter(getActivity(), items);
 
         RecyclerView itemList = (RecyclerView) rootView.findViewById(R.id.lv_home_tips);
 
