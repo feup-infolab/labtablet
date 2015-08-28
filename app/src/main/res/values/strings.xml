@@ -24,17 +24,6 @@
         <item>Configurations</item>
     </string-array>
 
-    <!-- Nav Drawer List Item Icons -->
-    <!-- Keep them in order as the titles are in -->
-    <array name="nav_drawer_icons">
-        <item>@drawable/ic_home</item>
-        <item>@android:drawable/ic_input_add</item>
-        <item>@android:drawable/btn_star_big_on</item>
-        <item>@drawable/ic_communities</item>
-        <item>@drawable/ic_whats_hot</item>
-        <item>@drawable/ic_pages</item>
-    </array>
-
     <string-array name="question_types">
         <item>Select type</item>
         <item>Free Text</item> //

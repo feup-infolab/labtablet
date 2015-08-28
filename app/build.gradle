@@ -41,6 +41,7 @@ dependencies {
     compile 'org.jdom:jdom:2.0.2'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.github.clans:fab:1.6.0'
+    compile 'com.android.support:design:22.2.1'
     compile files('libs/httpcore-4.3.2.jar')
     compile files('libs/httpclient-4.3.4.jar')
     compile files('libs/httpclient-cache-4.3.4.jar')

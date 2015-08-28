@@ -9,10 +9,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -23,12 +30,14 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Map;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.activities.FormQuestionCreatorActivity;
+import pt.up.fe.labtablet.adapters.HomeTipsAdapter;
 import pt.up.fe.labtablet.async.AsyncGenericChecker;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.labtablet.models.HomeTip;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class HomeFragment extends Fragment {
@@ -46,7 +55,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         Button btConfigurations = (Button) rootView.findViewById(R.id.home_bt_configurations);
         Button btNewProject = (Button) rootView.findViewById(R.id.home_bt_create_project);
@@ -65,6 +74,12 @@ public class HomeFragment extends Fragment {
         File file = new File(Environment.getExternalStorageDirectory()
                 + File.separator +getResources().getString(R.string.app_name));
 
+        Typeface fancyFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/LobsterTwo-Regular.ttf");
+        ((TextView)(rootView.findViewById(R.id.tv_home))).setTypeface(fancyFont);
+
+
+
+        /*
         if( file.exists() ) {
             if(file.listFiles().length > 0) {
                 tvProjectCount.setText(String.format(getResources().getString(R.string.you_have_x_projects), file.listFiles().length));
@@ -79,8 +94,7 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        Typeface fancyFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/LobsterTwo-Regular.ttf");
-        ((TextView)(rootView.findViewById(R.id.tv_home))).setTypeface(fancyFont);
+
 
 
         SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
@@ -133,6 +147,7 @@ public class HomeFragment extends Fragment {
             }).execute(getActivity(), "");
         }
 
+
         btConfigurations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,16 +196,66 @@ public class HomeFragment extends Fragment {
                 transaction.commit();
             }
         });
-
-        com.github.clans.fab.FloatingActionButton actionButton = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.home_action_button);
+*/
+        final com.github.clans.fab.FloatingActionButton actionButton = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.home_action_button);
         actionButton.show(true);
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "2015 Infolab", Toast.LENGTH_SHORT).show();
+                TextView header = (TextView)(rootView.findViewById(R.id.tv_home));
+                header.animate().translationY(-header.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
             }
         });
 
+        ArrayList<HomeTip> items = new ArrayList<>();
+
+        for (int i = 0; i < 5 ; ++i) {
+            HomeTip tip = new HomeTip();
+            tip.setTitle("Super title");
+            tip.setBody("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.");
+            items.add(tip);
+        }
+
+        HomeTipsAdapter adapter = new HomeTipsAdapter(items);
+
+        RecyclerView itemList = (RecyclerView) rootView.findViewById(R.id.lv_home_tips);
+
+        itemList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        itemList.setItemAnimator(new DefaultItemAnimator());
+        itemList.setAdapter(adapter);
+        itemList.animate();
+
+        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+            boolean hideToolBar = false;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                TextView header = (TextView)(rootView.findViewById(R.id.tv_home));
+                if (hideToolBar) {
+                    header.animate().translationY(-header.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+                    actionButton.hide(true);
+                    header.setVisibility(View.GONE);
+                } else {
+                    header.setVisibility(View.VISIBLE);
+                    actionButton.show(true);
+                    header.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 20) {
+                    hideToolBar = true;
+
+                } else if (dy < -5) {
+                    hideToolBar = false;
+                }
+            }
+        };
+
+        itemList.setOnScrollListener(onScrollListener);
         return rootView;
     }
 
@@ -221,4 +286,7 @@ public class HomeFragment extends Fragment {
             Log.e(getClass().getName(), e.toString());
         }
     }
+
+
+
 }

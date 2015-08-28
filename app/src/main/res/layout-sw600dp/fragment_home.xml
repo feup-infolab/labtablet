@@ -1,259 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:fillViewport="false">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/tools">
 
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content"
-        >
         <TextView
             android:id="@+id/tv_home"
+            android:layout_width="match_parent"
+            android:layout_height="470dp"
+            android:layout_weight="0.8"
             android:background="@color/primary"
             android:textSize="40sp"
-            android:minHeight="150dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
             android:textColor="@color/white"
             android:text="@string/welcome"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
-            android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
             />
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/home_action_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginTop="-50dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:src="@drawable/ic_info"
-            fab:fab_colorNormal="@color/fab_color"
-            fab:fab_progress_color="#FF009688"
-            fab:fab_colorPressed="@color/fab_color_pressed"
-            android:elevation="10sp"
-            android:visibility="invisible"
-            fab:fab_colorRipple="@color/fab_color_ripple" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/lv_home_tips"
+            android:divider="@android:color/transparent"
+            android:scrollbars="none"
+            android:dividerHeight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:orientation="horizontal"
+            />
 
-
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:id="@+id/home_feature_1"
-                    android:padding="20dp"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/collect_metadata_available_sensors"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:drawableStart="@drawable/ic_people"
-                    android:drawablePadding="15dp"
-                    />
-
-
-
-                <TextView
-                    android:id="@+id/home_feature_2"
-                    android:padding="20dp"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/easily_manage"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:drawableStart="@drawable/ic_communities"
-                    android:drawablePadding="15dp"
-                    />
-
-                <TextView
-                    android:id="@+id/home_feature_3"
-                    android:padding="20dp"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/upload_and_make_accessible"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:drawableStart="@drawable/ic_home"
-                    android:drawablePadding="15dp"
-                    />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            >
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <LinearLayout
-                    android:id="@+id/ll_feedback"
-                    android:layout_marginTop="20dp"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-
-                    >
-
-                    <TextView
-                        android:id="@+id/tv_profile_state"
-                        android:padding="10dp"
-                        android:layout_marginStart="10dp"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/no_profile"
-                        android:layout_height="fill_parent"
-                        android:gravity="center"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        />
-
-                    <TextView
-                        android:id="@+id/tv_project_state"
-                        android:layout_marginEnd="10dp"
-                        android:text="@string/no_projects"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_height="fill_parent"
-                        android:gravity="center"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:padding="10dp"
-                        />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/active_projects_separator"
-                    android:layout_width="fill_parent"
-                    android:layout_marginTop="30dp"
-                    android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_below="@+id/ll_feedback"
-                    />
-
-                <LinearLayout
-                    android:layout_below="@+id/active_projects_separator"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    >
-
-                    <Button
-                        android:id="@+id/home_bt_configurations"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.3"
-                        android:layout_height="fill_parent"
-                        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                        android:text="@string/open_configurations"
-                        android:drawableStart="@drawable/ab_pulse"
-                        android:textAllCaps="true"
-                        />
-
-                    <View
-                        android:background="@color/second_grey"
-                        android:layout_width="1dp"
-                        android:layout_height="fill_parent"/>
-
-                    <Button
-                        android:id="@+id/home_bt_create_project"
-                        android:layout_weight="0.3"
-                        android:layout_height="fill_parent"
-                        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                        android:text="@string/new_project"
-                        android:textAllCaps="true"
-                        android:layout_width="0dp"
-                        android:drawableStart="@drawable/ab_plus"
-                        />
-
-                    <View
-                        android:background="@color/second_grey"
-                        android:layout_width="1dp"
-                        android:layout_height="fill_parent"/>
-
-                    <Button
-                        android:id="@+id/bt_home_list_projects"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.3"
-                        android:layout_height="fill_parent"
-                        style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                        android:text="@string/my_projects"
-                        android:drawableStart="@drawable/ab_box"
-                        android:textAllCaps="true"
-                        />
-
-                </LinearLayout>
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-            <RelativeLayout
-                android:id="@+id/rl_metadata_quality"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:visibility="visible"
-                android:padding="8dp"
-                android:layout_marginTop="6dp"
-                >
-                <ProgressBar
-                    android:id="@+id/pb_generic_progress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:visibility="invisible"
-                    />
-                <ImageView
-                    android:id="@+id/iv_metadata_state"
-                    android:contentDescription="@string/image_placeholder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_check"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:visibility="visible"
-                    />
-                <TextView
-                    android:id="@+id/tv_metadata_state"
-                    android:layout_toEndOf="@id/iv_metadata_state"
-                    android:layout_marginStart="3dp"
-                    android:text="@string/metadata_meh"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    />
-
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
         <TextView
-            android:text="@string/swipe_to_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:drawableStart="@drawable/ic_swipe_right"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/second_grey"
+            android:id="@+id/text"
+            android:divider="@android:color/transparent"
+            android:scrollbars="none"
+            android:dividerHeight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.99"
+            android:orientation="horizontal"
             />
 
     </LinearLayout>
 
-</ScrollView>
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/home_action_button"
+        app:layout_anchor="@id/tv_home"
+        app:layout_anchorGravity="bottom|right|end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_info"
+        android:layout_marginEnd="20dp"
+        fab:fab_colorNormal="@color/fab_color"
+        fab:fab_progress_color="#FF009688"
+        fab:fab_colorPressed="@color/fab_color_pressed"
+        fab:fab_colorRipple="@color/fab_color_ripple"
+        android:layout_below="@id/toolbar"
+
+        />
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>
