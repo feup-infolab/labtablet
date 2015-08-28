@@ -15,9 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -36,14 +33,6 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class MainActivity extends AppCompatActivity implements DrawerFragment.FragmentDrawerListener {
 
-    // used to store app title
-    private CharSequence mTitle;
-
-
-    private Toolbar mToolbar;
-
-    private DrawerFragment drawerFragment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,19 +47,16 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(path)));
         }
 
-        // enabling action bar app icon and behaving it as toggle button
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        drawerFragment = (DrawerFragment)
+        DrawerFragment drawerFragment = (DrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
 
-        // display the first navigation drawer view on app launch
         displayView(0);
     }
 
@@ -156,10 +142,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             fragmentTransaction.commit();
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            //ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             ft.replace(R.id.frame_container, fragment, tag);
             ft.commit();
-
 
             getSupportActionBar().setTitle(tag);
         } else {
@@ -170,10 +154,9 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
 
     @Override
     public void setTitle(CharSequence title) {
-        mTitle = title;
 
-        if (mTitle.equals(getString(R.string.app_name)))
-            mTitle = "";
+        if (title.equals(getString(R.string.app_name)))
+            title = "";
 
         if (getSupportActionBar() == null) {
             ChangelogItem item = new ChangelogItem();
@@ -182,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             item.setDate(Utils.getDate());
             ChangelogManager.addLog(item, MainActivity.this);
         } else {
-            getSupportActionBar().setTitle(mTitle);
+            getSupportActionBar().setTitle(title);
         }
 
     }

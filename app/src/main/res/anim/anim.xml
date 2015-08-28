@@ -6,16 +6,16 @@
         <objectAnimator
             android:duration="@android:integer/config_shortAnimTime"
             android:propertyName="translationZ"
-            android:valueFrom="@dimen/button_elevation"
-            android:valueTo="@dimen/button_press_elevation"
+            android:valueFrom="6dp"
+            android:valueTo="2dp"
             android:valueType="floatType" />
     </item>
     <item>
         <objectAnimator
             android:duration="@android:integer/config_shortAnimTime"
             android:propertyName="translationZ"
-            android:valueFrom="@dimen/button_press_elevation"
-            android:valueTo="@dimen/button_elevation"
+            android:valueFrom="2dp"
+            android:valueTo="6dp"
             android:valueType="floatType" />
     </item>
 </selector>

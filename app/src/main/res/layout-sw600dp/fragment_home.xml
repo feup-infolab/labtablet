@@ -42,6 +42,7 @@
             android:visibility="invisible"
             fab:fab_colorRipple="@color/fab_color_ripple" />
 
+
         <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
