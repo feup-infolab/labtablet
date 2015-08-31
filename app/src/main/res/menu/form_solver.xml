@@ -1,9 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="pt.up.fe.labtablet.activities.FingerPaintActivity" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="pt.up.fe.labtablet.activities.FingerPaintActivity">
     <item
         android:id="@+id/action_finish_form"
         android:icon="@drawable/ab_save"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:title="@string/action_end_field_mode"/>
 </menu>

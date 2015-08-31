@@ -19,7 +19,6 @@
             android:padding="10dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:src="@drawable/ic_favorite"
             android:contentDescription="@string/image_placeholder"
             />
 

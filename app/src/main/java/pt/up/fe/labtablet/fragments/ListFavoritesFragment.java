@@ -47,26 +47,13 @@ public class ListFavoritesFragment extends Fragment {
         setHasOptionsMenu(true);
         items = new ArrayList<>();
 
-        ActionBar mActionBar = getActivity().getActionBar();
-        if (mActionBar == null) {
-            ChangelogItem item = new ChangelogItem();
-            item.setMessage("ListFavorites" + "Couldn't get actionbar. Compatibility mode layout");
-            item.setTitle(getResources().getString(R.string.developer_error));
-            item.setDate(Utils.getDate());
-            ChangelogManager.addLog(item, getActivity());
-        } else {
-            mActionBar.setDisplayHomeAsUpEnabled(false);
-            mActionBar.setSubtitle("");
-        }
-
-
         OnItemClickListener itemClickListener = new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 FavoriteItem selectedItem = items.get(position);
 
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                //transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
 
                 //switch to the favorite view
                 FavoriteDetailsFragment favoriteDetails = new FavoriteDetailsFragment();
@@ -111,7 +98,7 @@ public class ListFavoritesFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_new_dataset:
                 FragmentTransaction transaction = super.getFragmentManager().beginTransaction();
-                //ransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
                 NewFavoriteBaseFragment favoriteDetails = new NewFavoriteBaseFragment();
                 Bundle args = new Bundle();
                 args.putString("favorite_name", "");

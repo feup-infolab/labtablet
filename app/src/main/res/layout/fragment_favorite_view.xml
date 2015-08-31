@@ -2,83 +2,61 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/gv_dataset_view_base"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginTop="10dp"
-        >
+    xmlns:fab="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true">
 
         <LinearLayout
+            android:id="@+id/gv_dataset_view_base"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="@color/primary"
+            android:elevation="10dp"
             >
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <TextView
-                    android:id="@+id/tv_title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="5dp"
-                    android:layout_weight=".9"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:maxHeight="30dp"
-                    android:maxLength="20"
-                    android:text="Title"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="bold"
-                    />
-
-                <ImageButton
-                    android:id="@+id/favorite_view_edit_title"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:contentDescription="@string/desc_list_item_icon"
-                    android:src="@drawable/ab_edit"
-                    android:visibility="gone"/>
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="fill"
+                android:layout_gravity="center"
                 android:maxLines="5"
+                android:padding="6dp"
                 android:ellipsize="end"
                 android:text="@string/favorite_view_no_description"
-                android:gravity="center"
-                />
-
-            <View
-                android:layout_marginTop="3dp"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_gray"
+                android:textColor="@color/white"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:fontFamily="sans-serif-thin"
                 />
 
             <Button
                 android:id="@+id/bt_field_mode"
-                android:layout_width="match_parent"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawablePadding="15dp"
+                android:layout_gravity="end"
+                android:drawableEnd="@drawable/ic_terrain_white_24dp"
                 android:text="@string/launch_field_mode"
-                style="@android:style/Widget.Holo.Light.Button"
-                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
                 />
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lv_favorite_metadata"
+        android:scrollbars="none"
+        android:divider="@android:color/transparent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/gv_dataset_view_base"
+        android:layout_gravity="center"
+        />
+
 
     <LinearLayout
         android:id="@+id/ll_view_tabs"
@@ -90,13 +68,13 @@
 
         <Button
             android:id="@+id/tab_metadata"
-            style="@android:style/Widget.Holo.Light.Button"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:drawableStart="@drawable/ab_pulse"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="@string/metadata"
-            android:background="@color/text_blue_grey"
+            android:background="@color/primary"
             android:textColor="@color/white" />
 
         <View
@@ -107,48 +85,32 @@
         <Button
             android:id="@+id/tab_data"
             android:drawableEnd="@drawable/ab_box"
-            style="@android:style/Widget.Holo.Light.Button"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="@string/data"
             android:textColor="@color/white"
-            android:background="@color/text_blue_grey"
+            android:background="@color/primary"
             />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/lv_favorite_metadata"
-        android:divider="@android:color/transparent"
-        android:scrollbars="none"
-        android:layout_marginEnd="2dp"
-        android:dividerHeight="10dp"
-        android:layout_marginStart="2dp"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@id/ll_view_tabs"
-        android:layout_below="@+id/gv_dataset_view_base"
-        android:layout_gravity="center"
-        android:minHeight="30dp" />
-
-    <Button
+    <com.github.clans.fab.FloatingActionButton
         android:id="@+id/bt_new_metadata"
-        style="?android:attr/buttonStyleSmall"
-        android:background="@color/fab_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ab_plus"
+        android:layout_marginEnd="10dp"
+        fab:fab_colorNormal="@color/fab_color"
+        fab:fab_progress_color="#FF009688"
+        fab:fab_colorPressed="@color/fab_color_pressed"
+        fab:fab_colorRipple="@color/fab_color_ripple"
         android:paddingBottom="16dp"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:fontFamily="sans-serif-light"
-        android:gravity="center"
-        android:text="+"
-        android:textColor="@color/white"
-        android:textSize="40sp"
+
         />
-
-
 
 </RelativeLayout>

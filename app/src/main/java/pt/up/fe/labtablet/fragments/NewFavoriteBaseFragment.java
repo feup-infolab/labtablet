@@ -157,7 +157,7 @@ public class NewFavoriteBaseFragment extends Fragment {
                                             return;
                                         }
                                         bt_load_suggestions.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                                                null, getResources().getDrawable(R.drawable.ic_error), null, null
+                                                null, getResources().getDrawable(R.drawable.ab_cross), null, null
                                         );
 
                                         if (error != null) {
@@ -188,7 +188,7 @@ public class NewFavoriteBaseFragment extends Fragment {
                         }
                         bt_load_suggestions.setText(error.getMessage());
                         bt_load_suggestions.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                                null, getResources().getDrawable(R.drawable.ic_error), null, null
+                                null, getResources().getDrawable(R.drawable.ab_cross), null, null
                         );
                         if (mDialog != null) {
                             mDialog.dismiss();
@@ -235,7 +235,7 @@ public class NewFavoriteBaseFragment extends Fragment {
                         }
                     })
                     .setMessage(getResources().getString(R.string.no_profile))
-                    .setIcon(R.drawable.ic_whats_hot)
+                    .setIcon(R.drawable.ic_warning)
                     .show();
             return false;
         }
@@ -269,7 +269,11 @@ public class NewFavoriteBaseFragment extends Fragment {
                 folderMetadata.add(desc);
             } else if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
                 desc.validate();
-                desc.setValue(favoriteDescription.getText().toString());
+                String description = favoriteDescription.getText().toString();
+                if (description.equals("")) {
+                    description = getString(R.string.empty_description);
+                }
+                desc.setValue(description);
                 folderMetadata.add(desc);
             }
         }

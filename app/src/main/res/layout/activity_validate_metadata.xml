@@ -2,16 +2,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <LinearLayout
+        android:id="@+id/container_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+    </LinearLayout>
 
     <TextView
         android:text="@string/collected_metadata"
-        android:background="@drawable/card"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:background="@color/primary"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:fontFamily="sans-serif-thin"
+        android:textColor="@color/white"
         android:padding="20dp"
         android:layout_width="fill_parent"
         android:gravity="center"
         android:layout_height="wrap_content"
         android:id="@+id/tv_step1_header"
+        android:layout_below="@id/container_toolbar"
         />
 
     <android.support.v7.widget.RecyclerView

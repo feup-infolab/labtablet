@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
+
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fab="http://schemas.android.com/tools">
+    android:orientation="vertical">
 
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/home_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        >
 
         <TextView
             android:id="@+id/tv_home"
+            android:paddingTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="470dp"
-            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
             android:background="@color/primary"
             android:textSize="40sp"
             android:textColor="@color/white"
@@ -24,34 +29,74 @@
             android:orientation="horizontal"
             />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/lv_home_tips"
-            android:divider="@android:color/transparent"
-            android:scrollbars="none"
-            android:dividerHeight="10dp"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            />
+            android:background="@color/primary"
+            android:id="@+id/ll_home_buttons"
+            >
 
+            <Button
+                android:id="@+id/home_launch_configurations"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif-thin"
+                android:text="@string/open_configurations"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/home_launch_projects"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif-thin"
+                android:text="@string/my_projects"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/home_create_project"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:fontFamily="sans-serif-thin"
+                android:textColor="@color/white"
+                android:text="@string/new_project"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lv_home_tips"
+        android:layout_below="@id/home_header"
+        android:divider="@android:color/transparent"
+        android:scrollbars="none"
+        android:dividerHeight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        />
 
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/home_action_button"
-        app:layout_anchor="@id/tv_home"
-        app:layout_anchorGravity="bottom|right|end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_info"
-        android:layout_marginEnd="20dp"
+        android:layout_margin="10dp"
         fab:fab_colorNormal="@color/fab_color"
         fab:fab_progress_color="#FF009688"
         fab:fab_colorPressed="@color/fab_color_pressed"
         fab:fab_colorRipple="@color/fab_color_ripple"
-        android:layout_below="@id/toolbar"
-
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         />
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>
+
+
+

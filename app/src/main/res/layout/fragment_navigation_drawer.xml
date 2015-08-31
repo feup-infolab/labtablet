@@ -6,20 +6,23 @@
     >
 
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/nav_header_container"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_alignParentTop="true">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        >
 
         <ImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:src="@drawable/ab_save"
             android:scaleType="fitCenter"
-            android:layout_centerInParent="true" />
+            android:layout_gravity="center"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
     <android.support.v7.widget.RecyclerView
@@ -27,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/nav_header_container"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="35dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -36,7 +39,7 @@
         android:padding="10dp"
         android:text="&#174; 2015 InfoLab"
         android:fontFamily="sans-serif-thin"
-        android:textColor="@color/white"
+        android:textColor="@color/button_material_light"
         android:layout_alignParentBottom="true"
         />
 

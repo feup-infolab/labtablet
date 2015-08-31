@@ -1,7 +1,5 @@
 package pt.up.fe.labtablet.activities;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,6 +20,8 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -60,7 +60,7 @@ import pt.up.fe.labtablet.utils.Utils;
  * Exposes many of the device's sensors to gather their values
  * It also adds options to import from other resources such as camera, screen and gps
  */
-public class FieldModeActivity extends Activity implements SensorEventListener {
+public class FieldModeActivity extends AppCompatActivity implements SensorEventListener {
 
 
     private Button bt_photo;
@@ -125,15 +125,16 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
 
         //Make meta directory
         FileMgr.makeMetaDir(getApplication(), path);
-        ((TextView) findViewById(R.id.tv_title)).setText(favorite_name);
         attachButtons();
 
-        ActionBar mActionBar = getActionBar();
-        if (mActionBar != null) {
-            mActionBar.setTitle(favorite_name);
-            mActionBar.setSubtitle(getResources().getString(R.string.title_activity_field_mode));
-            mActionBar.setDisplayHomeAsUpEnabled(false);
-        }
+
+
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle(favorite_name);
+        getSupportActionBar().setSubtitle(getString(R.string.title_activity_field_mode));
 
         currentFavoriteItem = FavoriteMgr.getFavorite(this, favorite_name);
 
@@ -231,7 +232,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                     try {
 
                         pb_update.setVisibility(View.INVISIBLE);
-                        bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_voice, 0, 0, 0);
+                        bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_mic_black_24dp, 0, 0, 0);
                         recording = false;
                         bt_audio.setText(getResources().getString(R.string.record));
                         recorder.stop();
@@ -275,7 +276,7 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
                         Toast.makeText(FieldModeActivity.this, "Device is busy. Close other applications in the background.", Toast.LENGTH_SHORT).show();
 
                         pb_update.setVisibility(View.INVISIBLE);
-                        bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_voice, 0, 0, 0);
+                        bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_mic_black_24dp, 0, 0, 0);
                         recording = false;
                         bt_audio.setText(getResources().getString(R.string.record));
                         recorder = null;
@@ -574,7 +575,9 @@ public class FieldModeActivity extends Activity implements SensorEventListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId() != R.id.action_field_mode_end) {
+
+        if (item.getItemId() != R.id.action_field_mode_end &&
+                item.getItemId() != android.R.id.home) {
             return super.onOptionsItemSelected(item);
         }
 

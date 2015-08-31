@@ -1,20 +1,21 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_dendro_search"
         android:title="@string/action_select_project"
         android:icon="@drawable/ic_pick"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         />
     <item android:id="@+id/action_dendro_go_up"
         android:title="@string/goUp"
         android:icon="@drawable/ab_go_up"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         />
     <item android:id="@+id/action_dendro_refresh"
         android:title="@string/refresh"
         android:icon="@drawable/ab_reload"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
      />
 </menu>

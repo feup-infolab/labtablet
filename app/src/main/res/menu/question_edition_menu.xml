@@ -1,17 +1,17 @@
 <menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_question_undo"
         android:icon="@drawable/ab_reload"
         android:title="@string/undo"
-        android:showAsAction="always"
+        app:showAsAction="always"
         />
 
     <item
         android:id="@+id/action_question_cancel"
         android:icon="@drawable/ab_cross"
         android:title="@android:string/cancel"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         />
 </menu>

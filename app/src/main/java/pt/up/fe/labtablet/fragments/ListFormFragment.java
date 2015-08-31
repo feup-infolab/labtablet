@@ -131,7 +131,7 @@ public class ListFormFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.get_form_name));
-        builder.setIcon(R.drawable.ic_communities);
+        builder.setIcon(R.drawable.ic_description_black_24dp);
 
         final EditText input = new EditText(getActivity());
 

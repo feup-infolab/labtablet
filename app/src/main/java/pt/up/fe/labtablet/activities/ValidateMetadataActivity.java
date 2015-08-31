@@ -1,16 +1,16 @@
 package pt.up.fe.labtablet.activities;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +33,7 @@ import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.OnItemClickListener;
 import pt.up.fe.labtablet.utils.Utils;
 
-public class ValidateMetadataActivity extends Activity implements OnItemClickListener {
+public class ValidateMetadataActivity extends AppCompatActivity implements OnItemClickListener {
 
     private ProgressDialog mProgressDialog;
     private FavoriteItem fItem;
@@ -51,17 +51,11 @@ public class ValidateMetadataActivity extends Activity implements OnItemClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validate_metadata);
 
-        ActionBar mActionBar = getActionBar();
-        if (mActionBar == null) {
-            ChangelogItem item = new ChangelogItem();
-            item.setMessage("ValidateMetadata" + "Couldn't get actionbar.");
-            item.setTitle(getResources().getString(R.string.developer_error));
-            item.setDate(Utils.getDate());
-            ChangelogManager.addLog(item, ValidateMetadataActivity.this);
-        } else {
-            getActionBar().setTitle(getResources().getString(R.string.metadata_validation_title));
-            getActionBar().setDisplayHomeAsUpEnabled(false);
-        }
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(getString(R.string.title_activity_validate_metadata));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         if (savedInstanceState == null) {
             String descriptorsJson = getIntent().getStringExtra("favorite");

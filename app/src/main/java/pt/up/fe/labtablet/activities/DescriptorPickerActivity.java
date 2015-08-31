@@ -1,7 +1,6 @@
 package pt.up.fe.labtablet.activities;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -32,7 +34,7 @@ import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.utils.Utils;
 
-public class DescriptorPickerActivity extends Activity implements ActionBar.OnNavigationListener {
+public class DescriptorPickerActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
     private DescriptorsListAdapter mAdapter;
@@ -52,6 +54,12 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
         returnMode = mBundle.getInt("returnMode");
         favoriteName = mBundle.getString("favoriteName");
 
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_spinner);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         settings = getSharedPreferences(
                 getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);
@@ -70,32 +78,12 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
         }
 
         // Set up the action bar to show a dropdown list.
-        ActionBar actionBar = getActionBar();
-        if (actionBar == null) {
-            ChangelogItem item = new ChangelogItem();
-            item.setMessage("DescriptorPicker" + "Couldn't get actionbar. Compatibility mode layout");
-            item.setTitle(getResources().getString(R.string.developer_error));
-            item.setDate(Utils.getDate());
-            ChangelogManager.addLog(item, DescriptorPickerActivity.this);
-        } else {
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            // Set up the dropdown list navigation in the action bar.
-            actionBar.setListNavigationCallbacks(
-                    // Specify a SpinnerAdapter to populate the dropdown list.
-                    new ArrayAdapter<>(
-                            actionBar.getThemedContext(),
-                            R.layout.solver_spinner_item,
-                            android.R.id.text1,
-                            new String[]{
-                                    getResources().getString(R.string.recommended),
-                                    getResources().getString(R.string.from_dendro),
-                                    getResources().getString(R.string.all)
-                            }),
-                    this);
-        }
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mToolbar.getContext(),
+                R.array.descriptor_picker_items, R.layout.support_simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         ListView lv_descriptors;
         lv_descriptors = (ListView) findViewById(R.id.lv_descriptors);
@@ -247,9 +235,18 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
     }
 
     @Override
-    public boolean onNavigationItemSelected(int position, long id) {
-        // When the given dropdown item is selected, show its contents in the
-        // container view.
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (position) {
             case 0: //recommended
                 displayedDescriptors = new ArrayList<>();
@@ -308,17 +305,10 @@ public class DescriptorPickerActivity extends Activity implements ActionBar.OnNa
             default:
                 break;
         }
-        return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public void onNothingSelected(AdapterView<?> parent) {
 
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-
-        return false;
     }
 }

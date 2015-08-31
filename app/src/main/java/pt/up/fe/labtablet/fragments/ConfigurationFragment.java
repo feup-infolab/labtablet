@@ -180,7 +180,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                                 }
                             })
                             .setMessage("Please select an application profile before proceeding.")
-                            .setIcon(R.drawable.ic_whats_hot)
+                            .setIcon(R.drawable.ic_warning)
                             .show();
                     return;
                 }
@@ -299,7 +299,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         //TODO: address this issue
                         bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                                null, getResources().getDrawable(R.drawable.ic_error), null, null);
+                                null, getResources().getDrawable(R.drawable.ab_cross), null, null);
                     }
 
                     @Override

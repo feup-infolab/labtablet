@@ -129,7 +129,6 @@
             android:textSize="25sp"
             android:layout_marginTop="50dp"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-            android:drawableTop="@drawable/ic_error"
             />
     </RelativeLayout>
 

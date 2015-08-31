@@ -75,7 +75,7 @@ public class SubmissionStep1 extends Fragment {
         float batteryValue = getBatteryLevel();
         good = getResources().getDrawable(R.drawable.ic_check);
         meh = getResources().getDrawable(R.drawable.ic_warning);
-        bad = getResources().getDrawable(R.drawable.ic_error);
+        bad = getResources().getDrawable(R.drawable.ab_cross);
 
         if (batteryValue < 20f) {
             batteryLevel.setCompoundDrawablesWithIntrinsicBounds(null, null, bad, null);

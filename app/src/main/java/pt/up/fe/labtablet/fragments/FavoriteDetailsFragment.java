@@ -3,6 +3,8 @@ package pt.up.fe.labtablet.fragments;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +17,8 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,7 +66,6 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class FavoriteDetailsFragment extends Fragment {
 
-    private TextView tv_title;
     private TextView tv_description;
 
     //Buttons to switch between data and metadata views
@@ -88,17 +91,15 @@ public class FavoriteDetailsFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        Button bt_new_metadata = (Button) rootView.findViewById(R.id.bt_new_metadata);
+        com.github.clans.fab.FloatingActionButton bt_new_metadata
+                = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.bt_new_metadata);
         Button bt_fieldMode = (Button) rootView.findViewById(R.id.bt_field_mode);
-        ImageButton bt_edit_title = (ImageButton) rootView.findViewById(R.id.favorite_view_edit_title);
 
 
-        tv_title = (TextView) rootView.findViewById(R.id.tv_title);
         tv_description = (TextView) rootView.findViewById(R.id.tv_description);
 
         bt_meta_view = (Button) rootView.findViewById(R.id.tab_metadata);
         bt_data_view = (Button) rootView.findViewById(R.id.tab_data);
-        bt_edit_title.setTag(Utils.TITLE_TAG);
 
         if (savedInstanceState != null) {
             currentItem = new Gson().fromJson(savedInstanceState.getString("current_item"), FavoriteItem.class);
@@ -123,33 +124,12 @@ public class FavoriteDetailsFragment extends Fragment {
         }
 
         tv_description.setText(currentItem.getDescription());
-        tv_title.setText(currentItem.getTitle());
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(currentItem.getTitle());
 
         itemList = (RecyclerView) rootView.findViewById(R.id.lv_favorite_metadata);
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
         itemList.setItemAnimator(new DefaultItemAnimator());
         itemList.animate();
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // only for lollipop and newer versions
-            Outline mOutlineCircle;
-            int shapeSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
-            mOutlineCircle = new Outline();
-            mOutlineCircle.setRoundRect(0, 0, shapeSize, shapeSize, shapeSize / 2);
-
-            ViewOutlineProvider viewOutlineProvider = new ViewOutlineProvider() {
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    // Or read size directly from the view's width/height
-                    int size = getResources().getDimensionPixelSize(R.dimen.fab_size);
-                    outline.setOval(0, 0, size, size);
-                }
-            };
-
-            bt_new_metadata.setOutlineProvider(viewOutlineProvider);
-            bt_new_metadata.setClipToOutline(true);
-        }
-
 
 
         itemClickListener = new OnItemClickListener() {
@@ -219,7 +199,6 @@ public class FavoriteDetailsFragment extends Fragment {
 
 
         dcClickListener mClickListener = new dcClickListener();
-        bt_edit_title.setOnClickListener(mClickListener);
 
         bt_fieldMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -267,8 +246,8 @@ public class FavoriteDetailsFragment extends Fragment {
 
     private void loadMetadataView() {
         bt_data_view.setEnabled(true);
-        bt_data_view.setBackgroundColor(getResources().getColor(R.color.text_blue_grey));
-        bt_meta_view.setBackgroundColor(getResources().getColor(R.color.text_blue_grey_darker));
+        bt_data_view.setBackgroundColor(getResources().getColor(R.color.primary));
+        bt_meta_view.setBackgroundColor(getResources().getColor(R.color.primary_dark));
         bt_meta_view.setEnabled(false);
         isMetadataVisible = true;
 
@@ -285,8 +264,8 @@ public class FavoriteDetailsFragment extends Fragment {
 
         bt_data_view.setEnabled(false);
         bt_meta_view.setEnabled(true);
-        bt_data_view.setBackgroundColor(getResources().getColor(R.color.text_blue_grey_darker));
-        bt_meta_view.setBackgroundColor(getResources().getColor(R.color.text_blue_grey));
+        bt_data_view.setBackgroundColor(getResources().getColor(R.color.primary_dark));
+        bt_meta_view.setBackgroundColor(getResources().getColor(R.color.primary));
 
         isMetadataVisible = false;
 
@@ -309,7 +288,7 @@ public class FavoriteDetailsFragment extends Fragment {
         if (favoriteName != null) {
             currentItem = FavoriteMgr.getFavorite(getActivity(), favoriteName);
             tv_description.setText(currentItem.getDescription());
-            tv_title.setText(currentItem.getTitle());
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(currentItem.getTitle());
         }
         if (isMetadataVisible) {
             loadMetadataView();
@@ -456,73 +435,82 @@ public class FavoriteDetailsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
 
-        if (item.getItemId() == R.id.action_favorite_upload) {
+
+        switch (item.getItemId()) {
+            case R.id.action_favorite_upload:
+                SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
+                if (!settings.contains(Utils.DENDRO_CONFS_ENTRY)) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(getResources().getString(R.string.dendro_confs_not_found_title))
+                            .setMessage(getResources().getString(R.string.dendro_confs_not_found_message))
+                            .setCancelable(false)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .setIcon(getResources().getDrawable(R.drawable.ab_cross))
+                            .show();
+                    return super.onOptionsItemSelected(item);
+                }
+
+                Intent mIntent = new Intent(getActivity(), SubmissionValidationActivity.class);
+                mIntent.putExtra("favorite_name", favoriteName);
+                getActivity().startActivityForResult(mIntent, Utils.SUBMISSION_VALIDATION);
 
 
-            SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
-            if (!settings.contains(Utils.DENDRO_CONFS_ENTRY)) {
+                break;
+
+            case R.id.action_favorite_delete:
+                //remove this favorite
                 new AlertDialog.Builder(getActivity())
-                        .setTitle(getResources().getString(R.string.dendro_confs_not_found_title))
-                        .setMessage(getResources().getString(R.string.dendro_confs_not_found_message))
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        .setIcon(android.R.drawable.ic_menu_delete)
+                        .setTitle(R.string.edit_metadata_item_delete)
+                        .setMessage(R.string.form_really_delete_favorite)
+                        .setPositiveButton(R.string.form_ok, new DialogInterface.OnClickListener() {
+                            @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                FileMgr.removeFavorite(favoriteName, getActivity());
+                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                getFragmentManager().popBackStack();
+                                transaction.commit();
                             }
                         })
-                        .setIcon(getResources().getDrawable(R.drawable.ic_error))
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
-                return super.onOptionsItemSelected(item);
-            }
+                break;
 
-            Intent mIntent = new Intent(getActivity(), SubmissionValidationActivity.class);
-            mIntent.putExtra("favorite_name", favoriteName);
-            getActivity().startActivityForResult(mIntent, Utils.SUBMISSION_VALIDATION);
+            case R.id.action_favorite_zip:
+                final ProgressDialog dialog = ProgressDialog.show(getActivity(),
+                        getString(R.string.upload_progress_creating_package),
+                        getString(R.string.wait_queue_processing), false);
 
-        } else if (item.getItemId() == R.id.action_favorite_delete) {
-            //remove this favorite
-            new AlertDialog.Builder(getActivity())
-                    .setIcon(android.R.drawable.ic_menu_delete)
-                    .setTitle(R.string.edit_metadata_item_delete)
-                    .setMessage(R.string.form_really_delete_favorite)
-                    .setPositiveButton(R.string.form_ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            FileMgr.removeFavorite(favoriteName, getActivity());
-                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                            getFragmentManager().popBackStack();
-                            transaction.commit();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
+                new AsyncPackageCreator(new AsyncCustomTaskHandler<Void>() {
+                    @Override
+                    public void onSuccess(Void result) {
+                        Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        onResume();
+                    }
 
-        } else if (item.getItemId() == R.id.action_favorite_zip) {
+                    @Override
+                    public void onFailure(Exception error) {
+                        Toast.makeText(getActivity(), "FAILED", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
 
-            final ProgressDialog dialog = ProgressDialog.show(getActivity(),
-                    getString(R.string.upload_progress_creating_package),
-                    getString(R.string.wait_queue_processing), false);
+                    @Override
+                    public void onProgressUpdate(ProgressUpdateItem progress) {
+                        dialog.setProgress(progress.getProgress());
+                        dialog.setMessage(progress.getMessage());
+                    }
+                }).execute(favoriteName, getActivity());
+                break;
 
-            new AsyncPackageCreator(new AsyncCustomTaskHandler<Void>() {
-                @Override
-                public void onSuccess(Void result) {
-                    Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                    onResume();
-                }
-
-                @Override
-                public void onFailure(Exception error) {
-                    Toast.makeText(getActivity(), "FAILED", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-
-                @Override
-                public void onProgressUpdate(ProgressUpdateItem progress) {
-                    dialog.setProgress(progress.getProgress());
-                    dialog.setMessage(progress.getMessage());
-                }
-            }).execute(favoriteName, getActivity());
+            case android.R.id.home:
+                getActivity().getSupportFragmentManager().popBackStack();
+                break;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -557,6 +545,8 @@ public class FavoriteDetailsFragment extends Fragment {
                     }
 
                     //Update favorite's name (and DB entries ofc)
+                    //TODO: move this
+                    /*
                     if (mView.getTag().equals(Utils.TITLE_TAG)) {
                         if (!currentItem.getTitle().equals(input.getText().toString())) {
                             if (FileMgr.renameFavorite(favoriteName,
@@ -568,7 +558,7 @@ public class FavoriteDetailsFragment extends Fragment {
                                 tv_title.setText(favoriteName);
                             }
                         }
-                    }
+                    }*/
                     onResume();
                     dialog.dismiss();
                 }

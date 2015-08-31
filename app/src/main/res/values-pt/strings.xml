@@ -33,16 +33,6 @@
         <item>Range</item> //MC{1,2,3}
     </string-array>
 
-    <!-- Nav Drawer List Item Icons -->
-    <!-- Keep them in order as the titles are in -->
-    <array name="nav_drawer_icons">
-        <item>@drawable/ic_home</item>
-        <item>@android:drawable/ic_input_add</item>
-        <item>@android:drawable/btn_star_big_on</item>
-        <item>@drawable/ic_communities</item>
-        <item>@drawable/ic_whats_hot</item>
-        <item>@drawable/ic_pages</item>
-    </array>
 
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
@@ -239,4 +229,6 @@
     <string name="title_changelog">Updates</string>
     <string name="title_configurations">Configurations</string>
     <string name="title_list_forms">Forms</string>
+    <string name="about_item_preview">About this item (tap to edit)</string>
+    <string name="empty_description">No description provided</string>
 </resources>

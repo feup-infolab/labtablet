@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +29,7 @@ import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
 
 
-public class ItemPreviewActivity extends Activity {
+public class ItemPreviewActivity extends AppCompatActivity {
 
     private ImageView ivItemPreview;
     private TextView tvItemDescription;
@@ -47,10 +49,11 @@ public class ItemPreviewActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_item_preview);
-        if (getActionBar() != null) {
-            getActionBar().setTitle("Inspect record");
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(getString(R.string.title_activity_item_preview));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         Bundle extras;
 
@@ -188,7 +191,7 @@ public class ItemPreviewActivity extends Activity {
             tvItemDescriptorDescription.setText(currentItem.getDescription());
         }
 
-        CardView metadataDescriptorCard = (CardView) findViewById(R.id.item_preview_metadata_card);
+        CardView metadataDescriptorCard = (CardView) findViewById(R.id.item_preview_card);
 
         metadataDescriptorCard.setVisibility(View.VISIBLE);
         metadataDescriptorCard.setOnClickListener(new View.OnClickListener() {
