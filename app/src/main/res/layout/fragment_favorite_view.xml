@@ -77,11 +77,6 @@
             android:background="@color/primary"
             android:textColor="@color/white" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="fill_parent"
-            android:background="@color/white" />
-
         <Button
             android:id="@+id/tab_data"
             android:drawableEnd="@drawable/ab_box"
@@ -100,16 +95,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ab_plus"
-        android:layout_marginEnd="10dp"
         fab:fab_colorNormal="@color/fab_color"
         fab:fab_progress_color="#FF009688"
         fab:fab_colorPressed="@color/fab_color_pressed"
         fab:fab_colorRipple="@color/fab_color_ripple"
-        android:paddingBottom="16dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/activity_horizontal_margin"
 
         />
 

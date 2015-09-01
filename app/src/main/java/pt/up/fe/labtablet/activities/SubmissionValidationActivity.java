@@ -10,10 +10,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.github.clans.fab.FloatingActionButton;
 
 import java.util.Locale;
 
@@ -31,7 +35,7 @@ import pt.up.fe.labtablet.utils.Utils;
  * Holds the four steps to upload a favorite to the repository and handles
  * their transition
  */
-public class SubmissionValidationActivity extends Activity implements SubmissionStepHandler {
+public class SubmissionValidationActivity extends AppCompatActivity implements SubmissionStepHandler {
 
     private static String favoriteName;
     private static String projectName;
@@ -41,7 +45,7 @@ public class SubmissionValidationActivity extends Activity implements Submission
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private ProgressBar pb_submission_state;
+    private FloatingActionButton pb_submission_state;
 
     public static String getProjectName() {
         return projectName;
@@ -72,23 +76,16 @@ public class SubmissionValidationActivity extends Activity implements Submission
         destUri = "";
         projectName = "";
 
-        pb_submission_state = (ProgressBar) findViewById(R.id.pb_submission);
-        pb_submission_state.setProgress(0);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        pb_submission_state = (FloatingActionButton) findViewById(R.id.pb_submission);
+        pb_submission_state.setProgress(0, true);
 
         favoriteName = getIntent().getStringExtra("favorite_name");
-
-        ActionBar mActionBar = getActionBar();
-        if (mActionBar == null) {
-            ChangelogItem item = new ChangelogItem();
-            item.setMessage("SubmissionValidation" + "Couldn't get actionbar. Compatibility mode layout");
-            item.setTitle(getResources().getString(R.string.developer_error));
-            item.setDate(Utils.getDate());
-            ChangelogManager.addLog(item, SubmissionValidationActivity.this);
-        } else {
-            mActionBar.setTitle(favoriteName);
-            mActionBar.setSubtitle("Validating submission");
-        }
-
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -103,32 +100,16 @@ public class SubmissionValidationActivity extends Activity implements Submission
                 ObjectAnimator animation;
                 switch (position) {
                     case 0:
-                        animation = ObjectAnimator.ofInt(pb_submission_state, "progress", 0);
-                        animation.setDuration(250); // 0.5 second
-                        animation.setInterpolator(new DecelerateInterpolator());
-                        animation.start();
-                        //pb_submission_state.setProgress(0);
+                        pb_submission_state.setProgress(0, true);
                         break;
-                    case 1:
-                        animation = ObjectAnimator.ofInt(pb_submission_state, "progress", 33);
-                        animation.setDuration(250); // 0.5 second
-                        animation.setInterpolator(new DecelerateInterpolator());
-                        animation.start();
+                    case 1:pb_submission_state.setProgress(33, true);
                         break;
-                    case 2:
-                        animation = ObjectAnimator.ofInt(pb_submission_state, "progress", 66);
-                        animation.setDuration(250); // 0.5 second
-                        animation.setInterpolator(new DecelerateInterpolator());
-                        animation.start();
+                    case 2:pb_submission_state.setProgress(66, true);
                         break;
-                    case 3:
-                        animation = ObjectAnimator.ofInt(pb_submission_state, "progress", 100);
-                        animation.setDuration(250); // 0.5 second
-                        animation.setInterpolator(new DecelerateInterpolator());
-                        animation.start();
+                    case 3:pb_submission_state.setProgress(99, true);
                         break;
                     default:
-                        pb_submission_state.setProgress(0);
+                        pb_submission_state.setProgress(0, true);
                         break;
                 }
             }

@@ -154,7 +154,7 @@ public class HomeFragment extends Fragment {
                 "   &#8226; Depictions or photos<br/>" +
                 "   &#8226; Sketches<br/>" +
                 "<p>As soon as you finish the field session, the correspondent files are stored locally in appropriate formats.</p>");
-        tip.setResourceID("field_mode");
+        tip.setResourceID("sensors");
         items.add(tip);
 
         tip = new HomeTip();

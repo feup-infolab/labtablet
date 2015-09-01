@@ -113,7 +113,7 @@
                         <ProgressBar
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_height="wrap_content"
-                            android:layout_width="fill_parent"
+                            android:layout_width="100dp"
                             android:layout_centerHorizontal="true"
                             android:layout_alignParentBottom="true"
                             android:visibility="visible"
@@ -166,7 +166,7 @@
                             />
 
                         <ProgressBar
-                            android:layout_width="fill_parent"
+                            android:layout_width="100dp"
                             android:layout_centerHorizontal="true"
                             android:layout_height="wrap_content"
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

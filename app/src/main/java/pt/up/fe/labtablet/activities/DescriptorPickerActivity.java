@@ -80,8 +80,10 @@ public class DescriptorPickerActivity extends AppCompatActivity implements Adapt
         // Set up the action bar to show a dropdown list.
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mToolbar.getContext(),
-                R.array.descriptor_picker_items, R.layout.support_simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                R.array.descriptor_picker_items, R.layout.item_spinner);
+
+
+        adapter.setDropDownViewResource(R.layout.item_spinner);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 

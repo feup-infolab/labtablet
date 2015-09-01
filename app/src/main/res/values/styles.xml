@@ -14,6 +14,9 @@
 
         <item name="android:spinnerDropDownItemStyle">@style/LabTabletDropDownStyle</item>
 
+        <item name="colorPrimary">@color/primary</item>
+
+        <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorHint">@color/second_grey</item>
         <item name="android:textColorHighlight">@color/text_blue_grey</item>
@@ -23,11 +26,11 @@
         <item name="android:colorMultiSelectHighlight">@color/white</item>
         <item name="android:actionMenuTextColor">@color/white</item>
 
+
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorAccent">@color/fab_color</item>
 
-        <!--<item name="android:navigationBarColor">@color/primary_dark</item>-->
     </style>
 
     <style name="LabTabletDropDownStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">

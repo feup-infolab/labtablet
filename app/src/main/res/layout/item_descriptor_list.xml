@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -10,20 +11,21 @@
         <ImageView
             android:id="@+id/metadata_item_type"
             android:contentDescription="@string/image_placeholder"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="6dp"
-            android:layout_marginEnd="6dip"
+            android:padding="6dp"
             android:src="@android:drawable/ic_menu_share" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toEndOf="@id/metadata_item_type"
+            >
         <TextView
             android:id="@+id/item_title"
-            android:layout_toRightOf="@id/metadata_item_type"
-            android:layout_toEndOf="@id/metadata_item_type"
-            android:layout_alignParentTop="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="fill_horizontal"
@@ -34,30 +36,29 @@
             android:textStyle="bold"
             android:layout_marginTop="6sp" />
 
+
+
+        <TextView
+            android:id="@+id/item_description"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:fontFamily="sans-serif-thin"
+            android:text="description"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/second_grey"
+            />
+
         <TextView
             android:id="@+id/item_descriptor"
-            android:layout_below="@id/item_title"
-            android:layout_toRightOf="@id/metadata_item_type"
-            android:layout_toEndOf="@id/metadata_item_type"
             android:text="http://purl.org/dc/terms/date"
             android:textColor="@color/second_grey"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:fontFamily="sans-serif-thin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="fill_horizontal"
             android:gravity="center_vertical"
-             />
-
-        <TextView
-            android:id="@+id/item_description"
-            android:layout_below="@id/item_descriptor"
-            android:text="description"
-            android:layout_toRightOf="@id/metadata_item_type"
-            android:layout_toEndOf="@id/metadata_item_type"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/second_grey"
             />
-
+        </LinearLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

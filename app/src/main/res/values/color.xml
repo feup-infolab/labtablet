@@ -21,6 +21,7 @@
     <color name="primary">#007667</color>
     <color name="primary_dark">#005d4f</color>
     <color name="primary_translucent">#d7005d4f</color>
+    <color name="primary_translucent_tip">#607D8B</color>
 
     <color name="text_primary">#212121</color>
     <color name="text_blue_grey">#37474F</color>

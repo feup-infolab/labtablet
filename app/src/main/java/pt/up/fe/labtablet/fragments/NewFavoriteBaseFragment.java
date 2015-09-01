@@ -67,17 +67,6 @@ public class NewFavoriteBaseFragment extends Fragment {
         favoriteDescription = (EditText) rootView.findViewById(R.id.et_dataset_description);
         bt_load_suggestions = (Button) rootView.findViewById(R.id.new_favorite_proj_load);
 
-        ActionBar mActionBar = getActivity().getActionBar();
-        if (mActionBar == null) {
-            ChangelogItem item = new ChangelogItem();
-            item.setMessage("NewFavorite" + "Couldn't get actionbar. Compatibility mode layout");
-            item.setTitle(getResources().getString(R.string.developer_error));
-            item.setDate(Utils.getDate());
-            ChangelogManager.addLog(item, getActivity());
-        } else {
-            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
         setHasOptionsMenu(true);
         favoriteName.requestFocus();
 

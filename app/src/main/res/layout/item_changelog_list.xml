@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:contentDescription="@string/image_placeholder"
             android:layout_height="wrap_content"
-            android:src="@drawable/ab_plus"
+            android:src="@drawable/ic_preview"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"

@@ -17,7 +17,7 @@
 
         <TextView
             android:id="@+id/tv_home"
-            android:paddingTop="20dp"
+            android:padding="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primary"
@@ -38,6 +38,8 @@
             >
 
             <Button
+                android:drawableTop="@drawable/ab_pulse"
+                android:drawablePadding="10dp"
                 android:id="@+id/home_launch_configurations"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
                 android:textColor="@color/white"
@@ -48,6 +50,8 @@
                 android:layout_height="match_parent" />
 
             <Button
+                android:drawableTop="@drawable/ab_box"
+                android:drawablePadding="10dp"
                 android:id="@+id/home_launch_projects"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
                 android:textColor="@color/white"
@@ -58,6 +62,8 @@
                 android:layout_height="match_parent" />
 
             <Button
+                android:drawableTop="@drawable/ab_plus"
+                android:drawablePadding="10dp"
                 android:id="@+id/home_create_project"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
                 android:fontFamily="sans-serif-thin"

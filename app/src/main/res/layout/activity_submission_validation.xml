@@ -1,25 +1,41 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
-    >
-    <ProgressBar
-        android:id="@+id/pb_submission"
-        android:layout_width="fill_parent"
-        android:layout_height="8dp"
-        android:indeterminate="false"
-        android:visibility="visible"
-        android:progress="50"
-        android:max="100"
-        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
-        android:progressDrawable="@drawable/alternative_progress_bar"
-        />
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/container_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+    </LinearLayout>
+
     <android.support.v4.view.ViewPager
-        android:layout_below="@id/pb_submission"
         xmlns:tools="http://schemas.android.com/tools"
+        android:layout_below="@id/container_toolbar"
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context="pt.up.fe.labtablet.activities.SubmissionValidationActivity" />
 
-</RelativeLayout>
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/pb_submission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ab_validate"
+        fab:fab_colorNormal="@color/fab_color"
+        fab:fab_progress_color="#FF009688"
+        fab:fab_colorPressed="@color/fab_color_pressed"
+        fab:fab_colorRipple="@color/fab_color_ripple"
+        android:layout_gravity="bottom|end"
+        android:layout_marginTop="-80dp"
+        android:layout_marginEnd="15dp"
+        />
+
+</LinearLayout>
