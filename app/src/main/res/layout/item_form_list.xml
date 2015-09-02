@@ -47,7 +47,7 @@
                 android:ellipsize="none"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:text="Form description"
-                android:textColor="@color/cardview_dark_background"
+
                 />
 
             <TextView
@@ -55,24 +55,20 @@
                 android:layout_below="@id/form_item_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_note"
                 android:drawableStart="@drawable/ic_note"
                 android:textColor="@color/second_grey"
                 android:gravity="center"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:text="12 Questions"
-                android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 />
 
             <TextView
                 android:id="@+id/form_item_duration"
                 android:layout_below="@id/form_item_description"
-                android:layout_toRightOf="@id/form_item_number_questions"
                 android:layout_toEndOf="@id/form_item_number_questions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_wait"
                 android:drawableStart="@drawable/ic_wait"
                 android:gravity="center"
                 android:textColor="@color/second_grey"
@@ -98,8 +94,6 @@
                 android:layout_weight=".5"
                 android:layout_height="wrap_content"
                 android:text="@string/action_cancel"
-
-                android:background="@color/fab_color"
                 />
 
             <Button

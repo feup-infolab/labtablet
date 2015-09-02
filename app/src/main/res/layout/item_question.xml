@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_margin="7dp"
-    card_view:cardCornerRadius="5dp"
-    android:layout_height="match_parent">
+    card_view:cardCornerRadius="2dp">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -38,7 +39,7 @@
                 android:ellipsize="none"
                 android:textColor="@color/text_blue_grey_darker"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:text="Is this a question? because i really want to know if this is reaaaaally reaaaaaaly a question. Maybe mr saxobeat can help with this discovery."
+                android:text="Body of the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
                 />
         </LinearLayout>
 
@@ -60,12 +61,14 @@
                 android:layout_height="wrap_content"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:textColor="@color/second_grey"
+                android:fontFamily="sans-serif-thin"
                 android:text="Multiple Choice"
                 />
             <TextView
                 android:id="@+id/form_item_values"
                 android:layout_below="@id/form_item_type"
                 android:layout_marginTop="5dp"
+                android:fontFamily="sans-serif-thin"
                 android:text="[ Yes, No, Maybe, Maybe not, I don't know ]"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />

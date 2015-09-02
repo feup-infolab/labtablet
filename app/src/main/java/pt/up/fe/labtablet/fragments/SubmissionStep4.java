@@ -12,6 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.labtablet.async.AsyncCustomTaskHandler;
@@ -114,6 +116,12 @@ public class SubmissionStep4 extends Fragment {
                         if (getActivity() == null) {
                             return;
                         }
+                        FloatingActionButton fab = new FloatingActionButton(getActivity());
+                        fab.setImageDrawable(getActivity().getDrawable(R.drawable.ab_pulse));
+                        fab.setElevationCompat(15f);
+                        fab.show(true);
+
+
                         tv_progress_status.setText(value.getMessage());
                         pbStatus.setProgress(value.getProgress());
 

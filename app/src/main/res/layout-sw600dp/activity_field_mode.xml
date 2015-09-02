@@ -41,7 +41,6 @@
             android:elevation="6dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/rl_top_buttons"
-            android:layout_below="@id/container_toolbar"
             >
             <LinearLayout
                 android:layout_width="match_parent"

@@ -62,7 +62,7 @@
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
                 android:fontFamily="sans-serif-thin"
                 android:textColor="@color/white"
-                android:text="@string/new_project"
+                android:text="@string/action_new_project"
                 android:layout_width="0dp"
                 android:layout_weight="0.3"
                 android:layout_height="match_parent" />

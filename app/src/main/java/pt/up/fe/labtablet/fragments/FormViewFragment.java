@@ -1,5 +1,7 @@
 package pt.up.fe.labtablet.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +18,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -95,7 +100,10 @@ public class FormViewFragment extends Fragment {
             return rootView;
         }
 
-        (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.VISIBLE);
+        final LinearLayout descriptionHeader = (LinearLayout) rootView.findViewById(R.id.ll_set_form_description);
+        descriptionHeader.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
+        //descriptionHeader.setVisibility(View.VISIBLE);
+
         (rootView.findViewById(R.id.set_form_description_no)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,7 +111,18 @@ public class FormViewFragment extends Fragment {
                 (rootView.findViewById(R.id.set_form_description_no)).setEnabled(false);
                 (rootView.findViewById(R.id.set_form_description_yes)).setEnabled(false);
                 currentForm.setDescription("");
-                (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.GONE);
+
+                descriptionHeader.animate()
+                        .translationY(-descriptionHeader.getHeight()).setInterpolator(new AccelerateInterpolator())
+                        .alpha(0.0f)
+                        .setDuration(300)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                descriptionHeader.setVisibility(View.GONE);
+                            }
+                        });
             }
         });
 
@@ -118,7 +137,17 @@ public class FormViewFragment extends Fragment {
                     public void onClick(View view) {
                         EditText etFormDescription = (EditText) (rootView.findViewById(R.id.et_set_form_description));
                         currentForm.setDescription(etFormDescription.getText().toString());
-                        (rootView.findViewById(R.id.ll_set_form_description)).setVisibility(View.GONE);
+                        descriptionHeader.animate()
+                                .translationY(-descriptionHeader.getHeight()).setInterpolator(new AccelerateInterpolator())
+                                .alpha(0.0f)
+                                .setDuration(300)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        descriptionHeader.setVisibility(View.GONE);
+                                    }
+                                });
                     }
                 });
 
@@ -179,7 +208,7 @@ public class FormViewFragment extends Fragment {
 
             FormMgr.updateFormEntry(currentForm, getActivity());
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
+            transaction.setCustomAnimations(R.anim.abc_shrink_fade_out_from_bottom, R.anim.abc_shrink_fade_out_from_bottom);
             transaction.replace(R.id.frame_container, new ListFormFragment());
             transaction.commit();
             return true;

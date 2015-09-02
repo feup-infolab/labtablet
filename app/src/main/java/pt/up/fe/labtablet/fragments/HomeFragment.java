@@ -1,6 +1,8 @@
 package pt.up.fe.labtablet.fragments;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -31,8 +34,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.activities.MainActivity;
 import pt.up.fe.labtablet.adapters.HomeTipsAdapter;
 import pt.up.fe.labtablet.models.HomeTip;
+import pt.up.fe.labtablet.utils.Utils;
 
 public class HomeFragment extends Fragment {
 
@@ -58,53 +63,19 @@ public class HomeFragment extends Fragment {
         ((TextView)(rootView.findViewById(R.id.tv_home))).setTypeface(fancyFont);
 
 
-
-/*
+        ArrayList<HomeTip> items = new ArrayList<>();
+        HomeTip profileStatus = new HomeTip();
         SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
         if (settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
-            tvProfileState.setText(getResources().getString(R.string.profile_already_loaded));
-            tvProfileState.setCompoundDrawablesRelativeWithIntrinsicBounds(null,
-                    yes, null, null);
+            profileStatus.setTitle(getString(R.string.home_tip_profile_status_header));
+            profileStatus.setBody(getString(R.string.home_tip_profile_status_loaded));
+            profileStatus.setResourceID("profile_ok");
         } else {
-            tvProfileState.setText(getResources().getString(R.string.no_profile));
-            tvProfileState.setCompoundDrawablesRelativeWithIntrinsicBounds(null,
-                    no, null, null);
-            btConfigurations.setText(getResources().getString(R.string.open_configurations));
+            profileStatus.setTitle(getString(R.string.home_tip_profile_status_header));
+            profileStatus.setBody(getString(R.string.home_tip_profile_status_missing));
+            profileStatus.setResourceID("profile_missing");
         }
-
-*/
-        rootView.findViewById(R.id.home_launch_configurations).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-                transaction.replace(R.id.frame_container, new ConfigurationFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-
-        rootView.findViewById(R.id.home_create_project).setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                 transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-                 transaction.replace(R.id.frame_container, new NewFavoriteBaseFragment());
-                 transaction.addToBackStack("nopes");
-                 transaction.commit();
-             }
-         });
-
-        rootView.findViewById(R.id.home_launch_projects).setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                 transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-                 transaction.replace(R.id.frame_container, new ListFavoritesFragment());
-                 transaction.addToBackStack("nopes");
-                 transaction.commit();
-             }
-         });
+        items.add(profileStatus);
 
 
         final com.github.clans.fab.FloatingActionButton actionButton = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.home_action_button);
@@ -116,7 +87,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ArrayList<HomeTip> items = new ArrayList<>();
+
 
         HomeTip tip = new HomeTip();
         tip.setTitle("Describing data");
@@ -178,15 +149,35 @@ public class HomeFragment extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                LinearLayout header = (LinearLayout)(rootView.findViewById(R.id.home_header));
+                final LinearLayout header = (LinearLayout)(rootView.findViewById(R.id.home_header));
                 if (hideToolBar) {
-                    header.animate().translationY(-header.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+
+
+                    header.animate()
+                            .translationY(-header.getHeight())
+                            .setDuration(300)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    header.setVisibility(View.GONE);
+                                }
+                            });
                     actionButton.hide(true);
-                    header.setVisibility(View.GONE);
                 } else {
-                    header.setVisibility(View.VISIBLE);
+
                     actionButton.show(true);
-                    header.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
+                    header.animate()
+                            .translationY(0)
+                            .setDuration(600)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    header.setVisibility(View.VISIBLE);
+                                }
+                            });
+
                 }
             }
 
@@ -202,36 +193,34 @@ public class HomeFragment extends Fragment {
             }
         };
 
-        itemList.setOnScrollListener(onScrollListener);
+        rootView.findViewById(R.id.home_launch_configurations).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+                transaction.replace(R.id.frame_container, new ConfigurationFragment());
+                transaction.commit();
+            }
+        });
+
+        rootView.findViewById(R.id.home_create_project).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) getActivity()).promptProjectCreation();
+            }
+        });
+
+        rootView.findViewById(R.id.home_launch_projects).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+                transaction.replace(R.id.frame_container, new ListFavoritesFragment());
+                transaction.commit();
+            }
+        });
+
+        itemList.addOnScrollListener(onScrollListener);
         return rootView;
     }
-
-    private void saveSharedPreferences()
-    {
-        // create some junk data to populate the shared preferences
-        SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-
-        // BEGIN EXAMPLE
-
-        File myPath = new File(Environment.getExternalStorageDirectory().toString());
-        File myFile = new File(myPath, "MySharedPreferences");
-
-        try {
-            FileWriter fw = new FileWriter(myFile);
-            PrintWriter pw = new PrintWriter(fw);
-
-            Map<String,?> prefsMap = prefs.getAll();
-
-            for(Map.Entry<String,?> entry : prefsMap.entrySet()) {
-                pw.println(entry.getKey() + ": " + entry.getValue().toString());
-            }
-
-            pw.close();
-            fw.close();
-
-        } catch (Exception e) {
-            Log.e(getClass().getName(), e.toString());
-        }
-    }
-
 }

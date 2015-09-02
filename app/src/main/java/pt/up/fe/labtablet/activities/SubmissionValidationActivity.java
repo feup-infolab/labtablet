@@ -106,7 +106,7 @@ public class SubmissionValidationActivity extends AppCompatActivity implements S
                         break;
                     case 2:pb_submission_state.setProgress(66, true);
                         break;
-                    case 3:pb_submission_state.setProgress(99, true);
+                    case 3:pb_submission_state.setProgress(100, true);
                         break;
                     default:
                         pb_submission_state.setProgress(0, true);

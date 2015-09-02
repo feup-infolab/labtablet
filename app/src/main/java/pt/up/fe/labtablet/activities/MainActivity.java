@@ -1,7 +1,10 @@
 package pt.up.fe.labtablet.activities;
 
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -9,26 +12,33 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.fragments.ConfigurationFragment;
 import pt.up.fe.labtablet.fragments.DrawerFragment;
+import pt.up.fe.labtablet.fragments.FavoriteDetailsFragment;
 import pt.up.fe.labtablet.fragments.HomeFragment;
 import pt.up.fe.labtablet.fragments.ListChangelogFragment;
 import pt.up.fe.labtablet.fragments.ListFavoritesFragment;
 import pt.up.fe.labtablet.fragments.ListFormFragment;
-import pt.up.fe.labtablet.fragments.NewFavoriteBaseFragment;
 import pt.up.fe.labtablet.models.ChangelogItem;
+import pt.up.fe.labtablet.models.Descriptor;
+import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class MainActivity extends AppCompatActivity implements DrawerFragment.FragmentDrawerListener {
@@ -111,8 +121,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 tag = getString(R.string.title_home);
                 break;
             case 1:
-                fragment = new NewFavoriteBaseFragment();
-                tag = getString(R.string.title_new_favorite);
+                promptProjectCreation();
                 break;
             case 2:
                 fragment = new ListFavoritesFragment();
@@ -139,7 +148,9 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
             fragmentTransaction.replace(R.id.frame_container, fragment);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -147,9 +158,6 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             ft.commit();
 
             getSupportActionBar().setTitle(tag);
-        } else {
-            // error in creating fragment
-            Log.e("MainActivity", "Error in creating fragment");
         }
     }
 
@@ -184,5 +192,108 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             Toast.makeText(this, getString(R.string.uploaded_successfully), Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * Shows a dialog for the user to input the title and optional description when creating a new favorite/project
+     */
+    public void promptProjectCreation() {
+
+        SharedPreferences settings = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        //Base configuration already loaded?
+        if (!settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
+            new android.app.AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Application Profile not loaded")
+                    .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    })
+                    .setMessage(getResources().getString(R.string.no_profile))
+                    .setIcon(R.drawable.ic_warning)
+                    .show();
+            return;
+        }
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_new_project, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+
+
+        final EditText etDescription = (EditText) dialogView.findViewById(R.id.new_project_description);
+        final EditText etTitle = (EditText) dialogView.findViewById(R.id.new_project_title);
+
+        dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String itemName = etTitle.getText().toString();
+                if (itemName.equals("")) {
+                    etTitle.setError(getString(R.string.empty_name));
+                    return;
+                }
+
+                final File favoriteFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + "/" + getResources().getString(R.string.app_name) + "/"
+                        + itemName);
+
+                if (!favoriteFolder.exists()) {
+                    Log.i("Make dir", "" + favoriteFolder.mkdir());
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.created_folder), Toast.LENGTH_SHORT).show();
+                    MainActivity.this.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(favoriteFolder)));
+                }
+
+                //Register favorite
+                FavoriteItem newFavorite = new FavoriteItem(itemName);
+
+                //Load default configuration
+                ArrayList<Descriptor> baseCfg = FavoriteMgr.getBaseDescriptors(MainActivity.this);
+                ArrayList<Descriptor> folderMetadata = new ArrayList<>();
+
+                newFavorite.setTitle(itemName);
+
+                for (Descriptor desc : baseCfg) {
+                    String descName = desc.getName().toLowerCase();
+                    if (descName.contains("date")) {
+                        desc.validate();
+                        desc.setValue(Utils.getDate());
+                        folderMetadata.add(desc);
+                    } else if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                        desc.validate();
+                        String description = etDescription.getText().toString();
+                        if (description.equals("")) {
+                            description = getString(R.string.empty_description);
+                        }
+                        desc.setValue(description);
+                        folderMetadata.add(desc);
+                    }
+                }
+
+                newFavorite.setMetadataItems(folderMetadata);
+                FavoriteMgr.registerFavorite(MainActivity.this, newFavorite);
+
+                FragmentTransaction transaction = MainActivity.this.getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                FavoriteDetailsFragment favoriteDetail = new FavoriteDetailsFragment();
+                Bundle args = new Bundle();
+                args.putString("favorite_name", newFavorite.getTitle());
+                favoriteDetail.setArguments(args);
+                transaction.replace(R.id.frame_container, favoriteDetail);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+        dialogBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
 }
 

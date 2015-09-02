@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.activities.MainActivity;
 import pt.up.fe.labtablet.adapters.FavoriteListAdapter;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.models.ChangelogItem;
@@ -61,6 +62,7 @@ public class ListFavoritesFragment extends Fragment {
                 args.putString("favorite_name", selectedItem.getTitle());
                 favoriteDetails.setArguments(args);
                 transaction.replace(R.id.frame_container, favoriteDetails);
+                //go back to the list of projects
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
@@ -97,15 +99,7 @@ public class ListFavoritesFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.action_new_dataset:
-                FragmentTransaction transaction = super.getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-                NewFavoriteBaseFragment favoriteDetails = new NewFavoriteBaseFragment();
-                Bundle args = new Bundle();
-                args.putString("favorite_name", "");
-                favoriteDetails.setArguments(args);
-                transaction.replace(R.id.frame_container, favoriteDetails);
-                transaction.addToBackStack("nopes");
-                transaction.commit();
+                ((MainActivity)getActivity()).promptProjectCreation();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -80,7 +80,7 @@
     <string name="action_delete">Delete</string>
     <string name="form_really_delete_favorite">Are you sure you want to delete this favorite. After this step, all the enclosed (meta)data will be permanently lost.</string>
     <string name="no_projects">You have no active projects. To create a new one and start collecting metadata, press the button below</string>
-    <string name="new_project">Create project</string>
+    <string name="new_project">Projects can be seen as folders in which all the recorded data and metadata will be stored. A project can hold an unlimited set of resources concerning an experimental run, a field trip or any other activity. At this stage, we only need a name and an optional description. Both can be edited at any time.</string>
     <string name="open_configurations">Configurations</string>
     <string name="no_profile">No application profile was found. Please start by loading a profile in the configurations menu</string>
     <string name="my_projects">My projects</string>
@@ -199,7 +199,7 @@
     <string name="give_allowed_values">Add the allowed values to the list below</string>
     <string name="question_created">OK! Your question was created! Tap the button below to add it to the form and conclude this process. If you wish, you can specify the expected time for the user to answer this question.</string>
     <string name="expected_duration">Expected duration (optional, in minutes)</string>
-    <string name="want_to_give_form_description">Would you like to provide a description for this form?</string>
+    <string name="want_to_give_form_description">Q: Before you start… \n   Would you like to provide a description for this form?</string>
     <string name="select_form_solve">Select the form to fill from the list bellow</string>
     <string name="form_solver_intro">You are about to start a questionnaire that has X questions and is estimated to take Y minutes. Tap the button below to start.</string>
     <string name="form">Form</string>
@@ -238,4 +238,12 @@
     <string name="title_list_forms">Forms</string>
     <string name="about_item_preview">About this item (tap to edit)</string>
     <string name="empty_description">No description provided</string>
+    <string name="new_project_header">Creating a new project</string>
+    <string name="new_project_name_hint">Name goes here</string>
+    <string name="new_project_description_hint">...and its optional description goes here</string>
+    <string name="action_new_project">New project</string>
+    <string name="empty_name">A name identifier must be provided</string>
+    <string name="home_tip_profile_status_header">Profile status</string>
+    <string name="home_tip_profile_status_loaded">Your profile is already loaded, but you can change it through the configurations area. A profile is usually built together with an information specialist that has deep knowledge about your domain. if you find the loaded profile too limited or, in some way, inappropriate for your work, contact either the developer or your supervisor.</string>
+    <string name="home_tip_profile_status_missing">The application profile is not yet loaded. In order to proceed with creating and managing projects you must first select one to import. A profile contains elements that are later associated with each of your descriptions to give them meaning within the context of your project. It is usually built in collaboration with a curator - an information specialist - responsible for identifying important indicators for projects from your domain. If you happen to need the profile, please speak with either the developer or your supervisor.</string>
 </resources>

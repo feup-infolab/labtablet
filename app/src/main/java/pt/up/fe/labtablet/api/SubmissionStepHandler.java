@@ -5,5 +5,5 @@ package pt.up.fe.labtablet.api;
  * parent activity in the submission stages
  */
 public interface SubmissionStepHandler {
-    public void nextStep(int stage);
+    void nextStep(int stage);
 }

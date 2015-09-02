@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="2dp"
+    android:layout_margin="8dp"
+    android:elevation="6dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:background="@color/primary"
+                android:text="@string/new_project_header"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/white"
+                android:padding="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:contentDescription="@string/image_placeholder"
+                android:tint="@color/primary"
+                android:tintMode="screen"
+                android:scaleType="centerCrop"
+                android:src="@drawable/describing_data"
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+            <TextView
+                android:layout_marginTop="15dp"
+                android:text="@string/new_project"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:fontFamily="sans-serif-thin"
+                android:padding="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:padding="20dp"
+                android:layout_margin="20dp"
+                android:id="@+id/new_project_title"
+                android:hint="@string/new_project_name_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <requestFocus/>
+                </EditText>
+
+            <EditText
+                android:padding="20dp"
+                android:id="@+id/new_project_description"
+                android:layout_margin="20dp"
+                android:hint="@string/new_project_description_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="120dp"
+                >
+            </EditText>
+        </LinearLayout>
+    </ScrollView>
+</android.support.v7.widget.CardView>

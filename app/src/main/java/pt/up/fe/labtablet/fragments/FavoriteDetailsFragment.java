@@ -1,23 +1,16 @@
 package pt.up.fe.labtablet.fragments;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Outline;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,10 +22,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,13 +40,11 @@ import pt.up.fe.labtablet.activities.ItemPreviewActivity;
 import pt.up.fe.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.labtablet.adapters.DataListAdapter;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
-import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.async.AsyncCustomTaskHandler;
 import pt.up.fe.labtablet.async.AsyncFileImporter;
 import pt.up.fe.labtablet.async.AsyncPackageCreator;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
-import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
@@ -109,18 +98,6 @@ public class FavoriteDetailsFragment extends Fragment {
             favoriteName = this.getArguments().getString("favorite_name");
             currentItem = FavoriteMgr.getFavorite(getActivity(), favoriteName);
             isMetadataVisible = true;
-        }
-
-        ActionBar mActionBar = getActivity().getActionBar();
-        if (mActionBar == null) {
-            ChangelogItem item = new ChangelogItem();
-            item.setMessage("FavoriteDetails" + "Couldn't get actionbar. Compatibility mode layout");
-            item.setTitle(getResources().getString(R.string.developer_error));
-            item.setDate(Utils.getDate());
-            ChangelogManager.addLog(item, getActivity());
-        } else {
-            mActionBar.setSubtitle(favoriteName);
-            mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         tv_description.setText(currentItem.getDescription());
@@ -197,8 +174,6 @@ public class FavoriteDetailsFragment extends Fragment {
             loadDataView();
         }
 
-
-        dcClickListener mClickListener = new dcClickListener();
 
         bt_fieldMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,9 +256,7 @@ public class FavoriteDetailsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if (getActivity().getActionBar() != null) {
-            getActivity().getActionBar().setSubtitle(currentItem.getTitle());
-        }
+
 
         if (favoriteName != null) {
             currentItem = FavoriteMgr.getFavorite(getActivity(), favoriteName);

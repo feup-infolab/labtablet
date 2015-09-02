@@ -75,7 +75,7 @@
     <string name="action_delete">Apagar</string>
     <string name="form_really_delete_favorite">Tem a certeza de que pretende remover este favorito? Depois disto, todos os (meta)dados dentro deste favorito serão apagados.</string>
     <string name="no_projects">Não existem projetos em aberto. Para criar um e começar a recolher metadados clique no botão em baixo.</string>
-    <string name="new_project">Nova recolha</string>
+    <string name="new_project">Projects can be seen as folders in which all the recorded data and metadata will be stored. A project can hold an unlimited set of resources concerning an experimental run, a field trip or any other activity.</string>
     <string name="open_configurations">Abrir configurações</string>
     <string name="no_profile">Nenhum perfil de aplicação encontrado. Pode definir um a partir do menu de configurações</string>
     <string name="my_projects">Abrir os meus projetos</string>
@@ -231,4 +231,12 @@
     <string name="title_list_forms">Forms</string>
     <string name="about_item_preview">About this item (tap to edit)</string>
     <string name="empty_description">No description provided</string>
+    <string name="new_project_header">Creating a new project</string>
+    <string name="new_project_name_hint">Name goes here</string>
+    <string name="new_project_description_hint">...and its optional description goes here</string>
+    <string name="action_new_project">New project</string>
+    <string name="empty_name">A name identifier must be provided</string>
+    <string name="home_tip_profile_status_header">Profile status</string>
+    <string name="home_tip_profile_status_loaded">Your profile is already loaded, but you can change it through the configurations area. A profile is usually built together with an information specialist that has deep knowledge about your domain. if you find the loaded profile too limited or, in some way, inappropriate for your work, contact either the developer or your supervisor.</string>
+    <string name="home_tip_profile_status_missing">The application profile is not yet loaded. In order to proceed with creating and managing projects you must first select one to import. A profile contains elements that are later associated with each of your descriptions to give them meaning within the context of your project. It is usually built in collaboration with a curator - an information specialist - responsible for identifying important indicators for projects from your domain. If you happen to need the profile, please speak with either the developer or your supervisor.</string>
 </resources>

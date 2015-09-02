@@ -103,8 +103,6 @@ public class ListFormFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        //Any other layout data insertion can go here
-
         return rootView;
     }
 

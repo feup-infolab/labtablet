@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_favorite_upload"
-        android:icon="@drawable/ab_upload"
+        android:icon="@drawable/ic_backup_white_24dp"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
         android:title="@string/action_upload" />
