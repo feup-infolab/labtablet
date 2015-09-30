@@ -66,7 +66,7 @@ public class ListFormFragment extends Fragment {
                 args.putString("form", new Gson().toJson(items.get(position)));
                 formDetail.setArguments(args);
                 transaction.replace(R.id.frame_container, formDetail);
-                transaction.addToBackStack(null);
+                //transaction.addToBackStack(null);
                 transaction.commit();
             }
 

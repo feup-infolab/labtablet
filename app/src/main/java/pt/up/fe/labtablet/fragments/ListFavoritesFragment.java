@@ -63,7 +63,7 @@ public class ListFavoritesFragment extends Fragment {
                 favoriteDetails.setArguments(args);
                 transaction.replace(R.id.frame_container, favoriteDetails);
                 //go back to the list of projects
-                transaction.addToBackStack(null);
+                //transaction.addToBackStack(null);
                 transaction.commit();
             }
 

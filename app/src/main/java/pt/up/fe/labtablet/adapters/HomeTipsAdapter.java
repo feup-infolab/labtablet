@@ -49,10 +49,10 @@ public class HomeTipsAdapter extends RecyclerView.Adapter<HomeTipsAdapter.TipIte
                 holder.tipDrawable.setImageDrawable(drawable);
                 holder.tipDrawable.setVisibility(View.VISIBLE);
             } else {
-                holder.tipDrawable.setVisibility(View.GONE);
+                //holder.tipDrawable.setVisibility(View.GONE);
             }
         } else {
-            holder.tipDrawable.setVisibility(View.GONE);
+            //holder.tipDrawable.setVisibility(View.GONE);
         }
     }
 

@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
             fragmentTransaction.replace(R.id.frame_container, fragment);
-            fragmentTransaction.addToBackStack(null);
+            //fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         //Base configuration already loaded?
         if (!settings.contains(Utils.BASE_DESCRIPTORS_ENTRY)) {
             new android.app.AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Application Profile not loaded")
+                    .setTitle(getString(R.string.no_profile))
                     .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 args.putString("favorite_name", newFavorite.getTitle());
                 favoriteDetail.setArguments(args);
                 transaction.replace(R.id.frame_container, favoriteDetail);
-                transaction.addToBackStack(null);
+                //transaction.addToBackStack(null);
                 transaction.commit();
             }
         });

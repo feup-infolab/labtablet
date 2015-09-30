@@ -10,15 +10,20 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+
+import com.github.clans.fab.FloatingActionButton;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
@@ -28,7 +33,7 @@ import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.utils.ColorPickerDialog;
 import pt.up.fe.labtablet.utils.Utils;
 
-public class FingerPaintActivity extends Activity implements ColorPickerDialog.OnColorChangedListener {
+public class FingerPaintActivity extends AppCompatActivity implements ColorPickerDialog.OnColorChangedListener {
 
     private MyView mDrawingView;
     private String folderName;
@@ -38,8 +43,10 @@ public class FingerPaintActivity extends Activity implements ColorPickerDialog.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_sketch);
         folderName = getIntent().getStringExtra("folderName");
 
+        /*
         ActionBar mActionBar = getActionBar();
         if (mActionBar == null) {
             ChangelogItem item = new ChangelogItem();
@@ -51,10 +58,12 @@ public class FingerPaintActivity extends Activity implements ColorPickerDialog.O
             getActionBar().setTitle(folderName);
             getActionBar().setSubtitle(getResources().getString(R.string.title_activity_finger_paint));
         }
+        */
 
         mDrawingView = new MyView(this);
         mDrawingView.setDrawingCacheEnabled(true);
         mDrawingView.setBackgroundResource(R.drawable.card);//set the back ground if you wish to
+
         setContentView(mDrawingView);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -64,6 +73,9 @@ public class FingerPaintActivity extends Activity implements ColorPickerDialog.O
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(15);
+
+
+
     }
 
     @Override
@@ -177,7 +189,7 @@ public class FingerPaintActivity extends Activity implements ColorPickerDialog.O
         }
 
         private void touch_start(float x, float y) {
-//showDialog();
+            //showDialog();
             mPath.reset();
             mPath.moveTo(x, y);
             mX = x;

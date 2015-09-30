@@ -4,8 +4,10 @@ package pt.up.fe.labtablet.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -84,6 +86,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "2015 Infolab", Toast.LENGTH_SHORT).show();
+                String url = "http://dendro.fe.up.pt/";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             }
         });
 
@@ -144,6 +150,7 @@ public class HomeFragment extends Fragment {
         itemList.setAdapter(adapter);
         itemList.animate();
 
+        /*
         RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
             boolean hideToolBar = false;
             @Override
@@ -192,7 +199,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         };
-
+*/
         rootView.findViewById(R.id.home_launch_configurations).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -220,7 +227,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        itemList.addOnScrollListener(onScrollListener);
+        //itemList.addOnScrollListener(onScrollListener);
         return rootView;
     }
 }
