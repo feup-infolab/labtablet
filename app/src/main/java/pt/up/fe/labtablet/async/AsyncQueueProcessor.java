@@ -106,7 +106,7 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
                 dataItem.setHumanReadableSize(FileMgr.humanReadableByteCount(dst.length(), false));
                 dataItem.setMimeType(FileMgr.getMimeType(dst.getPath()));
 
-                ArrayList<Descriptor> itemLevelMetadata = new ArrayList<Descriptor>();
+                ArrayList<Descriptor> itemLevelMetadata = new ArrayList<>();
 
                 ArrayList<Descriptor> loadedDescriptors =
                         FavoriteMgr.getBaseDescriptors(mContext);
@@ -114,15 +114,19 @@ public class AsyncQueueProcessor extends AsyncTask<Object, Integer, Void> {
                 //If additional metadata is available, it should me added here
                 for (Descriptor dataDesc : loadedDescriptors) {
                     String tag = dataDesc.getTag();
-                    if (tag.equals(Utils.TITLE_TAG)) {
-                        dataDesc.setValue(dst.getName());
-                        itemLevelMetadata.add(dataDesc);
-                    } else if (tag.equals(Utils.CREATED_TAG)) {
-                        dataDesc.setValue("" + new Date());
-                        itemLevelMetadata.add(dataDesc);
-                    } else if (tag.equals(Utils.DESCRIPTION_TAG)) {
-                        dataDesc.setValue("No description provided");
-                        itemLevelMetadata.add(dataDesc);
+                    switch (tag) {
+                        case Utils.TITLE_TAG:
+                            dataDesc.setValue(dst.getName());
+                            itemLevelMetadata.add(dataDesc);
+                            break;
+                        case Utils.CREATED_TAG:
+                            dataDesc.setValue("" + new Date());
+                            itemLevelMetadata.add(dataDesc);
+                            break;
+                        case Utils.DESCRIPTION_TAG:
+                            dataDesc.setValue("No description provided");
+                            itemLevelMetadata.add(dataDesc);
+                            break;
                     }
                 }
                 dataItem.setFileLevelMetadata(itemLevelMetadata);

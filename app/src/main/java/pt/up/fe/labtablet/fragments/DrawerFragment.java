@@ -21,9 +21,6 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.NavigationDrawerAdapter;
 import pt.up.fe.labtablet.models.NavDrawerItem;
 
-/**
- * Created by ricardo on 8/27/15.
- */
 public class DrawerFragment extends Fragment {
 
     private static String TAG = DrawerFragment.class.getSimpleName();
@@ -49,9 +46,9 @@ public class DrawerFragment extends Fragment {
 
 
         // preparing navigation drawer items
-        for (int i = 0; i < titles.length; i++) {
+        for (String title : titles) {
             NavDrawerItem navItem = new NavDrawerItem();
-            navItem.setTitle(titles[i]);
+            navItem.setTitle(title);
             data.add(navItem);
         }
         return data;

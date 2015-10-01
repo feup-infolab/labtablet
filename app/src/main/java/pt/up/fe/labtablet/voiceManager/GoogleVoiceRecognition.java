@@ -240,225 +240,232 @@ public class GoogleVoiceRecognition implements
         //Log.d("current Order", currentAction);
 
         Map<String, String> kwords = null;
-        if(VoiceOrdersFile.currentLang.equals("en"))
-            kwords = (Map<String, String>) VoiceOrdersFile.savedKeywords_eng.getAll();
-        else  if(VoiceOrdersFile.currentLang.equals("pt"))
-            kwords = (Map<String, String>) VoiceOrdersFile.savedKeywords_pt.getAll();
-        else Log.e("GVR", "kwords null - ERROR");
-
-        if(currentAction.equals(AC_GPS)){
-            if(dialogGPS != null)
-            {
-                if(result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.YES))){
-                    dialogGPS.getButton(Dialog.BUTTON_POSITIVE).performClick();
-                }
-                else if(result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.NO))){
-                    dialogGPS.getButton(Dialog.BUTTON_NEGATIVE).performClick();
-                }
-            }
-            else Log.e("googleRec", "gps dialog null");
+        switch (VoiceOrdersFile.currentLang) {
+            case "en":
+                kwords = (Map<String, String>) VoiceOrdersFile.savedKeywords_eng.getAll();
+                break;
+            case "pt":
+                kwords = (Map<String, String>) VoiceOrdersFile.savedKeywords_pt.getAll();
+                break;
+            default:
+                Log.e("GVR", "kwords null - ERROR");
+                break;
         }
-        else if (currentAction.equals(AC_TAKING_NOTE)) { //some note
 
-            if (textRecord != null) {
+        switch (currentAction) {
+            case AC_GPS:
+                if (dialogGPS != null) {
+                    if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.YES))) {
+                        dialogGPS.getButton(Dialog.BUTTON_POSITIVE).performClick();
+                    } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.NO))) {
+                        dialogGPS.getButton(Dialog.BUTTON_NEGATIVE).performClick();
+                    }
+                } else Log.e("googleRec", "gps dialog null");
+                break;
+            case AC_TAKING_NOTE:  //some note
 
-                if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.CANCEL_NOTE))
-                        || result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.CANCEL_NOTE)+"s")) {
-                    dialogTextInput.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
-                } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.SAVE_NOTE))
-                        || (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.SAVE_NOTE)+"s"))) {
-                    dialogTextInput.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
-                } else {
-                    if (textRecord.getText().toString().length() == 0)
-                        textRecord.append(result);
-                    else textRecord.append(" " + result);
+                if (textRecord != null) {
+
+                    if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.CANCEL_NOTE))
+                            || result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.CANCEL_NOTE) + "s")) {
+                        dialogTextInput.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+                    } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.SAVE_NOTE))
+                            || (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.SAVE_NOTE) + "s"))) {
+                        dialogTextInput.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+                    } else {
+                        if (textRecord.getText().toString().length() == 0)
+                            textRecord.append(result);
+                        else textRecord.append(" " + result);
+                    }
                 }
-            }
-        } else if (currentAction.equals(AC_DESC_NAME)) { //descriptor name
+                break;
+            case AC_DESC_NAME:  //descriptor name
 
-            mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, LANG_EN);
+                mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, LANG_EN);
 
-            if (result.equalsIgnoreCase(fieldModeActivity.getResources().getString(R.string.cancel))) {
+                if (result.equalsIgnoreCase(fieldModeActivity.getResources().getString(R.string.cancel))) {
 
-                mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, VoiceOrdersFile.currentLang);
-                audioUnmute();
-                fieldModeActivity.getTTSvoice().informCanceled();
-            } else {
+                    mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, VoiceOrdersFile.currentLang);
+                    audioUnmute();
+                    fieldModeActivity.getTTSvoice().informCanceled();
+                } else {
 
-                ArrayList<Descriptor> descriptors = FavoriteMgr.getBaseDescriptors(fieldModeActivity);
-                boolean validDescriptor = false;
-                Descriptor selectedDescriptor = null;
-                for (Descriptor d : descriptors) {
-                    if (d.getName().equalsIgnoreCase(result)) {
-                        {
-                            validDescriptor = true;
-                            selectedDescriptor = d;
+                    ArrayList<Descriptor> descriptors = FavoriteMgr.getBaseDescriptors(fieldModeActivity);
+                    boolean validDescriptor = false;
+                    Descriptor selectedDescriptor = null;
+                    for (Descriptor d : descriptors) {
+                        if (d.getName().equalsIgnoreCase(result)) {
+                            {
+                                validDescriptor = true;
+                                selectedDescriptor = d;
+                            }
+                            break;
                         }
-                        break;
+                    }
+
+                    //Log.d("validDescriptor", validDescriptor + "");
+
+                    if (validDescriptor) {
+                        pause();
+                        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, VoiceOrdersFile.currentLang);
+                        fieldModeActivity.getTTSvoice().askForDescriptorValue();
+
+                        Log.i("Current lang", VoiceOrdersFile.currentLang);
+
+                        selectedDescriptor.setState(Utils.DESCRIPTOR_STATE_VALIDATED);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(fieldModeActivity);
+                        builder.setTitle(selectedDescriptor.getName());
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(fieldModeActivity,
+                                android.R.layout.simple_dropdown_item_1line,
+                                selectedDescriptor.getAllowed_values()
+                                        .toArray(new String[selectedDescriptor.getAllowed_values().size()]));
+
+                        autoCompleteTextView = new MultiAutoCompleteTextView(fieldModeActivity);
+                        autoCompleteTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+                        autoCompleteTextView.setAdapter(adapter);
+                        autoCompleteTextView.setThreshold(1);
+
+                        autoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
+
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                autoCompleteTextView.showDropDown();
+                                return false;
+                            }
+                        });
+
+
+                        // Set up the input
+                        builder.setView(autoCompleteTextView);
+
+                        // Set up the buttons
+
+                        final Descriptor newDescriptor = selectedDescriptor;
+                        builder.setPositiveButton(fieldModeActivity.getResources().getString(R.string.form_ok), new
+                                DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (autoCompleteTextView.getText().toString().equals("")) {
+                                            fieldModeActivity.getTTSvoice().informNotSaved();
+                                            autoCompleteTextView.setError("The value shall not be empty.");
+                                        } else {
+                                            newDescriptor.setValue(autoCompleteTextView.getText().toString());
+                                            fieldModeActivity.getCurrentFavoriteItem().addMetadataItem(newDescriptor);
+                                            FavoriteMgr.updateFavoriteEntry(fieldModeActivity.getCurrentFavoriteItem().getTitle(),
+                                                    fieldModeActivity.getCurrentFavoriteItem(), fieldModeActivity);
+
+                                            dialog.dismiss();
+
+                                            fieldModeActivity.getTTSvoice().informDescriptorAdded();
+
+                                        }
+                                    }
+                                });
+
+                        builder.setNegativeButton(fieldModeActivity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener
+                                () {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                Toast.makeText(fieldModeActivity.getApplication(), fieldModeActivity.getResources().getString(R.string.cancelled),
+                                        Toast.LENGTH_SHORT).show();
+
+                                audioUnmute();
+                                fieldModeActivity.getTTSvoice().informCanceled();
+                            }
+                        });
+
+                        final AlertDialog alertDialog = builder.show();
+
+                        dialogTextInput = alertDialog;
+
+
+                    } else {
+                        if (VoiceOrdersFile.warningsOn) audioUnmute();
+                        pause();
+
+                        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, LANG_EN);
+                        fieldModeActivity.getTTSvoice().informInvalidDescName(result);
+
+
                     }
                 }
 
-                //Log.d("validDescriptor", validDescriptor + "");
 
-                if (validDescriptor) {
-                    pause();
-                    mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, VoiceOrdersFile.currentLang);
-                    fieldModeActivity.getTTSvoice().askForDescriptorValue();
-
-                    Log.i("Current lang", VoiceOrdersFile.currentLang);
-
-                    selectedDescriptor.setState(Utils.DESCRIPTOR_STATE_VALIDATED);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(fieldModeActivity);
-                    builder.setTitle(selectedDescriptor.getName());
-
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(fieldModeActivity,
-                            android.R.layout.simple_dropdown_item_1line,
-                            selectedDescriptor.getAllowed_values()
-                                    .toArray(new String[selectedDescriptor.getAllowed_values().size()]));
-
-                    autoCompleteTextView = new MultiAutoCompleteTextView(fieldModeActivity);
-                    autoCompleteTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-                    autoCompleteTextView.setAdapter(adapter);
-                    autoCompleteTextView.setThreshold(1);
-
-                    autoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
-
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            autoCompleteTextView.showDropDown();
-                            return false;
-                        }
-                    });
-
-
-                    // Set up the input
-                    builder.setView(autoCompleteTextView);
-
-                    // Set up the buttons
-
-                    final Descriptor newDescriptor = selectedDescriptor;
-                    builder.setPositiveButton(fieldModeActivity.getResources().getString(R.string.form_ok), new
-                            DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (autoCompleteTextView.getText().toString().equals("")) {
-                                        fieldModeActivity.getTTSvoice().informNotSaved();
-                                        autoCompleteTextView.setError("The value shall not be empty.");
-                                    } else {
-                                        newDescriptor.setValue(autoCompleteTextView.getText().toString());
-                                        fieldModeActivity.getCurrentFavoriteItem().addMetadataItem(newDescriptor);
-                                        FavoriteMgr.updateFavoriteEntry(fieldModeActivity.getCurrentFavoriteItem().getTitle(),
-                                                fieldModeActivity.getCurrentFavoriteItem(), fieldModeActivity);
-
-                                        dialog.dismiss();
-
-                                        fieldModeActivity.getTTSvoice().informDescriptorAdded();
-
-                                    }
-                                }
-                            });
-
-                    builder.setNegativeButton(fieldModeActivity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener
-                            () {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            Toast.makeText(fieldModeActivity.getApplication(), fieldModeActivity.getResources().getString(R.string.cancelled),
-                                    Toast.LENGTH_SHORT).show();
-
-                            audioUnmute();
-                            fieldModeActivity.getTTSvoice().informCanceled();
-                        }
-                    });
-
-                    final AlertDialog alertDialog = builder.show();
-
-                    dialogTextInput = alertDialog;
-
-
+                break;
+            case AC_DESC_VALUE:
+                if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.CANCEL_DESC_VALUE))) {
+                    dialogTextInput.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+                } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.SAVE_DESC_VALUE))) {
+                    dialogTextInput.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
                 } else {
-                    if(VoiceOrdersFile.warningsOn) audioUnmute();
+                    if (autoCompleteTextView.getText().toString().length() == 0)
+                        autoCompleteTextView.append(result);
+                    else autoCompleteTextView.append(" " + result);
+                }
+
+                break;
+            case AC_ORDER:  //some order
+
+                if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.NOTE)) || result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.NOTE) + "s")) {
                     pause();
 
-                    mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, LANG_EN);
-                    fieldModeActivity.getTTSvoice().informInvalidDescName(result);
-
-
-                }
-            }
-
-
-        } else if (currentAction.equals(AC_DESC_VALUE)) {
-            if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.CANCEL_DESC_VALUE))) {
-                dialogTextInput.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
-            } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.SAVE_DESC_VALUE))) {
-                dialogTextInput.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
-            } else {
-                if (autoCompleteTextView.getText().toString().length() == 0)
-                    autoCompleteTextView.append(result);
-                else autoCompleteTextView.append(" " + result);
-            }
-
-        } else if (currentAction.equals(AC_ORDER)) { //some order
-
-            if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.NOTE)) || result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.NOTE)+"s")) {
-                pause();
-
-                fieldModeActivity.getBt_note().performClick();
-            } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.BATTERY))) {
-                audioUnmute(); //ttsVoice
-                if (!fieldModeActivity.getBt_temperature_sample().isEnabled()) {
-                    fieldModeActivity.getTTSvoice().sayBtnDisabled();
-                } else
-                fieldModeActivity.getBt_temperature_sample().performClick();
-            } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.POSITION))) {
-                audioUnmute(); //ttsVoice
-                if (!fieldModeActivity.getBt_location().isEnabled()) {
-                    fieldModeActivity.getTTSvoice().sayBtnDisabled();
-                } else
-                    fieldModeActivity.getBt_location().performClick();
-            }else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.RECORD))) {
-                audioUnmute(); //ttsVoice
+                    fieldModeActivity.getBt_note().performClick();
+                } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.BATTERY))) {
+                    audioUnmute(); //ttsVoice
+                    if (!fieldModeActivity.getBt_temperature_sample().isEnabled()) {
+                        fieldModeActivity.getTTSvoice().sayBtnDisabled();
+                    } else
+                        fieldModeActivity.getBt_temperature_sample().performClick();
+                } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.POSITION))) {
+                    audioUnmute(); //ttsVoice
+                    if (!fieldModeActivity.getBt_location().isEnabled()) {
+                        fieldModeActivity.getTTSvoice().sayBtnDisabled();
+                    } else
+                        fieldModeActivity.getBt_location().performClick();
+                } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.RECORD))) {
+                    audioUnmute(); //ttsVoice
                     if (!fieldModeActivity.getBt_audio().isEnabled()) {
                         fieldModeActivity.getTTSvoice().sayBtnDisabled();
                     } else
                         fieldModeActivity.getBt_audio().performClick();
-            } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.LUMINOSITY))) {
-                audioUnmute(); //ttsVoice
-                if (!fieldModeActivity.getBt_luminosity_sample().isEnabled()) {
-                    fieldModeActivity.getTTSvoice().sayBtnDisabled();
-                } else
-                fieldModeActivity.getBt_luminosity_sample().performClick();
-            } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.INTERNET))) {
-                audioUnmute(); //ttsVoice
-                if (!fieldModeActivity.getBt_network_temperature_sample().isEnabled()) {
-                    fieldModeActivity.getTTSvoice().sayBtnDisabled();
-                } else
-                    fieldModeActivity.getBt_network_temperature_sample().performClick();
-            } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.MAGNETIC))) {
-                audioUnmute(); //ttsVoice
-                if (!fieldModeActivity.getBt_magnetic_sample().isEnabled()) {
-                    fieldModeActivity.getTTSvoice().sayBtnDisabled();
-                } else
-                fieldModeActivity.getBt_magnetic_sample().performClick();
-            } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.GOODBYE)) &&
-                    fieldModeActivity.getSw_handsFree().isChecked()) {
-                audioUnmute();
-                fieldModeActivity.getSw_handsFree().performClick();
-            } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.GPS))) {
-                audioUnmute();
-                fieldModeActivity.getSw_gps().performClick();
+                } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.LUMINOSITY))) {
+                    audioUnmute(); //ttsVoice
+                    if (!fieldModeActivity.getBt_luminosity_sample().isEnabled()) {
+                        fieldModeActivity.getTTSvoice().sayBtnDisabled();
+                    } else
+                        fieldModeActivity.getBt_luminosity_sample().performClick();
+                } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.INTERNET))) {
+                    audioUnmute(); //ttsVoice
+                    if (!fieldModeActivity.getBt_network_temperature_sample().isEnabled()) {
+                        fieldModeActivity.getTTSvoice().sayBtnDisabled();
+                    } else
+                        fieldModeActivity.getBt_network_temperature_sample().performClick();
+                } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.MAGNETIC))) {
+                    audioUnmute(); //ttsVoice
+                    if (!fieldModeActivity.getBt_magnetic_sample().isEnabled()) {
+                        fieldModeActivity.getTTSvoice().sayBtnDisabled();
+                    } else
+                        fieldModeActivity.getBt_magnetic_sample().performClick();
+                } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.GOODBYE)) &&
+                        fieldModeActivity.getSw_handsFree().isChecked()) {
+                    audioUnmute();
+                    fieldModeActivity.getSw_handsFree().performClick();
+                } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.GPS))) {
+                    audioUnmute();
+                    fieldModeActivity.getSw_gps().performClick();
 
 
-            } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.DESCRIPTOR))) {
-                pause();
-                mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, LANG_EN);
-                fieldModeActivity.getTTSvoice().askForDescriptor();
+                } else if (result.equalsIgnoreCase(kwords.get(VoiceOrdersFile.DESCRIPTOR))) {
+                    pause();
+                    mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, LANG_EN);
+                    fieldModeActivity.getTTSvoice().askForDescriptor();
 
-            }
+                }
 
 
-
+                break;
         }
 
         if(!paused)

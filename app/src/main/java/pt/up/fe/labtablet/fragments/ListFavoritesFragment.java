@@ -1,12 +1,10 @@
 package pt.up.fe.labtablet.fragments;
 
 
-import android.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,8 +23,6 @@ import java.util.Date;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.MainActivity;
 import pt.up.fe.labtablet.adapters.FavoriteListAdapter;
-import pt.up.fe.labtablet.api.ChangelogManager;
-import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.OnItemClickListener;

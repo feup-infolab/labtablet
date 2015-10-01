@@ -2,11 +2,9 @@ package pt.up.fe.labtablet.voiceManager;
 
 import android.os.CountDownTimer;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
@@ -15,9 +13,6 @@ import pt.up.fe.labtablet.activities.FieldModeActivity;
 
 import static edu.cmu.pocketsphinx.SpeechRecognizerSetup.defaultSetup;
 
-/**
- * Created by Susana on 04-May-15.
- */
 public class OfflineVoiceRecognition implements RecognitionListener {
     final String TAG = "OfflineVoiceRecognition";
 
@@ -51,12 +46,10 @@ public class OfflineVoiceRecognition implements RecognitionListener {
 
     @Override
     public void onBeginningOfSpeech() {
-        Log.i(TAG, "beginning of speech");
     }
 
     @Override
     public void onEndOfSpeech() {
-        Log.i(TAG, "end of speech");
         recognizer.stop();
 
     }
@@ -68,23 +61,13 @@ public class OfflineVoiceRecognition implements RecognitionListener {
         if (hypothesis == null)
             return;
 
-        String text = hypothesis.getHypstr();
-
-        Log.i("partial result:", text);
-
-
     }
 
     @Override
     public void onResult(Hypothesis hypothesis) {
-        Log.i(TAG, "final result");
-
 
         if (hypothesis != null) {
-
-
             String text = hypothesis.getHypstr();
-            Log.i("final result", text);
 
 
             if (text.equalsIgnoreCase(OFF_GOODBYE) &&
@@ -128,10 +111,7 @@ public class OfflineVoiceRecognition implements RecognitionListener {
             recognizer.stop();
 
         } else {
-            Log.i(TAG, "hypothesis null");
-
             recognizer.stop();
-            //Toast.makeText(fieldModeActivity.getApplicationContext(), "I did not understand. Please repeat it.",Toast.LENGTH_SHORT).show();
             recognizer.startListening(ORDERS);
 
         }
@@ -163,23 +143,12 @@ public class OfflineVoiceRecognition implements RecognitionListener {
 
         recognizer.addListener(this);
 
-        // Create grammar-based search for digit recognition
-        //File ordersGrammar = new File(assetsDir, "orders.gram");
         File ordersKeywords = new File(assetsDir, "ordersKeywords.gram");
-        //File wakeupKeyword = new File(assetsDir, "wakeup.gram");
-        File englishLm = new File(assetsDir, "cmusphinx-5.0-en-us.lm.dmp");
-
-        //recognizer.addNgramSearch(ORDERS, englishLm);
-
-
-        //recognizer.addKeywordSearch(WAKEUP_ORDER, wakeupKeyword);
-
         recognizer.addKeywordSearch(ORDERS, ordersKeywords);
 
     }
 
     public void startListen() {
-        Log.d(TAG, "I'm listening");
         if(recognizer != null) recognizer.startListening(ORDERS);
     }
 
@@ -190,7 +159,6 @@ public class OfflineVoiceRecognition implements RecognitionListener {
     }
 
     public void shutdown() {
-        Log.d(TAG, "recognizer shutdown");
         if(recognizer == null) return;
         recognizer.cancel();
         recognizer.shutdown();

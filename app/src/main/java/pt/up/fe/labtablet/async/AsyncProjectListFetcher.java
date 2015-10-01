@@ -34,10 +34,7 @@ public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, Project
             error = new Exception("Expected Context, got null");
             return null;
         }
-        if (!(params[0] instanceof Context)) {
-            error = new Exception("Type mismatch (expected Context)");
-            return null;
-        }
+
         Context mContext = params[0];
 
         try {

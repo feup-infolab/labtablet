@@ -52,9 +52,6 @@
     <string name="base_configuration_not_found">Base configuration not found. Please select an application profile from the home screen.</string>
     <string name="check_connectivity">Please check your internet connectivity.</string>
     <string name="edit">Edit</string>
-    <string name="title_activity_field_mode">Field Mode</string>
-    <string name="title_activity_finger_paint">Sketch note</string>
-    <string name="title_activity_validate_metadata">ValidateMetadataActivity</string>
     <string name="cancel">Cancel</string>
     <string name="edit_metadata_item_delete">Delete record?</string>
     <string name="favorite_view_no_description">No description available</string>
@@ -184,7 +181,6 @@
     <string name="get_form_name">Form name</string>
     <string name="form_editor_top">These are the questions associated with this form. You can edit them or add new ones.</string>
     <string name="empty_form_rl">There are no items associated with this form. To add a new one, tap the button below.</string>
-    <string name="title_activity_form_question_creator">FormQuestionCreatorActivity</string>
     <string name="form_already_exists">This form already exists in your list. Please provide a different name</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -217,7 +213,6 @@
     <string name="new_favorite_create">Create</string>
     <string name="file_imported_description">Successfully imported file.</string>
     <string name="upload_generating_forms">Generating forms&#8230;</string>
-    <string name="title_activity_item_preview">itemPreviewActivity</string>
     <string name="action_zip">Create a zip file</string>
     <string name="image_placeholder">Image Placeholder</string>
     <string name="action_test">Test</string>
@@ -230,12 +225,7 @@
     <string name="tap_to_pick_descriptor">Tap here to choose a descriptor from the available set.</string>
     <string name="disabled_action">Action disabled by developer</string>
     <string name="location_disabled">Access to location services is disabled. Please enable them first</string>
-    <string name="title_home" />
-    <string name="title_list">Favorites</string>
-    <string name="title_new_favorite">New Project</string>
-    <string name="title_changelog">Updates</string>
-    <string name="title_configurations">Configurations</string>
-    <string name="title_list_forms">Forms</string>
+
     <string name="about_item_preview">About this item (tap to edit)</string>
     <string name="empty_description">No description provided</string>
     <string name="new_project_header">Creating a new project</string>
@@ -247,7 +237,17 @@
     <string name="home_tip_profile_status_loaded">Your profile is already loaded, but you can change it through the configurations area. A profile is usually built together with an information specialist that has deep knowledge about your domain. if you find the loaded profile too limited or, in some way, inappropriate for your work, contact either the developer or your supervisor.</string>
     <string name="home_tip_profile_status_missing">The application profile is not yet loaded. In order to proceed with creating and managing projects you must first select one to import. A profile contains elements that are later associated with each of your descriptions to give them meaning within the context of your project. It is usually built in collaboration with a curator - an information specialist - responsible for identifying important indicators for projects from your domain. If you happen to need the profile, please speak with either the developer or your supervisor.</string>
 
-
+    <string name="title_home">Home</string>
+    <string name="title_list">Favorites</string>
+    <string name="title_new_favorite">New Project</string>
+    <string name="title_changelog">Updates</string>
+    <string name="title_configurations">Configurations</string>
+    <string name="title_list_forms">Forms</string>
+    <string name="title_activity_item_preview">Item preview</string>
+    <string name="title_activity_form_question_creator">Creating a question</string>
+    <string name="title_activity_field_mode">Field Mode</string>
+    <string name="title_activity_finger_paint">Sketch note</string>
+    <string name="title_activity_validate_metadata">Validating records</string>
 
 
     <string name="network_temp_vr">Network</string><!-- for voice recognition -->

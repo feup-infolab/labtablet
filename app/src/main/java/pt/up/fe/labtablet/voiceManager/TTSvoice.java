@@ -1,27 +1,18 @@
 package pt.up.fe.labtablet.voiceManager;
 
-import android.os.AsyncTask;
 import android.os.Build;
-import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 
-import edu.cmu.pocketsphinx.Assets;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.FieldModeActivity;
 import pt.up.fe.labtablet.utils.Utils;
 
-/**
- * Created by Susana on 07-May-15.
- */
 public class TTSvoice {
     private final String TAG = "TTSvoice";
     FieldModeActivity fieldMode;
@@ -30,7 +21,6 @@ public class TTSvoice {
     /* Utterance IDs */
     public static final String UID_HELLO = "hello";
     public static final String UID_GOODBYE = "goodbye";
-    public static final String UID_ERROR = "error";
     public static final String UID_OP_DISABLED = "option_disabled";
     public static final String UID_DESC_INVALID = "invalid_descriptor";
     public static final String UID_CANCELED = "canceled";
@@ -72,68 +62,74 @@ public class TTSvoice {
                                 Log.i(TAG, utteranceId);
 
 
-                                if (utteranceId.equals(UID_HELLO)) {
+                                switch (utteranceId) {
+                                    case UID_HELLO:
 
-                                    if (Utils.isOnline(fieldMode)) {//try with google recognition if possible
-                                        fieldMode.turnOnGoogleRec();
+                                        if (Utils.isOnline(fieldMode)) {//try with google recognition if possible
+                                            fieldMode.turnOnGoogleRec();
+                                            
+                                        } else { //try with offline recognition
+                                            fieldMode.turnOnSphinxRec();
+                                        }
+
+                                        break;
+                                    case UID_GOODBYE:
+                                        Log.i(TAG, "shutting down");
+                                        ttSvoice.shutdown();
+                                        fieldMode.shutdownRecognizer();
 
 
-                                    } else { //try with offline recognition
-                                        fieldMode.turnOnSphinxRec();
+                                        break;
+                                    case UID_DESC_WATING:
+                                        Log.i(TAG, UID_DESC_WATING);
+                                        fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_DESC_NAME;
+                                        fieldMode.getGoogleRecognizer().restart();
 
-                                    }
+                                        break;
+                                    case UID_DESC_INVALID:
+                                        Log.i(TAG, UID_DESC_INVALID);
 
-                                } else if (utteranceId.equals(UID_GOODBYE)) {
-                                    Log.i(TAG, "shutting down");
-                                    ttSvoice.shutdown();
-                                    fieldMode.shutdownRecognizer();
+                                        fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_DESC_NAME;
+                                        fieldMode.getGoogleRecognizer().restart();
 
+                                        break;
+                                    case UID_DESC_ADDED:
+                                        fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_ORDER;
 
-                                } else if (utteranceId.equals(UID_DESC_WATING)) {
-                                    Log.i(TAG, UID_DESC_WATING);
-                                    fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_DESC_NAME;
-                                    fieldMode.getGoogleRecognizer().restart();
+                                        break;
+                                    case UID_TEXT_WAITING:
+                                        fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_TAKING_NOTE;
+                                        fieldMode.getGoogleRecognizer().restart();
+                                        break;
+                                    case UID_CANCELED:
+                                        fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_ORDER;
+                                        fieldMode.getGoogleRecognizer().resetAndRestart();
 
-                                } else if (utteranceId.equals(UID_DESC_INVALID)) {
-                                    Log.i(TAG, UID_DESC_INVALID);
+                                        break;
+                                    case UID_SAVED:
+                                    case UID_NOT_SAVED:
+                                        fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_ORDER;
+                                        fieldMode.getGoogleRecognizer().resetAndRestart();
+                                        break;
+                                    case UID_DESC_VAL_WATING:
+                                        fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_DESC_VALUE;
+                                        fieldMode.getGoogleRecognizer().restart();
+                                        break;
+                                    case UID_OP_DISABLED:
+                                        fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_ORDER;
+                                        fieldMode.getGoogleRecognizer().resetAndRestart();
+                                        break;
+                                    case UID_LOST_CONN:
+                                        fieldMode.getSw_handsFree().performClick();
 
-                                    fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_DESC_NAME;
-                                    fieldMode.getGoogleRecognizer().restart();
-
-                                } else if(utteranceId.equals(UID_DESC_ADDED)){
-                                    fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_ORDER;
-
-                                } else if(utteranceId.equals(UID_TEXT_WAITING)){
-                                    fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_TAKING_NOTE;
-                                    fieldMode.getGoogleRecognizer().restart();
-                                }
-                                else if(utteranceId.equals(UID_CANCELED)){
-                                    fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_ORDER;
-                                    fieldMode.getGoogleRecognizer().resetAndRestart();
-
-                                }
-                                else if (utteranceId.equals(UID_SAVED) || utteranceId.equals(UID_NOT_SAVED)){
-                                    fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_ORDER;
-                                    fieldMode.getGoogleRecognizer().resetAndRestart();
-                                }
-                                else if(utteranceId.equals(UID_DESC_VAL_WATING)){
-                                    fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_DESC_VALUE;
-                                    fieldMode.getGoogleRecognizer().restart();
-                                }
-                                else if(utteranceId.equals(UID_OP_DISABLED)){
-                                    fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_ORDER;
-                                    fieldMode.getGoogleRecognizer().resetAndRestart();
-                                }
-                                else if(utteranceId.equals(UID_LOST_CONN)){
-                                    fieldMode.getSw_handsFree().performClick();
-
-                                }
-                                else if (utteranceId.equals(UID_SENSOR_SAVED)){
-                                    if(fieldMode.getOfflineRecognizer() != null)
-                                        fieldMode.getOfflineRecognizer().startListen();
-                                }
-                                else if(utteranceId.equals(UID_GPS_DISABLED)){
-                                    fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_GPS;
+                                        break;
+                                    case UID_SENSOR_SAVED:
+                                        if (fieldMode.getOfflineRecognizer() != null)
+                                            fieldMode.getOfflineRecognizer().startListen();
+                                        break;
+                                    case UID_GPS_DISABLED:
+                                        fieldMode.getGoogleRecognizer().currentAction = GoogleVoiceRecognition.AC_GPS;
+                                        break;
                                 }
 
                               /*  if(!VoiceOrdersFile.warningsOn)
@@ -185,13 +181,13 @@ public class TTSvoice {
                     voice.speak(text, queueMode, null, id);
                     //voice.setSpeechRate()
                 } else {
-                    HashMap<String, String> hashTts = new HashMap<String, String>();
+                    HashMap<String, String> hashTts = new HashMap<>();
                     hashTts.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, id);
                     voice.speak(text, queueMode, hashTts);
                 }
             }
 
-        } else Log.e("voice", "voice null");
+        }
 
 
         Toast.makeText(fieldMode.getApplicationContext(), text,Toast.LENGTH_SHORT).show();

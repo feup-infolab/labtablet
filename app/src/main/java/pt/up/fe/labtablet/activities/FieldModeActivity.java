@@ -919,8 +919,10 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         public boolean onLongClick(View view) {
             if(googleRecognizer == null && offlineRecognizer == null) return false;
             int id = view.getId();
-            String text = new String();
+            String text = "";
+
             switch (id) {
+
                 case R.id.bt_network_temperature_sample:
                     if (googleRecognizer != null)
                         text = voice_rec_keywords.get(VoiceOrdersFile.INTERNET);

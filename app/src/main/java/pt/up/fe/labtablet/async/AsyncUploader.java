@@ -162,7 +162,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             builder.addPart("files[]", fileBody);
             builder.addTextBody("filename", favoriteName + ".zip");
 
-            Log.d("[AsyncUploader]File Path", file.getAbsolutePath());
+            Log.d("[AsyncUploader]Path", file.getAbsolutePath());
 
             long totalSize = file.length();
             LabTabletUploadEntity mEntity = new LabTabletUploadEntity(builder.build(), totalSize);

@@ -58,15 +58,19 @@ public class CSVHandler {
             //If additional metadata is available, it should me added here
             for (Descriptor desc : loadedDescriptors) {
                 String tag = desc.getTag();
-                if (tag.equals(Utils.TITLE_TAG)) {
-                    desc.setValue(entryName + ".csv");
-                    itemLevelMetadata.add(desc);
-                } else if (tag.equals(Utils.CREATED_TAG)) {
-                    desc.setValue("" + new Date());
-                    itemLevelMetadata.add(desc);
-                } else if (tag.equals(Utils.DESCRIPTION_TAG)) {
-                    desc.setValue("");
-                    itemLevelMetadata.add(desc);
+                switch (tag) {
+                    case Utils.TITLE_TAG:
+                        desc.setValue(entryName + ".csv");
+                        itemLevelMetadata.add(desc);
+                        break;
+                    case Utils.CREATED_TAG:
+                        desc.setValue("" + new Date());
+                        itemLevelMetadata.add(desc);
+                        break;
+                    case Utils.DESCRIPTION_TAG:
+                        desc.setValue("");
+                        itemLevelMetadata.add(desc);
+                        break;
                 }
             }
 
