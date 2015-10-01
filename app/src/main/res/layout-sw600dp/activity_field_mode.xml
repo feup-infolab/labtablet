@@ -23,353 +23,363 @@
         android:layout_height="wrap_content"
         >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="@color/primary"/>
-
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            card_view:cardCornerRadius="2dp"
-            android:layout_margin="8dp"
-            android:elevation="6dp"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:id="@+id/rl_top_buttons"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="-10dp"
-                >
-                <!-- First row -->
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Manual inputs"
-                    android:padding="15dp"
-                    android:gravity="center"
-                    android:textColor="@color/primary"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    />
-
-                <TextView
-                    android:padding="10dp"
-                    android:gravity="center"
-                    android:text="The inputs listed below allow you to gather quick memos and recordings that can be later exported within the dataset. When applicable, the produced file is stored in the project's root."
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:fontFamily="sans-serif-thin"
-                    />
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-                    <Button
-                        android:drawableStart="@drawable/ic_camera_alt_black_24dp"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.3"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/bt_camera"
-                        android:text="@string/photo"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        />
-
-                    <Button
-                        android:drawableStart="@drawable/ic_description_black_24dp"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.3"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/bt_form"
-                        android:text="@string/form"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        />
-                    <RelativeLayout
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.3"
-                        android:id="@+id/rl_record"
-                        >
-                        <Button
-                            android:drawableStart="@drawable/ic_mic_black_24dp"
-                            android:elevation="6sp"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/bt_audio"
-                            android:text="@string/record"
-                            style="@style/Base.Widget.AppCompat.Button.Borderless"
-                            />
-
-                        <ProgressBar
-                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                            android:layout_height="wrap_content"
-                            android:layout_width="100dp"
-                            android:layout_centerHorizontal="true"
-                            android:layout_alignParentBottom="true"
-                            android:visibility="visible"
-                            android:id="@+id/pb_recording"
-                            />
-                    </RelativeLayout>
-                </LinearLayout>
-                <!-- End of first row -->
-
-                <!-- Second row -->
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-
-                    <Button
-                        android:drawableStart="@drawable/ic_gesture_black_24dp"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.3"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/bt_sketch"
-                        android:text="@string/sketch"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        />
-
-                    <Button
-                        android:drawableStart="@drawable/ic_message_black_24dp"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.3"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/bt_text"
-                        android:text="@string/note"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        />
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="0.3"
-                        android:layout_height="wrap_content"
-                        >
-
-                        <Button
-                            android:layout_height="wrap_content"
-                            android:layout_width="fill_parent"
-                            android:id="@+id/bt_one_time_position"
-                            android:drawableStart="@drawable/ic_location_on_black_24dp"
-                            android:text="@string/position"
-                            style="@style/Base.Widget.AppCompat.Button.Borderless"
-                            />
-
-                        <ProgressBar
-                            android:layout_width="100dp"
-                            android:layout_centerHorizontal="true"
-                            android:layout_height="wrap_content"
-                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                            android:indeterminate="false"
-                            android:layout_alignParentBottom="true"
-                            android:progress="0"
-                            android:visibility="visible"
-                            android:id="@+id/pb_location"
-                            />
-                    </RelativeLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <!-- sivvs -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_top_buttons"
-            android:id="@+id/handsFree"
-            android:background="@drawable/card">
+            android:layout_height="wrap_content">
 
-            <Switch
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="35dp"
-                android:layout_marginLeft="35dp"
-                android:layout_marginTop="15dp"
-                android:text="@string/hands_free_mode"
-                android:id="@+id/handsFreeSwitch"
-                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@color/primary"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/hands_free_mode_desc"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/handsFreeSwitch"
-                />
-
-        </RelativeLayout>
-        <!-- /sivvs -->
-
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/card_sensors"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            card_view:cardCornerRadius="2dp"
-            android:layout_margin="8dp"
-            android:elevation="6dp"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:layout_below="@id/handsFree"
-            >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/rl_sensors_instructions"
-                android:orientation="vertical"
-                >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Available sensors"
-                    android:padding="15dp"
-                    android:gravity="center"
-                    android:textColor="@color/primary"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    />
-
-                <TextView
-                    android:padding="10dp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:fontFamily="sans-serif-thin"
-                    android:text="@string/field_sensors_instructions"
-                    />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/bt_temperature_sample"
-                        android:enabled="false"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        android:drawableStart="@drawable/ic_battery_std_black_24dp"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.5"
-                        android:text="@string/battery_temp"
-                        android:layout_height="wrap_content"
-                        />
-
-                    <Button
-                        android:id="@+id/bt_luminosity"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        android:drawableStart="@drawable/ic_brightness_medium_black_24dp"
-                        android:enabled="false"
-                        android:text="@string/luminosity"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.5"
-                        android:layout_height="wrap_content"
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-
-                    <Button
-                        android:id="@+id/bt_network_temperature_sample"
-                        android:enabled="false"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        android:drawableStart="@drawable/ic_temperature"
-                        android:text="@string/network_temp"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.5"
-                        />
-
-
-                    <Button
-                        android:id="@+id/bt_magnetic"
-                        android:drawableStart="@drawable/ic_explore_black_24dp"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        android:enabled="false"
-                        android:text="@string/magnetic"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.5"
-                        android:layout_height="wrap_content"
-                        />
-                </LinearLayout>
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-
-
-
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/card_sensors"
-            card_view:cardCornerRadius="2dp"
-            android:layout_margin="8dp"
-            android:elevation="6dp"
-            android:foreground="?android:attr/selectableItemBackground"
-            >
-
-            <LinearLayout
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                card_view:cardCornerRadius="2dp"
+                android:layout_margin="8dp"
+                android:elevation="6dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:id="@+id/rl_top_buttons"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="-10dp"
+                    >
+                    <!-- First row -->
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Manual inputs"
+                        android:padding="15dp"
+                        android:gravity="center"
+                        android:textColor="@color/primary"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        />
+
+                    <TextView
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:text="The inputs listed below allow you to gather quick memos and recordings that can be later exported within the dataset. When applicable, the produced file is stored in the project's root."
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:fontFamily="sans-serif-thin"
+                        />
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <Button
+                            android:drawableStart="@drawable/ic_camera_alt_black_24dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/bt_camera"
+                            android:text="@string/photo"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless"
+                            />
+
+                        <Button
+                            android:drawableStart="@drawable/ic_description_black_24dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/bt_form"
+                            android:text="@string/form"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless"
+                            />
+                        <RelativeLayout
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:id="@+id/rl_record"
+                            >
+                            <Button
+                                android:drawableStart="@drawable/ic_mic_black_24dp"
+                                android:elevation="6sp"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/bt_audio"
+                                android:text="@string/record"
+                                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                                />
+
+                            <ProgressBar
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_height="wrap_content"
+                                android:layout_width="100dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_alignParentBottom="true"
+                                android:visibility="visible"
+                                android:id="@+id/pb_recording"
+                                />
+                        </RelativeLayout>
+                    </LinearLayout>
+                    <!-- End of first row -->
+
+                    <!-- Second row -->
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <Button
+                            android:drawableStart="@drawable/ic_gesture_black_24dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/bt_sketch"
+                            android:text="@string/sketch"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless"
+                            />
+
+                        <Button
+                            android:drawableStart="@drawable/ic_message_black_24dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/bt_text"
+                            android:text="@string/note"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless"
+                            />
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:layout_height="wrap_content"
+                            >
+
+                            <Button
+                                android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:id="@+id/bt_one_time_position"
+                                android:drawableStart="@drawable/ic_location_on_black_24dp"
+                                android:text="@string/position"
+                                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                                />
+
+                            <ProgressBar
+                                android:layout_width="100dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_height="wrap_content"
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:indeterminate="false"
+                                android:layout_alignParentBottom="true"
+                                android:progress="0"
+                                android:visibility="visible"
+                                android:id="@+id/pb_location"
+                                />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardCornerRadius="2dp"
+                android:layout_margin="8dp"
+                android:elevation="6dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_below="@+id/rl_top_buttons"
+                android:id="@+id/handsFree"
+                >
+                <!-- sivvs -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Switch
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="35dp"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/hands_free_mode"
+                        android:id="@+id/handsFreeSwitch"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:fontFamily="sans-serif-thin"
+                        android:text="@string/hands_free_mode_desc"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/handsFreeSwitch"
+                        />
+
+                </RelativeLayout>
+                <!-- /sivvs -->
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_sensors"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardCornerRadius="2dp"
+                android:layout_margin="8dp"
+                android:elevation="6dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_below="@id/handsFree"
                 >
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/continuous_gps"
-                    android:padding="15dp"
-                    android:gravity="center"
-                    android:textColor="@color/primary"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    />
-
-                <TextView
-                    android:padding="10dp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:fontFamily="sans-serif-thin"
-                    android:text="@string/auto_data_collection"
-                    android:id="@+id/tv_auto_data"
-                    />
-
-                <Switch
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/continuous_gps"
-                    android:padding="15dp"
-                    android:id="@+id/sw_gps"
-                    android:textColor="@color/primary"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    />
+                    android:id="@+id/rl_sensors_instructions"
+                    android:orientation="vertical"
+                    >
 
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-    </RelativeLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Available sensors"
+                        android:padding="15dp"
+                        android:gravity="center"
+                        android:textColor="@color/primary"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        />
+
+                    <TextView
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:fontFamily="sans-serif-thin"
+                        android:text="@string/field_sensors_instructions"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/bt_temperature_sample"
+                            android:enabled="false"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless"
+                            android:drawableStart="@drawable/ic_battery_std_black_24dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:text="@string/battery_temp"
+                            android:layout_height="wrap_content"
+                            />
+
+                        <Button
+                            android:id="@+id/bt_luminosity"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless"
+                            android:drawableStart="@drawable/ic_brightness_medium_black_24dp"
+                            android:enabled="false"
+                            android:text="@string/luminosity"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <Button
+                            android:id="@+id/bt_network_temperature_sample"
+                            android:enabled="false"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless"
+                            android:drawableStart="@drawable/ic_temperature"
+                            android:text="@string/network_temp"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            />
+
+
+                        <Button
+                            android:id="@+id/bt_magnetic"
+                            android:drawableStart="@drawable/ic_explore_black_24dp"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless"
+                            android:enabled="false"
+                            android:text="@string/magnetic"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/card_sensors"
+                card_view:cardCornerRadius="2dp"
+                android:layout_margin="8dp"
+                android:elevation="6dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/continuous_gps"
+                        android:padding="15dp"
+                        android:gravity="center"
+                        android:textColor="@color/primary"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        />
+
+                    <TextView
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:fontFamily="sans-serif-thin"
+                        android:text="@string/auto_data_collection"
+                        android:id="@+id/tv_auto_data"
+                        />
+
+                    <Switch
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/continuous_gps"
+                        android:padding="15dp"
+                        android:id="@+id/sw_gps"
+                        android:textColor="@color/primary"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
     </ScrollView>
 </LinearLayout>
