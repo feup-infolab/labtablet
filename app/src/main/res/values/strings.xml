@@ -17,11 +17,11 @@
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
         <item>Home</item>
-        <item>New Project</item>
         <item>Favorites</item>
         <item>Forms</item>
         <item>Updates</item>
         <item>Configurations</item>
+        <item>Voice</item>
     </string-array>
 
     <string-array name="descriptor_picker_items">
@@ -246,4 +246,68 @@
     <string name="home_tip_profile_status_header">Profile status</string>
     <string name="home_tip_profile_status_loaded">Your profile is already loaded, but you can change it through the configurations area. A profile is usually built together with an information specialist that has deep knowledge about your domain. if you find the loaded profile too limited or, in some way, inappropriate for your work, contact either the developer or your supervisor.</string>
     <string name="home_tip_profile_status_missing">The application profile is not yet loaded. In order to proceed with creating and managing projects you must first select one to import. A profile contains elements that are later associated with each of your descriptions to give them meaning within the context of your project. It is usually built in collaboration with a curator - an information specialist - responsible for identifying important indicators for projects from your domain. If you happen to need the profile, please speak with either the developer or your supervisor.</string>
+
+
+
+
+    <string name="network_temp_vr">Network</string><!-- for voice recognition -->
+    <string name="battery_temp_vr">Battery</string><!-- for voice recognition -->
+    <string name="notes">Notes</string><!-- for voice recognition -->
+    <string name="goodbye_vr">Goodbye</string><!-- for voice recognition -->
+    <string name="cancel_note">Cancel note</string><!-- for voice recognition -->
+    <string name="cancel_notes">Cancel notes</string><!-- for voice recognition -->
+    <string name="save_note">Save note</string><!-- for voice recognition -->
+    <string name="save_notes">Save notes</string><!-- for voice recognition -->
+    <string name="collect_descriptor">Descriptor</string><!-- for voice recognition -->
+    <string name="save_value">Save value</string><!-- for voice recognition -->
+    <string name="cancel_value">Cancel value</string><!-- for voice recognition -->
+    <string name="title_voice_rec_config">Online Speech Recognition Configuration</string>
+    <string name="kw_goodbye">Shut down</string>
+    <string name="sensors">Sensors</string>
+    <string name="test">Test</string>
+    <string name="language">Language</string>
+    <string name="cannot_turnon_voice_rec">Cannot turn on voice recognition while recording</string>
+    <string name="confirm_change_screen_title">Do you really want to quit?</string>
+    <string name="confirm_change_screen">There are unsaved changes that will be lost if you leave this screen.</string>
+    <string name="reset">Reset</string>
+    <string name="save">Save</string>
+    <string name="confirm_default_conf_voice_rec">This will erase all voice recognition custom configurations.</string>
+    <string name="confirm_default_conf_voice_rec_title">Reset default voice recognition configurations?</string>
+    <string name="save_changes_current_lang_title">Unsaved changes</string>
+    <string name="save_changes_current_lang">Do you want to save the defined keywords for current language before change it?</string>
+    <string name="voice_sound">Voice</string>
+    <string name="warning_sound">Warning sounds</string>
+    <string name="sounds">Sounds</string>
+    <string name="hands_free_mode">Hands free mode</string>
+    <string name="hands_free_mode_desc">Hands free mode allows you to give voice commands in field mode. You can see the saved keywords for each button by long pressing it. Visit Speech recogn. area on the menu to customize your keywords. Speech recognition is not available for every button. You can save a descriptor\'s value by saying the descriptor\'s keyword. You can also dictate notes\' text and descriptors\' values. In offline mode you can only collect by voice sensors\' samples, initiate voice recording and save position (keywords not customizable).</string>
+    <string name="descriptors">Descriptors</string>
+    <string name="loc_unavailable">Unable to get Location</string>
+    <string name="turn_on_gps">Please turn on GPS manually</string>
+    <string name="yes_no_quest">Yes/No questions</string>
+    <string name="voice_speed">Voice speed rate</string>
+
+
+    <!-- TTS sentences -->
+    <string name="tts_hello">Hello!</string>
+    <string name="tts_say">say </string>
+    <string name="tts_goodbye">Goodbye!</string>
+    <string name="tts_error">I am sorry but I did not understand what you said. Please repeat it.</string>
+    <string name="tts_option_disabled">This option is disabled.</string>
+    <string name="tts_magnetic">magnetic field</string><!--TODO-->
+    <string name="tts_magnetic_saved">Magnetic field saved</string>
+    <string name="tts_ask_for_descriptor">Which descriptor?</string>
+    <string name="tts_ask_for_descriptor_value">Which value?</string>
+    <string name="tts_invalid_descriptor">That descriptor does not exist. Please choose another.</string>
+    <string name="tts_canceled">Canceled.</string>
+    <string name="tts_heard">I heard</string>
+    <string name="tts_desc_added">Descriptor added.</string>
+    <string name="tts_new_text_record">New text record</string>
+    <string name="tts_saved">Saved</string>
+    <string name="tts_not_saved">Not saved</string>
+    <string name="tts_lost_conn">You have lost network connection. Shutting down google speech recognition and turning on offline speech recognition (limited)</string>
+    <string name="tts_good_conn">You have network connection. You can use google speech recognition</string>
+    <string name="tts_loc_saved">Position saved</string>
+
+
+    <!-- /TTS sentences -->
 </resources>

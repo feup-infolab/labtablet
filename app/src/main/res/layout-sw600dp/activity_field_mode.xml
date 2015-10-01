@@ -181,6 +181,40 @@
 
         </android.support.v7.widget.CardView>
 
+        <!-- sivvs -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_top_buttons"
+            android:id="@+id/handsFree"
+            android:background="@drawable/card">
+
+            <Switch
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="35dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/hands_free_mode"
+                android:id="@+id/handsFreeSwitch"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/hands_free_mode_desc"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/handsFreeSwitch"
+                />
+
+        </RelativeLayout>
+        <!-- /sivvs -->
 
         <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/card_sensors"
@@ -191,7 +225,7 @@
             android:layout_margin="8dp"
             android:elevation="6dp"
             android:foreground="?android:attr/selectableItemBackground"
-            android:layout_below="@id/rl_top_buttons"
+            android:layout_below="@id/handsFree"
             >
 
             <LinearLayout

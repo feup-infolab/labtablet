@@ -1,0 +1,11 @@
+cmudict-en-us.dict
+cmusphinx-5.0-en-us.lm.dmp
+en-us-ptm/README
+en-us-ptm/feat.params
+en-us-ptm/mdef
+en-us-ptm/means
+en-us-ptm/noisedict
+en-us-ptm/sendump
+en-us-ptm/transition_matrices
+en-us-ptm/variances
+ordersKeywords.gram

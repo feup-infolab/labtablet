@@ -2,6 +2,7 @@ package pt.up.fe.labtablet.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 
 import com.google.gson.reflect.TypeToken;
@@ -172,5 +173,23 @@ public class Utils {
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    public static boolean isOnline(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
+    public static float getFloatFromInt(int intVal){
+        float floatVal = .1f * intVal;
+        return floatVal;
+    }
+
+    public static int getIntFromFloat(float floatVal){
+        int intVal = Math.round(floatVal / .1f);
+        return intVal;
     }
 }

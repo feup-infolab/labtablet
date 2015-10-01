@@ -17,11 +17,11 @@
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
         <item>Início</item>
-        <item>Novo favorito</item>
         <item>Os meus favoritos</item>
         <item>Formulários</item>
         <item>Eventos</item>
         <item>Configurações</item>
+        <item>Voz</item>
     </string-array>
 
     <string-array name="question_types">
@@ -233,10 +233,70 @@
     <string name="empty_description">No description provided</string>
     <string name="new_project_header">Creating a new project</string>
     <string name="new_project_name_hint">Name goes here</string>
-    <string name="new_project_description_hint">...and its optional description goes here</string>
+    <string name="new_project_description_hint">…and its optional description goes here</string>
     <string name="action_new_project">New project</string>
     <string name="empty_name">A name identifier must be provided</string>
     <string name="home_tip_profile_status_header">Profile status</string>
     <string name="home_tip_profile_status_loaded">Your profile is already loaded, but you can change it through the configurations area. A profile is usually built together with an information specialist that has deep knowledge about your domain. if you find the loaded profile too limited or, in some way, inappropriate for your work, contact either the developer or your supervisor.</string>
     <string name="home_tip_profile_status_missing">The application profile is not yet loaded. In order to proceed with creating and managing projects you must first select one to import. A profile contains elements that are later associated with each of your descriptions to give them meaning within the context of your project. It is usually built in collaboration with a curator - an information specialist - responsible for identifying important indicators for projects from your domain. If you happen to need the profile, please speak with either the developer or your supervisor.</string>
+
+
+    <string name="network_temp_vr">Network</string><!-- for voice recognition -->
+    <string name="battery_temp_vr">Battery</string><!-- for voice recognition -->
+    <string name="notes">Notes</string><!-- for voice recognition -->
+    <string name="goodbye_vr">Goodbye</string><!-- for voice recognition -->
+    <string name="cancel_note">Cancel note</string><!-- for voice recognition -->
+    <string name="cancel_notes">Cancel notes</string><!-- for voice recognition -->
+    <string name="save_note">Save note</string><!-- for voice recognition -->
+    <string name="save_notes">Save notes</string><!-- for voice recognition -->
+    <string name="collect_descriptor">Descriptor</string><!-- for voice recognition -->
+    <string name="save_value">Save value</string><!-- for voice recognition -->
+    <string name="cancel_value">Cancel value</string><!-- for voice recognition -->
+    <string name="title_voice_rec_config">Online Speech Recognition Configuration</string>
+    <string name="kw_goodbye">Shut down</string>
+    <string name="sensors">Sensors</string>
+    <string name="test">Test</string>
+    <string name="language">Language</string>
+    <string name="cannot_turnon_voice_rec">Não é possível ligar o reconhecimento de voz enquanto estiver a gravar</string>
+    <string name="confirm_change_screen_title">Quer mesmo sair?</string>
+    <string name="confirm_change_screen">Há alterações não gravadas que serão perdidas se sair deste ecrã.</string>
+    <string name="reset">Restaurar</string>
+    <string name="save">Guardar</string>
+    <string name="confirm_default_conf_voice_rec">Esta ação irá apagar todas as configurações de reconhecimento de voz customizadas.</string>
+    <string name="confirm_default_conf_voice_rec_title">Restaurar configurações de reconhecimento de voz por defeito?</string>
+    <string name="save_changes_current_lang_title">Alterações não gravadas</string>
+    <string name="save_changes_current_lang">Deseja gravar as palavras definidas para a língua corrente antes de mudar?</string>
+    <string name="voice_sound">Som de voz</string>
+    <string name="warning_sound">Sons de aviso</string>
+    <string name="sounds">Sons</string>
+    <string name="hands_free_mode">Mãos livres</string>
+    <string name="hands_free_mode_desc">O modo mãos livres permite manipular o tablet, em modo de campo, pela voz. Com um click longo em cada botão é possível ver a keyword associada. Para customizar as keywords visitar a secção Rec. de voz (menu). O reconhecimento de voz não está disponível para todos os botões. É possível atribuir valores a descritores, dizendo a keyword associada a Descritor. É também possível ditar o texto das notas e o valor dos descritores. Em modo offline, o reconhecimento de voz está limitado à recolha de amostras dos sensores, iniciar gravação de voz e gravar a posição (keywords não customizáveis).</string>
+    <string name="descriptors">Descritores</string>
+    <string name="loc_unavailable">Impossível obter localização</string>
+    <string name="yes_no_quest">Questões sim/não</string>
+    <string name="turn_on_gps">Por favor ative o GPS manualmente</string>
+    <string name="voice_speed">Velocidade da voz</string>
+
+    <!-- TTS sentences -->
+    <string name="tts_hello">Olá!</string>
+    <string name="tts_say">diga</string>
+    <string name="tts_goodbye">Adeus!</string>
+    <string name="tts_error">Desculpe, mas não entendi. Por favor repita.</string>
+    <string name="tts_option_disabled">Esta opção está desativada.</string>
+    <string name="tts_magnetic">Campo magnético</string><!--TODO-->
+    <string name="tts_magnetic_saved">Campo magnetico guardado</string>
+    <string name="tts_ask_for_descriptor">Qual descritor?</string>
+    <string name="tts_ask_for_descriptor_value">Que valor?</string>
+    <string name="tts_invalid_descriptor">Esse descritor não existe. Por favor escolha outro.</string>
+    <string name="tts_canceled">Cancelado.</string>
+    <string name="tts_heard">Eu ouvi</string>
+    <string name="tts_desc_added">Descritor adicionado.</string>
+    <string name="tts_new_text_record">Novo registo textual</string>
+    <string name="tts_saved">Guardado</string>
+    <string name="tts_not_saved">Não guardado</string>
+    <string name="tts_lost_conn">Perdeu conexão à internet. A desligar reconhecimento de voz da google e a ligar reconhecimento de voz offline (limitado)</string>
+    <string name="tts_good_conn">Conexão à internet existente. É possível usar o reconhecimento de voz da google</string>
+    <string name="tts_loc_saved">Posição guardada</string>
+    <!-- /TTS sentences -->
+
 </resources>

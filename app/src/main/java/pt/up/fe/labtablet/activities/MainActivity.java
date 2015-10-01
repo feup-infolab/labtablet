@@ -36,13 +36,16 @@ import pt.up.fe.labtablet.fragments.HomeFragment;
 import pt.up.fe.labtablet.fragments.ListChangelogFragment;
 import pt.up.fe.labtablet.fragments.ListFavoritesFragment;
 import pt.up.fe.labtablet.fragments.ListFormFragment;
+import pt.up.fe.labtablet.fragments.VoiceRecognitionConfFragment;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.Utils;
+import pt.up.fe.labtablet.voiceManager.VoiceOrdersFile;
 
 public class MainActivity extends AppCompatActivity implements DrawerFragment.FragmentDrawerListener {
 
+    VoiceOrdersFile voiceOrdersFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             Log.i("CREATEDIR", "" + path.mkdirs());
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(path)));
         }
+
+
+        //load speech recognition keywords
+        voiceOrdersFile = new VoiceOrdersFile(this);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -107,48 +114,52 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
     /**
      * Displaying fragment view for selected nav drawer list item
      */
-    private void displayView(int position) {
-        // remove the main content by replacing fragments
+    private void displayView(final int position) {
         Fragment fragment = null;
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setSubtitle("");
+        String tag = "";
+        if (getActionBar() != null) {
+            getActionBar().setSubtitle("");
         }
 
-        String tag = "";
         switch (position) {
             case 0:
                 fragment = new HomeFragment();
                 tag = getString(R.string.title_home);
                 break;
             case 1:
-                promptProjectCreation();
-                break;
-            case 2:
                 fragment = new ListFavoritesFragment();
                 tag = getString(R.string.title_list);
                 break;
-            case 3:
+            case 2:
                 fragment = new ListFormFragment();
                 tag = getString(R.string.title_list_forms);
                 break;
-            case 4:
+            case 3:
                 fragment = new ListChangelogFragment();
                 tag = getString(R.string.title_changelog);
                 break;
-            case 5:
+            case 4:
                 fragment = new ConfigurationFragment();
                 tag = getString(R.string.title_configurations);
+                break;
+            case 5:
+                fragment = new VoiceRecognitionConfFragment();
+                Bundle args = new Bundle();
+                args.putSerializable("voiceOrders", voiceOrdersFile);
+                fragment.setArguments(args);
+                tag = getString(R.string.title_voice_rec_config);
                 break;
             default:
                 break;
         }
+
 
         if (fragment != null) {
             //the favorite creation view should never be added to the back stack
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+            //fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
             fragmentTransaction.replace(R.id.frame_container, fragment);
             //fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
@@ -160,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             getSupportActionBar().setTitle(tag);
         }
     }
+
 
     @Override
     public void setTitle(CharSequence title) {

@@ -1,6 +1,8 @@
 package pt.up.fe.labtablet.activities;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,13 +12,16 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.hardware.display.DisplayManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaRecorder;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -24,6 +29,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,7 +47,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
+import edu.cmu.pocketsphinx.Assets;
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.api.LTLocationListener;
@@ -53,8 +61,13 @@ import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.models.Form;
+import pt.up.fe.labtablet.utils.ConnectivityReceiver;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.Utils;
+import pt.up.fe.labtablet.voiceManager.GoogleVoiceRecognition;
+import pt.up.fe.labtablet.voiceManager.OfflineVoiceRecognition;
+import pt.up.fe.labtablet.voiceManager.TTSvoice;
+import pt.up.fe.labtablet.voiceManager.VoiceOrdersFile;
 
 /**
  * Exposes many of the device's sensors to gather their values
@@ -107,6 +120,73 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
 
     private ArrayList<Descriptor> gatheredMetadata;
 
+    /* sivvs BEGIN */
+    ConnectivityReceiver connRec;
+
+    private TTSvoice ttsVoice;
+    private Switch sw_handsFree;
+
+    public Switch getSw_handsFree() {
+        return sw_handsFree;
+    }
+
+
+    private boolean isVoiceRecRunning = false;
+
+    //offline recognition
+    private OfflineVoiceRecognition offlineRecognizer;
+
+    //google recognition
+    private GoogleVoiceRecognition googleRecognizer;
+
+
+    public Button getBt_note() {
+        return bt_note;
+    }
+
+    public Button getBt_location() {
+        return bt_location;
+    }
+
+    public Button getBt_temperature_sample() {
+        return bt_temperature_sample;
+    }
+
+    public Button getBt_magnetic_sample() {
+        return bt_magnetic_sample;
+    }
+
+    public Button getBt_luminosity_sample() {
+        return bt_luminosity_sample;
+    }
+
+    public Button getBt_network_temperature_sample() {
+        return bt_network_temperature_sample;
+    }
+
+    public Switch getSw_gps() {
+        return sw_gps;
+    }
+
+    public Button getBt_audio() {
+        return bt_audio;
+    }
+
+    public LTLocationListener getLocationListener() {
+        return locationListener;
+    }
+
+    ArrayList<Descriptor> descriptors;
+
+    public ArrayList<Descriptor> getDescriptors() {
+        return descriptors;
+    }
+
+
+    Map<String, String> voice_rec_keywords;
+
+    /* sivvs END */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,6 +233,41 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         };
 
         locationListener = new LTLocationListener(FieldModeActivity.this, path, interfaceKml);
+
+        //voice recognition keywords
+        if (VoiceOrdersFile.currentLang.equals("en"))
+            voice_rec_keywords = (Map<String, String>) VoiceOrdersFile.savedKeywords_eng.getAll();
+        else if (VoiceOrdersFile.currentLang.equals("pt"))
+            voice_rec_keywords = (Map<String, String>) VoiceOrdersFile.savedKeywords_pt.getAll();
+
+
+        KeyguardManager myKM = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        if (myKM.inKeyguardRestrictedInputMode()) {
+            //it is locked
+            Log.i("Screen", "Locked");
+        } else {
+
+            //it is not locked
+            Log.i("Screen", "Unlocked");
+        }
+
+
+        //load descriptors
+        descriptors = FavoriteMgr.getBaseDescriptors(FieldModeActivity.this);
+
+        for (int i = 0; i < descriptors.size(); ++i) {
+            Log.i("descriptor " + i, descriptors.get(i).getName());
+        }
+
+        sw_gps.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                if (getGoogleRecognizer() != null)
+                    Toast.makeText(FieldModeActivity.this, voice_rec_keywords.get(VoiceOrdersFile.GPS), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
 
         sw_gps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,6 +366,14 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                         ChangelogManager.addLog(item, FieldModeActivity.this);
                     }
                 } else {
+
+                    if (isVoiceRecRunning) sw_handsFree.performClick(); //shutdown voice recognition
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                     recording = true;
                     pb_update.setVisibility(View.VISIBLE);
                     pb_update.setIndeterminate(true);
@@ -350,7 +473,89 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             }
         });
 
+        final FieldModeActivity fieldMode = this;
 
+        //initialize SpeechRecognizer
+
+        sw_handsFree.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (googleRecognizer != null)
+                    Toast.makeText(FieldModeActivity.this, voice_rec_keywords.get(VoiceOrdersFile.GOODBYE), Toast.LENGTH_SHORT).show();
+                else if (offlineRecognizer != null)
+                    Toast.makeText(FieldModeActivity.this, OfflineVoiceRecognition.OFF_GOODBYE, Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
+
+
+        sw_handsFree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (((Switch) v).isChecked()) {
+                    if (recording) {
+                        Toast.makeText(fieldMode, fieldMode.getResources().getString(R.string.cannot_turnon_voice_rec), Toast.LENGTH_SHORT).show();
+                        sw_handsFree.setChecked(false);
+                        return;
+                    }
+                    // if (ttsVoice != null) ttsVoice.shutdown();
+
+                    if (connRec.isNetworkOnline(fieldMode)) { //try with google recognition if possible
+                        if (offlineRecognizer != null) offlineRecognizer.shutdown();
+                        if (googleRecognizer != null) googleRecognizer.shutdown();
+
+                        googleRecognizer = new GoogleVoiceRecognition(fieldMode);
+                        googleRecognizer.setupGoogleRecognizer();
+                        locationListener.setGoogleRecognizer(googleRecognizer);
+
+                        googleRecognizer.audioUnmute(); //for ttsVoice
+
+                    } else { //try with offline recognition
+                        //Toast.makeText(fieldMode, "Internet connection necessary for speech recognition", Toast.LENGTH_SHORT).show();
+                        fieldMode.shutdownRecognizer();
+                        offlineRecognizer = new OfflineVoiceRecognition(fieldMode);
+
+
+                    }
+
+                    //initiate voice
+                    ttsVoice = new TTSvoice(fieldMode);
+                    locationListener.setVoice(ttsVoice);
+                    isVoiceRecRunning = true;
+
+                } else {
+                    ttsVoice.sayGoodbye();
+                    locationListener.setVoice(null);
+                    isVoiceRecRunning = false;
+                }
+
+
+            }
+        });
+
+
+        //TODO
+        if (connRec == null) {
+            registerConnectionReceiver(this);
+            Log.e("connRec", "registered (create)");
+        }
+    }
+
+    private void registerConnectionReceiver(FieldModeActivity f) {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        if (connRec != null) unregisterReceiver(connRec);
+        connRec = new ConnectivityReceiver(f);
+        if (connRec.isNetworkOnline(this)) {
+            connRec.prev_conn_state = "ONLINE";
+        } else {
+            connRec.prev_conn_state = "OFFLINE";
+        }
+
+        registerReceiver(connRec, intentFilter);
+        Log.e("connRec", "registered");
     }
 
     private void registerBatInforReceiver() {
@@ -372,6 +577,12 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
     }
 
     private void attachButtons() {
+
+        //sivvs BEGIN
+        sw_handsFree = (Switch) findViewById(R.id.handsFreeSwitch);
+        //sivvs END
+
+
         bt_audio = (Button) findViewById(R.id.bt_audio);
         bt_sketch = (Button) findViewById(R.id.bt_sketch);
         bt_photo = (Button) findViewById(R.id.bt_camera);
@@ -484,7 +695,25 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             mBatInfoReceiver = null;
         }
         sensorManager.unregisterListener(this);
+
+        if (connRec != null) {
+            unregisterReceiver(connRec);
+            Log.e("connRec", "unregistered");
+            connRec = null;
+        }
     }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
+    boolean isScreenOn(){
+        DisplayManager dm = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
+        for (Display display : dm.getDisplays()) {
+            if (display.getState() != Display.STATE_OFF) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
@@ -682,6 +911,53 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
     }
 
     /**
+     * Handles tapping on each sensor's button to capture its value
+     */
+
+    private class SensorsOnLongClickListener implements View.OnLongClickListener {
+
+        @Override
+        public boolean onLongClick(View view) {
+            if(googleRecognizer == null && offlineRecognizer == null) return false;
+            int id = view.getId();
+            String text = new String();
+            switch (id) {
+                case R.id.bt_network_temperature_sample:
+                    if (googleRecognizer != null)
+                        text = voice_rec_keywords.get(VoiceOrdersFile.INTERNET);
+                    else if (offlineRecognizer != null)
+                        text = OfflineVoiceRecognition.OFF_INTERNET;
+                    break;
+                case R.id.bt_temperature_sample:
+                    if (googleRecognizer != null)
+                        text = voice_rec_keywords.get(VoiceOrdersFile.BATTERY);
+                    else if (offlineRecognizer != null)
+                        text = OfflineVoiceRecognition.OFF_BATTERY;
+                    break;
+                case R.id.bt_magnetic:
+                    if (googleRecognizer != null)
+                        text = voice_rec_keywords.get(VoiceOrdersFile.MAGNETIC);
+                    else if (offlineRecognizer != null)
+                        text = OfflineVoiceRecognition.OFF_MAGNETIC;
+                    break;
+                case R.id.bt_luminosity:
+                    if (googleRecognizer != null)
+                        text = voice_rec_keywords.get(VoiceOrdersFile.LUMINOSITY);
+                    else if (offlineRecognizer != null)
+                        text = OfflineVoiceRecognition.OFF_LUMINOSITY;
+                    break;
+                default:
+                    break;
+
+            }
+
+
+            Toast.makeText(FieldModeActivity.this, text, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    /**
      * Waits until valid coordinates are available
      */
     public class FetchCoordinates extends AsyncTask<String, Integer, Void> {
@@ -836,5 +1112,93 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             captureMediaIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
             startActivityForResult(captureMediaIntent, Utils.VIDEO_CAPTURE_REQUEST);
         }
+    }
+
+    public OfflineVoiceRecognition getOfflineRecognizer() {
+        return offlineRecognizer;
+    }
+
+
+    public GoogleVoiceRecognition getGoogleRecognizer() {
+        return googleRecognizer;
+    }
+
+
+    public TTSvoice getTTSvoice() {
+        return ttsVoice;
+    }
+
+    public void shutdownRecognizer() {
+        if (offlineRecognizer != null) {
+            offlineRecognizer.shutdown();
+            offlineRecognizer = null;
+        }
+        if (googleRecognizer != null) {
+            googleRecognizer.shutdown();
+            googleRecognizer = null;
+            locationListener.setGoogleRecognizer(null);
+        }
+    }
+
+    public void turnOnGoogleRec() {
+        this.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (googleRecognizer.getRecognizer() != null) {
+                    googleRecognizer.getRecognizer().startListening
+                            (googleRecognizer.getRecognizerIntent());
+                    Log.d("recognizer", "listening with google");
+                }
+            }
+        });
+    }
+
+    public void setGoogleRecognizer(GoogleVoiceRecognition gvr) {
+        this.googleRecognizer = gvr;
+    }
+
+    public void setOfflineRecognizer(OfflineVoiceRecognition ofr) {
+        this.offlineRecognizer = ofr;
+    }
+
+    public void turnOnSphinxRec() {
+        final Context context = this;
+        new AsyncTask<Void, Void, Exception>() {
+            @Override
+            protected Exception doInBackground(Void... params) {
+
+                if (offlineRecognizer.getRecognizer() == null) {
+                    Assets assets = null;
+                    try {
+                        assets = new Assets(context);
+                        File assetDir = assets.syncAssets();
+                        offlineRecognizer.setupRecognizer(assetDir);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Exception result) {
+                if (result != null) {
+                    Log.e("", "Failed to init recognizer " + result);
+                } else {
+                    if (offlineRecognizer != null) {
+                        offlineRecognizer.startListen();
+                        Log.d("recognizer", "listening with sphinx");
+                    }
+
+                }
+            }
+        }.execute();
+    }
+
+
+    public FavoriteItem getCurrentFavoriteItem() {
+        return currentFavoriteItem;
     }
 }
