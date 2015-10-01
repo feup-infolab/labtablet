@@ -117,9 +117,6 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
     private void displayView(final int position) {
         Fragment fragment = null;
         String tag = "";
-        if (getActionBar() != null) {
-            getActionBar().setSubtitle("");
-        }
 
         switch (position) {
             case 0:
@@ -153,6 +150,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 break;
         }
 
+
+        setToolbarVisibile(!tag.equals(getString(R.string.title_home)));
 
         if (fragment != null) {
             //the favorite creation view should never be added to the back stack
@@ -218,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                     .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            setToolbarVisibile(false);
                         }
                     })
                     .setMessage(getResources().getString(R.string.no_profile))
@@ -305,6 +305,20 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         });
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
+    }
+
+
+    public void setToolbarVisibile(boolean visibility) {
+        android.support.v7.app.ActionBar bar = getSupportActionBar();
+        if (bar == null)
+            return;
+
+        if (visibility)
+            bar.show();
+        else
+            bar.hide();
+
+
     }
 
 }

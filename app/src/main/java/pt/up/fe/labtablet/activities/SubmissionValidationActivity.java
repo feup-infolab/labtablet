@@ -1,8 +1,6 @@
 package pt.up.fe.labtablet.activities;
 
 import android.animation.ObjectAnimator;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -13,8 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -22,14 +18,11 @@ import com.github.clans.fab.FloatingActionButton;
 import java.util.Locale;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.api.SubmissionStepHandler;
 import pt.up.fe.labtablet.fragments.SubmissionStep1;
 import pt.up.fe.labtablet.fragments.SubmissionStep2;
 import pt.up.fe.labtablet.fragments.SubmissionStep3;
 import pt.up.fe.labtablet.fragments.SubmissionStep4;
-import pt.up.fe.labtablet.models.ChangelogItem;
-import pt.up.fe.labtablet.utils.Utils;
 
 /**
  * Holds the four steps to upload a favorite to the repository and handles

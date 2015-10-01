@@ -3,6 +3,7 @@ package pt.up.fe.labtablet.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -117,7 +118,7 @@ public class SubmissionStep4 extends Fragment {
                             return;
                         }
                         FloatingActionButton fab = new FloatingActionButton(getActivity());
-                        fab.setImageDrawable(getActivity().getDrawable(R.drawable.ab_pulse));
+                        fab.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ab_pulse));
                         fab.setElevationCompat(15f);
                         fab.show(true);
 

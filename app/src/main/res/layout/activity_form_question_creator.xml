@@ -11,384 +11,361 @@
         android:animateLayoutChanges="true"
         >
 
-        <LinearLayout
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="2dp"
+            android:layout_margin="6dp"
+            android:elevation="6dp"
+            android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/ll_question_specify_text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/card"
-            android:orientation="vertical"
             >
 
-            <TextView
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/write_text_for_question"
-                android:gravity="center"
-                android:textColor="@color/text_blue_grey"
-                android:textSize="20sp"
-                android:drawableTop="@drawable/ab_edit"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="20dp"
-                />
-            <EditText
-                android:id="@+id/question_specify_text"
-                android:textColor="@color/text_blue_grey"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapSentences|textMultiLine"
-                android:hint="@string/input_goes_here">
-                <requestFocus/>
-            </EditText>
+                android:orientation="vertical"
+                >
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_gray"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                />
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/write_text_for_question"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:drawableTop="@drawable/ab_edit"
+                    android:layout_marginBottom="10dp"
+                    />
 
-            <Button
-                android:id="@+id/question_text_submit"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@android:string/ok"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/question_specify_text"
+                        android:textColor="@color/text_blue_grey"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:hint="@string/input_goes_here">
+                        <requestFocus/>
+                    </EditText>
+                </android.support.design.widget.TextInputLayout>
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/question_text_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/ok"
+                    android:layout_gravity="end"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    />
 
-        <LinearLayout
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <!-- GONE HERE -->
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="2dp"
+            android:layout_margin="6dp"
+            android:elevation="6dp"
+            android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/ll_question_specify_type"
-            android:layout_width="fill_parent"
             android:visibility="gone"
-            android:layout_height="wrap_content"
-            android:background="@drawable/card"
-            android:orientation="vertical"
             >
 
-            <TextView
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/choose_expected_type"
-                android:gravity="center"
-                android:textColor="@color/text_blue_grey"
-                android:textSize="20sp"
-                android:drawableTop="@drawable/ic_location"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                />
+                android:orientation="vertical"
+                >
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_gray"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                />
+                <TextView
+                    android:layout_margin="5dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose_expected_type"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    />
 
-            <Spinner
-                android:id="@+id/question_type_spinner"
-                android:gravity="center"
-                android:layout_width="fill_parent"
-                android:layout_height="80dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                />
-        </LinearLayout>
+                <Spinner
+                    android:id="@+id/question_type_spinner"
+                    android:gravity="center"
+                    android:layout_width="fill_parent"
+                    android:layout_height="80dp"
+                    android:layout_margin="6dp"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-
-        <LinearLayout
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="2dp"
+            android:layout_margin="6dp"
+            android:elevation="6dp"
+            android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/ll_question_specify_range"
             android:visibility="gone"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/card"
-            android:orientation="vertical"
             >
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/choose_range"
-                android:gravity="center"
-                android:textColor="@color/text_blue_grey"
-                android:textSize="20sp"
-                android:drawableTop="@android:drawable/btn_star"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                />
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
                 >
-                <EditText
-                    android:id="@+id/question_range_from"
-                    android:hint="@string/from"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.45"/>
 
-                <ImageView
-                    android:rotationX="180"
-                    android:contentDescription="@string/image_placeholder"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.1"
-                    android:layout_height="fill_parent"
-                    android:src="@drawable/ic_menu_forward"
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose_range"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_margin="5dp"
                     />
-
-                <EditText
-                    android:id="@+id/question_range_to"
-                    android:hint="@string/to"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.45"/>
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp"
+                    >
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.45"
+                        android:gravity="center"
+                        >
+                        <EditText
+                            android:id="@+id/question_range_from"
+                            android:hint="@string/from"
+                            android:inputType="number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </android.support.design.widget.TextInputLayout>
+                    <ImageView
+                        android:rotationX="180"
+                        android:contentDescription="@string/image_placeholder"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.1"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:tint="@color/primary_dark"
+                        android:src="@drawable/ic_menu_forward"
+                        />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.45"
+                        android:gravity="center"
+                        >
+                        <EditText
+                            android:id="@+id/question_range_to"
+                            android:hint="@string/to"
+                            android:inputType="number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/question_specify_range_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/ok"
+                    android:layout_gravity="end"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    />
             </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_gray"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                />
-            <Button
-                android:id="@+id/question_specify_range_submit"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@android:string/ok"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                />
-        </LinearLayout>
-
-        <LinearLayout
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="2dp"
+            android:layout_margin="6dp"
+            android:elevation="6dp"
+            android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/ll_question_vocabulary"
-            android:background="@drawable/card"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:visibility="gone"
             >
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/give_allowed_values"
-                android:gravity="center"
-                android:textColor="@color/text_blue_grey"
-                android:textSize="20sp"
-                android:drawableTop="@android:drawable/ic_menu_share"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                />
-
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
+                android:orientation="vertical"
                 >
-
-                <EditText
-                    android:id="@+id/question_et_add_word"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="0dp"
-                    android:layout_weight=".7"
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:layout_height="wrap_content"
-                    android:hint="@string/input_goes_here"
+                    android:text="@string/give_allowed_values"
+                    android:gravity="center"
+                    android:layout_margin="5dp"
                     />
 
-                <ImageButton
-                    android:id="@+id/question_add_word"
-                    android:contentDescription="@string/image_placeholder"
-                    style="@android:style/Holo.ButtonBar.AlertDialog"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="0.1"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_input_add"
+                    android:animateLayoutChanges="true"
+                    >
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_weight=".7"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:id="@+id/question_et_add_word"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/input_goes_here"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                    <ImageButton
+                        android:id="@+id/question_add_word"
+                        android:contentDescription="@string/image_placeholder"
+                        style="@android:style/Holo.ButtonBar.AlertDialog"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="0.1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_input_add"
+                        />
+                </LinearLayout>
+
+
+                <ListView
+                    style="@style/Base.Widget.AppCompat.ListView"
+                    android:id="@+id/list_allowed_vocabulary"
+                    android:animateLayoutChanges="true"
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+
+                    />
+
+                <Button
+                    android:id="@+id/question_vocabulary_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/ok"
+                    android:layout_gravity="end"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
                     />
             </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-            <ListView
-                android:id="@+id/list_allowed_vocabulary"
-                android:animateLayoutChanges="true"
-                android:layout_width="fill_parent"
-                android:layout_height="150dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-
-                />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_gray"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                />
-
-            <Button
-                android:id="@+id/question_vocabulary_submit"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@android:string/ok"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                />
-        </LinearLayout>
-
-        <LinearLayout
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="2dp"
+            android:layout_margin="6dp"
+            android:elevation="6dp"
+            android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/ll_question_is_mandatory"
-            android:layout_width="fill_parent"
             android:visibility="gone"
-            android:layout_height="wrap_content"
-            android:background="@drawable/card"
-            android:orientation="vertical"
             >
-
-            <TextView
-                android:textColor="@color/text_blue_grey"
-                android:textSize="20sp"
-                android:padding="20dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/is_question_mandatory"
-                />
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_gray"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                />
-
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 >
 
-                <Button
-                    android:id="@+id/mandatory_no"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no"
-                    android:textAllCaps="true"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
+                <TextView
+                    android:textColor="@color/text_blue_grey"
+                    android:textSize="20sp"
+                    android:padding="20dp"
                     android:layout_marginStart="10dp"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    />
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="fill_parent"
-                    android:background="@color/light_gray"
-                    android:layout_marginBottom="10dp"
-                    />
-                <Button
-                    android:id="@+id/mandatory_yes"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:textAllCaps="true"
-                    android:layout_height="wrap_content"
-                    android:text="@string/yes"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/is_question_mandatory"
                     />
-            </LinearLayout>
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
 
-        <LinearLayout
-            android:id="@+id/ll_question_save_and_return"
-            android:layout_width="fill_parent"
+                    <Button
+                        android:id="@+id/mandatory_no"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        />
+                    <Button
+                        android:id="@+id/mandatory_yes"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="wrap_content"
+                        android:text="@string/yes"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/card"
+            card_view:cardCornerRadius="2dp"
+            android:layout_margin="6dp"
+            android:elevation="6dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:id="@+id/ll_question_save_and_return"
             android:visibility="gone"
             >
-            <TextView
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/text_blue_grey"
-                android:textSize="20sp"
-                android:drawableTop="@drawable/ic_check"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:text="@string/question_created"
-                />
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="@string/question_created"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    />
 
-            <EditText
-                android:id="@+id/question_expected_duration"
-                android:inputType="number"
-                android:gravity="center"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:hint="@string/expected_duration"
-                ><requestFocus/></EditText>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/question_expected_duration"
+                        android:inputType="number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/expected_duration"
+                        ><requestFocus/></EditText>
+                </android.support.design.widget.TextInputLayout>
 
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_gray"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                />
-
-            <Button
-                android:id="@+id/question_save_and_return"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@android:string/ok"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/question_save_and_return"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/ok"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_gravity="end"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
+
 
 </ScrollView>

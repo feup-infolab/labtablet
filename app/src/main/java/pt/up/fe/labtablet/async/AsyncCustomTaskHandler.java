@@ -7,10 +7,10 @@ import pt.up.fe.labtablet.models.ProgressUpdateItem;
  */
 public interface AsyncCustomTaskHandler<T> {
 
-    public void onSuccess(T result);
+    void onSuccess(T result);
 
-    public void onFailure(Exception error);
+    void onFailure(Exception error);
 
-    public void onProgressUpdate(ProgressUpdateItem progress);
+    void onProgressUpdate(ProgressUpdateItem progress);
 
 }

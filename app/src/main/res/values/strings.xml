@@ -240,7 +240,7 @@
     <string name="empty_description">No description provided</string>
     <string name="new_project_header">Creating a new project</string>
     <string name="new_project_name_hint">Name goes here</string>
-    <string name="new_project_description_hint">...and its optional description goes here</string>
+    <string name="new_project_description_hint">…and its optional description goes here</string>
     <string name="action_new_project">New project</string>
     <string name="empty_name">A name identifier must be provided</string>
     <string name="home_tip_profile_status_header">Profile status</string>

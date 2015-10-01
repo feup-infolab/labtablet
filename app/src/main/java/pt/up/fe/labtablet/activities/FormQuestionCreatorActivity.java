@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,11 +41,11 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
     private boolean mandatory;
 
     //Layouts for visibility handling
-    private LinearLayout viewQuestionType;
-    private LinearLayout viewQuestionMandatory;
-    private LinearLayout viewQuestionVocabularies;
-    private LinearLayout viewQuestionRange;
-    private LinearLayout viewQuestionConclusion;
+    private CardView viewQuestionType;
+    private CardView viewQuestionMandatory;
+    private CardView viewQuestionVocabularies;
+    private CardView viewQuestionRange;
+    private CardView viewQuestionConclusion;
 
 
     //adapter for the closed vocabulary question
@@ -61,11 +62,11 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
             getActionBar().setTitle(getString(R.string.create_form_question_head));
         }
 
-        viewQuestionType = (LinearLayout) findViewById(R.id.ll_question_specify_type);
-        viewQuestionMandatory = (LinearLayout)  findViewById(R.id.ll_question_is_mandatory);
-        viewQuestionVocabularies = (LinearLayout) findViewById(R.id.ll_question_vocabulary);
-        viewQuestionRange = (LinearLayout) findViewById(R.id.ll_question_specify_range);
-        viewQuestionConclusion = (LinearLayout) findViewById(R.id.ll_question_save_and_return);
+        viewQuestionType = (CardView) findViewById(R.id.ll_question_specify_type);
+        viewQuestionMandatory = (CardView)  findViewById(R.id.ll_question_is_mandatory);
+        viewQuestionVocabularies = (CardView) findViewById(R.id.ll_question_vocabulary);
+        viewQuestionRange = (CardView) findViewById(R.id.ll_question_specify_range);
+        viewQuestionConclusion = (CardView) findViewById(R.id.ll_question_save_and_return);
 
         (findViewById(R.id.question_text_submit)).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,7 +1,5 @@
 package pt.up.fe.labtablet.activities;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,11 +8,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,8 +18,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-
-import com.github.clans.fab.FloatingActionButton;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.api.ChangelogManager;
@@ -62,7 +56,7 @@ public class FingerPaintActivity extends AppCompatActivity implements ColorPicke
 
         mDrawingView = new MyView(this);
         mDrawingView.setDrawingCacheEnabled(true);
-        mDrawingView.setBackgroundResource(R.drawable.card);//set the back ground if you wish to
+        //mDrawingView.setBackgroundResource(R.drawable.card);//set the back ground if you wish to
 
         setContentView(mDrawingView);
         mPaint = new Paint();

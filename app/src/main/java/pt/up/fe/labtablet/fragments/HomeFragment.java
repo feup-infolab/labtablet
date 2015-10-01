@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -16,13 +16,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.labtablet.R;
@@ -33,27 +29,15 @@ import pt.up.fe.labtablet.utils.Utils;
 
 public class HomeFragment extends Fragment {
 
-    private TextView tvMetadataQuality;
-    private ImageView ivMetadataQuality;
-    private ProgressBar pbMetadataLoading;
-    private RelativeLayout rlMetadataQuality;
-
-    private boolean projects;
-
     public HomeFragment(){}
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        File file = new File(Environment.getExternalStorageDirectory()
-                + File.separator +getResources().getString(R.string.app_name));
-
         Typeface fancyFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/LobsterTwo-Regular.ttf");
         ((TextView)(rootView.findViewById(R.id.tv_home))).setTypeface(fancyFont);
-
 
         ArrayList<HomeTip> items = new ArrayList<>();
         HomeTip profileStatus = new HomeTip();
@@ -70,8 +54,8 @@ public class HomeFragment extends Fragment {
         items.add(profileStatus);
 
 
-        final com.github.clans.fab.FloatingActionButton actionButton = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.home_action_button);
-        actionButton.show(true);
+        final FloatingActionButton actionButton = (FloatingActionButton) rootView.findViewById(R.id.home_action_button);
+        actionButton.show();
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,63 +124,15 @@ public class HomeFragment extends Fragment {
         itemList.setAdapter(adapter);
         itemList.animate();
 
-        /*
-        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-            boolean hideToolBar = false;
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                final LinearLayout header = (LinearLayout)(rootView.findViewById(R.id.home_header));
-                if (hideToolBar) {
 
-
-                    header.animate()
-                            .translationY(-header.getHeight())
-                            .setDuration(300)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    header.setVisibility(View.GONE);
-                                }
-                            });
-                    actionButton.hide(true);
-                } else {
-
-                    actionButton.show(true);
-                    header.animate()
-                            .translationY(0)
-                            .setDuration(600)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    header.setVisibility(View.VISIBLE);
-                                }
-                            });
-
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 20) {
-                    hideToolBar = true;
-
-                } else if (dy < -5) {
-                    hideToolBar = false;
-                }
-            }
-        };
-*/
         rootView.findViewById(R.id.home_launch_configurations).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+                //transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
                 transaction.replace(R.id.frame_container, new ConfigurationFragment());
                 transaction.commit();
+                ((MainActivity)getActivity()).setToolbarVisibile(true);
             }
         });
 
@@ -211,13 +147,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+                //transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
                 transaction.replace(R.id.frame_container, new ListFavoritesFragment());
                 transaction.commit();
+                ((MainActivity)getActivity()).setToolbarVisibile(true);
             }
         });
 
-        //itemList.addOnScrollListener(onScrollListener);
         return rootView;
     }
 }
