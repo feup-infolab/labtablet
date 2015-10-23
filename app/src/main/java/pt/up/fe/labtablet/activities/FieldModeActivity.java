@@ -217,8 +217,8 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
         getSupportActionBar().setTitle(favorite_name);
         getSupportActionBar().setSubtitle(getString(R.string.title_activity_field_mode));
 
