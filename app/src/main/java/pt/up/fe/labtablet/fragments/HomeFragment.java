@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -30,6 +32,7 @@ import pt.up.fe.labtablet.utils.Utils;
 public class HomeFragment extends Fragment {
 
     public HomeFragment(){}
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +55,23 @@ public class HomeFragment extends Fragment {
             profileStatus.setResourceID("profile_missing");
         }
         items.add(profileStatus);
+
+
+
+        coordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id
+                .coordinator_layout);
+
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, getString(R.string.welcome), Snackbar.LENGTH_LONG)
+                /*.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Snackbar snackbar1 = Snackbar.make(coordinatorLayout, "Message is restored!", Snackbar.LENGTH_LONG);
+                        snackbar1.show();
+                    }
+                })*/;
+
+        snackbar.show();
 
 
         final FloatingActionButton actionButton = (FloatingActionButton) rootView.findViewById(R.id.home_action_button);

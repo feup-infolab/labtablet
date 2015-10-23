@@ -11,12 +11,19 @@ import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import pt.up.fe.labtablet.R;
@@ -54,11 +61,69 @@ public class FingerPaintActivity extends AppCompatActivity implements ColorPicke
         }
         */
 
+
         mDrawingView = new MyView(this);
         mDrawingView.setDrawingCacheEnabled(true);
-        //mDrawingView.setBackgroundResource(R.drawable.card);//set the back ground if you wish to
 
-        setContentView(mDrawingView);
+        findViewById(R.id.sketch_save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(FingerPaintActivity.this, getString(R.string.saving), Toast.LENGTH_SHORT).show();
+                final String name = "" + System.currentTimeMillis() + ".png";
+                Bitmap bitmap = mDrawingView.getDrawingCache();
+
+                final String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                        "/" + getResources().getString(R.string.app_name) +
+                        "/" + folderName + "/meta/" + name;
+
+                new AsyncBitmapExporter(new AsyncTaskHandler<Void>() {
+                    @Override
+                    public void onSuccess(Void result) {
+
+                        mDrawingView.invalidate();
+                        mDrawingView.setDrawingCacheEnabled(false);
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("result", path);
+                        setResult(RESULT_OK, returnIntent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(Exception error) {
+
+                        Toast.makeText(FingerPaintActivity.this, ".", Toast.LENGTH_SHORT).show();
+                        ChangelogItem item = new ChangelogItem();
+                        item.setMessage("Sketch: " + error.toString() + "When exporting the sketch to a bitmap. Possible causes involve permissions and lack of storage space.");
+                        item.setTitle(getResources().getString(R.string.developer_error));
+                        item.setDate(Utils.getDate());
+                        ChangelogManager.addLog(item, FingerPaintActivity.this);
+                    }
+
+                    @Override
+                    public void onProgressUpdate(int value) {
+                    }
+                }).execute(path, bitmap, getApplication());
+
+            }
+        });
+
+        findViewById(R.id.sketch_pick_color).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ColorPickerDialog(FingerPaintActivity.this, FingerPaintActivity.this, mPaint.getColor()).show();
+
+            }
+        });
+
+        //mDrawingView.setBackgroundResource(R.drawable.card);//set the back ground if you wish to
+        ViewGroup insertPoint = (ViewGroup) findViewById(R.id.entry_point);
+
+        insertPoint.addView(mDrawingView, 0, new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+
+        //setContentView(mDrawingView);
+
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
@@ -67,8 +132,6 @@ public class FingerPaintActivity extends AppCompatActivity implements ColorPicke
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(15);
-
-
 
     }
 

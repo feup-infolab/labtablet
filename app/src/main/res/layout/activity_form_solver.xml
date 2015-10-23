@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:animateLayoutChanges="true"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     >
 
@@ -63,12 +63,15 @@
 
     <ScrollView
         android:id="@+id/sv_question_items"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fillViewport="true"
+        android:visibility="invisible"
         android:animateLayoutChanges="true"
         >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <LinearLayout
             android:id="@+id/ll_question_items"
             android:layout_width="fill_parent"
@@ -76,5 +79,15 @@
             android:orientation="vertical"
             android:animateLayoutChanges="true"
             />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/bt_form_save"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:src="@drawable/ab_validate"/>
+    </RelativeLayout>
     </ScrollView>
 </LinearLayout>

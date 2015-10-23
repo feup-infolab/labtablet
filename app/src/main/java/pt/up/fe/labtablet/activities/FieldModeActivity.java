@@ -25,6 +25,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -68,6 +70,8 @@ import pt.up.fe.labtablet.voiceManager.OfflineVoiceRecognition;
 import pt.up.fe.labtablet.voiceManager.TTSvoice;
 import pt.up.fe.labtablet.voiceManager.VoiceOrdersFile;
 
+
+
 /**
  * Exposes many of the device's sensors to gather their values
  * It also adds options to import from other resources such as camera, screen and gps
@@ -78,6 +82,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
     private Button bt_photo;
     private Button bt_sketch;
     private Button bt_audio;
+
     private Button bt_location;
     private Button bt_note;
 
@@ -94,6 +99,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
     private MediaRecorder recorder;
     private BroadcastReceiver mBatInfoReceiver;
     private SensorsOnClickListener sensorClickListener;
+    private SensorsOnLongClickListener sensorsOnLongClickListener;
 
     private String favorite_name;
     private String temperature_value;
@@ -119,8 +125,9 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
 
     private ArrayList<Descriptor> gatheredMetadata;
 
-    /* sivvs BEGIN */
     ConnectivityReceiver connRec;
+
+    /* sivvs BEGIN */
 
     private TTSvoice ttsVoice;
     private Switch sw_handsFree;
@@ -186,6 +193,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
 
     /* sivvs END */
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,6 +203,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         Intent intent = getIntent();
         favorite_name = intent.getStringExtra("favorite_name");
         sensorClickListener = new SensorsOnClickListener();
+        sensorsOnLongClickListener = new SensorsOnLongClickListener();
         gatheredMetadata = new ArrayList<>();
 
         path = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -206,8 +215,6 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         FileMgr.makeMetaDir(getApplication(), path);
         attachButtons();
 
-
-
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -216,8 +223,6 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         getSupportActionBar().setSubtitle(getString(R.string.title_activity_field_mode));
 
         currentFavoriteItem = FavoriteMgr.getFavorite(this, favorite_name);
-
-
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         if (mBatInfoReceiver != null) {
@@ -243,11 +248,11 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         KeyguardManager myKM = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         if (myKM.inKeyguardRestrictedInputMode()) {
             //it is locked
-            Log.i("Screen", "Locked");
+            Log.i("Screen", "locked");
         } else {
 
             //it is not locked
-            Log.i("Screen", "Unlocked");
+            Log.i("Screen", "UNlocked");
         }
 
 
@@ -275,7 +280,6 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                     return;
                 }
 
-
                 if (!isCollecting) {
                     isCollecting = true;
                     if (sw_gps.isChecked()) {
@@ -302,40 +306,76 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             }
         });
 
+        bt_note.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                if (getGoogleRecognizer() != null)
+                    Toast.makeText(FieldModeActivity.this, voice_rec_keywords.get(VoiceOrdersFile.NOTE), Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
         bt_note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(FieldModeActivity.this);
                 builder.setTitle(getResources().getString(R.string.new_text_record));
+
+                if (ttsVoice != null) ttsVoice.informWatingTextRecord();
+
 
                 // Set up the input
                 final EditText input = new EditText(FieldModeActivity.this);
                 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+
+
                 builder.setView(input);
+
 
                 // Set up the buttons
                 builder.setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (input.getText().toString().equals("")) {
+                            if (ttsVoice != null) ttsVoice.informNotSaved();
                             return;
                         }
                         Descriptor desc = new Descriptor();
                         desc.setValue(input.getText().toString());
+
                         desc.setTag(Utils.TEXT_TAGS);
                         gatheredMetadata.add(desc);
+                        if (getGoogleRecognizer() != null) {
+                            getGoogleRecognizer().getRecognizerIntent().putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                    RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+                        }
+                        ttsVoice.informSaved();
+
                     }
                 });
                 builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+                        if (getGoogleRecognizer() != null) {
+                            getGoogleRecognizer().getRecognizerIntent().putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                    RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+                        }
+                        if (ttsVoice != null) ttsVoice.informCanceled();
+
                     }
                 });
 
+                final AlertDialog alertDialog = builder.show();
 
-                builder.show();
+                if (getGoogleRecognizer() != null) {
+                    getGoogleRecognizer().setTextRecord(input);
+                    getGoogleRecognizer().setDialogTextInput(alertDialog);
+                }
+
             }
         });
 
@@ -373,6 +413,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                         e.printStackTrace();
                     }
 
+
                     recording = true;
                     pb_update.setVisibility(View.VISIBLE);
                     pb_update.setIndeterminate(true);
@@ -395,7 +436,8 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                         item.setDate(Utils.getDate());
                         ChangelogManager.addLog(item, FieldModeActivity.this);
 
-                        Toast.makeText(FieldModeActivity.this, "Device is busy. Close other applications in the background.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FieldModeActivity.this, "Device is busy. Close other applications in the background.",
+                                Toast.LENGTH_SHORT).show();
 
                         pb_update.setVisibility(View.INVISIBLE);
                         bt_audio.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_mic_black_24dp, 0, 0, 0);
@@ -408,12 +450,51 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             }
         });
 
+        bt_audio.setOnLongClickListener(new View.OnLongClickListener() {
+                                            @Override
+                                            public boolean onLongClick(View view) {
+                                                if (googleRecognizer != null)
+                                                    Toast.makeText(FieldModeActivity.this, voice_rec_keywords.get(VoiceOrdersFile.RECORD), Toast.LENGTH_SHORT).show();
+                                                else if (offlineRecognizer != null)
+                                                    Toast.makeText(FieldModeActivity.this, OfflineVoiceRecognition.OFF_RECORD, Toast.LENGTH_SHORT).show();
+                                                return false;
+
+                                            }
+                                        }
+
+        );
+
+
+        bt_location.setOnLongClickListener(new View.OnLongClickListener() {
+                                               @Override
+                                               public boolean onLongClick(View view) {
+                                                   if (googleRecognizer != null)
+                                                       Toast.makeText(FieldModeActivity.this, voice_rec_keywords.get(VoiceOrdersFile.POSITION), Toast.LENGTH_SHORT).show();
+                                                   else if (offlineRecognizer != null)
+                                                       Toast.makeText(FieldModeActivity.this, OfflineVoiceRecognition.OFF_POSITION, Toast.LENGTH_SHORT).show();
+                                                   return false;
+                                               }
+                                           }
+
+
+        );
         bt_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!startService()) {
                     Log.e("LOCATIONListener", "error staring service");
                 }
+
+                /*
+                if (ttsVoice != null) {
+                    TTSvoice.voiceSpeaking = true;
+                    Log.e("voice", "speaking");
+                    ttsVoice.speakText(getResources().getString(R.string.tts_loc_saved), TextToSpeech.QUEUE_FLUSH, TTSvoice.UID_SENSOR_SAVED);
+                }
+                */
+
+                if (offlineRecognizer != null)
+                    offlineRecognizer.startListen();
 
             }
         });
@@ -422,7 +503,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             @Override
             public void onClick(View view) {
 
-                CharSequence options[] = new CharSequence[] {getString(R.string.photo), "Video"};
+                CharSequence options[] = new CharSequence[]{getString(R.string.photo), "Video"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(FieldModeActivity.this);
                 builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -452,6 +533,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             public void onClick(View view) {
                 formCollected = true;
                 final ArrayList<Form> forms = FormMgr.getCurrentBaseForms(FieldModeActivity.this);
+
                 final CharSequence values[] = new CharSequence[forms.size()];
                 for (int i = 0; i < forms.size(); ++i) {
                     values[i] = forms.get(i).getFormName();
@@ -471,6 +553,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                 builder.show();
             }
         });
+
 
         final FieldModeActivity fieldMode = this;
 
@@ -540,6 +623,8 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             registerConnectionReceiver(this);
             Log.e("connRec", "registered (create)");
         }
+
+
     }
 
     private void registerConnectionReceiver(FieldModeActivity f) {
@@ -556,6 +641,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         registerReceiver(connRec, intentFilter);
         Log.e("connRec", "registered");
     }
+
 
     private void registerBatInforReceiver() {
         mBatInfoReceiver = new BroadcastReceiver() {
@@ -581,7 +667,6 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         sw_handsFree = (Switch) findViewById(R.id.handsFreeSwitch);
         //sivvs END
 
-
         bt_audio = (Button) findViewById(R.id.bt_audio);
         bt_sketch = (Button) findViewById(R.id.bt_sketch);
         bt_photo = (Button) findViewById(R.id.bt_camera);
@@ -595,13 +680,19 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         bt_launch_form = (Button) findViewById(R.id.bt_form);
 
         bt_network_temperature_sample.setOnClickListener(sensorClickListener);
+        bt_network_temperature_sample.setOnLongClickListener(sensorsOnLongClickListener);
+
         bt_temperature_sample.setOnClickListener(sensorClickListener);
+        bt_temperature_sample.setOnLongClickListener(sensorsOnLongClickListener);
         bt_magnetic_sample.setOnClickListener(sensorClickListener);
+        bt_magnetic_sample.setOnLongClickListener(sensorsOnLongClickListener);
         bt_luminosity_sample.setOnClickListener(sensorClickListener);
+        bt_luminosity_sample.setOnLongClickListener(sensorsOnLongClickListener);
 
         sw_gps = (Switch) findViewById(R.id.sw_gps);
         pb_update = (ProgressBar) findViewById(R.id.pb_recording);
         pb_location = (ProgressBar) findViewById(R.id.pb_location);
+
 
         if ((System.currentTimeMillis() - lastUpdateNetworkTemperature) > Utils.SAMPLE_MILLIS) {
             bt_network_temperature_sample.setText(getResources().getString(R.string.loading));
@@ -675,6 +766,8 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
     @Override
     protected void onResume() {
         super.onResume();
+        Log.e("fieldMode", "resume");
+
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT),
                 SensorManager.SENSOR_DELAY_NORMAL);
@@ -684,11 +777,27 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                 SensorManager.SENSOR_DELAY_NORMAL);
 
         registerBatInforReceiver();
+
+        if (connRec == null) {
+            registerConnectionReceiver(this);
+            Log.e("connRec", "registered (resume)");
+        }
+
+/*
+        if (getGoogleRecognizer() != null)
+            if (getGoogleRecognizer().getRecognizer() != null)
+                getGoogleRecognizer().restart();
+        else if (offlineRecognizer != null)
+                if(offlineRecognizer.getRecognizer() != null)
+                    offlineRecognizer.startListen();
+*/
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Log.e("fieldMode", "pause");
+
         if (mBatInfoReceiver != null) {
             unregisterReceiver(mBatInfoReceiver);
             mBatInfoReceiver = null;
@@ -700,7 +809,20 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             Log.e("connRec", "unregistered");
             connRec = null;
         }
+
+/*
+        if (isScreenOn()) {
+            if (getGoogleRecognizer() != null)
+                getGoogleRecognizer().pause();
+            else if (offlineRecognizer != null)
+                offlineRecognizer.getRecognizer().shutdown();
+        }
+*/
+
+
+
     }
+
 
     @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
     boolean isScreenOn(){
@@ -713,7 +835,6 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         return false;
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
 
@@ -722,6 +843,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             return;
         }
 
+        //get the picture filename and update records
 
         switch (requestCode) {
             case Utils.SKETCH_INTENT_REQUEST:
@@ -734,6 +856,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                 desc.setFilePath(filePath);
                 desc.setTag(Utils.PICTURE_TAGS);
                 gatheredMetadata.add(desc);
+
 
                 break;
 
@@ -797,15 +920,15 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                 Log.e("uri", data.getDataString());
 
                 break;
+
+
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-
-        if (item.getItemId() != R.id.action_field_mode_end &&
-                item.getItemId() != android.R.id.home) {
+        if (item.getItemId() != R.id.action_field_mode_end) {
             return super.onOptionsItemSelected(item);
         }
 
@@ -855,63 +978,6 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
     /**
      * Handles tapping on each sensor's button to capture its value
      */
-    private class SensorsOnClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            Descriptor desc;
-            int id = view.getId();
-
-            switch (id) {
-                case R.id.bt_network_temperature_sample:
-                    desc = new Descriptor();
-                    desc.setValue(bt_network_temperature_sample.getText().toString());
-                    desc.setTag(Utils.TEMP_TAGS);
-                    gatheredMetadata.add(desc);
-                    Toast.makeText(getApplication(),
-                            getResources().getString(R.string.net_temp_saved),
-                            Toast.LENGTH_SHORT).show();
-
-                    break;
-
-                case R.id.bt_temperature_sample:
-                    desc = new Descriptor();
-                    desc.setValue(bt_temperature_sample.getText().toString());
-                    desc.setTag(Utils.TEMP_TAGS);
-                    gatheredMetadata.add(desc);
-                    Toast.makeText(getApplication(),
-                            getResources().getString(R.string.temp_saved),
-                            Toast.LENGTH_SHORT).show();
-
-                    break;
-
-                case R.id.bt_magnetic:
-                    desc = new Descriptor();
-                    desc.setValue(real_magnetic_value);
-                    desc.setTag(Utils.MAGNETIC_TAGS);
-                    gatheredMetadata.add(desc);
-                    Toast.makeText(getApplication(),
-                            getResources().getString(R.string.mag_saved),
-                            Toast.LENGTH_SHORT).show();
-
-                    break;
-
-                case R.id.bt_luminosity:
-                    desc = new Descriptor();
-                    desc.setValue(bt_luminosity_sample.getText().toString());
-                    desc.setTag(Utils.TEXT_TAGS);
-                    gatheredMetadata.add(desc);
-                    Toast.makeText(getApplication(),
-                            getResources().getString(R.string.lum_saved),
-                            Toast.LENGTH_SHORT).show();
-
-                    break;
-            }
-        }
-    }
-
-    /**
-     * Handles tapping on each sensor's button to capture its value
-     */
 
     private class SensorsOnLongClickListener implements View.OnLongClickListener {
 
@@ -919,10 +985,8 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         public boolean onLongClick(View view) {
             if(googleRecognizer == null && offlineRecognizer == null) return false;
             int id = view.getId();
-            String text = "";
-
+            String text = new String();
             switch (id) {
-
                 case R.id.bt_network_temperature_sample:
                     if (googleRecognizer != null)
                         text = voice_rec_keywords.get(VoiceOrdersFile.INTERNET);
@@ -958,6 +1022,97 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
         }
     }
 
+    ;
+
+    private class SensorsOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Descriptor desc;
+            int id = view.getId();
+
+            switch (id) {
+                case R.id.bt_network_temperature_sample:
+                    desc = new Descriptor();
+                    desc.setValue(bt_network_temperature_sample.getText().toString());
+                    desc.setTag(Utils.TEMP_TAGS);
+                    gatheredMetadata.add(desc);
+
+
+
+                    if (getGoogleRecognizer() != null)
+                        getGoogleRecognizer().audioUnmute(); //for ttsVoice
+
+                    if (ttsVoice != null)
+                        ttsVoice.speakText(getResources().getString(R.string.net_temp_saved), TextToSpeech.QUEUE_FLUSH,
+                                TTSvoice.UID_SENSOR_SAVED);
+                    else
+                        Toast.makeText(getApplication(),
+                                getResources().getString(R.string.net_temp_saved),
+                                Toast.LENGTH_SHORT).show();
+
+                    break;
+
+                case R.id.bt_temperature_sample:
+                    desc = new Descriptor();
+                    desc.setValue(bt_temperature_sample.getText().toString());
+                    desc.setTag(Utils.TEMP_TAGS);
+                    gatheredMetadata.add(desc);
+
+
+                    TTSvoice.voiceSpeaking = true;
+                   /* if (getGoogleRecognizer() != null)
+                        getGoogleRecognizer().audioUnmute(); //for ttsVoice*/
+                    if (ttsVoice != null) {
+                        TTSvoice.voiceSpeaking = true;
+                        Log.e("voice", "speaking");
+                        ttsVoice.speakText(getResources().getString(R.string.temp_saved), TextToSpeech.QUEUE_FLUSH, TTSvoice.UID_SENSOR_SAVED);
+                    } else
+                        Toast.makeText(getApplication(),
+                                getResources().getString(R.string.temp_saved),
+                                Toast.LENGTH_SHORT).show();
+
+                    break;
+
+                case R.id.bt_magnetic:
+                    desc = new Descriptor();
+                    desc.setValue(real_magnetic_value);
+                    desc.setTag(Utils.MAGNETIC_TAGS);
+                    gatheredMetadata.add(desc);
+
+
+                    if (getGoogleRecognizer() != null)
+                        getGoogleRecognizer().audioUnmute(); //ttsVoice
+                    if (ttsVoice != null)
+                        ttsVoice.speakText(getResources().getString(R.string.tts_magnetic_saved), TextToSpeech.QUEUE_FLUSH,
+                                TTSvoice.UID_SENSOR_SAVED);
+                    else Toast.makeText(getApplication(),
+                            getResources().getString(R.string.mag_saved),
+                            Toast.LENGTH_SHORT).show();
+
+                    break;
+
+                case R.id.bt_luminosity:
+                    desc = new Descriptor();
+                    desc.setValue(bt_luminosity_sample.getText().toString());
+                    desc.setTag(Utils.TEXT_TAGS);
+                    gatheredMetadata.add(desc);
+
+
+                    if (getGoogleRecognizer() != null)
+                        getGoogleRecognizer().audioUnmute(); //ttsVoice
+                    if (ttsVoice != null)
+                        ttsVoice.speakText(getResources().getString(R.string.lum_saved), TextToSpeech.QUEUE_FLUSH, TTSvoice.UID_SENSOR_SAVED);
+                    else  Toast.makeText(getApplication(),
+                            getResources().getString(R.string.lum_saved),
+                            Toast.LENGTH_SHORT).show();
+
+                    break;
+
+
+            }
+        }
+    }
+
     /**
      * Waits until valid coordinates are available
      */
@@ -980,11 +1135,22 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                     LocationManager.NETWORK_PROVIDER, 0, 0,
                     mLocationListener);
 
+
+
+
             if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                Toast.makeText(FieldModeActivity.this, getResources().getString(R.string.location_disabled), Toast.LENGTH_SHORT).show();
+                if (ttsVoice != null)
+                    ttsVoice.speakText(getResources().getString(R.string.location_disabled), TextToSpeech.QUEUE_FLUSH,
+                            TTSvoice.UID_OP_DISABLED);
+                else
+                    Toast.makeText(FieldModeActivity.this, getResources().getString(R.string.location_disabled), Toast.LENGTH_SHORT).show();
                 this.cancel(true);
                 return;
             }
+
+
+
+
 
             pb_location.setIndeterminate(true);
             pb_location.setVisibility(View.VISIBLE);
@@ -1005,14 +1171,22 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             desc.setTag(Utils.GEO_TAGS);
             gatheredMetadata.add(desc);
 
-            Toast.makeText(FieldModeActivity.this,
-                    "LAT:" + latitude + " LNG:" + longitude,
-                    Toast.LENGTH_SHORT).show();
+            String text = "LAT:" + latitude + " LNG:" + longitude;
+
+
+
+            if (ttsVoice != null)
+                ttsVoice.speakText(text, TextToSpeech.QUEUE_FLUSH,
+                        TTSvoice.UID_SENSOR_SAVED);
+            else
+                Toast.makeText(FieldModeActivity.this,
+                        text,
+                        Toast.LENGTH_SHORT).show();
+
         }
 
         @Override
         protected Void doInBackground(String... params) {
-
 
 
             while (this.latitude == 0.0) {
@@ -1031,9 +1205,14 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                     longitude = location.getLongitude();
                 } catch (Exception e) {
                     pb_location.setIndeterminate(false);
-                    Toast.makeText(getApplicationContext(),
-                            "Unable to get Location"
-                            , Toast.LENGTH_LONG).show();
+
+                    if (ttsVoice != null)
+                        ttsVoice.speakText(getResources().getString(R.string.loc_unavailable), TextToSpeech.QUEUE_FLUSH,
+                                TTSvoice.UID_OP_DISABLED);
+                    else
+                        Toast.makeText(getApplicationContext(),
+                                getResources().getString(R.string.loc_unavailable)
+                                , Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -1114,6 +1293,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
             startActivityForResult(captureMediaIntent, Utils.VIDEO_CAPTURE_REQUEST);
         }
     }
+
 
     public OfflineVoiceRecognition getOfflineRecognizer() {
         return offlineRecognizer;
@@ -1202,4 +1382,6 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
     public FavoriteItem getCurrentFavoriteItem() {
         return currentFavoriteItem;
     }
+
+
 }

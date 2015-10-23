@@ -49,7 +49,7 @@
     <string name="edit">Editar</string>
     <string name="title_activity_field_mode">Modo de campo</string>
     <string name="title_activity_finger_paint">Esboço</string>
-    <string name="title_activity_validate_metadata">ValidateMetadataActivity</string>
+    <string name="title_activity_validate_metadata">Validar registos</string>
     <string name="cancel">Cancelar</string>
     <string name="edit_metadata_item_delete">Eliminar registo?</string>
     <string name="favorite_view_no_description">Sem descrição disponível</string>
@@ -212,7 +212,7 @@
     <string name="new_favorite_create">Create</string>
     <string name="file_imported_description">Successfully imported file.</string>
     <string name="upload_generating_forms">Generating forms&#8230;</string>
-    <string name="title_activity_item_preview">itemPreviewActivity</string>
+    <string name="title_activity_item_preview">Item Preview</string>
     <string name="action_zip">Create a zip file</string>
     <string name="image_placeholder">Image Placeholder</string>
     <string name="no_apps_available">Não existem aplicações para abrir este tipo de ficheiros.</string>
@@ -297,6 +297,7 @@
     <string name="tts_lost_conn">Perdeu conexão à internet. A desligar reconhecimento de voz da google e a ligar reconhecimento de voz offline (limitado)</string>
     <string name="tts_good_conn">Conexão à internet existente. É possível usar o reconhecimento de voz da google</string>
     <string name="tts_loc_saved">Posição guardada</string>
+    <string name="saving">Saving...</string>
     <!-- /TTS sentences -->
 
 </resources>

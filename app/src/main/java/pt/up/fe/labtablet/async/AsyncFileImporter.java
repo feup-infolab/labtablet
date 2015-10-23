@@ -68,8 +68,8 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, DataItem> {
         }
 
         String destPath = Environment.getExternalStorageDirectory() + "/"
-                + mContext.getResources().getString(R.string.app_name) + "/"
-                + favoriteName + "/" + importFile.getName();
+                + mContext.getResources().getString(R.string.app_name) + File.separator
+                + favoriteName + File.separator + importFile.getName();
 
         File destFile = new File(destPath);
         if (destFile.exists()) {

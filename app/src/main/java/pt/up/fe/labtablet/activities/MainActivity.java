@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         drawerFragment.setDrawerListener(this);
 
         displayView(0);
+
+
     }
 
     @Override

@@ -62,6 +62,8 @@ public class FormSolverActivity extends Activity {
         }
 
 
+
+
         setContentView(R.layout.activity_form_solver);
         table = (LinearLayout) findViewById(R.id.ll_question_items);
         (findViewById(R.id.bt_dismiss_form_intro)).setOnClickListener(new View.OnClickListener() {
@@ -87,6 +89,64 @@ public class FormSolverActivity extends Activity {
             View v = getQuestionView(targetForm.getFormQuestions().get(i));
             table.addView(v);
         }
+
+        findViewById(R.id.bt_form_save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean requirementsMet = true;
+                int viewCount = table.getChildCount();
+                ArrayList<FormQuestion> fqs = targetForm.getFormQuestions();
+                for (int i = 0; i < viewCount; ++i) {
+
+                    FormEnumType questionType = fqs.get(i).getType();
+                    View childView = table.getChildAt(i);
+                    //CHeck whether the question is mandatory or not
+                    ImageView questionStatus = (ImageView) childView.findViewById(R.id.solver_question_status);
+
+                    switch (questionType) {
+                        case NUMBER:
+                        case FREE_TEXT:
+                            EditText etSource = (EditText) childView.findViewById(R.id.solver_question_text);
+                            if (fqs.get(i).isMandatory() && etSource.getText().toString().equals("")) {
+                                questionStatus.setVisibility(View.VISIBLE);
+                                requirementsMet = false;
+                                break;
+                            }
+
+                            fqs.get(i).setValue(etSource.getText().toString());
+                            break;
+
+                        case MULTIPLE_CHOICE:
+                            Spinner spSource = (Spinner) childView.findViewById(R.id.solver_question_spinner);
+                            if (fqs.get(i).isMandatory() &&
+                                    spSource.getSelectedItem().toString().equals(getString(R.string.pick_allowed_values))) {
+                                questionStatus.setVisibility(View.VISIBLE);
+                                requirementsMet = false;
+                                break;
+                            }
+                            fqs.get(i).setValue(spSource.getSelectedItem().toString());
+                            break;
+                        case RANGE:
+                            NumberPicker npSource = (NumberPicker) childView.findViewById(R.id.solver_question_number_picker);
+                            fqs.get(i).setValue("" + npSource.getValue());
+                            break;
+                    }
+                }
+
+                if (!requirementsMet) {
+                    Toast.makeText(FormSolverActivity.this, getString(R.string.empty_questions_exist), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Intent returnIntent = new Intent();
+                targetForm.setElapsedTime(
+                        ((Chronometer)findViewById(R.id.form_solver_chrono)).getText().toString());
+
+                returnIntent.putExtra("form", new Gson().toJson(targetForm));
+                setResult(Utils.SOLVE_FORM, returnIntent);
+                finish();
+            }
+        });
     }
 
     private View getQuestionView(FormQuestion fq) {
