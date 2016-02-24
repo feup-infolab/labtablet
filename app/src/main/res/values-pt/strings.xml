@@ -298,6 +298,7 @@
     <string name="tts_good_conn">Conexão à internet existente. É possível usar o reconhecimento de voz da google</string>
     <string name="tts_loc_saved">Posição guardada</string>
     <string name="saving">Saving...</string>
+    <string name="crash_submitted">Relatório de erros submetido</string>
     <!-- /TTS sentences -->
 
 </resources>

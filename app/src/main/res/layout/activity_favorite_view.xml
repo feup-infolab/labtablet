@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:animateLayoutChanges="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".activities.FavoriteDetailsActivity" >
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:background="@color/primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            L<android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+            <Button
+                android:id="@+id/bt_field_mode"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_gravity="end"
+                android:drawableEnd="@drawable/ic_terrain_white_24dp"
+                android:drawablePadding="20dp"
+                android:text="Field Mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.AppBarLayout>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@id/appbar"
+                android:id="@+id/lv_favorite_metadata"
+                android:scrollbars="none"
+                android:divider="@android:color/transparent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                />
+
+
+            <LinearLayout
+                android:id="@+id/ll_view_tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                >
+
+                <Button
+                    android:id="@+id/tab_metadata"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:drawableStart="@drawable/ab_pulse"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="@string/metadata"
+                    android:background="@color/primary"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/tab_data"
+                    android:drawableEnd="@drawable/ab_box"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="@string/data"
+                    android:textColor="@color/white"
+                    android:background="@color/primary"
+                    />
+            </LinearLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/bt_new_metadata"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ab_plus"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:layout_above="@id/ll_view_tabs"
+                />
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

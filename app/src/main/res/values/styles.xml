@@ -9,8 +9,6 @@
         <!-- API 14 theme customizations can go here. -->
         <!--translucent action bar can be enabled here -->
         <item name="android:windowBackground">@color/light_gray</item>
-        <!--<item name="android:windowTranslucentStatus">true</item>-->
-        <!--<item name="android:windowTranslucentNavigation">true</item>-->
 
         <item name="android:spinnerDropDownItemStyle">@style/LabTabletDropDownStyle</item>
 
@@ -26,11 +24,16 @@
         <item name="android:colorMultiSelectHighlight">@color/white</item>
         <item name="android:actionMenuTextColor">@color/white</item>
 
-
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+
         <item name="colorAccent">@color/fab_color</item>
 
+    </style>
+
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/primary</item>
     </style>
 
     <style name="LabTabletDropDownStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">

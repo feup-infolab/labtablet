@@ -24,6 +24,10 @@
         android:versionName="Zorg"
         >
 
+        <service
+            android:name="org.acra.sender.SenderService"
+            android:exported="false"
+            android:process=":acra" />
 
         <activity
             android:name="pt.up.fe.labtablet.activities.MainActivity"
@@ -35,6 +39,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.FavoriteDetailsActivity"
+            android:theme="@style/AppBaseTheme"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_favorite_detail" />
+
         <activity
             android:name="pt.up.fe.labtablet.activities.DescriptorPickerActivity"
             android:screenOrientation="portrait"
@@ -55,7 +65,7 @@
             android:screenOrientation="portrait"
             android:label="@string/title_activity_validate_metadata"
             android:parentActivityName="pt.up.fe.labtablet.activities.FieldModeActivity"
-             >
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pt.up.fe.labtablet.activities.FieldModeActivity" />

@@ -31,7 +31,6 @@ import pt.up.fe.labtablet.api.ChangelogManager;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.fragments.ConfigurationFragment;
 import pt.up.fe.labtablet.fragments.DrawerFragment;
-import pt.up.fe.labtablet.fragments.FavoriteDetailsFragment;
 import pt.up.fe.labtablet.fragments.HomeFragment;
 import pt.up.fe.labtablet.fragments.ListChangelogFragment;
 import pt.up.fe.labtablet.fragments.ListFavoritesFragment;
@@ -287,15 +286,9 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 newFavorite.setMetadataItems(folderMetadata);
                 FavoriteMgr.registerFavorite(MainActivity.this, newFavorite);
 
-                FragmentTransaction transaction = MainActivity.this.getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                FavoriteDetailsFragment favoriteDetail = new FavoriteDetailsFragment();
-                Bundle args = new Bundle();
-                args.putString("favorite_name", newFavorite.getTitle());
-                favoriteDetail.setArguments(args);
-                transaction.replace(R.id.frame_container, favoriteDetail);
-                //transaction.addToBackStack(null);
-                transaction.commit();
+                Intent intent = new Intent(MainActivity.this, FavoriteDetailsActivity.class);
+                intent.putExtra("favorite_name", newFavorite.getTitle());
+                startActivity(intent);
             }
         });
 

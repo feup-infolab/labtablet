@@ -1,10 +1,10 @@
 package pt.up.fe.labtablet.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.activities.FavoriteDetailsActivity;
 import pt.up.fe.labtablet.activities.MainActivity;
 import pt.up.fe.labtablet.adapters.FavoriteListAdapter;
 import pt.up.fe.labtablet.models.FavoriteItem;
@@ -49,18 +50,10 @@ public class ListFavoritesFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 FavoriteItem selectedItem = items.get(position);
 
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-
                 //switch to the favorite view
-                FavoriteDetailsFragment favoriteDetails = new FavoriteDetailsFragment();
-                Bundle args = new Bundle();
-                args.putString("favorite_name", selectedItem.getTitle());
-                favoriteDetails.setArguments(args);
-                transaction.replace(R.id.frame_container, favoriteDetails);
-                //go back to the list of projects
-                //transaction.addToBackStack(null);
-                transaction.commit();
+                Intent intent = new Intent(getActivity(), FavoriteDetailsActivity.class);
+                intent.putExtra("favorite_name", selectedItem.getTitle());
+                startActivity(intent);
             }
 
             @Override

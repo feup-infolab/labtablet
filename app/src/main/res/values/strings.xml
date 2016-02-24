@@ -248,6 +248,7 @@
     <string name="title_activity_field_mode">Field Mode</string>
     <string name="title_activity_finger_paint">Sketch note</string>
     <string name="title_activity_validate_metadata">Validating records</string>
+    <string name="title_activity_favorite_detail">Favorite Details</string>
 
 
     <string name="network_temp_vr">Network</string><!-- for voice recognition -->
@@ -307,7 +308,8 @@
     <string name="tts_lost_conn">You have lost network connection. Shutting down google speech recognition and turning on offline speech recognition (limited)</string>
     <string name="tts_good_conn">You have network connection. You can use google speech recognition</string>
     <string name="tts_loc_saved">Position saved</string>
-    <string name="saving">Saving...</string>
+    <string name="saving">Saving…</string>
+    <string name="crash_submitted">Error report submitted</string>
     <!-- /TTS sentences -->
 
 

@@ -34,20 +34,21 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v4:22.2.1'
-    compile 'com.android.support:support-v13:20.0.0'
-    compile 'com.google.code.gson:gson:2.3'
     compile 'com.android.support:cardview-v7:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile 'org.jdom:jdom:2.0.2'
     compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.github.clans:fab:1.6.0'
     compile 'com.android.support:design:22.2.1'
+    compile 'com.android.support:support-v13:22.0.0'
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'org.jdom:jdom:2.0.2'
+    compile 'ch.acra:acra:4.8.2'
+    compile 'com.github.clans:fab:1.6.0'
     compile files('libs/httpcore-4.3.2.jar')
     compile files('libs/httpclient-4.3.4.jar')
     compile files('libs/httpclient-cache-4.3.4.jar')
     compile files('libs/httpmime-4.3.4.jar')
     compile files('libs/itextpdf-5.5.3.jar')
     compile files('libs/opencsv-3.1.jar')
-    compile files('libs/acra-4.5.0.jar')
     compile files('libs/pocketsphinx-android-5prealpha-nolib.jar')
+
 }

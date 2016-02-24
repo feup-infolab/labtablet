@@ -67,7 +67,7 @@ public class AsyncFileImporter extends AsyncTask<Object, Integer, DataItem> {
             }
         }
 
-        String destPath = Environment.getExternalStorageDirectory() + "/"
+        String destPath = Environment.getExternalStorageDirectory() + File.separator
                 + mContext.getResources().getString(R.string.app_name) + File.separator
                 + favoriteName + File.separator + importFile.getName();
 

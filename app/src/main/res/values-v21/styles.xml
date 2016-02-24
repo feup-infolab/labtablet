@@ -20,6 +20,8 @@
         <item name="windowActionBar">false</item>
         <item name="colorAccent">@color/fab_color</item>
 
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
@@ -29,5 +31,8 @@
 
     <style name="LabTabletDropDownStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/primary</item>
     </style>
 </resources>
