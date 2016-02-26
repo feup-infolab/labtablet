@@ -2,6 +2,7 @@ package pt.up.fe.labtablet.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.models.AssociationItem;
 import pt.up.fe.labtablet.models.ChangelogItem;
 import pt.up.fe.labtablet.models.Dendro.DendroDescriptor;
@@ -191,5 +193,14 @@ public class Utils {
     public static int getIntFromFloat(float floatVal){
         int intVal = Math.round(floatVal / .1f);
         return intVal;
+    }
+
+    public static int getToolbarHeight(Context context) {
+        final TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(
+                new int[]{R.attr.actionBarSize});
+        int toolbarHeight = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+
+        return toolbarHeight;
     }
 }

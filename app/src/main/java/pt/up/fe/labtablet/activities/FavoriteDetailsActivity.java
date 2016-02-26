@@ -10,15 +10,23 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +39,7 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.adapters.DataListAdapter;
@@ -40,6 +49,7 @@ import pt.up.fe.labtablet.async.AsyncFileImporter;
 import pt.up.fe.labtablet.async.AsyncPackageCreator;
 import pt.up.fe.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
+import pt.up.fe.labtablet.fragments.FavoriteViewFragment;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
@@ -48,11 +58,7 @@ import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.OnItemClickListener;
 import pt.up.fe.labtablet.utils.Utils;
 
-public class FavoriteDetailsActivity extends AppCompatActivity {
-
-    //Buttons to switch between data and metadata views
-    private Button bt_meta_view;
-    private Button bt_data_view;
+public class FavoriteDetailsActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
 
     private boolean isMetadataVisible;
 
@@ -66,6 +72,10 @@ public class FavoriteDetailsActivity extends AppCompatActivity {
     private DataListAdapter dataListAdapter;
 
     private CoordinatorLayout coordinatorLayout;
+    private AppBarLayout appBarLayout;
+    private ViewPager viewPager;
+    private TabLayout.Tab activeTab;
+    private ViewPagerAdapter adapter;
     private Toolbar mToolbar;
 
     @Override
@@ -78,9 +88,8 @@ public class FavoriteDetailsActivity extends AppCompatActivity {
 
 
         Button bt_fieldMode = (Button) findViewById(R.id.bt_field_mode);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        bt_meta_view = (Button) findViewById(R.id.tab_metadata);
-        bt_data_view = (Button) findViewById(R.id.tab_data);
 
         if (savedInstanceState != null) {
             currentItem = new Gson().fromJson(savedInstanceState.getString("current_item"), FavoriteItem.class);
@@ -93,17 +102,21 @@ public class FavoriteDetailsActivity extends AppCompatActivity {
             isMetadataVisible = true;
         }
 
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setOnTabSelectedListener(this);
+        activeTab = tabLayout.getTabAt(0);
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
         mToolbar.setTitle(currentItem.getTitle());
         mToolbar.setSubtitle(currentItem.getDescription());
+        setSupportActionBar(mToolbar);
 
-        itemList = (RecyclerView) findViewById(R.id.lv_favorite_metadata);
-        itemList.setLayoutManager(new LinearLayoutManager(this));
-        itemList.setItemAnimator(new DefaultItemAnimator());
-        itemList.animate();
+        ((TextView) findViewById(R.id.favorite_stats)).setText("kowa\nbunga");
 
-
+/*
         itemClickListener = new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -168,7 +181,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity {
         } else {
             loadDataView();
         }
-
+        */
 
         bt_fieldMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,7 +196,10 @@ public class FavoriteDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (!isMetadataVisible) {
+                if (activeTab == null || activeTab.getText() == null)
+                    return;
+
+                if (activeTab.getText().equals("metadata")) {
                     Toast.makeText(FavoriteDetailsActivity.this, "Choose the file", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("file/*");
@@ -197,70 +213,24 @@ public class FavoriteDetailsActivity extends AppCompatActivity {
                 }
             }
         });
-
-        bt_data_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadDataView();
-            }
-        });
-        bt_meta_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadMetadataView();
-            }
-        });
     }
 
 
-    private void loadMetadataView() {
-        bt_data_view.setEnabled(true);
-        bt_data_view.setBackgroundColor(getResources().getColor(R.color.primary));
-        bt_meta_view.setBackgroundColor(getResources().getColor(R.color.primary_dark));
-        bt_meta_view.setEnabled(false);
-        isMetadataVisible = true;
-
-        metadataListAdapter =
-                new MetadataListAdapter(
-                        currentItem.getMetadataItems(),
-                        itemClickListener,
-                        FavoriteDetailsActivity.this);
-
-        itemList.setAdapter(metadataListAdapter);
-    }
-
-    private void loadDataView() {
-
-        bt_data_view.setEnabled(false);
-        bt_meta_view.setEnabled(true);
-        bt_data_view.setBackgroundColor(getResources().getColor(R.color.primary_dark));
-        bt_meta_view.setBackgroundColor(getResources().getColor(R.color.primary));
-
-        isMetadataVisible = false;
-
-        dataListAdapter = new DataListAdapter(
-                currentItem.getDataItems(),
-                itemClickListener,
-                FavoriteDetailsActivity.this);
-
-        itemList.setAdapter(dataListAdapter);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.favorite_view_menu, menu);
+        return true;
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-
-
         if (favoriteName != null) {
             currentItem = FavoriteMgr.getFavorite(FavoriteDetailsActivity.this, favoriteName);
             mToolbar.setSubtitle(currentItem.getDescription());
             mToolbar.setTitle(currentItem.getTitle());
-        }
-        if (isMetadataVisible) {
-            loadMetadataView();
-        } else {
-            loadDataView();
         }
     }
 
@@ -386,6 +356,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -477,6 +448,22 @@ public class FavoriteDetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        activeTab = tab;
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
     private class dcClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
@@ -538,4 +525,39 @@ public class FavoriteDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private void setupViewPager(ViewPager viewPager) {
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(FavoriteViewFragment.newInstance("metadata", currentItem.getMetadataItems()), "metadata");
+        adapter.addFragment(FavoriteViewFragment.newInstance("data", currentItem.getDataItems()), "data");
+        viewPager.setAdapter(adapter);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
 }

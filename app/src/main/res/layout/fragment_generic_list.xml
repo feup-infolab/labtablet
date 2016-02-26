@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CountryActivity">
+
+    <TextView
+        android:id="@+id/list_state"
+        android:fontFamily="sans-serif-thin"
+        android:text="@string/no_items_yet"
+        android:layout_centerInParent="true"
+        android:padding="25dp"
+        android:textSize="20sp"
+        android:drawablePadding="30dp"
+        android:drawableTop="@drawable/ic_empty_sheet_80dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:visibility="invisible"
+        android:clickable="true"
+        android:longClickable="true"
+        android:focusable="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</RelativeLayout>

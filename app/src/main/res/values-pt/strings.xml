@@ -299,6 +299,8 @@
     <string name="tts_loc_saved">Posição guardada</string>
     <string name="saving">Saving...</string>
     <string name="crash_submitted">Relatório de erros submetido</string>
+    <string name="no_items_yet">There are no items in this section. Tap below to import or create resources</string>
+    <string name="help">Help</string>
     <!-- /TTS sentences -->
 
 </resources>

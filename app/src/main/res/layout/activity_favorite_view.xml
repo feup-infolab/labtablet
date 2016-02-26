@@ -6,93 +6,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:animateLayoutChanges="true"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:background="@color/primary"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".activities.FavoriteDetailsActivity" >
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbar"
-            android:background="@color/primary"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:orientation="horizontal">
 
-            L<android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            <TextView
+                android:id="@+id/favorite_stats"
+                android:textColor="@android:color/white"
+                android:gravity="center_vertical"
+                android:fontFamily="sans-serif-thin"
+                android:drawableStart="@drawable/ic_file"
+                android:text="2KB\n14items"
+                android:layout_weight=".3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
 
             <Button
+                android:textColor="@android:color/white"
                 android:id="@+id/bt_field_mode"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_gravity="end"
                 android:drawableEnd="@drawable/ic_terrain_white_24dp"
                 android:drawablePadding="20dp"
-                android:text="Field Mode"
-                android:layout_width="wrap_content"
+                android:gravity="end|center_vertical"
+                android:text="@string/launch_field_mode"
+                android:layout_width="0dp"
+                android:layout_weight=".7"
                 android:layout_height="wrap_content" />
-        </android.support.design.widget.AppBarLayout>
+
+        </LinearLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_below="@id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_collapseMode="parallax"
+            app:tabMode="fixed"
+            app:tabGravity="center"
+            />
+
+    </android.support.design.widget.AppBarLayout>
 
 
-            <android.support.v7.widget.RecyclerView
-                android:layout_below="@id/appbar"
-                android:id="@+id/lv_favorite_metadata"
-                android:scrollbars="none"
-                android:divider="@android:color/transparent"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center"
-                />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        app:tabMode="scrollable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    </android.support.v4.view.ViewPager>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bt_new_metadata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ab_plus"
+        android:layout_margin="20dp"
+        app:layout_behavior="pt.up.fe.labtablet.adapters.ScrollingFABBehavior"
+        android:layout_gravity="end|bottom"
+        />
 
-            <LinearLayout
-                android:id="@+id/ll_view_tabs"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                >
-
-                <Button
-                    android:id="@+id/tab_metadata"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
-                    android:drawableStart="@drawable/ab_pulse"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="@string/metadata"
-                    android:background="@color/primary"
-                    android:textColor="@color/white" />
-
-                <Button
-                    android:id="@+id/tab_data"
-                    android:drawableEnd="@drawable/ab_box"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="@string/data"
-                    android:textColor="@color/white"
-                    android:background="@color/primary"
-                    />
-            </LinearLayout>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/bt_new_metadata"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ab_plus"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="10dp"
-                android:layout_above="@id/ll_view_tabs"
-                />
-
-    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

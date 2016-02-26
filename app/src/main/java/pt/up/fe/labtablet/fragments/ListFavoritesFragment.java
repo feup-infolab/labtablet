@@ -35,12 +35,12 @@ import pt.up.fe.labtablet.utils.Utils;
 public class ListFavoritesFragment extends Fragment {
 
     private ArrayList<FavoriteItem> items;
-
+    private View rootView;
     private FavoriteListAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_favorite_list, container, false);
+        rootView = inflater.inflate(R.layout.fragment_generic_list, container, false);
 
         setHasOptionsMenu(true);
         items = new ArrayList<>();
@@ -62,10 +62,11 @@ public class ListFavoritesFragment extends Fragment {
             }
         };
 
+
         adapter = new FavoriteListAdapter(items,
                 itemClickListener);
 
-        RecyclerView itemList = (RecyclerView) rootView.findViewById(R.id.favorite_list);
+        RecyclerView itemList = (RecyclerView) rootView.findViewById(R.id.list);
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
         itemList.setItemAnimator(new DefaultItemAnimator());
         itemList.setAdapter(adapter);
@@ -118,7 +119,16 @@ public class ListFavoritesFragment extends Fragment {
                 items.add(newItem);
             }
         }
+
+        if (items.isEmpty()) {
+            rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
+            return;
+        }
+
+
+        rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
         adapter.notifyDataSetChanged();
     }
-
 }
