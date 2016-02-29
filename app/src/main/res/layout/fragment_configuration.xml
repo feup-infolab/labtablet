@@ -9,12 +9,24 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp"
         >
+
+        <TextView
+            android:text="Profile"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:background="@color/primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-thin"
+            android:layout_gravity="start"
+            android:padding="5dp"
+            />
 
         <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
             >
 
             <RelativeLayout
@@ -27,6 +39,7 @@
 
                 <TextView
                     android:id="@+id/conf_pick_file_instructions"
+                    android:fontFamily="sans-serif-thin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
@@ -50,8 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/conf_pick_file_separator"
-                    android:drawableStart="@android:drawable/ic_menu_agenda"
-                    android:drawableLeft="@android:drawable/ic_menu_agenda"
+                    android:drawableStart="@drawable/ic_view_headline_black_24dp"
                     android:ems="10"
                     android:text="@string/bt_file_select"
                     android:textAllCaps="true" />
@@ -59,10 +71,23 @@
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
+
+        <TextView
+            android:text="Associations"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:background="@color/primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-thin"
+            android:layout_gravity="start"
+            android:padding="5dp"
+            />
+
         <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_margin="6dp"
             >
             <LinearLayout
                 android:id="@+id/gv_clear"
@@ -75,6 +100,7 @@
 
                 <TextView
                     android:id="@+id/configuration_instructions"
+                    android:fontFamily="sans-serif-thin"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -92,7 +118,6 @@
                 <Button
                     android:id="@+id/bt_clear_associations"
                     android:drawableStart="@drawable/ic_recycle"
-                    android:drawableLeft="@drawable/ic_recycle"
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -107,6 +132,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:layout_margin="6dp"
             >
             <LinearLayout
                 android:id="@+id/gl_gps"
@@ -119,7 +145,7 @@
 
                 <TextView
                     android:id="@+id/conf_kml_title"
-                    android:textColor="@color/list_background_pressed"
+                    android:textColor="@color/primary_dark"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -129,11 +155,12 @@
 
                 <TextView
                     android:id="@+id/conf_kml_instructions"
+                    android:fontFamily="sans-serif-thin"
+                    android:padding="10dp"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/gps_description"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     />
 
                 <TextView
@@ -178,6 +205,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:layout_margin="6dp"
             >
             <LinearLayout
                 android:id="@+id/gl_jpg"
@@ -189,7 +217,7 @@
 
                 <TextView
                     android:id="@+id/conf_jpeg_title"
-                    android:textColor="@color/list_background_pressed"
+                    android:textColor="@color/primary_dark"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -199,12 +227,12 @@
 
                 <TextView
                     android:id="@+id/conf_jpeg_description"
+                    android:fontFamily="sans-serif-thin"
                     android:layout_width="fill_parent"
+                    android:padding="10dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:padding="10dp"
                     android:text="@string/jpg_description"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     />
 
                 <TextView
@@ -249,6 +277,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:layout_margin="6dp"
             >
             <LinearLayout
                 android:id="@+id/rl_mp3"
@@ -260,7 +289,7 @@
 
                 <TextView
                     android:id="@+id/conf_mp3_title"
-                    android:textColor="@color/list_background_pressed"
+                    android:textColor="@color/primary_dark"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -274,8 +303,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="10dp"
+                    android:fontFamily="sans-serif-thin"
                     android:text="@string/mp3_description"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     />
 
                 <TextView
@@ -284,7 +313,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Descriptor not set"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
                     />
 
                 <TextView
@@ -317,10 +346,23 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
+        <TextView
+            android:text="Remote"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:background="@color/primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-thin"
+            android:layout_gravity="start"
+            android:padding="5dp"
+            />
+
         <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:layout_margin="6dp"
             android:layout_marginBottom="20dp">
 
             <RelativeLayout

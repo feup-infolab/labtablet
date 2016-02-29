@@ -37,97 +37,97 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:animateLayoutChanges="true">
-
-            <ImageView
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/item_preview_image"
-                android:contentDescription="@string/image_placeholder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxHeight="200dp"
-                android:scaleType="center"
-                android:adjustViewBounds="true"
-                android:src="@drawable/ic_preview"
-                />
-
-                <TextView
-                android:id="@+id/item_preview_mime"
-                android:visibility="visible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="start"
-                android:maxWidth="200dp"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:background="#b0f5361c"
-                android:text="mime type"
-                android:layout_alignParentBottom="true"
-                android:textSize="14sp" />
-
-            </RelativeLayout>
-
-        <TextView
-            android:id="@+id/item_preview_value"
-            android:layout_marginTop="20dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/primary"
-            android:padding="5dp"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Item value"
-            />
-
-            <LinearLayout
-                android:id="@+id/item_preview_metadata_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="30dp"
-                android:visibility="gone"
-                >
-
-                <View
-                    android:background="@color/light_gray"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="5dp"/>
-
-                <TextView
-                    android:padding="5dp"
-                    android:layout_marginBottom="10dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:fontFamily="sans-serif-thin"
-                    android:textColor="@color/second_grey"
-                    android:text="@string/about_item_preview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/item_preview_descriptor"
-                    android:text="Item Descriptor"
-                    android:padding="5dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primary"
-                    />
+                    android:animateLayoutChanges="true">
+
+                    <ImageView
+                        android:id="@+id/item_preview_image"
+                        android:layout_centerHorizontal="true"
+                        android:contentDescription="@string/image_placeholder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="center"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_preview"
+                        />
+
+                    <TextView
+                        android:id="@+id/item_preview_mime"
+                        android:layout_centerHorizontal="true"
+                        android:visibility="visible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="start"
+                        android:maxWidth="200dp"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:background="#b0f5361c"
+                        android:text="mime type"
+                        android:layout_alignParentBottom="true"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/item_preview_descriptor_details"
-                    android:text="Descriptor description"
+                    android:id="@+id/item_preview_value"
+                    android:layout_marginTop="20dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:fontFamily="sans-serif-thin"
                     android:textColor="@color/primary"
                     android:padding="5dp"
+                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Item value"
                     />
-            </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/item_preview_metadata_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="30dp"
+                    android:visibility="gone"
+                    >
+
+                    <View
+                        android:background="@color/light_gray"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"/>
+
+                    <TextView
+                        android:padding="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:fontFamily="sans-serif-thin"
+                        android:textColor="@color/second_grey"
+                        android:text="@string/about_item_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/item_preview_descriptor"
+                        android:text="Item Descriptor"
+                        android:padding="5dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary"
+                        />
+
+                    <TextView
+                        android:id="@+id/item_preview_descriptor_details"
+                        android:text="Descriptor description"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:fontFamily="sans-serif-thin"
+                        android:textColor="@color/primary"
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>

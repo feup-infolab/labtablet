@@ -79,11 +79,11 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataLi
 
         if (item.getMimeType() != null
                 && Utils.knownImageMimeTypes.contains(item.getMimeType())) {
+
             new AsyncImageLoader(holder.mDescriptorType, context, true).execute();
         } else {
             holder.mDescriptorType.setImageResource(R.drawable.ic_file);
         }
-
     }
 
     @Override

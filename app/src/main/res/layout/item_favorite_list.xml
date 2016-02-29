@@ -19,6 +19,7 @@
                 android:layout_height="60dp"
                 android:layout_centerVertical="true"
                 android:padding="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_alignParentStart="true"
                 android:tint="@color/primary_translucent"
                 android:src="@drawable/ab_box" />

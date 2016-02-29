@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:gravity="end"
         android:padding="10dp"
-        android:text="&#174; 2015 InfoLab"
+        android:text="&#174; 2016 InfoLab"
         android:fontFamily="sans-serif-thin"
         android:textColor="@color/button_material_light"
         android:layout_alignParentBottom="true"

@@ -81,7 +81,7 @@ public class ItemPreviewActivity extends AppCompatActivity {
                     .fromJson(extras.getString("data_item"), DataItem.class);
 
             isMetadataVisible = false;
-            attachDataItemView();
+            bindDataItemView();
         } else if (extras.containsKey("metadata_item")) {
             metadataItem = new Gson()
                     .fromJson(extras.getString("metadata_item"), Descriptor.class);
@@ -151,12 +151,12 @@ public class ItemPreviewActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private void attachDataItemView() {
+    private void bindDataItemView() {
 
         final DataItem currentItem
                 = draftDataItem == null ? dataItem : draftDataItem;
 
-        tvItemDescription.setText(currentItem.getDescription());
+        tvItemDescription.setText(currentItem.getDescription().isEmpty() ? getString(R.string.no_description) : currentItem.getDescription());
         itemMimeType.setText(currentItem.getMimeType());
         ivItemPreview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,7 +228,7 @@ public class ItemPreviewActivity extends AppCompatActivity {
         if (isMetadataVisible) {
             atatchMetadataItemView();
         } else {
-            attachDataItemView();
+            bindDataItemView();
         }
     }
 

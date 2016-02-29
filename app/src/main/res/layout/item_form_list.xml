@@ -4,8 +4,7 @@
     android:id="@+id/form_view_instructions_card"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="5dp"
-    android:layout_margin="8dp"
+    android:layout_margin="5dp"
     android:foreground="?android:attr/selectableItemBackground"
     >
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -29,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="none"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
-                android:text="Bota fogo"
+                android:text="@string/text_placeholder"
                 />
         </LinearLayout>
 
@@ -41,39 +40,43 @@
             >
 
             <TextView
+                android:fontFamily="sans-serif-thin"
                 android:id="@+id/form_item_description"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="none"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:text="Form description"
-
+                android:text="@string/text_placeholder"
+                android:textColor="@color/primary"
+                android:layout_marginBottom="8dp"
                 />
 
             <TextView
+                android:fontFamily="sans-serif-thin"
+                android:drawablePadding="6dp"
                 android:id="@+id/form_item_number_questions"
                 android:layout_below="@id/form_item_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_note"
-                android:textColor="@color/second_grey"
+                android:drawableStart="@drawable/ic_view_headline_black_24dp"
+                android:textColor="@color/primary"
                 android:gravity="center"
-                style="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:text="12 Questions"
+                android:text="@string/text_placeholder"
                 android:layout_marginEnd="5dp"
                 />
 
             <TextView
+                android:fontFamily="sans-serif-thin"
+                android:drawablePadding="6dp"
                 android:id="@+id/form_item_duration"
                 android:layout_below="@id/form_item_description"
                 android:layout_toEndOf="@id/form_item_number_questions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_wait"
+                android:drawableStart="@drawable/ic_query_builder_black_24dp"
                 android:gravity="center"
-                android:textColor="@color/second_grey"
-                style="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:text="15min"
+                android:textColor="@color/primary"
+                android:text="@string/text_placeholder"
                 />
         </RelativeLayout>
 

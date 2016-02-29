@@ -302,6 +302,8 @@
     <string name="no_items_yet">There are no items in this section. Tap below to import or create resources</string>
     <string name="help">Help</string>
     <string name="favorite_info">%1$s\n%2$d registos</string>
+    <string name="text_placeholder">Text Placeholder</string>
+    <string name="no_description">Não foi dada nenhuma descrição (clicar aqui para editar)</string>
     <!-- /TTS sentences -->
 
 </resources>

@@ -11,8 +11,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,9 +19,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.Menu;
@@ -43,8 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.up.fe.labtablet.R;
-import pt.up.fe.labtablet.adapters.DataListAdapter;
-import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.async.AsyncCustomTaskHandler;
 import pt.up.fe.labtablet.async.AsyncFileImporter;
 import pt.up.fe.labtablet.async.AsyncPackageCreator;
@@ -56,27 +49,15 @@ import pt.up.fe.labtablet.models.Descriptor;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.labtablet.utils.FileMgr;
-import pt.up.fe.labtablet.utils.OnItemClickListener;
 import pt.up.fe.labtablet.utils.Utils;
 
 public class FavoriteDetailsActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
 
-    private boolean isMetadataVisible;
-
     private FavoriteItem currentItem;
     private String favoriteName;
 
-    private RecyclerView itemList;
-    private OnItemClickListener itemClickListener;
-
-    private MetadataListAdapter metadataListAdapter;
-    private DataListAdapter dataListAdapter;
-
-    private CoordinatorLayout coordinatorLayout;
-    private AppBarLayout appBarLayout;
     private ViewPager viewPager;
     private TabLayout.Tab activeTab;
-    private ViewPagerAdapter adapter;
     private Toolbar mToolbar;
 
     @Override
@@ -94,14 +75,12 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
 
         if (savedInstanceState != null) {
             currentItem = new Gson().fromJson(savedInstanceState.getString("current_item"), FavoriteItem.class);
-            favoriteName = savedInstanceState.getString("favorite_name");
-            isMetadataVisible = savedInstanceState.getBoolean("metadata_visible");
         } else {
             Bundle extras = getIntent().getExtras();
             favoriteName = extras.getString("favorite_name");
-            currentItem = FavoriteMgr.getFavorite(this, favoriteName);
-            isMetadataVisible = true;
         }
+
+        currentItem = FavoriteMgr.getFavorite(this, favoriteName);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -115,72 +94,17 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         mToolbar.setSubtitle(currentItem.getDescription());
 
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         String rootFolder = Environment.getExternalStorageDirectory() + File.separator + getString(R.string.app_name) + File.separator + currentItem.getTitle();
         ((TextView) findViewById(R.id.favorite_stats)).setText(
                 getString(R.string.favorite_info,
                         FileMgr.humanReadableByteCount(FileMgr.folderSize(new File(rootFolder)), false),
                         currentItem.getMetadataItems().size()));
-
-        itemClickListener = new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-                Intent intent = new Intent(FavoriteDetailsActivity.this, ItemPreviewActivity.class);
-                if (isMetadataVisible) {
-                    intent.putExtra("metadata_item",
-                            new Gson().toJson(currentItem.getMetadataItems().get(position)));
-                } else {
-                    intent.putExtra("data_item",
-                            new Gson().toJson(currentItem.getDataItems().get(position)));
-                }
-
-                intent.putExtra("position", position);
-                startActivityForResult(intent, Utils.ITEM_PREVIEW);
-            }
-
-            @Override
-            public void onItemLongClick(View view, final int position) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(FavoriteDetailsActivity.this);
-                builder.setTitle(getResources().getString(R.string.form_really_delete));
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        //remove entry and associated file (if any)
-                        if (isMetadataVisible) {
-                            Descriptor deletionItem = currentItem.getMetadataItems().get(position);
-                            if (deletionItem.hasFile()) {
-                                if (new File(deletionItem.getFilePath()).delete()) {
-                                    currentItem.getMetadataItems().remove(position);
-                                    metadataListAdapter.notifyItemRemoved(position);
-                                } else {
-                                    Toast.makeText(FavoriteDetailsActivity.this, "Failed to remove resource ", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                currentItem.getMetadataItems().remove(position);
-                                metadataListAdapter.notifyItemRemoved(position);
-                            }
-
-                        } else {
-                            if ((new File(currentItem.getDataItems().get(position).getLocalPath())).delete()) {
-                                currentItem.getDataItems().remove(position);
-                                dataListAdapter.notifyItemRemoved(position);
-
-                            } else {
-                                Toast.makeText(FavoriteDetailsActivity.this, "Failed to remove resource ", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, FavoriteDetailsActivity.this);
-                    }
-                });
-                builder.setCancelable(true);
-                builder.show();
-            }
-        };
 
 
         bt_fieldMode.setOnClickListener(new View.OnClickListener() {
@@ -231,6 +155,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
             currentItem = FavoriteMgr.getFavorite(FavoriteDetailsActivity.this, favoriteName);
             mToolbar.setSubtitle(currentItem.getDescription());
             mToolbar.setTitle(currentItem.getTitle());
+            setupViewPager(viewPager);
         }
     }
 
@@ -361,8 +286,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("favorite_name", favoriteName);
-        outState.putString("current_item", new Gson().toJson(currentItem));
-        outState.putBoolean("metadata_visible", isMetadataVisible);
     }
 
 
@@ -524,7 +447,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(FavoriteViewFragment.newInstance("metadata", currentItem.getMetadataItems()), "metadata");
         adapter.addFragment(FavoriteViewFragment.newInstance("data", currentItem.getDataItems()), "data");
         viewPager.setAdapter(adapter);

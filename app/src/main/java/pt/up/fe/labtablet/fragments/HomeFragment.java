@@ -79,7 +79,7 @@ public class HomeFragment extends Fragment {
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "2015 Infolab", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "2016 Infolab", Toast.LENGTH_SHORT).show();
                 String url = "http://dendro.fe.up.pt/";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));

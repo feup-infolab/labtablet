@@ -352,10 +352,12 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                             getGoogleRecognizer().getRecognizerIntent().putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                                     RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
                         }
-                        ttsVoice.informSaved();
+                        if (ttsVoice != null)
+                            ttsVoice.informSaved();
 
                     }
                 });
+
                 builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -364,8 +366,8 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                             getGoogleRecognizer().getRecognizerIntent().putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                                     RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
                         }
-                        if (ttsVoice != null) ttsVoice.informCanceled();
-
+                        if (ttsVoice != null)
+                            ttsVoice.informCanceled();
                     }
                 });
 

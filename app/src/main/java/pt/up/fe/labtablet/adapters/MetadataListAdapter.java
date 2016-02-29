@@ -58,9 +58,11 @@ public class MetadataListAdapter extends RecyclerView.Adapter<MetadataListAdapte
 
         if (item.hasFile()
                 && Utils.knownImageMimeTypes.contains(FileMgr.getMimeType(item.getFilePath()))) {
+            holder.mDescriptorType.setVisibility(View.VISIBLE);
             new AsyncImageLoader(holder.mDescriptorType, context, true).execute();
         } else {
-            holder.mDescriptorType.setImageResource(R.drawable.ic_file);
+            //holder.mDescriptorType.setImageResource(R.drawable.ic_file);
+            holder.mDescriptorType.setVisibility(View.GONE);
         }
     }
 
