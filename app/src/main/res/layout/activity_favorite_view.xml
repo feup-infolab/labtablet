@@ -31,7 +31,7 @@
                 android:textColor="@android:color/white"
                 android:gravity="center_vertical"
                 android:fontFamily="sans-serif-thin"
-                android:drawableStart="@drawable/ic_file"
+                android:layout_marginStart="20dp"
                 android:text="2KB\n14items"
                 android:layout_weight=".3"
                 android:layout_width="0dp"

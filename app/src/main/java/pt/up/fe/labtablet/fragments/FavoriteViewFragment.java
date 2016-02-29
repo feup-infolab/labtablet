@@ -1,5 +1,6 @@
 package pt.up.fe.labtablet.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,28 +10,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.Objects;
 
 import pt.up.fe.labtablet.R;
+import pt.up.fe.labtablet.activities.ItemPreviewActivity;
 import pt.up.fe.labtablet.adapters.DataListAdapter;
 import pt.up.fe.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.labtablet.models.DataItem;
 import pt.up.fe.labtablet.models.Descriptor;
-import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.OnItemClickListener;
+import pt.up.fe.labtablet.utils.Utils;
 
 public class FavoriteViewFragment extends Fragment implements OnItemClickListener {
 
 
     private RecyclerView itemList;
+    private String mCurrentTag;
+    private ArrayList<DataItem> dataItems;
+    private ArrayList<Descriptor> metadataItems;
 
     public FavoriteViewFragment() {
         // Required empty public constructor
@@ -60,12 +63,12 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
         itemList = (RecyclerView) rootView.findViewById(R.id.list);
 
-        String mCurrentTag = args.getString("current_tag");
+        mCurrentTag = args.getString("current_tag");
         assert mCurrentTag != null;
         switch (mCurrentTag){
 
             case "data":
-                ArrayList<DataItem> dataItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<DataItem>>(){}.getType());
+                dataItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<DataItem>>(){}.getType());
                 if (dataItems.isEmpty()) {
                     rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
                     rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
@@ -77,7 +80,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 break;
 
             case "metadata":
-                ArrayList<Descriptor> metadataItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<Descriptor>>(){}.getType());
+                metadataItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<Descriptor>>(){}.getType());
                 if (metadataItems.isEmpty()) {
                     rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
                     rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
@@ -111,7 +114,17 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
     @Override
     public void onItemClick(View view, int position) {
+        Intent intent = new Intent(getActivity(), ItemPreviewActivity.class);
+        if (mCurrentTag.equals("metadata")) {
+            intent.putExtra("metadata_item",
+                    new Gson().toJson(metadataItems.get(position)));
+        } else {
+            intent.putExtra("data_item",
+                    new Gson().toJson(dataItems.get(position)));
+        }
 
+        intent.putExtra("position", position);
+        startActivityForResult(intent, Utils.ITEM_PREVIEW);
     }
 
     @Override

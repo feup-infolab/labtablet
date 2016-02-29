@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -112,11 +113,17 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(currentItem.getTitle());
         mToolbar.setSubtitle(currentItem.getDescription());
+
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        ((TextView) findViewById(R.id.favorite_stats)).setText("kowa\nbunga");
+        String rootFolder = Environment.getExternalStorageDirectory() + File.separator + getString(R.string.app_name) + File.separator + currentItem.getTitle();
+        ((TextView) findViewById(R.id.favorite_stats)).setText(
+                getString(R.string.favorite_info,
+                        FileMgr.humanReadableByteCount(FileMgr.folderSize(new File(rootFolder)), false),
+                        currentItem.getMetadataItems().size()));
 
-/*
         itemClickListener = new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -176,13 +183,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         };
 
 
-        if (isMetadataVisible) {
-            loadMetadataView();
-        } else {
-            loadDataView();
-        }
-        */
-
         bt_fieldMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -200,16 +200,16 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                     return;
 
                 if (activeTab.getText().equals("metadata")) {
-                    Toast.makeText(FavoriteDetailsActivity.this, "Choose the file", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("file/*");
-                    startActivityForResult(intent, Utils.PICK_FILE_INTENT);
-                } else {
                     Intent myIntent = new Intent(FavoriteDetailsActivity.this, DescriptorPickerActivity.class);
                     myIntent.putExtra("file_extension", "");
                     myIntent.putExtra("favoriteName", favoriteName);
                     myIntent.putExtra("returnMode", Utils.DESCRIPTOR_DEFINE);
                     startActivityForResult(myIntent, Utils.DESCRIPTOR_DEFINE);
+                } else {
+                    Toast.makeText(FavoriteDetailsActivity.this, "Choose the file", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("file/*");
+                    startActivityForResult(intent, Utils.PICK_FILE_INTENT);
                 }
             }
         });
@@ -371,6 +371,9 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
 
 
         switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
             case R.id.action_favorite_upload:
                 SharedPreferences settings = getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
                 if (!settings.contains(Utils.DENDRO_CONFS_ENTRY)) {
@@ -390,7 +393,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                 Intent mIntent = new Intent(this, SubmissionValidationActivity.class);
                 mIntent.putExtra("favorite_name", favoriteName);
                 startActivityForResult(mIntent, Utils.SUBMISSION_VALIDATION);
-
 
                 break;
 
@@ -438,10 +440,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                         dialog.setMessage(progress.getMessage());
                     }
                 }).execute(favoriteName, this);
-                break;
-
-            case android.R.id.home:
-                getSupportFragmentManager().popBackStack();
                 break;
         }
 

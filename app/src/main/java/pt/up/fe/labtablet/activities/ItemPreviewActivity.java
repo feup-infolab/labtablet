@@ -191,6 +191,7 @@ public class ItemPreviewActivity extends AppCompatActivity {
         }
 
         CardView metadataDescriptorCard = (CardView) findViewById(R.id.item_preview_card);
+        findViewById(R.id.item_preview_metadata_card).setVisibility(View.VISIBLE);
 
         metadataDescriptorCard.setVisibility(View.VISIBLE);
         metadataDescriptorCard.setOnClickListener(new View.OnClickListener() {

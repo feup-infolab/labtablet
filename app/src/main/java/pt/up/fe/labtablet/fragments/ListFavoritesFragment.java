@@ -24,6 +24,7 @@ import pt.up.fe.labtablet.R;
 import pt.up.fe.labtablet.activities.FavoriteDetailsActivity;
 import pt.up.fe.labtablet.activities.MainActivity;
 import pt.up.fe.labtablet.adapters.FavoriteListAdapter;
+import pt.up.fe.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.labtablet.models.FavoriteItem;
 import pt.up.fe.labtablet.utils.FileMgr;
 import pt.up.fe.labtablet.utils.OnItemClickListener;
@@ -125,7 +126,6 @@ public class ListFavoritesFragment extends Fragment {
             rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
             return;
         }
-
 
         rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
