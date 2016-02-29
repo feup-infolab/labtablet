@@ -56,9 +56,12 @@ public class DescriptorPickerActivity extends AppCompatActivity implements Adapt
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_spinner);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
         settings = getSharedPreferences(
                 getResources().getString(R.string.app_name),
