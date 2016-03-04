@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pt.up.fe.labtablet" >
+    package="pt.up.fe.alpha" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -19,9 +19,9 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppBaseTheme"
-        android:name="pt.up.fe.labtablet.application.LabTablet"
+        android:name=".labtablet.application.LabTablet"
         android:versionCode="16"
-        android:versionName="Zorg"
+        android:versionName="Tango"
         >
 
         <service
@@ -30,7 +30,7 @@
             android:process=":acra" />
 
         <activity
-            android:name="pt.up.fe.labtablet.activities.MainActivity"
+            android:name=".labtablet.activities.MainActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
@@ -40,56 +40,56 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.FavoriteDetailsActivity"
+            android:name=".labtablet.activities.FavoriteDetailsActivity"
             android:theme="@style/AppBaseTheme"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_favorite_detail" />
 
         <activity
-            android:name="pt.up.fe.labtablet.activities.DescriptorPickerActivity"
+            android:name=".labtablet.activities.DescriptorPickerActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_descriptor_picker" >
         </activity>
         <activity
-            android:name="pt.up.fe.labtablet.activities.FieldModeActivity"
+            android:name=".labtablet.activities.FieldModeActivity"
             android:label="@string/title_activity_field_mode"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="pt.up.fe.labtablet.activities.FingerPaintActivity"
+            android:name=".labtablet.activities.FingerPaintActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_finger_paint" >
         </activity>
         <activity
-            android:name="pt.up.fe.labtablet.activities.ValidateMetadataActivity"
+            android:name=".labtablet.activities.ValidateMetadataActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_validate_metadata"
-            android:parentActivityName="pt.up.fe.labtablet.activities.FieldModeActivity"
+            android:parentActivityName=".labtablet.activities.FieldModeActivity"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="pt.up.fe.labtablet.activities.FieldModeActivity" />
+                android:value=".labtablet.activities.FieldModeActivity" />
         </activity>
         <activity
-            android:name="pt.up.fe.labtablet.activities.SubmissionValidationActivity"
+            android:name=".labtablet.activities.SubmissionValidationActivity"
             android:label="@string/title_activity_submission_validation"
             android:screenOrientation="portrait"
             >
         </activity>
         <activity
-            android:name="pt.up.fe.labtablet.activities.FormQuestionCreatorActivity"
+            android:name=".labtablet.activities.FormQuestionCreatorActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_form_question_creator"
             >
         </activity>
         <activity
-            android:name="pt.up.fe.labtablet.activities.FormSolverActivity"
+            android:name=".labtablet.activities.FormSolverActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_form_question_creator"
             >
         </activity>
         <activity
-            android:name="pt.up.fe.labtablet.activities.ItemPreviewActivity"
+            android:name=".labtablet.activities.ItemPreviewActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_item_preview"
             >

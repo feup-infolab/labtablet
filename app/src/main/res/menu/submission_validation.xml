@@ -1,3 +1,3 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
-    tools:context="pt.up.fe.labtablet.activities.SubmissionValidationActivity">
+    tools:context=".labtablet.activities.SubmissionValidationActivity">
 </menu>

@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="pt.up.fe.labtablet.activities.FieldModeActivity">
+    tools:context=".labtablet.activities.FieldModeActivity">
 
     <item android:id="@+id/action_field_mode_end"
         android:title="@string/action_end_field_mode"

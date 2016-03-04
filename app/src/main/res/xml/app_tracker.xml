@@ -22,14 +22,14 @@
     substitute for the full length canonical Activity name in screen view hit. In order to
     specify an alternate screen name use an <screenName> element, with the name attribute
     specifying the canonical name, and the value the alias to use instead. -->
-    <screenName name="pt.up.fe.labtablet.activities.MainActivity">My Activity</screenName>
-    <screenName name="pt.up.fe.labtablet.activities.FieldModeActivity">Field Mode</screenName>
-    <screenName name="pt.up.fe.labtablet.activities.FingerPaintActivity">Handwriting</screenName>
-    <screenName name="pt.up.fe.labtablet.activities.FormQuestionCreatorActivity">Question Creator</screenName>
-    <screenName name="pt.up.fe.labtablet.activities.SubmissionValidationActivity">Submission validation</screenName>
-    <screenName name="pt.up.fe.labtablet.activities.DescriptorPickerActivity">Pick descriptor</screenName>
-    <screenName name="pt.up.fe.labtablet.activities.FormSolverActivity">Solve form</screenName>
-    <screenName name="pt.up.fe.labtablet.fragments.ConfigurationFragment">Configurations</screenName>
-    <screenName name="pt.up.fe.labtablet.fragments.SubmissionStep4">Upload fragment</screenName>
+    <screenName name="pt.up.fe.alpha.labtablet.activities.MainActivity">My Activity</screenName>
+    <screenName name="pt.up.fe.alpha.labtablet.activities.FieldModeActivity">Field Mode</screenName>
+    <screenName name="pt.up.fe.alpha.labtablet.activities.FingerPaintActivity">Handwriting</screenName>
+    <screenName name="pt.up.fe.alpha.labtablet.activities.FormQuestionCreatorActivity">Question Creator</screenName>
+    <screenName name="pt.up.fe.alpha.labtablet.activities.SubmissionValidationActivity">Submission validation</screenName>
+    <screenName name="pt.up.fe.alpha.labtablet.activities.DescriptorPickerActivity">Pick descriptor</screenName>
+    <screenName name="pt.up.fe.alpha.labtablet.activities.FormSolverActivity">Solve form</screenName>
+    <screenName name="pt.up.fe.alpha.labtablet.fragments.ConfigurationFragment">Configurations</screenName>
+    <screenName name="pt.up.fe.alpha.labtablet.fragments.SubmissionStep4">Upload fragment</screenName>
 
 </resources>

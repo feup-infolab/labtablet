@@ -22,9 +22,9 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="pt.up.fe.labtablet.activities.SubmissionValidationActivity" />
+        tools:context=".labtablet.activities.SubmissionValidationActivity" />
 
-    <com.github.clans.fab.FloatingActionButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/pb_submission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

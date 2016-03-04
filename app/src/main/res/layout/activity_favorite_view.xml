@@ -78,7 +78,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ab_plus"
         android:layout_margin="20dp"
-        app:layout_behavior="pt.up.fe.labtablet.adapters.ScrollingFABBehavior"
+        app:layout_behavior="pt.up.fe.alpha.labtablet.adapters.ScrollingFABBehavior"
         android:layout_gravity="end|bottom"
         />
 

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    tools:context="pt.up.fe.labtablet.fragments.ConfigurationFragment"
+    tools:context=".labtablet.fragments.ConfigurationFragment"
     >
 
     <LinearLayout

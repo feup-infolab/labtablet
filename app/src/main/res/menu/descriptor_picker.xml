@@ -1,4 +1,4 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
-    tools:context="pt.up.fe.labtablet.activities.DescriptorPickerActivity">
+    tools:context=".labtablet.activities.DescriptorPickerActivity">
     
 </menu>

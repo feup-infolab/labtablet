@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="pt.up.fe.labtablet.activities.ValidateMetadataActivity">
+    tools:context=".labtablet.activities.ValidateMetadataActivity">
 
     <item
         android:id="@+id/action_favorite_upload"

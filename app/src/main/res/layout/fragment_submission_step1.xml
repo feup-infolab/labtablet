@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="pt.up.fe.labtablet.fragments.SubmissionStep1"
+    tools:context=".labtablet.fragments.SubmissionStep1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/card"
