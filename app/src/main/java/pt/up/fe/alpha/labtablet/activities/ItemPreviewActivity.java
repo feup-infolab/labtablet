@@ -50,9 +50,13 @@ public class ItemPreviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item_preview);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(getString(R.string.title_activity_item_preview));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getString(R.string.title_activity_item_preview));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
+
 
         Bundle extras;
 

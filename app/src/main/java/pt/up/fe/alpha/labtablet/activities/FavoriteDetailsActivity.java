@@ -1,6 +1,5 @@
 package pt.up.fe.alpha.labtablet.activities;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -18,7 +17,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -46,7 +44,6 @@ import pt.up.fe.alpha.labtablet.async.AsyncPackageCreator;
 import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.fragments.FavoriteViewFragment;
-import pt.up.fe.alpha.labtablet.interfaces.OnItemChangeListener;
 import pt.up.fe.alpha.labtablet.models.DataItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
@@ -178,122 +175,129 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         if (data == null)
             return;
 
-        //Add single descriptor
-        if (requestCode == Utils.DESCRIPTOR_DEFINE || requestCode == Utils.DESCRIPTOR_GET) {
-            if (!data.getExtras().containsKey("descriptor"))
-                return;
 
-            String descriptorJson = data.getStringExtra("descriptor");
-            Descriptor newDescriptor = new Gson().fromJson(descriptorJson, Descriptor.class);
-            currentItem.addMetadataItem(newDescriptor);
-            FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, this);
+        switch (requestCode) {
+            case Utils.DESCRIPTOR_DEFINE:
+            case Utils.DESCRIPTOR_GET:
+                if (!data.getExtras().containsKey("descriptor"))
+                    return;
 
-            this.onResume();
+                String descriptorJson = data.getStringExtra("descriptor");
+                Descriptor newDescriptor = new Gson().fromJson(descriptorJson, Descriptor.class);
+                currentItem.addMetadataItem(newDescriptor);
+                FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, this);
 
-        } else if (requestCode == Utils.METADATA_VALIDATION) {
-            if (!data.getExtras().containsKey("favorite")) {
-                throw new AssertionError("Received no favorite from metadata validation");
-            }
+                this.onResume();
+                break;
 
-            currentItem = new Gson().fromJson(data.getStringExtra("favorite"), FavoriteItem.class);
-            this.onResume();
+            case Utils.METADATA_VALIDATION:
+                if (!data.getExtras().containsKey("favorite")) {
+                    throw new AssertionError("Received no favorite from metadata validation");
+                }
 
-        } else if (requestCode == Utils.PICK_FILE_INTENT) {
+                currentItem = new Gson().fromJson(data.getStringExtra("favorite"), FavoriteItem.class);
+                this.onResume();
+                break;
 
-            final Dialog dialog = new Dialog(this);
-            dialog.setCancelable(false);
-            dialog.setContentView(R.layout.dialog_import_file);
-            dialog.setTitle(getResources().getString(R.string.importing_file));
+            case Utils.PICK_FILE_INTENT:
 
-            final EditText importDescription = (EditText) dialog.findViewById(R.id.import_file_description);
-            final ProgressBar importProgress = (ProgressBar) dialog.findViewById(R.id.import_file_progress);
-            final Button importSubmit = (Button) dialog.findViewById(R.id.import_file_submit);
-            final TextView importHeader = (TextView) dialog.findViewById(R.id.import_file_header);
+                final Dialog dialog = new Dialog(this);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.dialog_import_file);
+                dialog.setTitle(getResources().getString(R.string.importing_file));
 
-            importSubmit.setEnabled(false);
+                final EditText importDescription = (EditText) dialog.findViewById(R.id.import_file_description);
+                final ProgressBar importProgress = (ProgressBar) dialog.findViewById(R.id.import_file_progress);
+                final Button importSubmit = (Button) dialog.findViewById(R.id.import_file_submit);
+                final TextView importHeader = (TextView) dialog.findViewById(R.id.import_file_header);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-            }
+                importSubmit.setEnabled(false);
 
-            dialog.show();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+                }
 
-            new AsyncFileImporter(new AsyncTaskHandler<DataItem>() {
-                @Override
-                public void onSuccess(final DataItem result) {
+                dialog.show();
 
-                    importSubmit.setEnabled(true);
-                    importHeader.setText(getString(R.string.file_imported_description));
-                    importSubmit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String value = importDescription.getText().toString();
+                new AsyncFileImporter(new AsyncTaskHandler<DataItem>() {
+                    @Override
+                    public void onSuccess(final DataItem result) {
 
-                            if (!value.equals("")) {
-                                ArrayList<Descriptor> itemLevelDescriptors = result.getFileLevelMetadata();
-                                for (Descriptor desc : itemLevelDescriptors) {
-                                    if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
-                                        desc.setValue(value);
+                        importSubmit.setEnabled(true);
+                        importHeader.setText(getString(R.string.file_imported_description));
+                        importSubmit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String value = importDescription.getText().toString();
+
+                                if (!value.equals("")) {
+                                    ArrayList<Descriptor> itemLevelDescriptors = result.getFileLevelMetadata();
+                                    for (Descriptor desc : itemLevelDescriptors) {
+                                        if (desc.getTag().equals(Utils.DESCRIPTION_TAG)) {
+                                            desc.setValue(value);
+                                        }
                                     }
                                 }
+
+                                currentItem.addDataItem(result);
+                                FavoriteMgr.updateFavoriteEntry(favoriteName, currentItem, FavoriteDetailsActivity.this);
+                                dialog.dismiss();
+                                onResume();
+                                FavoriteDetailsActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                             }
+                        });
 
-                            currentItem.addDataItem(result);
-                            FavoriteMgr.updateFavoriteEntry(favoriteName, currentItem, FavoriteDetailsActivity.this);
-                            dialog.dismiss();
-                            onResume();
-                            FavoriteDetailsActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                        }
-                    });
+                    }
 
+                    @Override
+                    public void onFailure(Exception error) {
+                        Toast.makeText(FavoriteDetailsActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                        onResume();
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onProgressUpdate(int value) {
+                        importProgress.setProgress(value);
+                        importHeader.setText("" + value + "%");
+                    }
+                }).execute(FavoriteDetailsActivity.this, data, favoriteName);
+                break;
+
+
+            case Utils.ITEM_PREVIEW:
+                Bundle extras = data.getExtras();
+
+                if (resultCode == Utils.DATA_ITEM_CHANGED) {
+                    if (extras == null
+                            || !extras.containsKey("data_item")
+                            || !extras.containsKey("position")) {
+                        throw new AssertionError("Received no data from item preview");
+                    }
+
+                    DataItem item = new Gson()
+                            .fromJson(data.getStringExtra("data_item"), DataItem.class);
+
+                    currentItem.getDataItems().remove(extras.getInt("position"));
+                    currentItem.addDataItem(item);
+
+                } else if (resultCode == Utils.METADATA_ITEM_CHANGED) {
+                    if (extras == null
+                            || !extras.containsKey("metadata_item")
+                            || !extras.containsKey("position")) {
+                        throw new AssertionError("Received no data from item preview");
+                    }
+
+                    Descriptor item = new Gson()
+                            .fromJson(data.getStringExtra("metadata_item"), Descriptor.class);
+
+                    currentItem.getMetadataItems().remove(extras.getInt("position"));
+                    currentItem.addMetadataItem(item);
                 }
 
-                @Override
-                public void onFailure(Exception error) {
-                    Toast.makeText(FavoriteDetailsActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-                    onResume();
-                    dialog.dismiss();
-                }
-
-                @Override
-                public void onProgressUpdate(int value) {
-                    importProgress.setProgress(value);
-                    importHeader.setText("" + value + "%");
-                }
-            }).execute(FavoriteDetailsActivity.this, data, favoriteName);
-        } else if (requestCode == Utils.ITEM_PREVIEW) {
-
-            Bundle extras = data.getExtras();
-
-            if (resultCode == Utils.DATA_ITEM_CHANGED) {
-                if (extras == null
-                        || !extras.containsKey("data_item")
-                        || !extras.containsKey("position")) {
-                    throw new AssertionError("Received no data from item preview");
-                }
-
-                DataItem item = new Gson()
-                        .fromJson(data.getStringExtra("data_item"), DataItem.class);
-
-                currentItem.getDataItems().remove(extras.getInt("position"));
-                currentItem.addDataItem(item);
-
-            } else if (resultCode == Utils.METADATA_ITEM_CHANGED) {
-                if (extras == null
-                        || !extras.containsKey("metadata_item")
-                        || !extras.containsKey("position")) {
-                    throw new AssertionError("Received no data from item preview");
-                }
-
-                Descriptor item = new Gson()
-                        .fromJson(data.getStringExtra("metadata_item"), Descriptor.class);
-
-                currentItem.getMetadataItems().remove(extras.getInt("position"));
-                currentItem.addMetadataItem(item);
-            }
-
-            FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, FavoriteDetailsActivity.this);
-            onResume();
+                FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, FavoriteDetailsActivity.this);
+                onResume();
+                break;
         }
     }
 

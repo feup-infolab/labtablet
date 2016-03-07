@@ -135,7 +135,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         }
 
         intent.putExtra("position", position);
-        startActivityForResult(intent, Utils.ITEM_PREVIEW);
+        getActivity().startActivityForResult(intent, Utils.ITEM_PREVIEW);
     }
 
     @Override
