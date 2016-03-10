@@ -20,7 +20,11 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.api.ChangelogManager;
@@ -69,10 +73,6 @@ public class FormSolverActivity extends Activity {
         (findViewById(R.id.bt_dismiss_form_intro)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Chronometer chronos = (Chronometer)(findViewById(R.id.form_solver_chrono));
-                chronos.setVisibility(View.VISIBLE);
-                chronos.start();
-
                 table.setVisibility(View.VISIBLE);
                 (findViewById(R.id.sv_question_items)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.rl_form_solver_intro)).setVisibility(View.GONE);
@@ -139,9 +139,11 @@ public class FormSolverActivity extends Activity {
                 }
 
                 Intent returnIntent = new Intent();
-                targetForm.setElapsedTime(
-                        ((Chronometer)findViewById(R.id.form_solver_chrono)).getText().toString());
 
+
+                targetForm.setElapsedTime("This feature has been removed");
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm:SS");
+                targetForm.setTimestamp(dateFormat.format(new Date()));
                 returnIntent.putExtra("form", new Gson().toJson(targetForm));
                 setResult(Utils.SOLVE_FORM, returnIntent);
                 finish();
@@ -249,8 +251,7 @@ public class FormSolverActivity extends Activity {
         }
 
         Intent returnIntent = new Intent();
-        targetForm.setElapsedTime(
-                ((Chronometer)findViewById(R.id.form_solver_chrono)).getText().toString());
+        targetForm.setElapsedTime("This feature was disabled");
 
         returnIntent.putExtra("form", new Gson().toJson(targetForm));
         setResult(Utils.SOLVE_FORM, returnIntent);

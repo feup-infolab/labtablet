@@ -1,7 +1,10 @@
 package pt.up.fe.alpha.labtablet.models;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 
@@ -13,7 +16,7 @@ public class Form {
     private String elapsedTime;
     private ArrayList<FormQuestion> formQuestions;
     private boolean descriptionSet;
-    private String linkedResourcePath;
+    private String timestamp;
 
     public void setFormName(String formName) {
         this.formName = formName;
@@ -24,7 +27,6 @@ public class Form {
         this.parent = parent;
         this.formDescription = "";
         this.formName = name;
-        this.linkedResourcePath = "";
     }
 
     public String getParent() {
@@ -96,12 +98,23 @@ public class Form {
 
     public String[] getAnswers() {
         String[] answerSet = new String[formQuestions.size()];
-
-
         for (int i = 0; i < formQuestions.size(); ++i) {
             answerSet[i] = formQuestions.get(i).getValue();
         }
 
         return answerSet;
+    }
+
+    @Override
+    public String toString() {
+        return this.timestamp == null ? "Unknown timestamp" : this.getTimestamp();
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }

@@ -24,6 +24,7 @@ import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.activities.FavoriteDetailsActivity;
 import pt.up.fe.alpha.labtablet.activities.MainActivity;
 import pt.up.fe.alpha.labtablet.adapters.FavoriteListAdapter;
+import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.utils.FileMgr;
 import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
@@ -64,7 +65,7 @@ public class ListFavoritesFragment extends Fragment {
 
 
         adapter = new FavoriteListAdapter(items,
-                itemClickListener);
+                itemClickListener, getActivity());
 
         RecyclerView itemList = (RecyclerView) rootView.findViewById(R.id.list);
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -112,10 +113,14 @@ public class ListFavoritesFragment extends Fragment {
         items.clear();
         for (File inFile : files) {
             if (inFile.isDirectory()) {
+
+                //FavoriteItem newItem = FavoriteMgr.getFavorite(getActivity(), inFile.getName());
+
                 FavoriteItem newItem = new FavoriteItem("" + new Date().getTime());
                 newItem.setSize(FileMgr.humanReadableByteCount(FileMgr.folderSize(inFile), false));
                 newItem.setTitle(inFile.getName());
                 newItem.setDate_modified(Utils.getDate(inFile.lastModified()));
+
                 items.add(newItem);
             }
         }

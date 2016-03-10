@@ -13,72 +13,56 @@
         android:layout_height="fill_parent"
         android:background="@color/light_gray"
         >
-        <LinearLayout
-            android:layout_width="fill_parent"
+
+        <android.support.v7.widget.CardView
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/card"
-            >
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/form_solver_intro"
-                android:padding="20dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                />
+            android:layout_margin="4dp">
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@color/second_grey"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                />
-            <Button
-                android:id="@+id/bt_dismiss_form_intro"
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/form_ok"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                />
-        </LinearLayout>
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/form_solver_intro"
+                    android:padding="20dp"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    />
+
+                <Button
+                    android:id="@+id/bt_dismiss_form_intro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/form_ok"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
-
-    <Chronometer
-        android:visibility="invisible"
-        android:id="@+id/form_solver_chrono"
-        android:background="@color/list_background_pressed"
-        android:textColor="@color/white"
-        android:padding="5dp"
-        android:layout_gravity="top|end"
-        android:textSize="15sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        />
 
     <ScrollView
         android:id="@+id/sv_question_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:animateLayoutChanges="true"
         >
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/ll_question_items"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true"
-            />
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/ll_question_items"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:animateLayoutChanges="true"
+                />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/bt_form_save"
@@ -88,6 +72,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:src="@drawable/ab_validate"/>
-    </RelativeLayout>
+        </RelativeLayout>
     </ScrollView>
 </LinearLayout>

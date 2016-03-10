@@ -41,7 +41,7 @@ public class LabTablet extends Application {
         mContext = this;
 
         // The following line triggers the initialization of ACRA
-        ACRA.init(this);
+        //ACRA.init(this);
     }
 
 

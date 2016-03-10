@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:padding="6dp"
+        android:id="@+id/form_instances_list_header"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:fontFamily="sans-serif-thin"
+        android:gravity="center_vertical"
+        android:text="@string/form_instance_list_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:padding="6dp"
+        tools:listitem="@layout/item_form_instance"
+        android:id="@+id/form_instances_list"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        />
+</LinearLayout>

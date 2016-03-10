@@ -1,9 +1,11 @@
 package pt.up.fe.alpha.labtablet.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -19,12 +21,15 @@ import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
 public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapter.FavoriteItemVH>{
 	private final List<FavoriteItem> items;
     private static OnItemClickListener listener;
+    private final Context context;
 
 	public FavoriteListAdapter(
                                List<FavoriteItem> srcItems,
-                               OnItemClickListener clickListener) {
+                               OnItemClickListener clickListener,
+                               Context mContext) {
 
 		this.items = srcItems;
+        this.context = mContext;
         listener = clickListener;
 	}
 
@@ -55,12 +60,14 @@ public class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapte
         public final TextView mFavoriteName;
         public final TextView mFavoriteDate;
         public final TextView mFavoriteSize;
+        public final ImageView mFavoriteIcon;
 
         public FavoriteItemVH(View itemView) {
             super(itemView);
             mFavoriteName = (TextView) itemView.findViewById(R.id.folder_item_title);
             mFavoriteSize = (TextView) itemView.findViewById(R.id.folder_item_size);
             mFavoriteDate = (TextView) itemView.findViewById(R.id.folder_item_date);
+            mFavoriteIcon = (ImageView) itemView.findViewById(R.id.folder_item_type);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

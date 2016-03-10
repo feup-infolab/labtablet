@@ -1,8 +1,11 @@
 package pt.up.fe.alpha.labtablet.fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,20 +13,31 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import pt.up.fe.alpha.R;
+import pt.up.fe.alpha.labtablet.activities.FavoriteDetailsActivity;
 import pt.up.fe.alpha.labtablet.activities.ItemPreviewActivity;
 import pt.up.fe.alpha.labtablet.adapters.DataListAdapter;
+import pt.up.fe.alpha.labtablet.adapters.FormListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.alpha.labtablet.models.DataItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
+import pt.up.fe.alpha.labtablet.models.Form;
 import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
@@ -34,20 +48,31 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     private String mCurrentTag;
     private ArrayList<DataItem> dataItems;
     private ArrayList<Descriptor> metadataItems;
+    private HashMap<String, ArrayList<Form>> formItems;
+    private View rootView;
+
+    private AlertDialog alertDialog;
 
     public FavoriteViewFragment() {
         // Required empty public constructor
     }
 
     public void notifyItemsChanged(FavoriteItem item) {
-        if (mCurrentTag.equals("metadata")) {
-            metadataItems = item.getMetadataItems();
-            loadMetaDataView(metadataItems);
-        } else {
-            dataItems = item.getDataItems();
-            loadDataView(dataItems);
-        }
 
+        switch (mCurrentTag) {
+            case "metadata":
+                metadataItems = item.getMetadataItems();
+                bindMetaDataView(metadataItems);
+                break;
+            case "data":
+                dataItems = item.getDataItems();
+                bindDataView(dataItems);
+                break;
+            case "forms":
+                formItems = item.getLinkedForms();
+                bindFormsView(formItems);
+                break;
+        }
     }
 
     public static FavoriteViewFragment newInstance(String tag, Object item) {
@@ -64,7 +89,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        final View rootView = inflater.inflate(R.layout.fragment_generic_list, container, false);
+        rootView = inflater.inflate(R.layout.fragment_generic_list, container, false);
 
         Bundle args = getArguments();
         if (!args.containsKey("current_tag")) {
@@ -80,26 +105,17 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
             case "data":
                 dataItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<DataItem>>(){}.getType());
-                if (dataItems.isEmpty()) {
-                    rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
-                    rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
-                    break;
-                }
-                rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
-                rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
-                loadDataView(dataItems);
+                bindDataView(dataItems);
                 break;
 
             case "metadata":
                 metadataItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<Descriptor>>(){}.getType());
-                if (metadataItems.isEmpty()) {
-                    rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
-                    rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
-                    break;
-                }
-                rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
-                rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
-                loadMetaDataView(metadataItems);
+                bindMetaDataView(metadataItems);
+                break;
+
+            case "forms":
+                formItems = new Gson().fromJson(args.getString("items"), new TypeToken<HashMap<String, ArrayList<Form>>>(){}.getType());
+                bindFormsView(formItems);
                 break;
             default:
                 Toast.makeText(getActivity(), "NO VIEW ATTACHED", Toast.LENGTH_SHORT).show();
@@ -111,14 +127,44 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         return rootView;
     }
 
-    private void loadDataView(ArrayList<DataItem> items) {
+    private void bindDataView(ArrayList<DataItem> items) {
+        if (dataItems.isEmpty()) {
+            rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
+            return;
+        }
+        rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
+
         DataListAdapter mAdapter = new DataListAdapter(items, this, getActivity());
         itemList.setAdapter(mAdapter);
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void loadMetaDataView(ArrayList<Descriptor> items) {
+    private void bindMetaDataView(ArrayList<Descriptor> items) {
+        if (metadataItems.isEmpty()) {
+            rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
+            return;
+        }
+        rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
+
         MetadataListAdapter mAdapter = new MetadataListAdapter(items, this, getActivity());
+        itemList.setAdapter(mAdapter);
+        itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private void bindFormsView(HashMap<String, ArrayList<Form>> items) {
+        if (formItems.isEmpty()) {
+            rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
+            return;
+        }
+        rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
+
+        FormListAdapter mAdapter = new FormListAdapter(items, this, getActivity());
         itemList.setAdapter(mAdapter);
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -126,12 +172,49 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     @Override
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(getActivity(), ItemPreviewActivity.class);
-        if (mCurrentTag.equals("metadata")) {
-            intent.putExtra("metadata_item",
-                    new Gson().toJson(metadataItems.get(position)));
-        } else {
-            intent.putExtra("data_item",
-                    new Gson().toJson(dataItems.get(position)));
+
+        switch (mCurrentTag) {
+            case "metadata":
+                intent.putExtra("metadata_item",
+                        new Gson().toJson(metadataItems.get(position)));
+                break;
+            case "data":
+                intent.putExtra("data_item",
+                        new Gson().toJson(dataItems.get(position)));
+                break;
+            case "forms":
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.alert_form_instances_list, null);
+                dialogBuilder.setView(dialogView);
+
+                //EditText editText = (EditText) dialogView.findViewById(R.id.label_field);
+                RecyclerView instancesList = (RecyclerView) dialogView.findViewById(R.id.form_instances_list);
+                String baseFormName = (new ArrayList<>(formItems.keySet())).get(position);
+
+                instancesList.setAdapter(new FormInstancesListAdapter(formItems.get(baseFormName), new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        //TODO dispatch form solver activity with this form
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+
+                    }
+                }));
+
+                dialogBuilder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
+                instancesList.setLayoutManager(new LinearLayoutManager(getActivity()));
+                alertDialog = dialogBuilder.create();
+                alertDialog.show();
+                return;
         }
 
         intent.putExtra("position", position);
@@ -141,4 +224,70 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     @Override
     public void onItemLongClick(View view, int position) {}
 
+
+    private class FormInstancesListAdapter extends RecyclerView.Adapter<FormInstancesListAdapter.FormInstanceVH> {
+        private final ArrayList<Form> instances;
+        private OnItemClickListener listener;
+
+
+        public FormInstancesListAdapter(ArrayList<Form> srcItems,
+                               OnItemClickListener clickListener) {
+
+            this.instances = srcItems;
+            listener = clickListener;
+        }
+
+        @Override
+        public FormInstanceVH onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_form_instance, parent, false);
+            return new FormInstanceVH(v);
+        }
+
+        @Override
+        public void onBindViewHolder(FormInstanceVH holder, final int position) {
+
+            holder.instanceTimestamp.setText(instances.get(position).getTimestamp());
+            holder.instanceDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((FavoriteDetailsActivity) getActivity()).notifyFormInstanceRemoved(instances.get(position), position);
+                    if (alertDialog != null) {
+                        alertDialog.dismiss();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return instances == null ? 0 : instances.size();
+        }
+
+        class FormInstanceVH extends RecyclerView.ViewHolder
+                implements View.OnClickListener, View.OnLongClickListener {
+
+            public final TextView instanceTimestamp;
+            public final ImageButton instanceDelete;
+
+            public FormInstanceVH(View rowView) {
+                super(rowView);
+                instanceTimestamp = (TextView) rowView.findViewById(R.id.instance_timestamp);
+                instanceDelete = (ImageButton) rowView.findViewById(R.id.instance_delete);
+
+                rowView.setOnClickListener(this);
+                rowView.setOnLongClickListener(this);
+            }
+
+            @Override
+            public void onClick(View view) {
+                listener.onItemClick(view, getPosition());
+            }
+
+            @Override
+            public boolean onLongClick(View view) {
+                return true;
+            }
+        }
+    }
 }

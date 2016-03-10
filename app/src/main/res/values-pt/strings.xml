@@ -314,6 +314,7 @@
     <string name="favorite_info">%1$s\n%2$d registos</string>
     <string name="text_placeholder">Text Placeholder</string>
     <string name="no_description">Não foi dada nenhuma descrição (clicar aqui para editar)</string>
+    <string name="form_instance_list_header">Formulários preenchidos</string>
     <!-- /TTS sentences -->
 
     <string-array name="home_tips">

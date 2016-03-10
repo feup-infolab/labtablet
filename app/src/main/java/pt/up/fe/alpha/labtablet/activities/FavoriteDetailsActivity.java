@@ -47,6 +47,7 @@ import pt.up.fe.alpha.labtablet.fragments.FavoriteViewFragment;
 import pt.up.fe.alpha.labtablet.models.DataItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
+import pt.up.fe.alpha.labtablet.models.Form;
 import pt.up.fe.alpha.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.alpha.labtablet.utils.FileMgr;
 import pt.up.fe.alpha.labtablet.utils.Utils;
@@ -65,7 +66,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_view);
 
-        FloatingActionButton bt_new_metadata
+        FloatingActionButton fab
                 = (FloatingActionButton) findViewById(R.id.bt_new_metadata);
 
 
@@ -118,24 +119,31 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
             }
         });
 
-        bt_new_metadata.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (activeTab == null || activeTab.getText() == null)
                     return;
 
-                if (activeTab.getText().equals("metadata")) {
-                    Intent myIntent = new Intent(FavoriteDetailsActivity.this, DescriptorPickerActivity.class);
-                    myIntent.putExtra("file_extension", "");
-                    myIntent.putExtra("favoriteName", favoriteName);
-                    myIntent.putExtra("returnMode", Utils.DESCRIPTOR_DEFINE);
-                    startActivityForResult(myIntent, Utils.DESCRIPTOR_DEFINE);
-                } else {
-                    Toast.makeText(FavoriteDetailsActivity.this, "Choose the file", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("file/*");
-                    startActivityForResult(intent, Utils.PICK_FILE_INTENT);
+                String activeTabName = "" + activeTab.getText();
+                switch (activeTabName) {
+                    case "metadata":
+                        Intent myIntent = new Intent(FavoriteDetailsActivity.this, DescriptorPickerActivity.class);
+                        myIntent.putExtra("file_extension", "");
+                        myIntent.putExtra("favoriteName", favoriteName);
+                        myIntent.putExtra("returnMode", Utils.DESCRIPTOR_DEFINE);
+                        startActivityForResult(myIntent, Utils.DESCRIPTOR_DEFINE);
+                        break;
+                    case "data":
+                        Toast.makeText(FavoriteDetailsActivity.this, "Choose the file", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("file/*");
+                        startActivityForResult(intent, Utils.PICK_FILE_INTENT);
+                        break;
+                    case "forms":
+                        Toast.makeText(FavoriteDetailsActivity.this, "Open field mode to fill a new form", Toast.LENGTH_SHORT).show();
+                        break;
                 }
             }
         });
@@ -401,6 +409,24 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
 
     }
 
+    /**
+     * Handles form instance removal from the Form tab
+     * @param form form that is to be removed
+     */
+    public void notifyFormInstanceRemoved(Form form, int position) {
+        FavoriteItem item =  FavoriteMgr.getFavorite(this, favoriteName);
+
+        if (item.getLinkedForms().get(form.getParent()).size() == 1) {
+            item.getLinkedForms().remove(form.getParent());
+        } else {
+            item.getLinkedForms().get(form.getParent()).remove(position);
+        }
+
+        FavoriteMgr.updateFavoriteEntry(favoriteName, item, this);
+        Toast.makeText(this, "Instance removed", Toast.LENGTH_SHORT).show();
+        onResume();
+    }
+
     private class dcClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
@@ -466,6 +492,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         currentItem = FavoriteMgr.getFavorite(this, currentItem.getTitle());
         adapter.addFragment(FavoriteViewFragment.newInstance("metadata", currentItem.getMetadataItems()), "metadata");
         adapter.addFragment(FavoriteViewFragment.newInstance("data", currentItem.getDataItems()), "data");
+        adapter.addFragment(FavoriteViewFragment.newInstance("forms", currentItem.getLinkedForms()), "forms");
         viewPager.setAdapter(adapter);
     }
 
