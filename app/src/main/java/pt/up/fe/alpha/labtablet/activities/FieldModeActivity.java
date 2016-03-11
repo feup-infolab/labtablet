@@ -29,6 +29,7 @@ import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
@@ -750,8 +751,8 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                 if ((System.currentTimeMillis() - lastUpdateSensorLuminosity) < Utils.SAMPLE_MILLIS) {
                     break;
                 }
-                luminosity_value = "" + event.values[0];
-                bt_luminosity_sample.setText(luminosity_value + " (Lx)");
+                luminosity_value = event.values[0] + "lx";
+                bt_luminosity_sample.setText(luminosity_value);
                 bt_luminosity_sample.setEnabled(true);
                 lastUpdateSensorLuminosity = System.currentTimeMillis();
                 break;

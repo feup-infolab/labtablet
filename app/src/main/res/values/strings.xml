@@ -118,7 +118,7 @@
     <string name="note">Note</string>
     <string name="position">Position</string>
     <string name="refresh">Update</string>
-    <string name="luminosity">Luminosity</string>
+    <string name="luminosity">Luminosity (µ)</string>
     <string name="magnetic">Magnetic Field</string>
     <string name="continuous_gps">GPS tracking</string>
     <string name="uploaded_successfully">Your metadata was successfully uploaded!</string>
