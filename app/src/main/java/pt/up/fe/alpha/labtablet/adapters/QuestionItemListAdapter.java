@@ -41,7 +41,8 @@ public class QuestionItemListAdapter extends RecyclerView.Adapter<QuestionItemLi
         FormQuestion item = items.get(i);
         holder.mFormItemQuestion.setText(item.getQuestion());
         holder.mFormItemType.setText(item.getType().toString());
-        if (item.getType().equals(FormEnumType.MULTIPLE_CHOICE)) {
+        if (item.getType().equals(FormEnumType.MULTIPLE_CHOICE) ||
+                item.getType().equals(FormEnumType.MULTI_INSTANCE_RESPONSE)) {
             holder.mFormItemAllowedValues.setText(item.getAllowedValues().toString());
         } else {
             holder.mFormItemAllowedValues.setVisibility(View.GONE);

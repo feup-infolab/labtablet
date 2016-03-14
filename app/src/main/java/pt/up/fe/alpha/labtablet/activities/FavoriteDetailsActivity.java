@@ -43,6 +43,7 @@ import pt.up.fe.alpha.labtablet.async.AsyncFileImporter;
 import pt.up.fe.alpha.labtablet.async.AsyncPackageCreator;
 import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
+import pt.up.fe.alpha.labtablet.db_handlers.FormMgr;
 import pt.up.fe.alpha.labtablet.fragments.FavoriteViewFragment;
 import pt.up.fe.alpha.labtablet.models.DataItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
@@ -142,7 +143,25 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                         startActivityForResult(intent, Utils.PICK_FILE_INTENT);
                         break;
                     case "forms":
-                        Toast.makeText(FavoriteDetailsActivity.this, "Open field mode to fill a new form", Toast.LENGTH_SHORT).show();
+                        final ArrayList<Form> forms = FormMgr.getCurrentBaseForms(FavoriteDetailsActivity.this);
+
+                        final CharSequence values[] = new CharSequence[forms.size()];
+                        for (int i = 0; i < forms.size(); ++i) {
+                            values[i] = forms.get(i).getFormName();
+                        }
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(FavoriteDetailsActivity.this);
+                        builder.setTitle(getResources().getString(R.string.select_form_solve));
+                        builder.setItems(values, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent formIntent = new Intent(FavoriteDetailsActivity.this, FormSolverActivity.class);
+                                formIntent.putExtra("form",
+                                        new Gson().toJson(forms.get(which)));
+                                startActivityForResult(formIntent, Utils.SOLVE_FORM);
+                            }
+                        });
+                        builder.show();
                         break;
                 }
             }
@@ -184,6 +203,8 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
             return;
 
 
+
+        Bundle extras = data.getExtras();
         switch (requestCode) {
             case Utils.DESCRIPTOR_DEFINE:
             case Utils.DESCRIPTOR_GET:
@@ -274,8 +295,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
 
 
             case Utils.ITEM_PREVIEW:
-                Bundle extras = data.getExtras();
-
                 if (resultCode == Utils.DATA_ITEM_CHANGED) {
                     if (extras == null
                             || !extras.containsKey("data_item")
@@ -304,6 +323,20 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                 }
 
                 FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, FavoriteDetailsActivity.this);
+                onResume();
+                break;
+
+            case Utils.SOLVE_FORM:
+
+                if (extras == null
+                        || !extras.containsKey("form")) {
+                    throw new AssertionError("Received no data from form activity");
+                }
+
+                Form f = new Gson().fromJson(extras.getString("form"), Form.class);
+                f.setParent(f.getFormName());
+                currentItem.addFormItem(f);
+                FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, this);
                 onResume();
                 break;
         }

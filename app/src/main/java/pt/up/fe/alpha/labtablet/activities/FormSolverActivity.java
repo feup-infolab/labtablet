@@ -65,9 +65,6 @@ public class FormSolverActivity extends Activity {
             }
         }
 
-
-
-
         setContentView(R.layout.activity_form_solver);
         table = (LinearLayout) findViewById(R.id.ll_question_items);
         (findViewById(R.id.bt_dismiss_form_intro)).setOnClickListener(new View.OnClickListener() {
@@ -185,6 +182,9 @@ public class FormSolverActivity extends Activity {
                                 R.layout.solver_spinner_item,
                                 fq.getAllowedValues());
                 spValues.setAdapter(dataAdapter);
+                break;
+            case MULTI_INSTANCE_RESPONSE:
+                baseView = inflater.inflate(R.layout.solver_item_multi_instance_response, null, false);
                 break;
             default:
                 baseView = null;

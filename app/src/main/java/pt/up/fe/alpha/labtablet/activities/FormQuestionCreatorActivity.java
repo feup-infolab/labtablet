@@ -14,9 +14,12 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -134,7 +137,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-        if(i ==0 ) {
+        if(i == 0 ) {
             return;
         }
 
@@ -241,7 +244,50 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                     }
                 });
                 break;
+            case 6:
+                questionType = FormEnumType.MULTI_INSTANCE_RESPONSE;
+                ((TextView)findViewById(R.id.closed_vocabulary_title)).setText("Specify this questions header (variables to read from the user's input)");
 
+                viewQuestionVocabularies.setVisibility(View.VISIBLE);
+                (findViewById(R.id.question_et_add_word)).setEnabled(true);
+                (findViewById(R.id.question_add_word)).setEnabled(true);
+
+                ListView lv_header_words = (ListView) findViewById(R.id.list_allowed_vocabulary);
+                allowedValues = new ArrayList<>();
+                mAdapter = new ArrayAdapter<>(this,
+                        android.R.layout.simple_list_item_1, allowedValues);
+                lv_header_words.setAdapter(mAdapter);
+
+                (findViewById(R.id.question_add_word)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EditText etWord = (EditText) findViewById(R.id.question_et_add_word);
+                        if (etWord.getText().toString().equals("")) {
+                            etWord.setError(getString(R.string.required));
+                            return;
+                        }
+
+                        allowedValues.add(etWord.getText().toString());
+                        etWord.setText("");
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                (findViewById(R.id.question_vocabulary_submit)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (allowedValues.isEmpty()) {
+                            Toast.makeText(FormQuestionCreatorActivity.this, "At least two options should be added.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        (findViewById(R.id.question_add_word)).setEnabled(false);
+                        (findViewById(R.id.question_et_add_word)).setEnabled(false);
+
+                        questionType = FormEnumType.MULTI_INSTANCE_RESPONSE;
+                        enableMandatoryView();
+                    }
+                });
+                break;
             default:
                 break;
         }
@@ -272,7 +318,9 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
 
                 EditText etDuration = (EditText) findViewById(R.id.question_expected_duration);
 
-                allowedValues.add(0, getString(R.string.pick_from_spinner));
+                if (!questionType.equals(FormEnumType.MULTI_INSTANCE_RESPONSE))
+                    allowedValues.add(0, getString(R.string.pick_from_spinner));
+
                 FormQuestion fq = new FormQuestion(questionType, questionBody, allowedValues);
                 if(!etDuration.getText().toString().equals("")) {
                     fq.setDuration(Integer.parseInt(etDuration.getText().toString()));

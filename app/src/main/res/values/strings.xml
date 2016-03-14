@@ -37,6 +37,7 @@
         <item>Yes/No</item> //MC{Y,N}
         <item>Closed Vocabulary</item> //MC{a,b,c}
         <item>Range</item> //MC{1-3}
+        <item>Multi-row answer</item>
     </string-array>
 
     <!-- Content Description -->
