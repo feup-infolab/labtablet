@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,7 +23,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.api.ChangelogManager;
@@ -82,9 +80,13 @@ public class FormSolverActivity extends Activity {
 
         int questionCount = targetForm.getFormQuestions().size();
 
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.setMargins(10, 10, 10, 10);
         for (int i = 0; i < questionCount; ++i) {
             View v = getQuestionView(targetForm.getFormQuestions().get(i));
-            table.addView(v);
+            table.addView(v, layoutParams);
         }
 
         findViewById(R.id.bt_form_save).setOnClickListener(new View.OnClickListener() {
@@ -136,7 +138,6 @@ public class FormSolverActivity extends Activity {
                 }
 
                 Intent returnIntent = new Intent();
-
 
                 targetForm.setElapsedTime("This feature has been removed");
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm:SS");

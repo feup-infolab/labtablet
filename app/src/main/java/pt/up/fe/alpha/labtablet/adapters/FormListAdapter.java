@@ -5,23 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import pt.up.fe.alpha.R;
-import pt.up.fe.alpha.labtablet.async.AsyncImageLoader;
-import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.Form;
-import pt.up.fe.alpha.labtablet.utils.FileMgr;
 import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
-import pt.up.fe.alpha.labtablet.utils.Utils;
 
 /**
  * Handles each form item and shows additional info

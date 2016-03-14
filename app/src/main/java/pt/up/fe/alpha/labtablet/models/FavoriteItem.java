@@ -97,10 +97,6 @@ public class FavoriteItem {
                 return desc.getValue();
             }
         }
-
         return "";
     }
-
-
-
 }

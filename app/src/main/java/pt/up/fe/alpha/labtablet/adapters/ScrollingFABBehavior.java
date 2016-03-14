@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
 
-
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
 

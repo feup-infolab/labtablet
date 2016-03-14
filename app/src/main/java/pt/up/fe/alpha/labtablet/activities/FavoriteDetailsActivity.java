@@ -204,7 +204,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
             return;
 
 
-
         Bundle extras = data.getExtras();
         switch (requestCode) {
             case Utils.DESCRIPTOR_DEFINE:
@@ -216,7 +215,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                 Descriptor newDescriptor = new Gson().fromJson(descriptorJson, Descriptor.class);
                 currentItem.addMetadataItem(newDescriptor);
                 FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, this);
-
                 this.onResume();
                 break;
 

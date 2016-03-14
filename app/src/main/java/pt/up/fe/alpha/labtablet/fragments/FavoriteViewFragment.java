@@ -1,6 +1,5 @@
 package pt.up.fe.alpha.labtablet.fragments;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,18 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -213,7 +207,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                         Intent i = new Intent(getActivity(), FormSolverActivity.class);
                         i.putExtra("form", new Gson().toJson(formItems.get(baseFormName).get(position)));
                         i.putExtra("form_name", formItems.get(baseFormName).get(position).getFormName());
-                        startActivityForResult(i, Utils.SOLVE_FORM);
+                        getActivity().startActivityForResult(i, Utils.SOLVE_FORM);
                     }
 
                     @Override
@@ -282,6 +276,10 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
             return instances == null ? 0 : instances.size();
         }
 
+        /**
+         * ViewHolder for an instance item, timestamp would be the selection criteria for the user's
+         * interaction as an instance may not have a name
+         */
         class FormInstanceVH extends RecyclerView.ViewHolder
                 implements View.OnClickListener, View.OnLongClickListener {
 

@@ -24,7 +24,6 @@ import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.activities.FavoriteDetailsActivity;
 import pt.up.fe.alpha.labtablet.activities.MainActivity;
 import pt.up.fe.alpha.labtablet.adapters.FavoriteListAdapter;
-import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.utils.FileMgr;
 import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;

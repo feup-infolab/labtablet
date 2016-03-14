@@ -19,8 +19,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 import pt.up.fe.alpha.R;
