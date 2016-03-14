@@ -17,6 +17,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -61,14 +62,14 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
     private ViewPager viewPager;
     private TabLayout.Tab activeTab;
     private Toolbar mToolbar;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_view);
 
-        FloatingActionButton fab
-                = (FloatingActionButton) findViewById(R.id.bt_new_metadata);
+        fab = (FloatingActionButton) findViewById(R.id.bt_new_metadata);
 
 
         Button bt_fieldMode = (Button) findViewById(R.id.bt_field_mode);
@@ -342,7 +343,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         }
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -430,6 +430,23 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
     public void onTabSelected(TabLayout.Tab tab) {
         activeTab = tab;
         viewPager.setCurrentItem(tab.getPosition());
+
+        if (tab.getText() == null)
+            return;
+
+        String activeTabName = "" + activeTab.getText();
+
+        switch (activeTabName) {
+            case "metadata":
+                fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_border_color_white_24dp));
+                break;
+            case "data":
+                fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_attachment_white_24dp));
+                break;
+            case "forms":
+                fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_assignment_white_24dp));
+                break;
+        }
     }
 
     @Override

@@ -156,10 +156,12 @@ public class FormSolverActivity extends Activity {
             case FREE_TEXT:
                 baseView = inflater.inflate(R.layout.solver_item_text, null, false);
                 ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
+                ((TextView)baseView.findViewById(R.id.solver_question_text)).setText(fq.getValue());
                 break;
             case RANGE:
                 baseView = inflater.inflate(R.layout.solver_item_number, null, false);
                 ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
+                ((TextView)baseView.findViewById(R.id.solver_question_text)).setText(fq.getValue());
                 NumberPicker np = (NumberPicker) baseView.findViewById(R.id.solver_question_number_picker);
                 if (fq.getAllowedValues().size() > 0) {
                     //0 will be the "pick an item" option
@@ -172,6 +174,7 @@ public class FormSolverActivity extends Activity {
                 baseView = inflater.inflate(R.layout.solver_item_text, null, false);
                 ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
                 ((EditText)baseView.findViewById(R.id.solver_question_text)).setInputType(InputType.TYPE_CLASS_NUMBER);
+                ((TextView)baseView.findViewById(R.id.solver_question_text)).setText(fq.getValue());
                 break;
             case MULTIPLE_CHOICE:
                 baseView = inflater.inflate(R.layout.solver_item_spinner, null, false);
@@ -182,6 +185,16 @@ public class FormSolverActivity extends Activity {
                                 R.layout.solver_spinner_item,
                                 fq.getAllowedValues());
                 spValues.setAdapter(dataAdapter);
+
+                if (fq.getValue().equals(""))
+                    break;
+
+                for (int i = 0; i < fq.getAllowedValues().size(); ++i) {
+                    if (fq.getAllowedValues().get(i).equals(fq.getValue())) {
+                        spValues.setSelection(i);
+                        break;
+                    }
+                }
                 break;
             case MULTI_INSTANCE_RESPONSE:
                 baseView = inflater.inflate(R.layout.solver_item_multi_instance_response, null, false);

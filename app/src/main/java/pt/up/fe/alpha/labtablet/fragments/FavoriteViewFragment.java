@@ -30,6 +30,7 @@ import java.util.HashMap;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.activities.FavoriteDetailsActivity;
+import pt.up.fe.alpha.labtablet.activities.FormSolverActivity;
 import pt.up.fe.alpha.labtablet.activities.ItemPreviewActivity;
 import pt.up.fe.alpha.labtablet.adapters.DataListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.FormListAdapter;
@@ -127,6 +128,10 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         return rootView;
     }
 
+    /**
+     * Attaches the view to display the collected files for a particular favorite
+     * @param items data items
+     */
     private void bindDataView(ArrayList<DataItem> items) {
         if (dataItems.isEmpty()) {
             rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
@@ -141,6 +146,10 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    /**
+     * Attaches the view for the exising descriptors
+     * @param items favorite's descriptors
+     */
     private void bindMetaDataView(ArrayList<Descriptor> items) {
         if (metadataItems.isEmpty()) {
             rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
@@ -155,6 +164,10 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    /**
+     * Attaches a list of form instances for a particular favorite (if any) or an appropriate view otherwise
+     * @param items existing form items
+     */
     private void bindFormsView(HashMap<String, ArrayList<Form>> items) {
         if (formItems.isEmpty()) {
             rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
@@ -190,12 +203,17 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
                 //EditText editText = (EditText) dialogView.findViewById(R.id.label_field);
                 RecyclerView instancesList = (RecyclerView) dialogView.findViewById(R.id.form_instances_list);
-                String baseFormName = (new ArrayList<>(formItems.keySet())).get(position);
+                final String baseFormName = (new ArrayList<>(formItems.keySet())).get(position);
 
                 instancesList.setAdapter(new FormInstancesListAdapter(formItems.get(baseFormName), new OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        //TODO dispatch form solver activity with this form
+
+                        //dispatch form solver activity with this form
+                        Intent i = new Intent(getActivity(), FormSolverActivity.class);
+                        i.putExtra("form", new Gson().toJson(formItems.get(baseFormName).get(position)));
+                        i.putExtra("form_name", formItems.get(baseFormName).get(position).getFormName());
+                        startActivityForResult(i, Utils.SOLVE_FORM);
                     }
 
                     @Override
