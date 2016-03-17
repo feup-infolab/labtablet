@@ -1,5 +1,6 @@
 package pt.up.fe.alpha.labtablet.models;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,14 +16,14 @@ public class FavoriteItem {
     private ArrayList<Descriptor> metadataItems;
 
     private ArrayList<Descriptor> metadataRecommendations;
-    private HashMap<String, ArrayList<Form>> linkedForms;
+    private ArrayList<FormInstance> linkedForms;
 
 
     public FavoriteItem(String title) {
         this.title = title;
         this.dataItems = new ArrayList<>();
         this.metadataItems = new ArrayList<>();
-        this.linkedForms = new HashMap<>();
+        this.linkedForms = new ArrayList<>();
         this.metadataRecommendations = new ArrayList<>();
     }
 
@@ -30,7 +31,7 @@ public class FavoriteItem {
         this.metadataRecommendations = metadataRecommendations;
     }
 
-    public HashMap<String, ArrayList<Form>> getLinkedForms() {
+    public ArrayList<FormInstance> getLinkedForms() {
         return linkedForms;
     }
 
@@ -82,13 +83,13 @@ public class FavoriteItem {
         this.dataItems.add(newDataItem);
     }
 
-    public void addFormItem(Form form) {
-       if (this.linkedForms.containsKey(form.getParent())) {
-           this.linkedForms.get(form.getParent()).add(form);
-       } else {
-           this.linkedForms.put(form.getParent(), new ArrayList<Form>());
-           this.linkedForms.get(form.getParent()).add(form);
-       }
+    public void addFormInstance(FormInstance form) {
+
+        if (linkedForms.contains(form)) {
+            linkedForms.remove(form);
+        }
+
+        linkedForms.add(form);
     }
 
     public String getDescription() {

@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,10 +28,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pt.up.fe.alpha.R;
-import pt.up.fe.alpha.labtablet.api.ChangelogManager;
-import pt.up.fe.alpha.labtablet.models.ChangelogItem;
-import pt.up.fe.alpha.labtablet.models.Form;
 import pt.up.fe.alpha.labtablet.models.FormEnumType;
+import pt.up.fe.alpha.labtablet.models.FormInstance;
 import pt.up.fe.alpha.labtablet.models.FormQuestion;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
@@ -37,7 +38,7 @@ import pt.up.fe.alpha.labtablet.utils.Utils;
  */
 public class FormSolverActivity extends Activity {
 
-    private Form targetForm;
+    private FormInstance targetForm;
     private LinearLayout table;
 
     @Override
@@ -45,22 +46,10 @@ public class FormSolverActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            targetForm = new Gson().fromJson(savedInstanceState.getString("form"), Form.class);
+            targetForm = new Gson().fromJson(savedInstanceState.getString("form"), FormInstance.class);
         } else {
-            String formName = getIntent().getStringExtra("form_name");
             targetForm =
-                    new Gson().fromJson(getIntent().getStringExtra("form"), Form.class);
-
-            if (targetForm == null) {
-                Toast.makeText(this, "Form not found!", Toast.LENGTH_SHORT).show();
-                ChangelogItem item = new ChangelogItem();
-                item.setMessage("Failed to load form " + formName);
-                item.setTitle(getString(R.string.developer_error));
-                item.setDate(Utils.getDate());
-                ChangelogManager.addLog(item, this);
-                finish();
-                return;
-            }
+                    new Gson().fromJson(getIntent().getStringExtra("form"), FormInstance.class);
         }
 
         setContentView(R.layout.activity_form_solver);
@@ -75,7 +64,7 @@ public class FormSolverActivity extends Activity {
         });
 
         if (getActionBar() != null) {
-            getActionBar().setTitle(targetForm.getFormName());
+            getActionBar().setTitle(targetForm.getParent());
         }
 
         int questionCount = targetForm.getFormQuestions().size();
@@ -139,9 +128,10 @@ public class FormSolverActivity extends Activity {
 
                 Intent returnIntent = new Intent();
 
-                targetForm.setElapsedTime("This feature has been removed");
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm:SS");
-                targetForm.setTimestamp(dateFormat.format(new Date()));
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm");
+                if (targetForm.getInstanceTimestamp() == null || targetForm.getInstanceTimestamp().equals(""))
+                    targetForm.setInstanceTimestamp(dateFormat.format(new Date()));
+
                 returnIntent.putExtra("form", new Gson().toJson(targetForm));
                 setResult(Utils.SOLVE_FORM, returnIntent);
                 finish();
@@ -149,9 +139,9 @@ public class FormSolverActivity extends Activity {
         });
     }
 
-    private View getQuestionView(FormQuestion fq) {
+    private View getQuestionView(final FormQuestion fq) {
         LayoutInflater inflater = LayoutInflater.from(FormSolverActivity.this);
-        View baseView;
+        final View baseView;
 
         switch (fq.getType()) {
             case FREE_TEXT:
@@ -162,13 +152,15 @@ public class FormSolverActivity extends Activity {
             case RANGE:
                 baseView = inflater.inflate(R.layout.solver_item_number, null, false);
                 ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
-                ((TextView)baseView.findViewById(R.id.solver_question_text)).setText(fq.getValue());
                 NumberPicker np = (NumberPicker) baseView.findViewById(R.id.solver_question_number_picker);
                 if (fq.getAllowedValues().size() > 0) {
                     //0 will be the "pick an item" option
                     //1 and 2 are respectively the lower and upper bound
                     np.setMinValue(Integer.parseInt(fq.getAllowedValues().get(1)));
                     np.setMaxValue(Integer.parseInt(fq.getAllowedValues().get(2)));
+                }
+                if (!fq.getValue().equals("")) {
+                    np.setValue(Integer.parseInt(fq.getValue()));
                 }
                 break;
             case NUMBER:
@@ -199,10 +191,14 @@ public class FormSolverActivity extends Activity {
                 break;
             case MULTI_INSTANCE_RESPONSE:
                 baseView = inflater.inflate(R.layout.solver_item_multi_instance_response, null, false);
+                final Button newRowButton = (Button) baseView.findViewById(R.id.question_add_response_instance);
+                newRowButton.setOnClickListener(new onRowAddedListener(baseView, fq));
                 break;
             default:
                 baseView = null;
         }
+
+
         return baseView;
     }
 
@@ -265,12 +261,63 @@ public class FormSolverActivity extends Activity {
         }
 
         Intent returnIntent = new Intent();
-        targetForm.setElapsedTime("This feature was disabled");
-
         returnIntent.putExtra("form", new Gson().toJson(targetForm));
         setResult(Utils.SOLVE_FORM, returnIntent);
         finish();
         return true;
     }
 
+    private class onRowSavedListener implements View.OnClickListener {
+        private View rootView;
+        private FormQuestion fq;
+
+        public onRowSavedListener(View baseView, FormQuestion fq) {
+            this.rootView = baseView;
+            this.fq = fq;
+        }
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getApplicationContext(), "SAVED (NOT)", Toast.LENGTH_SHORT).show();
+
+            //Extract values from children
+            LinearLayout rowsView = (LinearLayout) rootView.findViewById(R.id.repeatable_items);
+            for (int i = 0; i < rowsView.getChildCount(); ++i) {
+                EditText et = (EditText) rowsView.getChildAt(i).findViewById(R.id.input_row);
+                Log.e("", et.getText().toString());
+            }
+
+            //Add them to the existing list
+
+            //Remove any child from view
+            ((LinearLayout) rootView.findViewById(R.id.repeatable_items)).removeAllViews();
+            ((Button) rootView.findViewById(R.id.question_add_response_instance)).setText("ADD NEW ROW");
+            rootView.findViewById(R.id.question_add_response_instance).setOnClickListener(new onRowAddedListener(rootView, fq));
+        }
+    }
+
+    private class onRowAddedListener implements View.OnClickListener {
+        private View rootView;
+        private FormQuestion fq;
+
+        public onRowAddedListener(View baseView, FormQuestion fq) {
+            this.rootView = baseView;
+            this.fq = fq;
+        }
+
+        @Override
+        public void onClick(View view) {
+            final LinearLayout repeatableItems = (LinearLayout) rootView.findViewById(R.id.repeatable_items);
+            final Button newRowButton = (Button) rootView.findViewById(R.id.question_add_response_instance);
+
+            for (String s : fq.getAllowedValues()) {
+                View editView = View.inflate(FormSolverActivity.this, R.layout.row_repeatable_question, null);
+                EditText myEditText = (EditText) editView.findViewById(R.id.input_row);
+                myEditText.setHint(s);
+                repeatableItems.addView(editView);
+            }
+            newRowButton.setText(android.R.string.ok);
+            newRowButton.setOnClickListener(new onRowSavedListener(rootView, fq));
+        }
+    }
 }

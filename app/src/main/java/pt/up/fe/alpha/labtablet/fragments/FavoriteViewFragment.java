@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,10 +30,14 @@ import pt.up.fe.alpha.labtablet.activities.ItemPreviewActivity;
 import pt.up.fe.alpha.labtablet.adapters.DataListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.FormListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.MetadataListAdapter;
+import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
+import pt.up.fe.alpha.labtablet.db_handlers.FormMgr;
 import pt.up.fe.alpha.labtablet.models.DataItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.models.Form;
+import pt.up.fe.alpha.labtablet.models.FormInstance;
+import pt.up.fe.alpha.labtablet.utils.FileMgr;
 import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
@@ -43,7 +48,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     private String mCurrentTag;
     private ArrayList<DataItem> dataItems;
     private ArrayList<Descriptor> metadataItems;
-    private HashMap<String, ArrayList<Form>> formItems;
+    private HashMap<String, ArrayList<FormInstance>> groupedForms;
     private View rootView;
 
     private AlertDialog alertDialog;
@@ -64,8 +69,8 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 bindDataView(dataItems);
                 break;
             case "forms":
-                formItems = item.getLinkedForms();
-                bindFormsView(formItems);
+                groupedForms = groupFormInstances(item.getLinkedForms());
+                bindFormsView(groupedForms);
                 break;
         }
     }
@@ -109,8 +114,9 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 break;
 
             case "forms":
-                formItems = new Gson().fromJson(args.getString("items"), new TypeToken<HashMap<String, ArrayList<Form>>>(){}.getType());
-                bindFormsView(formItems);
+                ArrayList<FormInstance> instances = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<FormInstance>>(){}.getType());
+                groupedForms = groupFormInstances(instances);
+                bindFormsView(groupedForms);
                 break;
             default:
                 Toast.makeText(getActivity(), "NO VIEW ATTACHED", Toast.LENGTH_SHORT).show();
@@ -162,8 +168,9 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
      * Attaches a list of form instances for a particular favorite (if any) or an appropriate view otherwise
      * @param items existing form items
      */
-    private void bindFormsView(HashMap<String, ArrayList<Form>> items) {
-        if (formItems.isEmpty()) {
+    private void bindFormsView(HashMap<String, ArrayList<FormInstance>> items) {
+
+        if (items.isEmpty()) {
             rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
             rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
             return;
@@ -174,6 +181,22 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         FormListAdapter mAdapter = new FormListAdapter(items, this, getActivity());
         itemList.setAdapter(mAdapter);
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+
+    private HashMap<String, ArrayList<FormInstance>> groupFormInstances(ArrayList<FormInstance> items) {
+        HashMap<String, ArrayList<FormInstance>> groupedInstances = new HashMap<>();
+        for (FormInstance fi : items) {
+            if (groupedInstances.containsKey(fi.getParent())) {
+                groupedInstances.get(fi.getParent()).add(fi);
+                continue;
+            }
+
+            ArrayList<FormInstance> newInstances = new ArrayList<>();
+            newInstances.add(fi);
+            groupedInstances.put(fi.getParent(), newInstances);
+        }
+        return groupedInstances;
     }
 
     @Override
@@ -197,16 +220,16 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
                 //EditText editText = (EditText) dialogView.findViewById(R.id.label_field);
                 RecyclerView instancesList = (RecyclerView) dialogView.findViewById(R.id.form_instances_list);
-                final String baseFormName = (new ArrayList<>(formItems.keySet())).get(position);
+                final String baseFormName = (new ArrayList<>(groupedForms.keySet())).get(position);
 
-                instancesList.setAdapter(new FormInstancesListAdapter(formItems.get(baseFormName), new OnItemClickListener() {
+                instancesList.setAdapter(new FormInstancesListAdapter(groupedForms.get(baseFormName), new OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
 
                         //dispatch form solver activity with this form
                         Intent i = new Intent(getActivity(), FormSolverActivity.class);
-                        i.putExtra("form", new Gson().toJson(formItems.get(baseFormName).get(position)));
-                        i.putExtra("form_name", formItems.get(baseFormName).get(position).getFormName());
+                        i.putExtra("form", new Gson().toJson(groupedForms.get(baseFormName).get(position)));
+                        i.putExtra("form_name", groupedForms.get(baseFormName).get(position).getParent());
                         getActivity().startActivityForResult(i, Utils.SOLVE_FORM);
                     }
 
@@ -238,12 +261,12 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
 
     private class FormInstancesListAdapter extends RecyclerView.Adapter<FormInstancesListAdapter.FormInstanceVH> {
-        private final ArrayList<Form> instances;
+        private final ArrayList<FormInstance> instances;
         private OnItemClickListener listener;
 
 
-        public FormInstancesListAdapter(ArrayList<Form> srcItems,
-                               OnItemClickListener clickListener) {
+        public FormInstancesListAdapter(ArrayList<FormInstance> srcItems,
+                                        OnItemClickListener clickListener) {
 
             this.instances = srcItems;
             listener = clickListener;
@@ -259,7 +282,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         @Override
         public void onBindViewHolder(FormInstanceVH holder, final int position) {
 
-            holder.instanceTimestamp.setText(instances.get(position).getTimestamp());
+            holder.instanceTimestamp.setText(instances.get(position).getInstanceTimestamp());
             holder.instanceDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import pt.up.fe.alpha.R;
+import pt.up.fe.alpha.labtablet.db_handlers.FormMgr;
 import pt.up.fe.alpha.labtablet.models.Form;
+import pt.up.fe.alpha.labtablet.models.FormInstance;
 import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
 
 /**
@@ -22,16 +24,18 @@ public class FormListAdapter extends RecyclerView.Adapter<FormListAdapter.FormLi
 
     private final Context context;
 
-    private final HashMap<String, ArrayList<Form>> items;
+    private final HashMap<String, ArrayList<FormInstance>> items;
+    private ArrayList<Form> templateForms;
     private static OnItemClickListener listener;
 
 
-    public FormListAdapter(HashMap<String, ArrayList<Form>> srcItems,
+    public FormListAdapter(HashMap<String, ArrayList<FormInstance>> srcItems,
                                OnItemClickListener clickListener,
                                Context context) {
 
         this.context = context;
         this.items = srcItems;
+        this.templateForms = FormMgr.getCurrentBaseForms(context);
         listener = clickListener;
     }
 
@@ -46,9 +50,8 @@ public class FormListAdapter extends RecyclerView.Adapter<FormListAdapter.FormLi
     public void onBindViewHolder(FormListVH holder, int position) {
         String baseFormName = (String) items.keySet().toArray()[position];
 
-
         if (items.get(baseFormName).size() > 0) {
-            holder.mFormDescription.setText(items.get(baseFormName).get(0).getFormDescription());
+            holder.mFormDescription.setText(templateForms.get(position).getFormDescription());
         } else {
             holder.mFormDescription.setVisibility(View.INVISIBLE);
         }

@@ -20,6 +20,7 @@ import pt.up.fe.alpha.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.models.Form;
+import pt.up.fe.alpha.labtablet.models.FormInstance;
 import pt.up.fe.alpha.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.alpha.labtablet.utils.Zipper;
 
@@ -73,7 +74,7 @@ public class AsyncPackageCreator extends AsyncTask<Object, ProgressUpdateItem, V
         //Generate forms and forms' csv file
         if (item.getLinkedForms().size() > 0) {
             publishProgress(new ProgressUpdateItem(15, "Generating " + item.getLinkedForms().size() + " forms..."));
-            HashMap<String, ArrayList<Form>> linkedForms = item.getLinkedForms();
+           ArrayList<FormInstance> linkedForms = item.getLinkedForms();
 
             try {
                 generateCSV(mContext, linkedForms, favoriteName);
@@ -119,7 +120,7 @@ public class AsyncPackageCreator extends AsyncTask<Object, ProgressUpdateItem, V
         if (item.getLinkedForms().size() > 0) {
             String progress = mContext.getString(R.string.upload_generating_forms);
 
-            HashMap<String, ArrayList<Form>> linkedForms = item.getLinkedForms();
+             ArrayList<FormInstance> linkedForms = item.getLinkedForms();
             publishProgress(new ProgressUpdateItem(15, progress));
 
             try {

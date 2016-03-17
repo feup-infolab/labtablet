@@ -45,6 +45,8 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -62,6 +64,7 @@ import pt.up.fe.alpha.labtablet.models.ChangelogItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.models.Form;
+import pt.up.fe.alpha.labtablet.models.FormInstance;
 import pt.up.fe.alpha.labtablet.utils.ConnectivityReceiver;
 import pt.up.fe.alpha.labtablet.utils.FileMgr;
 import pt.up.fe.alpha.labtablet.utils.Utils;
@@ -548,7 +551,7 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                     public void onClick(DialogInterface dialog, int which) {
                         Intent formIntent = new Intent(FieldModeActivity.this, FormSolverActivity.class);
                         formIntent.putExtra("form",
-                                new Gson().toJson(forms.get(which)));
+                                new Gson().toJson(new FormInstance(forms.get(which))));
                         startActivityForResult(formIntent, Utils.SOLVE_FORM);
                     }
                 });
@@ -899,10 +902,15 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                 }
 
                 //Add form item to the favorite record
-                Form form = new Gson().fromJson(data.getStringExtra("form"), Form.class);
-                form.setParent(form.getFormName());
-                form.setFormName(form.getFormName() + "_" + new Date().getTime());
-                currentFavoriteItem.addFormItem(form);
+                FormInstance form = new Gson().fromJson(data.getStringExtra("form"), FormInstance.class);
+
+                /*
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm:SS");
+                if (targetForm.getTimestamp().isEmpty())
+                    targetForm.setTimestamp(dateFormat.format(new Date()));
+                */
+                //form.setFormName(form.getFormName() + "_" + new Date().getTime());
+                currentFavoriteItem.addFormInstance(form);
                 FavoriteMgr.updateFavoriteEntry(
                         currentFavoriteItem.getTitle(), currentFavoriteItem, this);
 

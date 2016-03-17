@@ -50,6 +50,7 @@ import pt.up.fe.alpha.labtablet.models.DataItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.models.Form;
+import pt.up.fe.alpha.labtablet.models.FormInstance;
 import pt.up.fe.alpha.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.alpha.labtablet.utils.FileMgr;
 import pt.up.fe.alpha.labtablet.utils.Utils;
@@ -158,7 +159,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent formIntent = new Intent(FavoriteDetailsActivity.this, FormSolverActivity.class);
                                 formIntent.putExtra("form",
-                                        new Gson().toJson(forms.get(which)));
+                                        new Gson().toJson(new FormInstance(forms.get(which))));
                                 startActivityForResult(formIntent, Utils.SOLVE_FORM);
                             }
                         });
@@ -332,9 +333,8 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                     throw new AssertionError("Received no data from form activity");
                 }
 
-                Form f = new Gson().fromJson(extras.getString("form"), Form.class);
-                f.setParent(f.getFormName());
-                currentItem.addFormItem(f);
+                FormInstance f = new Gson().fromJson(extras.getString("form"), FormInstance.class);
+                currentItem.addFormInstance(f);
                 FavoriteMgr.updateFavoriteEntry(currentItem.getTitle(), currentItem, this);
                 onResume();
                 break;
@@ -461,15 +461,10 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
      * Handles form instance removal from the Form tab
      * @param form form that is to be removed
      */
-    public void notifyFormInstanceRemoved(Form form, int position) {
+    public void notifyFormInstanceRemoved(FormInstance form, int position) {
         FavoriteItem item =  FavoriteMgr.getFavorite(this, favoriteName);
 
-        if (item.getLinkedForms().get(form.getParent()).size() == 1) {
-            item.getLinkedForms().remove(form.getParent());
-        } else {
-            item.getLinkedForms().get(form.getParent()).remove(position);
-        }
-
+        item.getLinkedForms().remove(form);
         FavoriteMgr.updateFavoriteEntry(favoriteName, item, this);
         Toast.makeText(this, "Instance removed", Toast.LENGTH_SHORT).show();
         onResume();

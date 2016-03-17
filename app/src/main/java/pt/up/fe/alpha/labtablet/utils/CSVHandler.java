@@ -18,7 +18,7 @@ import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.models.DataItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
-import pt.up.fe.alpha.labtablet.models.Form;
+import pt.up.fe.alpha.labtablet.models.FormInstance;
 
 /**
  * Handles different events when exporting records to csv files
@@ -26,22 +26,40 @@ import pt.up.fe.alpha.labtablet.models.Form;
 public class CSVHandler {
 
     public static boolean generateCSV(Context context,
-                                      HashMap<String, ArrayList<Form>> formSet,
+                                      ArrayList<FormInstance> instances,
                                       String favoriteName) throws IOException {
 
+        HashMap<String, ArrayList<FormInstance>> groupedForms = new HashMap<>();
+
+        for (FormInstance formInstance : instances) {
+            if (groupedForms.containsKey(formInstance.getParent())) {
+                groupedForms.get(formInstance.getParent()).add(formInstance);
+                continue;
+            }
+
+
+            ArrayList<FormInstance> forminstaces = new ArrayList<>();
+            forminstaces.add(formInstance);
+            groupedForms.put(formInstance.getParent(), forminstaces);
+        }
         String basePath = Environment.getExternalStorageDirectory() + File.separator
                 + context.getString(R.string.app_name) + File.separator
                 + favoriteName + File.separator;
 
-        Set<String> entrySet = formSet.keySet();
+        Set<String> entrySet = groupedForms.keySet();
         for (String entryName : entrySet) {
 
-            ArrayList<Form> entryForms = formSet.get(entryName);
+            ArrayList<FormInstance> entryForms = groupedForms.get(entryName);
             CSVWriter writer = new CSVWriter(new FileWriter(basePath + entryName + ".csv"), ',');
 
-            writer.writeNext( entryForms.get(0).getQuestions());
-            for (Form form : entryForms) {
-                writer.writeNext(form.getAnswers());
+            writer.writeNext((String[]) entryForms.get(0).getFormQuestions().toArray());
+            for (FormInstance form : entryForms) {
+                String[] line = new String[form.getFormQuestions().size()];
+
+                for (int i = 0; i < line.length; ++i) {
+                    line[i] = form.getFormQuestions().get(i).getValue();
+                }
+                writer.writeNext(line);
             }
             writer.close();
 

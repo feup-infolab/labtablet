@@ -17,6 +17,7 @@ public class FormQuestion {
         this.question = question;
         this.allowedValues = allowedValues;
         this.value = "";
+        this.value = "";
     }
 
     public FormEnumType getType() {

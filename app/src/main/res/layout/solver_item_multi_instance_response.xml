@@ -6,6 +6,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
+    android:animateLayoutChanges="true"
     >
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -48,6 +49,14 @@
             android:textSize="20sp"
             />
 
+        <LinearLayout
+            android:id="@+id/repeatable_items"
+            android:animateLayoutChanges="true"
+            android:layout_below="@id/solver_question_instructions"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <Button
             android:text="Add new row"
             android:contentDescription="@string/image_placeholder"
@@ -55,17 +64,9 @@
             android:src="@drawable/ab_plus"
             android:layout_alignParentEnd="true"
             android:tint="@color/primary"
-            android:layout_below="@id/solver_question_instructions"
+            android:layout_below="@id/repeatable_items"
             android:id="@+id/question_add_response_instance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_below="@id/question_add_response_instance"
-            android:layout_width="match_parent"
-            android:layout_height="250dp">
-
-
-        </android.support.v7.widget.RecyclerView>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

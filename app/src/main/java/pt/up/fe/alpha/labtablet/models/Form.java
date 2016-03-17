@@ -10,7 +10,6 @@ public class Form {
     private String formName;
     private String parent;
     private String formDescription;
-    private String elapsedTime;
     private ArrayList<FormQuestion> formQuestions;
     private boolean descriptionSet;
     private String timestamp;
@@ -23,6 +22,7 @@ public class Form {
         formQuestions = new ArrayList<>();
         this.parent = parent;
         this.formDescription = "";
+        this.timestamp = "";
         this.formName = name;
     }
 
@@ -69,10 +69,6 @@ public class Form {
         return formDescription;
     }
 
-    public void setElapsedTime(String elapsedTime) {
-        this.elapsedTime = elapsedTime;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (! (o instanceof Form)) {
@@ -101,6 +97,7 @@ public class Form {
 
         return answerSet;
     }
+
 
     @Override
     public String toString() {
