@@ -1,15 +1,17 @@
 package pt.up.fe.alpha.labtablet.activities;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pt.up.fe.alpha.R;
+import pt.up.fe.alpha.labtablet.fragments.QuestionRowDialogFragment;
 import pt.up.fe.alpha.labtablet.models.FormEnumType;
 import pt.up.fe.alpha.labtablet.models.FormInstance;
 import pt.up.fe.alpha.labtablet.models.FormQuestion;
@@ -36,7 +39,7 @@ import pt.up.fe.alpha.labtablet.utils.Utils;
 /**
  * Shows the view to solve a form's set of questions and collect available metrics
  */
-public class FormSolverActivity extends Activity {
+public class FormSolverActivity extends AppCompatActivity {
 
     private FormInstance targetForm;
     private LinearLayout table;
@@ -191,7 +194,19 @@ public class FormSolverActivity extends Activity {
                 break;
             case MULTI_INSTANCE_RESPONSE:
                 baseView = inflater.inflate(R.layout.solver_item_multi_instance_response, null, false);
-                final Button newRowButton = (Button) baseView.findViewById(R.id.question_add_response_instance);
+                ((TextView) baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
+                ((TextView) baseView.findViewById(R.id.question_items_count)).setText(fq.getRows().size() + " items");
+
+                Button newRowButton = (Button) baseView.findViewById(R.id.question_add_response_instance);
+                baseView.findViewById(R.id.question_items_count).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (fq.getRows().size() > 0)
+                            showDialog(fq);
+                        else
+                            Toast.makeText(FormSolverActivity.this, getString(R.string.no_rows), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 newRowButton.setOnClickListener(new onRowAddedListener(baseView, fq));
                 break;
             default:
@@ -267,6 +282,20 @@ public class FormSolverActivity extends Activity {
         return true;
     }
 
+    /**
+     * This should be called whenever the user changed a question's values
+     * for multi option type
+     * @param fq updated form question
+     */
+    public void onFormQuestionUpdate(FormQuestion fq) {
+        for (FormQuestion question : targetForm.getFormQuestions()) {
+            if (question.getQuestion().equals(fq.getQuestion())) {
+                question.setRows(fq.getRows());
+                return;
+            }
+        }
+    }
+
     private class onRowSavedListener implements View.OnClickListener {
         private View rootView;
         private FormQuestion fq;
@@ -278,20 +307,30 @@ public class FormSolverActivity extends Activity {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getApplicationContext(), "SAVED (NOT)", Toast.LENGTH_SHORT).show();
 
             //Extract values from children
             LinearLayout rowsView = (LinearLayout) rootView.findViewById(R.id.repeatable_items);
+
+            String row = "";
             for (int i = 0; i < rowsView.getChildCount(); ++i) {
                 EditText et = (EditText) rowsView.getChildAt(i).findViewById(R.id.input_row);
-                Log.e("", et.getText().toString());
+                row += et.getText().toString() + ";";
             }
+            fq.addNewRow(row);
+            TextView tvCount = (TextView) rootView.findViewById(R.id.question_items_count);
 
-            //Add them to the existing list
+            tvCount.setText(fq.getRows().size() + " items");
+            Toast.makeText(FormSolverActivity.this, "SAVED", Toast.LENGTH_SHORT).show();
+
+            Animation animation = new ScaleAnimation(1,1.1f,1,1.1f);
+            animation.setDuration(300);
+            animation.setRepeatMode(Animation.REVERSE);
+            animation.setRepeatCount(1);
+            tvCount.startAnimation(animation);
 
             //Remove any child from view
             ((LinearLayout) rootView.findViewById(R.id.repeatable_items)).removeAllViews();
-            ((Button) rootView.findViewById(R.id.question_add_response_instance)).setText("ADD NEW ROW");
+            ((Button) rootView.findViewById(R.id.question_add_response_instance)).setText(getString(R.string.action_new_row));
             rootView.findViewById(R.id.question_add_response_instance).setOnClickListener(new onRowAddedListener(rootView, fq));
         }
     }
@@ -319,5 +358,14 @@ public class FormSolverActivity extends Activity {
             newRowButton.setText(android.R.string.ok);
             newRowButton.setOnClickListener(new onRowSavedListener(rootView, fq));
         }
+    }
+
+
+
+
+    void showDialog(FormQuestion fq) {
+        // Create the fragment and show it as a dialog.
+        DialogFragment newFragment = QuestionRowDialogFragment.newInstance(fq);
+        newFragment.show(getSupportFragmentManager(), "rows_dialog");
     }
 }

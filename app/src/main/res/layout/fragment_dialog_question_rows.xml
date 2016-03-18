@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    >
+
+    <TextView
+        android:gravity="center"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:padding="10dp"
+        android:text="@string/existing_rows"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:id="@+id/fragment_dialog_edit_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/fragment_dialog_edit_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+    </ScrollView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/question_items_list"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:text="@android:string/cancel"
+            android:id="@+id/dialog_cancel"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/dialog_ok"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:text="@android:string/ok"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

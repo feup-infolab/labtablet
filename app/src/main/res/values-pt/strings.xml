@@ -316,6 +316,9 @@
     <string name="text_placeholder">Text Placeholder</string>
     <string name="no_description">Não foi dada nenhuma descrição (clicar aqui para editar)</string>
     <string name="form_instance_list_header">Formulários preenchidos</string>
+    <string name="action_new_row">New row</string>
+    <string name="no_rows">There are no items.\\nAdd new ones by pressing the button below</string>
+    <string name="existing_rows">Existing rows</string>
     <!-- /TTS sentences -->
 
     <string-array name="home_tips">

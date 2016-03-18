@@ -38,21 +38,21 @@
             />
 
         <TextView
-            android:id="@+id/solver_question_instructions"
-            android:padding="5dp"
-            android:fontFamily="sans-serif-thin"
+            android:id="@+id/question_items_count"
+            android:padding="10dp"
             android:layout_below="@id/solver_question_body"
-            android:layout_alignParentStart="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="To start adding data, tap the '+' button. For each row you wan to add, fill in the values accordingly"
-            android:textSize="20sp"
-            />
+            android:drawableStart="@drawable/ic_view_headline_black_24dp"
+            android:drawablePadding="20dp"
+            android:fontFamily="sans-serif-thin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="0 items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:id="@+id/repeatable_items"
             android:animateLayoutChanges="true"
-            android:layout_below="@id/solver_question_instructions"
+            android:layout_below="@id/question_items_count"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
