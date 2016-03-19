@@ -1,12 +1,17 @@
 package pt.up.fe.alpha.labtablet.fragments;
 
+import android.media.Image;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -31,6 +36,7 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
     private RecyclerView rvItems;
     private ScrollView editView;
     private LinearLayout editRootView;
+    private Button btOK;
 
     /**
      * Create a new instance of MyDialogFragment, providing "num"
@@ -61,6 +67,7 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
 
         editView = (ScrollView) rootView.findViewById(R.id.fragment_dialog_edit_view);
         editRootView = (LinearLayout) rootView.findViewById(R.id.fragment_dialog_edit_layout);
+        btOK = (Button) rootView.findViewById(R.id.dialog_ok);
 
         rootView.findViewById(R.id.dialog_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,11 +76,10 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
             }
         });
 
-        rootView.findViewById(R.id.dialog_ok).setOnClickListener(new View.OnClickListener() {
+        btOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((FormSolverActivity)getActivity()).onFormQuestionUpdate(fq);
-                dismiss();
+                onOkPressed();
             }
         });
 
@@ -85,15 +91,40 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
         return rootView;
     }
 
+    private void onOkPressed() {
+        ((FormSolverActivity) getActivity()).onFormQuestionUpdate(fq);
+        dismiss();
+    }
+
     @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(getActivity(), "TOUCHÉ", Toast.LENGTH_SHORT).show();
+    public void onItemClick(View view, final int position) {
         rvItems.setVisibility(View.GONE);
         editView.setVisibility(View.VISIBLE);
 
-        for (String s : fq.getAllowedValues()) {
-            //add each view for edition here
+        final String[] values = fq.getRows().get(position).split(";");
+        for (int i = 0; i < values.length; ++i) {
+            View editView = View.inflate(getActivity(), R.layout.row_repeatable_question, null);
+            TextInputLayout myEditText = (TextInputLayout) editView.findViewById(R.id.input_layout);
+            myEditText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            myEditText.setHint(fq.getAllowedValues().get(i));
+            myEditText.getEditText().setText(values[i]);
+            editRootView.addView(editView);
         }
+
+        btOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int viewCount = editRootView.getChildCount();
+                String mergedValues = "";
+                for (int i = 0; i < viewCount; ++i) {
+                    TextInputLayout editText = (TextInputLayout) editRootView.getChildAt(i);
+                    mergedValues += editText.getEditText().getText().toString() + ";";
+                }
+                fq.getRows().set(position, mergedValues);
+                Toast.makeText(getActivity(), getString(R.string.updated), Toast.LENGTH_SHORT).show();
+                onOkPressed();
+            }
+        });
     }
 
     @Override
@@ -129,7 +160,17 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
                 public void onClick(View view) {
                     fq.getRows().remove(position);
                     mAdapter.notifyDataSetChanged();
-                    Toast.makeText(getActivity(), "REMOVED", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.removed), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            holder.instanceDuplicate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String copiedRow = fq.getRows().get(position);
+                    fq.getRows().add(position+1, copiedRow);
+                    mAdapter.notifyDataSetChanged();
+                    Toast.makeText(getActivity(), getString(R.string.copied), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -148,11 +189,14 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
 
             public final TextView rowText;
             public final ImageButton instanceDelete;
+            public final ImageButton instanceDuplicate;
 
             public FormInstanceVH(View rowView) {
                 super(rowView);
                 rowText = (TextView) rowView.findViewById(R.id.instance_body);
                 instanceDelete = (ImageButton) rowView.findViewById(R.id.instance_delete);
+                instanceDuplicate = (ImageButton) rowView.findViewById(R.id.instance_duplicate);
+                instanceDuplicate.setVisibility(View.VISIBLE);
 
                 rowView.setOnClickListener(this);
                 rowView.setOnLongClickListener(this);

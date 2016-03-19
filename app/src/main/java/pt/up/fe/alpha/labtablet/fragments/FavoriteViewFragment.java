@@ -292,6 +292,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                     }
                 }
             });
+
         }
 
         @Override

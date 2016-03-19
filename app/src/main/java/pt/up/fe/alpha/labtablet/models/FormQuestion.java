@@ -1,5 +1,7 @@
 package pt.up.fe.alpha.labtablet.models;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 public class FormQuestion {

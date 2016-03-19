@@ -320,6 +320,9 @@
     <string name="action_new_row">New row</string>
     <string name="no_rows">There are no items.\nAdd new ones by pressing the button below</string>
     <string name="existing_rows">Existing rows</string>
+    <string name="updated">Updated successfully</string>
+    <string name="copied">Copied successfully</string>
+    <string name="removed">Removed successfully</string>
     <!-- /TTS sentences -->
 
 
