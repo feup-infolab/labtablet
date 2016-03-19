@@ -3,6 +3,7 @@ package pt.up.fe.alpha.labtablet.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -43,6 +44,7 @@ public class FormSolverActivity extends AppCompatActivity {
 
     private FormInstance targetForm;
     private LinearLayout table;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class FormSolverActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_form_solver);
         table = (LinearLayout) findViewById(R.id.ll_question_items);
+        fab = (FloatingActionButton) findViewById(R.id.bt_form_save);
+
         (findViewById(R.id.bt_dismiss_form_intro)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +85,7 @@ public class FormSolverActivity extends AppCompatActivity {
             table.addView(v, layoutParams);
         }
 
-        findViewById(R.id.bt_form_save).setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean requirementsMet = true;
@@ -332,6 +336,7 @@ public class FormSolverActivity extends AppCompatActivity {
             ((LinearLayout) rootView.findViewById(R.id.repeatable_items)).removeAllViews();
             ((Button) rootView.findViewById(R.id.question_add_response_instance)).setText(getString(R.string.action_new_row));
             rootView.findViewById(R.id.question_add_response_instance).setOnClickListener(new onRowAddedListener(rootView, fq));
+            fab.show();
         }
     }
 
@@ -349,6 +354,7 @@ public class FormSolverActivity extends AppCompatActivity {
             final LinearLayout repeatableItems = (LinearLayout) rootView.findViewById(R.id.repeatable_items);
             final Button newRowButton = (Button) rootView.findViewById(R.id.question_add_response_instance);
 
+            fab.hide();
             for (String s : fq.getAllowedValues()) {
                 View editView = View.inflate(FormSolverActivity.this, R.layout.row_repeatable_question, null);
                 EditText myEditText = (EditText) editView.findViewById(R.id.input_row);
