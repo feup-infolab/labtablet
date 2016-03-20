@@ -206,7 +206,7 @@
     <string name="expected_duration">Duração prevista (opcional, em minutos)</string>
     <string name="want_to_give_form_description">Quer acrescentar uma descrição ao questionário?</string>
     <string name="select_form_solve">Selecione o questionário a preencher a partir da lista</string>
-    <string name="form_solver_intro">Está prestes a iniciar um questionário com X questões, e com uma duração prevista de Y minutos. Para começar clique no botão em baixo.</string>
+    <string name="form_solver_intro">Vai dar início ao preenchimento de um formulário</string>
     <string name="form">Questionário</string>
     <string name="is_question_mandatory">Esta pergunta é obrigatória?</string>
     <string name="pick_allowed_values">Escolha uma opção</string>
@@ -308,20 +308,20 @@
     <string name="tts_lost_conn">Perdeu conexão à internet. A desligar reconhecimento de voz da google e a ligar reconhecimento de voz offline (limitado)</string>
     <string name="tts_good_conn">Conexão à internet existente. É possível usar o reconhecimento de voz da google</string>
     <string name="tts_loc_saved">Posição guardada</string>
-    <string name="saving">Saving...</string>
+    <string name="saving">Saving…</string>
     <string name="crash_submitted">Relatório de erros submetido</string>
-    <string name="no_items_yet">There are no items in this section. Tap below to import or create resources</string>
-    <string name="help">Help</string>
+    <string name="no_items_yet">Não há items nesta secção. Clique no botão em baixo para adicionar recursos</string>
+    <string name="help">Ajuda</string>
     <string name="favorite_info">%1$s\n%2$d registos</string>
     <string name="text_placeholder">Text Placeholder</string>
     <string name="no_description">Não foi dada nenhuma descrição (clicar aqui para editar)</string>
     <string name="form_instance_list_header">Formulários preenchidos</string>
     <string name="action_new_row">New row</string>
     <string name="no_rows">There are no items.\\nAdd new ones by pressing the button below</string>
-    <string name="existing_rows">Existing rows</string>
-    <string name="updated">Updated successfully</string>
-    <string name="copied">Copied successfully</string>
-    <string name="removed">Removed successfully</string>
+    <string name="existing_rows">Linhas registadas</string>
+    <string name="updated">Atualizado com sucesso</string>
+    <string name="copied">Duplicado com sucesso</string>
+    <string name="removed">Removido com sucesso</string>
     <!-- /TTS sentences -->
 
     <string-array name="home_tips">

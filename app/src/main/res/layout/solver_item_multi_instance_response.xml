@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"/>
 
         <Button
-            android:text="Add new row"
+            android:text="@string/action_new_row"
             android:contentDescription="@string/image_placeholder"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:src="@drawable/ab_plus"
