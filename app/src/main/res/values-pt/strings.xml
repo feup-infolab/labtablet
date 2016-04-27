@@ -322,6 +322,13 @@
     <string name="updated">Atualizado com sucesso</string>
     <string name="copied">Duplicado com sucesso</string>
     <string name="removed">Removido com sucesso</string>
+    <string name="date">Date</string>
+    <string name="dictionary">Dicionário</string>
+
+    <!-- Used to sepparate values for each row (forms) -->
+    <string name="row_sepparator">;</string>
+    <string name="temperature">Temperature</string>
+    <string name="form_solver_title">Filling a form</string>
     <!-- /TTS sentences -->
 
     <string-array name="home_tips">

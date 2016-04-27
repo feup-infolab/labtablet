@@ -3,14 +3,22 @@ package pt.up.fe.alpha.labtablet.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ArrayAdapter;
@@ -29,6 +37,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.fragments.QuestionRowDialogFragment;
@@ -40,11 +49,14 @@ import pt.up.fe.alpha.labtablet.utils.Utils;
 /**
  * Shows the view to solve a form's set of questions and collect available metrics
  */
-public class FormSolverActivity extends AppCompatActivity {
+public class FormSolverActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener, View.OnFocusChangeListener {
 
     private FormInstance targetForm;
     private LinearLayout table;
     private FloatingActionButton fab;
+    private CoordinatorLayout coordinatorLayout;
+    private LinearLayout assistingLayout;
+    private EditText focusedView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +70,15 @@ public class FormSolverActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_form_solver);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         table = (LinearLayout) findViewById(R.id.ll_question_items);
         fab = (FloatingActionButton) findViewById(R.id.bt_form_save);
 
-        (findViewById(R.id.bt_dismiss_form_intro)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                table.setVisibility(View.VISIBLE);
-                (findViewById(R.id.sv_question_items)).setVisibility(View.VISIBLE);
-                (findViewById(R.id.rl_form_solver_intro)).setVisibility(View.GONE);
-            }
-        });
-
-        if (getActionBar() != null) {
-            getActionBar().setTitle(targetForm.getParent());
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(targetForm.getParent());
+            getSupportActionBar().setSubtitle("Use the buttons bellow to assist you with the form");
         }
 
         int questionCount = targetForm.getFormQuestions().size();
@@ -82,7 +89,18 @@ public class FormSolverActivity extends AppCompatActivity {
         layoutParams.setMargins(10, 10, 10, 10);
         for (int i = 0; i < questionCount; ++i) {
             View v = getQuestionView(targetForm.getFormQuestions().get(i));
+            v.setFocusable(true);
+            v.setOnTouchListener(this);
             table.addView(v, layoutParams);
+        }
+
+        assistingLayout = (LinearLayout) findViewById(R.id.assisting_layout);
+        OnAssistRequestListener mListener = new OnAssistRequestListener();
+        for (int i = 0; i < assistingLayout.getChildCount(); ++i) {
+            if (!(assistingLayout.getChildAt(i) instanceof Button))
+                continue;
+
+            assistingLayout.getChildAt(i).setOnClickListener(mListener);
         }
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +163,7 @@ public class FormSolverActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private View getQuestionView(final FormQuestion fq) {
         LayoutInflater inflater = LayoutInflater.from(FormSolverActivity.this);
@@ -216,7 +235,6 @@ public class FormSolverActivity extends AppCompatActivity {
             default:
                 baseView = null;
         }
-
 
         return baseView;
     }
@@ -300,6 +318,26 @@ public class FormSolverActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        Log.e("FOCUS", "");
+        return false;
+    }
+
+    @Override
+    public void onClick(View view) {
+        Toast.makeText(this, "TOUCHÉ", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean hasFocusjoao) {
+        Log.e("FOCUS", "FOCUS CHANGED TO " + view.getId());
+    }
+
+    /**
+     * Called whenever the user saves the info provided in each column
+     * (adds the row to the form)
+     */
     private class onRowSavedListener implements View.OnClickListener {
         private View rootView;
         private FormQuestion fq;
@@ -318,7 +356,7 @@ public class FormSolverActivity extends AppCompatActivity {
             String row = "";
             for (int i = 0; i < rowsView.getChildCount(); ++i) {
                 EditText et = (EditText) rowsView.getChildAt(i).findViewById(R.id.input_row);
-                row += et.getText().toString() + ";";
+                row += et.getText().toString() + getString(R.string.row_sepparator);
             }
             fq.addNewRow(row);
             TextView tvCount = (TextView) rootView.findViewById(R.id.question_items_count);
@@ -338,6 +376,16 @@ public class FormSolverActivity extends AppCompatActivity {
             rootView.findViewById(R.id.question_add_response_instance).setOnClickListener(new onRowAddedListener(rootView, fq));
             fab.show();
         }
+    }
+
+    /**
+     * Displays a dialog containing the dorm question that is passed as an argument
+     * @param fq qeustion to extract the values from
+     */
+    void showDialog(FormQuestion fq) {
+        // Create the fragment and show it as a dialog.
+        DialogFragment newFragment = QuestionRowDialogFragment.newInstance(fq);
+        newFragment.show(getSupportFragmentManager(), "rows_dialog");
     }
 
     private class onRowAddedListener implements View.OnClickListener {
@@ -366,12 +414,73 @@ public class FormSolverActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Listener to handle assist request from the user to fill in structured values
+     */
+    private class OnAssistRequestListener implements View.OnClickListener {
 
+        @Override
+        public void onClick(View view) {
 
+            //find active/focused view
+            ArrayList<EditText> focusableViews = getAllEditTexts(table);
+            for (EditText et : focusableViews) {
+                if (et.isFocused())
+                    focusedView = et;
+            }
 
-    void showDialog(FormQuestion fq) {
-        // Create the fragment and show it as a dialog.
-        DialogFragment newFragment = QuestionRowDialogFragment.newInstance(fq);
-        newFragment.show(getSupportFragmentManager(), "rows_dialog");
+            if (focusedView == null) {
+                dispatchSnackBar("Touch one of the form's fields to fill in this value");
+                return;
+            }
+
+            switch (view.getId()) {
+                case R.id.assist_position:
+                    break;
+
+                case R.id.assist_date:
+                    focusedView.setText(focusedView.getText() + " " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+                    break;
+
+                case R.id.assist_temperature:
+                    break;
+
+                case R.id.assist_dictionary:
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Displays a snackbar with the provided message
+     * @param message message to display
+     */
+    private void dispatchSnackBar(String message) {
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, message, Snackbar.LENGTH_LONG);
+
+        snackbar.show();
+    }
+
+    /**
+     * Gets all editTexts associated with the viewgroup
+     * @param rootView
+     * @return
+     */
+    private ArrayList<EditText> getAllEditTexts(ViewGroup rootView) {
+        ArrayList<EditText> outputs = new ArrayList<>();
+
+        for (int i = 0; i < rootView.getChildCount(); i++)
+        {
+            Object child = rootView.getChildAt(i);
+            if (child instanceof EditText) {
+                outputs.add((EditText) child);
+            }
+            else if(child instanceof ViewGroup) {
+                outputs.addAll(getAllEditTexts((ViewGroup)child));  // Recursive call.
+            }
+        }
+
+        return outputs;
     }
 }

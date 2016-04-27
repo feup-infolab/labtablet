@@ -323,6 +323,11 @@
     <string name="updated">Updated successfully</string>
     <string name="copied">Copied successfully</string>
     <string name="removed">Removed successfully</string>
+    <string name="row_sepparator">;</string>
+    <string name="date">Date</string>
+    <string name="dictionary">Dictionary</string>
+    <string name="temperature">Temperature</string>
+    <string name="form_solver_title">Filling a form</string>
     <!-- /TTS sentences -->
 
 

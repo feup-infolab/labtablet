@@ -101,7 +101,7 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
         rvItems.setVisibility(View.GONE);
         editView.setVisibility(View.VISIBLE);
 
-        final String[] values = fq.getRows().get(position).split(";");
+        final String[] values = fq.getRows().get(position).split(getString(R.string.row_sepparator));
         for (int i = 0; i < values.length; ++i) {
             View editView = View.inflate(getActivity(), R.layout.row_repeatable_question, null);
             TextInputLayout myEditText = (TextInputLayout) editView.findViewById(R.id.input_layout);
