@@ -1,7 +1,10 @@
 package pt.up.fe.alpha.labtablet.activities;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
@@ -37,6 +40,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import pt.up.fe.alpha.R;
@@ -147,7 +151,7 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
                 }
 
                 if (!requirementsMet) {
-                    Toast.makeText(FormSolverActivity.this, getString(R.string.empty_questions_exist), Toast.LENGTH_SHORT).show();
+                    dispatchSnackBar(getString(R.string.empty_questions_exist));
                     return;
                 }
 
@@ -436,6 +440,13 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
 
             switch (view.getId()) {
                 case R.id.assist_position:
+                    Location location = getLastKnownLocation();
+                    if (location != null) {
+                        focusedView.setText(focusedView.getText() + " " + location.getLatitude() + ", " + location.getLongitude());
+                    } else {
+                        dispatchSnackBar(getString(R.string.unable_get_location));
+                    }
+
                     break;
 
                 case R.id.assist_date:
@@ -448,6 +459,12 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
                 case R.id.assist_dictionary:
                     break;
             }
+
+            Animation animation = new ScaleAnimation(1,1.1f,1,1.1f);
+            animation.setDuration(300);
+            animation.setRepeatMode(Animation.REVERSE);
+            animation.setRepeatCount(1);
+            focusedView.startAnimation(animation);
         }
     }
 
@@ -464,8 +481,8 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
 
     /**
      * Gets all editTexts associated with the viewgroup
-     * @param rootView
-     * @return
+     * @param rootView rootView to extract the views from
+     * @return an array of avtive EditTexts
      */
     private ArrayList<EditText> getAllEditTexts(ViewGroup rootView) {
         ArrayList<EditText> outputs = new ArrayList<>();
@@ -482,5 +499,26 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
         }
 
         return outputs;
+    }
+
+    /**
+     * Get last known location as in http://stackoverflow.com/questions/20438627/getlastknownlocation-returns-null
+     * @return
+     */
+    private Location getLastKnownLocation() {
+        LocationManager mLocationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
     }
 }

@@ -16,7 +16,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+            app:layout_scrollFlags="scroll|enterAlways"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -27,6 +27,7 @@
 
             <LinearLayout
                 android:id="@+id/assisting_layout"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -89,11 +90,10 @@
 
     <ScrollView
         android:id="@+id/sv_question_items"
+        app:tabMode="scrollable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:visibility="visible"
-        android:animateLayoutChanges="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
         <RelativeLayout
             android:layout_width="match_parent"
@@ -105,15 +105,15 @@
                 android:orientation="vertical"
                 android:animateLayoutChanges="true"
                 />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/bt_form_save"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:src="@drawable/ab_validate"/>
         </RelativeLayout>
     </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bt_form_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ab_validate"
+        android:layout_margin="20dp"
+        app:layout_behavior="pt.up.fe.alpha.labtablet.adapters.ScrollingFABBehavior"
+        android:layout_gravity="end|bottom"/>
 </android.support.design.widget.CoordinatorLayout>

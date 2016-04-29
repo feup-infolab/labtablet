@@ -20,11 +20,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import pt.up.fe.alpha.R;
@@ -135,6 +137,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         Button bt_gps_edit = (Button) rootView.findViewById(R.id.bt_kml_edit);
         Button bt_jpg_edit = (Button) rootView.findViewById(R.id.bt_jpg_edit);
         Button bt_mp3_edit = (Button) rootView.findViewById(R.id.bt_mp3_edit);
+        Button bt_dic_edit = (Button) rootView.findViewById(R.id.bt_dictionary_load);
 
         bt_clear_association = (Button) rootView.findViewById(R.id.bt_clear_associations);
         bt_file = (Button) rootView.findViewById(R.id.bt_file_path);
@@ -281,7 +284,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                         editor.putString(Utils.DENDRO_CONFS_ENTRY, new Gson().toJson(conf, DendroConfiguration.class));
                         editor.apply();
 
-//TODO: address this issue
+                        //TODO: address this issue
                         bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null, getResources().getDrawable(R.drawable.ic_check), null, null);
                         Toast.makeText(getActivity(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
@@ -305,6 +308,21 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
 
                     }
                 }).execute(getActivity());
+            }
+        });
+
+        bt_dic_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO:
+            }
+        });
+
+        bt_dic_edit.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                //TODO:
+                return true;
             }
         });
     }

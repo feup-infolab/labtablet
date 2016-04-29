@@ -328,6 +328,10 @@
     <string name="dictionary">Dictionary</string>
     <string name="temperature">Temperature</string>
     <string name="form_solver_title">Filling a form</string>
+    <string name="unable_get_location">Unable to get a location</string>
+    <string name="dictionary_configurations_title">Dictionary Configuration</string>
+    <string name="dictionary_configurations_description">Dictionaries are sets of frequently used terms that can assist you when filling out some descriptions throughout the project. They can be, for instance, a list of your collaborators\' full names, or a list of species that are frequently seen.</string>
+    <string name="dictionary_configurations_load">Load file</string>
     <!-- /TTS sentences -->
 
 

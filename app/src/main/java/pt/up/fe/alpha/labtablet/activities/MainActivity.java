@@ -23,8 +23,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.api.ChangelogManager;
@@ -38,6 +42,7 @@ import pt.up.fe.alpha.labtablet.fragments.ListFormFragment;
 import pt.up.fe.alpha.labtablet.fragments.VoiceRecognitionConfFragment;
 import pt.up.fe.alpha.labtablet.models.ChangelogItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
+import pt.up.fe.alpha.labtablet.models.Dictionary;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 import pt.up.fe.alpha.labtablet.voiceManager.VoiceOrdersFile;
@@ -75,8 +80,6 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         drawerFragment.setDrawerListener(this);
 
         displayView(0);
-
-
     }
 
     @Override
