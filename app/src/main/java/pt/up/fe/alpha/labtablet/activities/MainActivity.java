@@ -23,12 +23,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.StringTokenizer;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.api.ChangelogManager;
@@ -39,17 +35,12 @@ import pt.up.fe.alpha.labtablet.fragments.HomeFragment;
 import pt.up.fe.alpha.labtablet.fragments.ListChangelogFragment;
 import pt.up.fe.alpha.labtablet.fragments.ListFavoritesFragment;
 import pt.up.fe.alpha.labtablet.fragments.ListFormFragment;
-import pt.up.fe.alpha.labtablet.fragments.VoiceRecognitionConfFragment;
 import pt.up.fe.alpha.labtablet.models.ChangelogItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
-import pt.up.fe.alpha.labtablet.models.Dictionary;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.utils.Utils;
-import pt.up.fe.alpha.labtablet.voiceManager.VoiceOrdersFile;
 
 public class MainActivity extends AppCompatActivity implements DrawerFragment.FragmentDrawerListener {
-
-    VoiceOrdersFile voiceOrdersFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +54,6 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             Log.i("CREATEDIR", "" + path.mkdirs());
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(path)));
         }
-
-
-        //load speech recognition keywords
-        voiceOrdersFile = new VoiceOrdersFile(this);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -143,17 +130,9 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 fragment = new ConfigurationFragment();
                 tag = getString(R.string.title_configurations);
                 break;
-            case 5:
-                fragment = new VoiceRecognitionConfFragment();
-                Bundle args = new Bundle();
-                args.putSerializable("voiceOrders", voiceOrdersFile);
-                fragment.setArguments(args);
-                tag = getString(R.string.title_voice_rec_config);
-                break;
             default:
                 break;
         }
-
 
         setToolbarVisibile(!tag.equals(getString(R.string.title_home)));
 
@@ -162,9 +141,7 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            //fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
             fragmentTransaction.replace(R.id.frame_container, fragment);
-            //fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

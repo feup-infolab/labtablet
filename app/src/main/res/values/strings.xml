@@ -21,7 +21,6 @@
         <item>Forms</item>
         <item>Updates</item>
         <item>Configurations</item>
-        <item>Voice</item>
     </string-array>
 
     <string-array name="descriptor_picker_items">

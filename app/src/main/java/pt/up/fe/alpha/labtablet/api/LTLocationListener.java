@@ -9,7 +9,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,8 +20,6 @@ import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.alpha.labtablet.models.ChangelogItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.utils.Utils;
-import pt.up.fe.alpha.labtablet.voiceManager.GoogleVoiceRecognition;
-import pt.up.fe.alpha.labtablet.voiceManager.TTSvoice;
 
 /**
  * Listener to record the gps coordinates and export them (if any) to
@@ -37,16 +34,16 @@ public class LTLocationListener implements LocationListener {
     private final ArrayList<Location> mLocations;
     private LocationManager locationManager;
 
-    TTSvoice ttsVoice;
-    GoogleVoiceRecognition googleVoiceRecognizer;
+    //TTSvoice ttsVoice;
+    //GoogleVoiceRecognition googleVoiceRecognizer;
 
     public LTLocationListener(Context context, String path, kmlCreatedInterface kmlInterface) {
         mLocations = new ArrayList<>();
         this.path = path;
         this.mContext = context;
         this.mKmlInterface = kmlInterface;
-        ttsVoice = null;
-        googleVoiceRecognizer = null;
+        //ttsVoice = null;
+        //googleVoiceRecognizer = null;
     }
 
     @Override
@@ -131,35 +128,41 @@ public class LTLocationListener implements LocationListener {
                                     Intent callGPSSettingIntent = new Intent(
                                             android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                                     mContext.startActivity(callGPSSettingIntent);
+                                    /*
                                     if (ttsVoice != null) {
                                         ttsVoice.speakText(mContext.getResources().getString(R.string.gps_disabled), TextToSpeech.QUEUE_FLUSH, TTSvoice.UID_SENSOR_SAVED);
                                     }
                                     if(googleVoiceRecognizer != null)
                                         googleVoiceRecognizer.currentAction = GoogleVoiceRecognition.AC_ORDER;
+                                        */
                                 }
                             });
             alertDialogBuilder.setNegativeButton(mContext.getResources().getString(R.string.action_cancel),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
+                            /*
                             if (ttsVoice != null) {
                                 ttsVoice.speakText(mContext.getResources().getString(R.string.cancelled), TextToSpeech.QUEUE_FLUSH, TTSvoice.UID_CANCELED);
 
                             }
+
                             if(googleVoiceRecognizer != null)
                                 googleVoiceRecognizer.currentAction = GoogleVoiceRecognition.AC_ORDER;
+                                */
                         }
                     });
             AlertDialog alert = alertDialogBuilder.create();
             alert.show();
 
+            /*
             if (ttsVoice != null) {
                 Log.e("voice", "speaking");
                 ttsVoice.speakText(mContext.getResources().getString(R.string.gps_disabled), TextToSpeech.QUEUE_FLUSH, TTSvoice.UID_GPS_DISABLED);
             }
             if(googleVoiceRecognizer != null) {
                 googleVoiceRecognizer.setDialogGPS(alert);
-            }
+            }*/
             return false;
         }
 
@@ -172,11 +175,12 @@ public class LTLocationListener implements LocationListener {
         void kmlCreated(Descriptor kmlDescriptor);
     }
 
+    /*
     public void setVoice(TTSvoice voice) {
         this.ttsVoice = voice;
     }
 
     public void setGoogleRecognizer(GoogleVoiceRecognition googleRecognizer) {
         this.googleVoiceRecognizer = googleRecognizer;
-    }
+    }*/
 }
