@@ -88,11 +88,16 @@ public class Utils {
     //Configuration entries. If updated, the application must be completely reinstalled
     //should not use previous instances
     public static final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?";
-    public static final String ASSOCIATIONS_CONFIG_ENTRY = "associations";
 
+    /**
+     * Preferences entries for the managed resources. These are used to
+     * query the shared preferences settings for simple data entries
+     */
+    public static final String ASSOCIATIONS_CONFIG_ENTRY = "associations";
     public static final String BASE_DESCRIPTORS_ENTRY = "base_descriptors";
     public static final String BASE_FORMS_ENTRY = "base_forms";
     public static final String CHANGELOG_CONFIG_ENTRY = "changelogs";
+    public static final String DICTIONARY_ENTRY = "dictionary";
 
     public static final long SAMPLE_MILLIS = 5000;
     //Select a descriptor and return it

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by ricardo on 29-04-2016.
+ * Class to mirror the dictionary object when using Gson read & write
  */
 public class Dictionary {
     private HashMap<String, ArrayList<String>> items;

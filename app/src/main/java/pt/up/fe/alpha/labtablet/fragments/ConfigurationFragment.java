@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,10 +36,12 @@ import pt.up.fe.alpha.labtablet.api.ChangelogManager;
 import pt.up.fe.alpha.labtablet.async.AsyncAuthenticator;
 import pt.up.fe.alpha.labtablet.async.AsyncProfileLoader;
 import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.models.AssociationItem;
 import pt.up.fe.alpha.labtablet.models.ChangelogItem;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
+import pt.up.fe.alpha.labtablet.models.Dictionary;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
 public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<ArrayList<Descriptor>> {
@@ -314,15 +317,43 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         bt_dic_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO:
+
             }
         });
 
         bt_dic_edit.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                //TODO:
-                return true;
+                //implement async task to load the settings if needed
+                BufferedReader reader = null;
+                try {
+                    reader = new BufferedReader(
+                            new InputStreamReader(getActivity().getAssets().open("base_dictionary.json")));
+
+                    // do reading, usually loop until end of file reading
+                    String content = "";
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        content += line;
+                    }
+
+                    Dictionary dictionary = new Gson().fromJson(content, Dictionary.class);
+                    FavoriteMgr.updateApplicationDictionary(dictionary, getActivity());
+                    Toast.makeText(getActivity(), R.string.success, Toast.LENGTH_SHORT).show();
+                    return true;
+
+                } catch (IOException e) {
+                    Toast.makeText(getActivity(), R.string.load_file_failed, Toast.LENGTH_SHORT).show();
+                    return true;
+                } finally {
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            Toast.makeText(getActivity(), R.string.load_file_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
             }
         });
     }
