@@ -136,7 +136,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         return rootView;
     }
 
-    private void setupLayout(View rootView) {
+    private void setupLayout(final View rootView) {
         Button bt_gps_edit = (Button) rootView.findViewById(R.id.bt_kml_edit);
         Button bt_jpg_edit = (Button) rootView.findViewById(R.id.bt_jpg_edit);
         Button bt_mp3_edit = (Button) rootView.findViewById(R.id.bt_mp3_edit);
@@ -339,6 +339,13 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
 
                     Dictionary dictionary = new Gson().fromJson(content, Dictionary.class);
                     FavoriteMgr.updateApplicationDictionary(dictionary, getActivity());
+
+                    String formattedEntries = getString(R.string.loaded_entries_header);
+                    for (String entry : dictionary.getItems().keySet()) {
+                        formattedEntries += entry + "\n";
+                    }
+
+                    ((TextView) rootView.findViewById(R.id.dictionary_entries_list)).setText(formattedEntries);
                     Toast.makeText(getActivity(), R.string.success, Toast.LENGTH_SHORT).show();
                     return true;
 
@@ -393,6 +400,9 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         }
     }
 
+    /**
+     * Gets associations that are registered by the user and applies them to the interface if they exist
+     */
     private void loadAssociations() {
 
         //They don't exist, create new ones
