@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,10 +36,12 @@ import pt.up.fe.alpha.labtablet.api.ChangelogManager;
 import pt.up.fe.alpha.labtablet.async.AsyncAuthenticator;
 import pt.up.fe.alpha.labtablet.async.AsyncProfileLoader;
 import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.models.AssociationItem;
 import pt.up.fe.alpha.labtablet.models.ChangelogItem;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
+import pt.up.fe.alpha.labtablet.models.Dictionary;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
 public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<ArrayList<Descriptor>> {
@@ -133,7 +136,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         return rootView;
     }
 
-    private void setupLayout(View rootView) {
+    private void setupLayout(final View rootView) {
         Button bt_gps_edit = (Button) rootView.findViewById(R.id.bt_kml_edit);
         Button bt_jpg_edit = (Button) rootView.findViewById(R.id.bt_jpg_edit);
         Button bt_mp3_edit = (Button) rootView.findViewById(R.id.bt_mp3_edit);
@@ -284,7 +287,6 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                         editor.putString(Utils.DENDRO_CONFS_ENTRY, new Gson().toJson(conf, DendroConfiguration.class));
                         editor.apply();
 
-                        //TODO: address this issue
                         bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null, getResources().getDrawable(R.drawable.ic_check), null, null);
                         Toast.makeText(getActivity(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
@@ -298,7 +300,6 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
 
                         Log.e("AUTH", "" + error.getMessage());
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                        //TODO: address this issue
                         bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null, getResources().getDrawable(R.drawable.ab_cross), null, null);
                     }
@@ -314,15 +315,51 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         bt_dic_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO:
+                //WARN: implement async task to load the settings if needed. Doesn't seem to be the case though
+
             }
         });
 
         bt_dic_edit.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                //TODO:
-                return true;
+                //WARN: implement async task to load the settings if needed. Doesn't seem to be the case though
+                BufferedReader reader = null;
+                try {
+                    reader = new BufferedReader(
+                            new InputStreamReader(getActivity().getAssets().open("base_dictionary.json")));
+
+                    // do reading, usually loop until end of file reading
+                    String content = "";
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        content += line;
+                    }
+
+                    Dictionary dictionary = new Gson().fromJson(content, Dictionary.class);
+                    FavoriteMgr.updateApplicationDictionary(dictionary, getActivity());
+
+                    String formattedEntries = getString(R.string.loaded_entries_header);
+                    for (String entry : dictionary.getItems().keySet()) {
+                        formattedEntries += entry + "\n";
+                    }
+
+                    ((TextView) rootView.findViewById(R.id.dictionary_entries_list)).setText(formattedEntries);
+                    Toast.makeText(getActivity(), R.string.success, Toast.LENGTH_SHORT).show();
+                    return true;
+
+                } catch (IOException e) {
+                    Toast.makeText(getActivity(), R.string.load_file_failed, Toast.LENGTH_SHORT).show();
+                    return true;
+                } finally {
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            Toast.makeText(getActivity(), R.string.load_file_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
             }
         });
     }
@@ -362,6 +399,9 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         }
     }
 
+    /**
+     * Gets associations that are registered by the user and applies them to the interface if they exist
+     */
     private void loadAssociations() {
 
         //They don't exist, create new ones

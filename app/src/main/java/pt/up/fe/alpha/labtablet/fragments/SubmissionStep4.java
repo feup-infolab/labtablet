@@ -3,6 +3,7 @@ package pt.up.fe.alpha.labtablet.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.activities.SubmissionValidationActivity;
@@ -119,8 +119,7 @@ public class SubmissionStep4 extends Fragment {
                         }
                         FloatingActionButton fab = new FloatingActionButton(getActivity());
                         fab.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ab_pulse));
-                        fab.setElevationCompat(15f);
-                        fab.show(true);
+                        fab.show();
 
 
                         tv_progress_status.setText(value.getMessage());

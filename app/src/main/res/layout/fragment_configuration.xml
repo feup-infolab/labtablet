@@ -478,6 +478,16 @@
                     android:text="@string/dictionary_configurations_description"
                     />
 
+                <TextView
+                    android:id="@+id/dictionary_entries_list"
+                    android:layout_width="fill_parent"
+                    android:padding="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-thin"
+                    android:text=""
+                    />
+
                 <View
                     android:id="@+id/dictionary_configurations_load"
                     android:layout_width="fill_parent"

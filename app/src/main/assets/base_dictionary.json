@@ -3,6 +3,6 @@
     "Collaborators": ["Alberto Caeiro", "Ron Swanson", "Gustav Mahler", "Salvador Dali", "Ricardo Amorim"],
     "Class": ["Acanthocephala", "Acoelomorpha", "Annelida", "Arthropoda", "Chelicerata", "Crustacea", "Hexapoda", "Myriapoda", "Brachiopoda", "Bryozoa", "Chaetognatha", "Chordata", "Cephalochordata", "Tunicata", "Vertebrata", "Cnidaria"],
     "Kingdom": ["Bacteria", "Archaea", "Protozoa", "Chromista", "Platae", "Fungi", "Animalia"],
-    "Phylum": ["Arthropoda", "Chordata", "Echinodermata", "Mollusca", "Porifera", "Rhombozoa"]
+    "Phylum": ["Arthropoda", "Chordata", "Echinodermata", "Mollusca", "Porifera", "Rhombozoa"],
   }
 }

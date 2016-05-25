@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.models.DataItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
+import pt.up.fe.alpha.labtablet.models.Dictionary;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
@@ -144,5 +145,25 @@ public class FavoriteMgr {
             editor.remove(entryName);
             editor.putString(entryName, new Gson().toJson(item, FavoriteItem.class));
             editor.commit();
+    }
+
+    /**
+     * Updates the application dictionary (set of closed vocabulary entries, global to the app)
+     * @param dictionary the input dictionary
+     * @param context activity or context to access SharedPreferences object
+     */
+    public static void updateApplicationDictionary(Dictionary dictionary, Context context) {
+        SharedPreferences settings = context.getSharedPreferences(
+                context.getResources().getString(R.string.app_name),
+                Context.MODE_PRIVATE);
+
+        if (settings.contains(Utils.DICTIONARY_ENTRY)) {
+            Log.i("OVERWRITE", "Dictionary entry will be updated");
+        }
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(Utils.DICTIONARY_ENTRY);
+        editor.putString(Utils.DICTIONARY_ENTRY, new Gson().toJson(dictionary, Dictionary.class));
+        editor.apply();
     }
 }

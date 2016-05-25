@@ -6,10 +6,10 @@ package pt.up.fe.alpha.labtablet.async;
  */
 public interface AsyncTaskHandler<T> {
 
-	public void onSuccess(T result);
+	void onSuccess(T result);
 
-	public void onFailure(Exception error);
+	void onFailure(Exception error);
 	
-	public void onProgressUpdate(int value);
+	void onProgressUpdate(int value);
 
 }
