@@ -287,7 +287,6 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                         editor.putString(Utils.DENDRO_CONFS_ENTRY, new Gson().toJson(conf, DendroConfiguration.class));
                         editor.apply();
 
-                        //TODO: address this issue
                         bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null, getResources().getDrawable(R.drawable.ic_check), null, null);
                         Toast.makeText(getActivity(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
@@ -301,7 +300,6 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
 
                         Log.e("AUTH", "" + error.getMessage());
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                        //TODO: address this issue
                         bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 null, getResources().getDrawable(R.drawable.ab_cross), null, null);
                     }
@@ -317,6 +315,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         bt_dic_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //WARN: implement async task to load the settings if needed. Doesn't seem to be the case though
 
             }
         });
@@ -324,7 +323,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         bt_dic_edit.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                //implement async task to load the settings if needed
+                //WARN: implement async task to load the settings if needed. Doesn't seem to be the case though
                 BufferedReader reader = null;
                 try {
                     reader = new BufferedReader(
