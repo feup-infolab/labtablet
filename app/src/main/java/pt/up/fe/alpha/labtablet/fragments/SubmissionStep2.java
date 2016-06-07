@@ -146,6 +146,11 @@ public class SubmissionStep2 extends Fragment implements OnItemClickListener {
         builder.show();
     }
 
+    @Override
+    public void onDeleteRequested(View view, int position) {
+        Toast.makeText(getActivity(), "DELETION NOT IMPLEMENTED HERE YET (SubmissionStep2)", Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {

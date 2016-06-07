@@ -5,6 +5,7 @@
         AppBaseTheme from BOTH res/values/styles.xml and
         res/values-v11/styles.xml on API 14+ devices.
     -->
+
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowBackground">@color/light_gray</item>
         <item name="android:spinnerDropDownItemStyle">@style/LabTabletDropDownStyle</item>
@@ -15,19 +16,17 @@
         <item name="android:textColorHint">@color/second_grey</item>
         <item name="android:textColorHighlight">@color/text_blue_grey</item>
         <item name="android:textColor">@color/primary_dark</item>
-
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorAccent">@color/fab_color</item>
-
         <item name="android:actionBarStyle">@style/MyActionBar</item>
-
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
     </style>
+
 
     <style name="LabTabletDropDownStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/white</item>

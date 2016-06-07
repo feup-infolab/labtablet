@@ -88,6 +88,12 @@ public class ListFormFragment extends Fragment {
                 builder.show();
 
             }
+
+            @Override
+            public void onDeleteRequested(View view, int position) {
+
+                Toast.makeText(getActivity(), "DELETION NOT IMPLEMENTED HERE YET (ListFormFragment)", Toast.LENGTH_SHORT).show();
+            }
         };
 
         adapter = new BaseFormListAdapter(items,

@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -52,6 +53,9 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     private View rootView;
 
     private AlertDialog alertDialog;
+
+    private DataListAdapter dataListAdapter;
+    private MetadataListAdapter metadataListAdapter;
 
     public FavoriteViewFragment() {
         // Required empty public constructor
@@ -141,13 +145,13 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
 
-        DataListAdapter mAdapter = new DataListAdapter(items, this, getActivity());
-        itemList.setAdapter(mAdapter);
+        dataListAdapter = new DataListAdapter(items, this, getActivity());
+        itemList.setAdapter(dataListAdapter);
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     /**
-     * Attaches the view for the exising descriptors
+     * Attaches the view for the existing descriptors
      * @param items favorite's descriptors
      */
     private void bindMetaDataView(ArrayList<Descriptor> items) {
@@ -159,8 +163,8 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
 
-        MetadataListAdapter mAdapter = new MetadataListAdapter(items, this, getActivity());
-        itemList.setAdapter(mAdapter);
+        metadataListAdapter = new MetadataListAdapter(items, this, getActivity());
+        itemList.setAdapter(metadataListAdapter);
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
@@ -237,6 +241,11 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                     public void onItemLongClick(View view, int position) {
 
                     }
+
+                    @Override
+                    public void onDeleteRequested(View view, int position) {
+                        Toast.makeText(getActivity(), "DELETE FORM NOT IMPLEMENTED YET", Toast.LENGTH_SHORT).show();
+                    }
                 }));
 
                 dialogBuilder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
@@ -257,7 +266,27 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     }
 
     @Override
-    public void onItemLongClick(View view, int position) {}
+    public void onItemLongClick(View view, int position) {
+        Log.e("LCLICK","" + position);
+    }
+
+    @Override
+    public void onDeleteRequested(View view, int position) {
+        switch (mCurrentTag) {
+            case "metadata":
+                if (position <= metadataItems.size()) {
+                    metadataItems.remove(position);
+                    metadataListAdapter.notifyItemRemoved(position);
+                }
+                break;
+            case "data":
+                if (position <= dataItems.size()) {
+                    dataItems.remove(position);
+                    dataListAdapter.notifyItemRemoved(position);
+                }
+                break;
+        }
+    }
 
 
     private class FormInstancesListAdapter extends RecyclerView.Adapter<FormInstancesListAdapter.FormInstanceVH> {

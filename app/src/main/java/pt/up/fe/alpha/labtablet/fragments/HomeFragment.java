@@ -39,8 +39,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        Typeface fancyFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/LobsterTwo-Regular.ttf");
-        ((TextView)(rootView.findViewById(R.id.tv_home))).setTypeface(fancyFont);
+        //Typeface fancyFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/LobsterTwo-Regular.ttf");
+        //((TextView)(rootView.findViewById(R.id.tv_home))).setTypeface(fancyFont);
 
         ArrayList<HomeTip> items = new ArrayList<>();
         HomeTip profileStatus = new HomeTip();

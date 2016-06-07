@@ -470,66 +470,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         onResume();
     }
 
-    private class dcClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(FavoriteDetailsActivity.this);
-            builder.setTitle("New value");
-
-            // Set up the input
-            final EditText input = new EditText(FavoriteDetailsActivity.this);
-            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            builder.setView(input);
-            builder.setMessage(getResources().getString(R.string.update_name_instructions));
-
-            if (view.getTag().equals(Utils.TITLE_TAG)) {
-                input.setText(currentItem.getTitle());
-            } else {
-                input.setText(mToolbar.getSubtitle());
-            }
-
-            // Set up the buttons
-            builder.setPositiveButton(getResources().getString(R.string.form_ok), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (input.getText().toString().equals("")) {
-                        Toast.makeText(FavoriteDetailsActivity.this, "Unchanged", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    //Update favorite's name (and DB entries ofc)
-                    //TODO: move this
-                    /*
-                    if (mView.getTag().equals(Utils.TITLE_TAG)) {
-                        if (!currentItem.getTitle().equals(input.getText().toString())) {
-                            if (FileMgr.renameFavorite(favoriteName,
-                                    input.getText().toString(),
-                                    getActivity())) {
-                                Toast.makeText(getActivity(), "Successfully updated name", Toast.LENGTH_LONG).show();
-                                favoriteName = input.getText().toString();
-                                currentItem.setTitle(favoriteName);
-                                tv_title.setText(favoriteName);
-                            }
-                        }
-                    }*/
-                    onResume();
-                    dialog.dismiss();
-                }
-            });
-
-            builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-
-            builder.show();
-        }
-    }
-
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         currentItem = FavoriteMgr.getFavorite(this, currentItem.getTitle());

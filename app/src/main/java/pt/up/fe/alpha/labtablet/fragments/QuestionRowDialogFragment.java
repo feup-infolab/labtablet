@@ -132,6 +132,12 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
         Toast.makeText(getActivity(), "LONG TOUCHÉ", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onDeleteRequested(View view, int position) {
+
+        Toast.makeText(getActivity(), "DELETION NOT IMPLEMENTED HERE YET (QuestionRowDialogFramgment)", Toast.LENGTH_SHORT).show();
+    }
+
     private class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapter.FormInstanceVH> {
         private final ArrayList<String> rows;
         private OnItemClickListener listener;

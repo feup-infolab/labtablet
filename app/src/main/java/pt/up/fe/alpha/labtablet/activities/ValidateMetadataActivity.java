@@ -244,4 +244,9 @@ public class ValidateMetadataActivity extends AppCompatActivity implements OnIte
         builder.show();
     }
 
+    @Override
+    public void onDeleteRequested(View view, int position) {
+        Toast.makeText(this, "DELETION NOT IMPLEMENTED HERE YET", Toast.LENGTH_SHORT).show();
+    }
+
 }

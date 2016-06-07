@@ -114,7 +114,7 @@ public class MetadataListAdapter extends RecyclerView.Adapter<MetadataListAdapte
             actionDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onItemLongClick(view, getPosition());
+                    listener.onDeleteRequested(view, getPosition());
                 }
             });
             return true;

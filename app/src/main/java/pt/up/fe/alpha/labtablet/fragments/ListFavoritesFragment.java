@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -59,6 +60,12 @@ public class ListFavoritesFragment extends Fragment {
             @Override
             public void onItemLongClick(View view, int position) {
                 // anything to consider here?
+            }
+
+            @Override
+            public void onDeleteRequested(View view, int position) {
+
+                Toast.makeText(getActivity(), "DELETION NOT IMPLEMENTED HERE YET (listFavoritesFragment)", Toast.LENGTH_SHORT).show();
             }
         };
 
