@@ -334,6 +334,8 @@
     <string name="dictionary_configurations_description">Dictionaries are sets of frequently used terms that can assist you when filling out some descriptions throughout the project. They can be, for instance, a list of your collaborators\' full names, or a list of species that are frequently seen.</string>
     <string name="dictionary_configurations_load">Load file</string>
     <string name="loaded_entries_header">Entradas carregadas:\n</string>
+    <string name="seabio_authenticate_error">Unable to authenticate. Try again?</string>
+    <string name="seabio_error_dictionary">Error loading data. Try again?</string>
     <!-- /TTS sentences -->
 
     <string-array name="home_tips">

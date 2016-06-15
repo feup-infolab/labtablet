@@ -358,6 +358,108 @@
             android:padding="5dp"
             />
 
+
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:id="@+id/dictionary_setup_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rl_mp3"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:textColor="@color/list_background_pressed"
+                    android:gravity="center"
+                    android:layout_width="fill_parent"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dictionary_configurations_title"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dictionary_configurations_description"
+                    />
+
+                <TextView
+                    android:id="@+id/dictionary_entries_list"
+                    android:layout_width="fill_parent"
+                    android:padding="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-thin"
+                    android:text=""
+                    />
+
+                <LinearLayout
+                    android:padding="5dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/seabio_configurations_address"
+                        android:layout_width="fill_parent"
+                        android:textColor="@android:color/black"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@android:drawable/ic_menu_directions"
+                        android:text="http://sensorix.inescporto.pt:3000"
+                        android:inputType="textUri"
+                        />
+
+                    <EditText
+                        android:id="@+id/seabio_configurations_username"
+                        android:layout_width="fill_parent"
+                        android:textColor="@android:color/black"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@android:drawable/ic_menu_myplaces"
+                        android:hint="Username"
+                        android:text="admin"
+                        />
+
+                    <EditText
+                        android:id="@+id/seabio_configurations_password"
+                        android:layout_width="fill_parent"
+                        android:textColor="@android:color/black"
+                        android:layout_height="wrap_content"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:text="admin"
+                        />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/dictionary_configurations_load"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/darker_gray"
+                    />
+
+                <Button
+                    android:id="@+id/bt_dictionary_load"
+                    android:text="@string/dictionary_configurations_load"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:textAllCaps="true"
+                    />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
         <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -370,7 +472,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rl_mp3"
-                android:padding="10dp"
+                android:padding="5dp"
                 >
 
                 <Button
@@ -447,66 +549,6 @@
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="20dp">
-
-            <LinearLayout
-                android:id="@+id/dictionary_setup_layout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/rl_mp3"
-                android:orientation="vertical"
-                >
-
-                <TextView
-                    android:textColor="@color/list_background_pressed"
-                    android:gravity="center"
-                    android:layout_width="fill_parent"
-                    android:padding="10dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dictionary_configurations_title"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:padding="10dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dictionary_configurations_description"
-                    />
-
-                <TextView
-                    android:id="@+id/dictionary_entries_list"
-                    android:layout_width="fill_parent"
-                    android:padding="5dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-thin"
-                    android:text=""
-                    />
-
-                <View
-                    android:id="@+id/dictionary_configurations_load"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray"
-                    />
-
-                <Button
-                    android:id="@+id/bt_dictionary_load"
-                    android:text="@string/dictionary_configurations_load"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:textAllCaps="true"
-                    />
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
 
         <Button
             android:id="@+id/bt_feedback"

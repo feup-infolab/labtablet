@@ -18,8 +18,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,10 +38,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.activities.DescriptorPickerActivity;
 import pt.up.fe.alpha.labtablet.api.ChangelogManager;
+import pt.up.fe.alpha.labtablet.application.LabTablet;
 import pt.up.fe.alpha.labtablet.async.AsyncAuthenticator;
 import pt.up.fe.alpha.labtablet.async.AsyncProfileLoader;
 import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
@@ -60,6 +72,8 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
     private EditText et_conf_password;
     private EditText et_conf_address;
     private Button bt_save_dendro_confs;
+    private Button bt_dic_edit;
+
 
     private SharedPreferences.Editor editor;
     private SharedPreferences settings;
@@ -140,7 +154,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         Button bt_gps_edit = (Button) rootView.findViewById(R.id.bt_kml_edit);
         Button bt_jpg_edit = (Button) rootView.findViewById(R.id.bt_jpg_edit);
         Button bt_mp3_edit = (Button) rootView.findViewById(R.id.bt_mp3_edit);
-        Button bt_dic_edit = (Button) rootView.findViewById(R.id.bt_dictionary_load);
+        bt_dic_edit = (Button) rootView.findViewById(R.id.bt_dictionary_load);
 
         bt_clear_association = (Button) rootView.findViewById(R.id.bt_clear_associations);
         bt_file = (Button) rootView.findViewById(R.id.bt_file_path);
@@ -315,8 +329,70 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         bt_dic_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //WARN: implement async task to load the settings if needed. Doesn't seem to be the case though
+                //Check if user input is valid
+                final EditText etUsername = (EditText) rootView.findViewById(R.id.seabio_configurations_username);
+                final EditText etPassword = (EditText) rootView.findViewById(R.id.seabio_configurations_password);
+                final EditText etURL = (EditText) rootView.findViewById(R.id.seabio_configurations_address);
 
+                if (etUsername.getText().toString().isEmpty()) {
+                    etUsername.setError(getString(R.string.required));
+                    return;
+                }
+
+                if (etPassword.getText().toString().isEmpty()) {
+                    etPassword.setError(getString(R.string.required));
+                    return;
+                }
+
+                if (etURL.getText().toString().isEmpty()) {
+                    etURL.setError(getString(R.string.required));
+                    return;
+                }
+
+                String baseQuery = etURL.getText().toString() + "/signin?";
+                Uri builtUri = Uri.parse(baseQuery)
+                        .buildUpon()
+                        .appendQueryParameter("username", etUsername.getText().toString())
+                        .appendQueryParameter("password", etPassword.getText().toString())
+                        .build();
+
+
+                bt_dic_edit.setText(getString(R.string.loading));
+
+                //Async request for token
+                JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, builtUri.toString(), null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    VolleyLog.v("Response:%n %s", response.toString(4));
+                                    if (!response.get("status").equals("success")) {
+                                        bt_dic_edit.setText(getString(R.string.seabio_authenticate_error));
+                                        bt_dic_edit.setError("");
+                                        return;
+                                    }
+
+                                    //Load users (and more?)
+                                    Request<JSONObject> request = getEntriesLoader(etURL.getText().toString(),
+                                            ((JSONObject)response.get("data")).get("token").toString());
+
+                                    LabTablet.getInstance().addToRequestQueue(request);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.e("Error: ", error.getMessage());
+                        bt_dic_edit.setText(getString(R.string.seabio_authenticate_error));
+                        bt_dic_edit.setError("");
+                    }
+                });
+
+                // add the request object to the queue to be executed
+                LabTablet.getInstance().addToRequestQueue(req);
             }
         });
 
@@ -362,6 +438,47 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                 }
             }
         });
+    }
+
+    /**
+     * Creates a Json request to load the specified entries
+     * @param baseUri URI to post to
+     * @param token authentication token
+     * @return the json request for fetching the input entries
+     */
+    private Request<JSONObject> getEntriesLoader(String baseUri, final String token) {
+
+        String baseQuery = baseUri + "/api/users";
+
+        return new JsonObjectRequest(baseQuery, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                            bt_dic_edit.setText(getString(R.string.success));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            bt_dic_edit.setText(getString(R.string.seabio_error_dictionary));
+                            bt_dic_edit.setError("");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+
+                bt_dic_edit.setText(getString(R.string.seabio_error_dictionary));
+                bt_dic_edit.setError("");
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("x-access-token", token);
+                return params;
+            }
+        };
     }
 
     @Override
