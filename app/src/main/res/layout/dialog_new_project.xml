@@ -61,7 +61,6 @@
                 android:hint="@string/new_project_description_hint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="120dp"
                 >
             </EditText>
         </LinearLayout>

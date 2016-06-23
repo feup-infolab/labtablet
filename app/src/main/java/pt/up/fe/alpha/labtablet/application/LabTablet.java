@@ -9,6 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 
+import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
@@ -49,7 +50,7 @@ public class LabTablet extends Application {
         mInstance = this;
 
         // The following line triggers the initialization of ACRA
-        //ACRA.init(this);
+        ACRA.init(this);
     }
 
 

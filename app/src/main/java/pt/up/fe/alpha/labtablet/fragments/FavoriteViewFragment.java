@@ -283,7 +283,6 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         }
     }
 
-
     private class FormInstancesListAdapter extends RecyclerView.Adapter<FormInstancesListAdapter.FormInstanceVH> {
         private final ArrayList<FormInstance> instances;
         private OnItemClickListener listener;
