@@ -469,6 +469,30 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         onResume();
     }
 
+    /**
+     * Handles data item removal from the fragment
+     * @param items updated items for the active favorite
+     */
+    public void notifyDataItemRemoved(ArrayList<DataItem> items) {
+        FavoriteItem item =  FavoriteMgr.getFavorite(this, favoriteName);
+        item.setDataItems(items);
+        FavoriteMgr.updateFavoriteEntry(favoriteName, item, this);
+        Toast.makeText(this, "Instance removed", Toast.LENGTH_SHORT).show();
+        onResume();
+    }
+
+    /**
+     * Handles metadata item removal from the fragment
+     * @param items updated items for the active favorite
+     */
+    public void notifyMetadataItemRemoved(ArrayList<Descriptor> items) {
+        FavoriteItem item =  FavoriteMgr.getFavorite(this, favoriteName);
+        item.setMetadataItems(items);
+        FavoriteMgr.updateFavoriteEntry(favoriteName, item, this);
+        Toast.makeText(this, "Instance removed", Toast.LENGTH_SHORT).show();
+        onResume();
+    }
+
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         currentItem = FavoriteMgr.getFavorite(this, currentItem.getTitle());

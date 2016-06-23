@@ -16,7 +16,7 @@
     <application
         android:allowBackup="true"
         android:screenOrientation="portrait"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_launcher_sbd"
         android:label="@string/app_name"
         android:theme="@style/AppBaseTheme"
         android:name=".labtablet.application.LabTablet"

@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,13 +30,10 @@ import pt.up.fe.alpha.labtablet.adapters.DataListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.FormListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
-import pt.up.fe.alpha.labtablet.db_handlers.FormMgr;
 import pt.up.fe.alpha.labtablet.models.DataItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
-import pt.up.fe.alpha.labtablet.models.Form;
 import pt.up.fe.alpha.labtablet.models.FormInstance;
-import pt.up.fe.alpha.labtablet.utils.FileMgr;
 import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
@@ -105,8 +100,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
         mCurrentTag = args.getString("current_tag");
         assert mCurrentTag != null;
-        switch (mCurrentTag){
-
+        switch (mCurrentTag) {
             case "data":
                 dataItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<DataItem>>(){}.getType());
                 bindDataView(dataItems);
@@ -222,7 +216,6 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 View dialogView = inflater.inflate(R.layout.alert_form_instances_list, null);
                 dialogBuilder.setView(dialogView);
 
-                //EditText editText = (EditText) dialogView.findViewById(R.id.label_field);
                 RecyclerView instancesList = (RecyclerView) dialogView.findViewById(R.id.form_instances_list);
                 final String baseFormName = (new ArrayList<>(groupedForms.keySet())).get(position);
 
@@ -277,12 +270,14 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 if (position <= metadataItems.size()) {
                     metadataItems.remove(position);
                     metadataListAdapter.notifyItemRemoved(position);
+                    ((FavoriteDetailsActivity) getActivity()).notifyMetadataItemRemoved(metadataItems);
                 }
                 break;
             case "data":
                 if (position <= dataItems.size()) {
                     dataItems.remove(position);
                     dataListAdapter.notifyItemRemoved(position);
+                    ((FavoriteDetailsActivity) getActivity()).notifyDataItemRemoved(dataItems);
                 }
                 break;
         }
