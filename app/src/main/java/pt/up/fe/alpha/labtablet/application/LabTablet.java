@@ -50,7 +50,7 @@ public class LabTablet extends Application {
         mInstance = this;
 
         // The following line triggers the initialization of ACRA
-        ACRA.init(this);
+        //ACRA.init(this);
     }
 
 
@@ -81,7 +81,8 @@ public class LabTablet extends Application {
 
     public <T> void addToRequestQueue(Request<T> req) {
         // set the default tag if tag is empty
-        req.setTag(TAG);
+        if (null == req.getTag())
+            req.setTag(TAG);
 
         getRequestQueue().add(req);
     }

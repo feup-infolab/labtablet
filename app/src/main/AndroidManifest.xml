@@ -11,7 +11,12 @@
     <uses-permission android:name="android.permission.READ_LOGS"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.NFC" />
 
+    <!-- NFC requirement should be evaluated in code -->
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -35,15 +40,18 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW"/>
+                <data android:mimeType="application/zip" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".labtablet.activities.FavoriteDetailsActivity"
             android:theme="@style/AppBaseTheme"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_favorite_detail" />
+            android:label="@string/title_activity_favorite_detail">
+        </activity>
 
         <activity
             android:name=".labtablet.activities.DescriptorPickerActivity"

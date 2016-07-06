@@ -26,6 +26,10 @@ import pt.up.fe.alpha.labtablet.models.Form;
 
 public class Utils {
 
+    //SEABIODATA
+    public static final String TAG_SBD_USERNAME = "sbd_username";
+    public static final String TAG_SBD_CAMPAIGNS = "sbd_campaigns";
+
     //Contextual tags that will make the associated descriptor to be suggested
     //when the context applies
     public static final String AUDIO_TAGS = "audio";
@@ -110,6 +114,7 @@ public class Utils {
     public static final int PICK_FILE_INTENT = 8;
     //Record a video
     public static final int VIDEO_CAPTURE_REQUEST = 10;
+
 
 
     public static String getDate() {

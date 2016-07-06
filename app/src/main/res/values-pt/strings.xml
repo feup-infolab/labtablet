@@ -336,6 +336,12 @@
     <string name="loaded_entries_header">Entradas carregadas:\n</string>
     <string name="seabio_authenticate_error">Unable to authenticate. Try again?</string>
     <string name="seabio_error_dictionary">Error loading data. Try again?</string>
+    <string name="import_favorite">Do you wish to import this favorite to your list?</string>
+    <string name="unable_import_favorite">Unable to import this project. Please contact the supervisor.</string>
+    <string name="import_dataset">Import</string>
+    <string name="seabio_json_error">Unable to parse response</string>
+    <string name="authenticate">Authenticate credentials</string>
+    <string name="update">Update</string>
     <!-- /TTS sentences -->
 
     <string-array name="home_tips">

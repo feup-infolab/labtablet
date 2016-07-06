@@ -23,7 +23,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 
@@ -72,7 +71,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
     private EditText et_conf_password;
     private EditText et_conf_address;
     private Button bt_save_dendro_confs;
-    private Button bt_dic_edit;
+    private Button bt_sbd_username;
 
 
     private SharedPreferences.Editor editor;
@@ -154,7 +153,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         Button bt_gps_edit = (Button) rootView.findViewById(R.id.bt_kml_edit);
         Button bt_jpg_edit = (Button) rootView.findViewById(R.id.bt_jpg_edit);
         Button bt_mp3_edit = (Button) rootView.findViewById(R.id.bt_mp3_edit);
-        bt_dic_edit = (Button) rootView.findViewById(R.id.bt_dictionary_load);
+        bt_sbd_username = (Button) rootView.findViewById(R.id.bt_sbd_authenticate_user);
 
         bt_clear_association = (Button) rootView.findViewById(R.id.bt_clear_associations);
         bt_file = (Button) rootView.findViewById(R.id.bt_file_path);
@@ -243,6 +242,10 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
             }
         }
 
+        if (settings.contains(Utils.TAG_SBD_USERNAME)) {
+            bt_sbd_username.setText(getString(R.string.update));
+        }
+
         bt_save_dendro_confs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -274,7 +277,6 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                 editor.putString(Utils.DENDRO_CONFS_ENTRY, new Gson().toJson(conf, DendroConfiguration.class));
                 editor.apply();
 
-                //TODO: address this issue
                 bt_save_dendro_confs.setCompoundDrawablesRelativeWithIntrinsicBounds(
                         null, getResources().getDrawable(R.drawable.ic_wait), null, null);
 
@@ -326,7 +328,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
             }
         });
 
-        bt_dic_edit.setOnClickListener(new View.OnClickListener() {
+        bt_sbd_username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Check if user input is valid
@@ -352,51 +354,64 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                 String baseQuery = etURL.getText().toString() + "/signin?";
                 Uri builtUri = Uri.parse(baseQuery)
                         .buildUpon()
-                        .appendQueryParameter("username", etUsername.getText().toString())
-                        .appendQueryParameter("password", etPassword.getText().toString())
                         .build();
 
-
-                bt_dic_edit.setText(getString(R.string.loading));
+                bt_sbd_username.setText(getString(R.string.loading));
 
                 //Async request for token
-                JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, builtUri.toString(), null,
-                        new Response.Listener<JSONObject>() {
+                final StringRequest req = new StringRequest(Request.Method.POST, builtUri.toString(),
+                        new Response.Listener<String>() {
                             @Override
-                            public void onResponse(JSONObject response) {
+                            public void onResponse(String response) {
+                                Toast.makeText(getActivity(), response,Toast.LENGTH_LONG).show();
+
                                 try {
-                                    VolleyLog.v("Response:%n %s", response.toString(4));
-                                    if (!response.get("status").equals("success")) {
-                                        bt_dic_edit.setText(getString(R.string.seabio_authenticate_error));
-                                        bt_dic_edit.setError("");
+                                    JSONObject responseObj = new JSONObject(response);
+                                    if (!responseObj.get("status").equals("success")) {
+                                        bt_sbd_username.setText(getString(R.string.seabio_authenticate_error));
+                                        bt_sbd_username.setError("");
                                         return;
                                     }
 
-                                    //Load users (and more?)
-                                    Request<JSONObject> request = getEntriesLoader(etURL.getText().toString(),
-                                            ((JSONObject)response.get("data")).get("token").toString());
+                                    String username = ((JSONObject)responseObj.get("data")).get("name").toString();
 
-                                    LabTablet.getInstance().addToRequestQueue(request);
+                                    SharedPreferences.Editor editor = settings.edit();
+                                    if (settings.contains(Utils.TAG_SBD_USERNAME)) {
+                                        editor.remove(Utils.TAG_SBD_USERNAME);
+                                    }
+                                    editor.putString(Utils.TAG_SBD_USERNAME, username);
+                                    editor.apply();
+                                    bt_sbd_username.setText(getString(android.R.string.ok));
 
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    bt_sbd_username.setText(getString(R.string.seabio_json_error));
+                                    bt_sbd_username.setError("");
                                 }
                             }
-                        }, new Response.ErrorListener() {
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                VolleyLog.e("Error: ", error.getMessage());
+                                bt_sbd_username.setText(getString(R.string.seabio_authenticate_error));
+                                bt_sbd_username.setError("");
+                            }
+                        }){
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        VolleyLog.e("Error: ", error.getMessage());
-                        bt_dic_edit.setText(getString(R.string.seabio_authenticate_error));
-                        bt_dic_edit.setError("");
+                    protected Map<String,String> getParams(){
+                        Map<String,String> params = new HashMap<>();
+                        params.put("username", etUsername.getText().toString());
+                        params.put("password",etPassword.getText().toString());
+                        return params;
                     }
-                });
+                };
 
                 // add the request object to the queue to be executed
                 LabTablet.getInstance().addToRequestQueue(req);
             }
         });
 
-        bt_dic_edit.setOnLongClickListener(new View.OnLongClickListener() {
+        bt_sbd_username.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 //WARN: implement async task to load the settings if needed. Doesn't seem to be the case though
@@ -441,44 +456,45 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
     }
 
     /**
-     * Creates a Json request to load the specified entries
-     * @param baseUri URI to post to
+     * Sets up an array of requests based on the required entries
+     * @param baseUri base uri for the server where the requests should get the data from
      * @param token authentication token
-     * @return the json request for fetching the input entries
+     * @return an array of requests, according to the entries that are required
      */
-    private Request<JSONObject> getEntriesLoader(String baseUri, final String token) {
+    private ArrayList<StringRequest> setupEntriesRequestQueue(String baseUri, final String token) {
 
-        String baseQuery = baseUri + "/api/users";
+        ArrayList<StringRequest> requests = new ArrayList<>();
+        String[] entries = {"campaigns", "locations", "users"};
 
-        return new JsonObjectRequest(baseQuery, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            VolleyLog.v("Response:%n %s", response.toString(4));
-                            bt_dic_edit.setText(getString(R.string.success));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            bt_dic_edit.setText(getString(R.string.seabio_error_dictionary));
-                            bt_dic_edit.setError("");
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.e("Error: ", error.getMessage());
+        for (String entry : entries) {
 
-                bt_dic_edit.setText(getString(R.string.seabio_error_dictionary));
-                bt_dic_edit.setError("");
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> params = new HashMap<>();
-                params.put("x-access-token", token);
-                return params;
-            }
-        };
+            StringRequest entryRequest = new StringRequest(baseUri + "/api/" + entry  + "?token=" + token, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.e("Error: ", error.getMessage());
+
+                    bt_sbd_username.setText(getString(R.string.seabio_error_dictionary));
+                    bt_sbd_username.setError("");
+                }
+            }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> params = new HashMap<>();
+                    params.put("token", token);
+                    return params;
+                }
+            };
+
+            entryRequest.setTag(entry);
+            requests.add(entryRequest);
+        }
+
+        return requests;
     }
 
     @Override
@@ -570,7 +586,6 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
 
         return mItems;
     }
-
 
     @Override
     public void onSuccess(ArrayList<Descriptor> result) {

@@ -6,4 +6,11 @@
         android:title="@string/new_dataset_item"
         app:showAsAction="always"
         />
+
+    <item
+        android:id="@+id/action_import_dataset"
+        android:icon="@android:drawable/radiobutton_off_background"
+        android:title="@string/import_dataset"
+        app:showAsAction="always"
+        />
 </menu>

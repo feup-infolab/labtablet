@@ -27,7 +27,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.alpha.R;
-import pt.up.fe.alpha.labtablet.api.ChangelogManager;
+import pt.up.fe.alpha.labtablet.async.AsyncFavoriteSetup;
+import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.fragments.ConfigurationFragment;
 import pt.up.fe.alpha.labtablet.fragments.DrawerFragment;
@@ -35,12 +36,11 @@ import pt.up.fe.alpha.labtablet.fragments.HomeFragment;
 import pt.up.fe.alpha.labtablet.fragments.ListChangelogFragment;
 import pt.up.fe.alpha.labtablet.fragments.ListFavoritesFragment;
 import pt.up.fe.alpha.labtablet.fragments.ListFormFragment;
-import pt.up.fe.alpha.labtablet.models.ChangelogItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
-public class MainActivity extends AppCompatActivity implements DrawerFragment.FragmentDrawerListener {
+public class MainActivity extends AppCompatActivity implements DrawerFragment.FragmentDrawerListener  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +67,56 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         drawerFragment.setDrawerListener(this);
 
         displayView(0);
+
+        //Incoming file/favorite?
+        if (getIntent().getData() != null) {
+            //Show dialog to import
+            dispatchImportDialog(getIntent().getData());
+        }
+    }
+
+    /**
+     * Shows a dialog to ask whether the user wants to proceed importing the favorite or not
+     * This should be called when the app is selected to open a zip file
+     * @param data the uri from the intent-filter pointing to the file
+     */
+    private void dispatchImportDialog(final Uri data) {
+
+        File importFile = new File(data.getPath());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                .setTitle(importFile.getName())
+                .setMessage(getString(R.string.import_favorite))
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, int which) {
+                        //extract file to app folder
+                        new AsyncFavoriteSetup(new AsyncTaskHandler<String>() {
+                            @Override
+                            public void onSuccess(String result) {
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void onFailure(Exception error) {
+                                Toast.makeText(MainActivity.this, getString(R.string.unable_import_favorite), Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void onProgressUpdate(int value) {
+
+                            }
+                        }).execute(MainActivity.this, data.getPath());
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(R.drawable.ic_import_contacts_white_48dp)
+                ;
+
+        dialog.show();
     }
 
     @Override
@@ -137,8 +187,6 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         setToolbarVisibile(!tag.equals(getString(R.string.title_home)));
 
         if (fragment != null) {
-            //the favorite creation view should never be added to the back stack
-
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.frame_container, fragment);
@@ -148,7 +196,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             ft.replace(R.id.frame_container, fragment, tag);
             ft.commit();
 
-            getSupportActionBar().setTitle(tag);
+            if (getSupportActionBar() != null)
+                getSupportActionBar().setTitle(tag);
         }
     }
 
@@ -159,16 +208,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
         if (title.equals(getString(R.string.app_name)))
             title = "";
 
-        if (getSupportActionBar() == null) {
-            ChangelogItem item = new ChangelogItem();
-            item.setMessage("MainActivity" + "Couldn't get actionbar. Compatibility mode layout");
-            item.setTitle(getResources().getString(R.string.developer_error));
-            item.setDate(Utils.getDate());
-            ChangelogManager.addLog(item, MainActivity.this);
-        } else {
+        if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(title);
-        }
-
     }
 
 
@@ -292,9 +333,16 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             bar.show();
         else
             bar.hide();
-
-
     }
 
+    //as in https://developer.android.com/training/beam-files/receive-files.html
+    public String handleFileUri(Uri beamUri) {
+        // Get the path part of the URI
+        String fileName = beamUri.getPath();
+        // Create a File object for this filename
+        File copiedFile = new File(fileName);
+        // Get a string containing the file's parent directory
+        return copiedFile.getParent();
+    }
 }
 

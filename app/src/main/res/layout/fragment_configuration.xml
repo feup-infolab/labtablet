@@ -435,7 +435,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Password"
                         android:inputType="textPassword"
-                        android:text="admin"
+                        android:text="seabiodata_inesc"
                         />
 
                 </LinearLayout>
@@ -449,8 +449,8 @@
                     />
 
                 <Button
-                    android:id="@+id/bt_dictionary_load"
-                    android:text="@string/dictionary_configurations_load"
+                    android:id="@+id/bt_sbd_authenticate_user"
+                    android:text="@string/authenticate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
@@ -459,6 +459,8 @@
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
+
 
         <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"

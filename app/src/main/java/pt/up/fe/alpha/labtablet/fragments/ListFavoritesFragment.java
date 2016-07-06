@@ -1,10 +1,12 @@
 package pt.up.fe.alpha.labtablet.fragments;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +27,8 @@ import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.activities.FavoriteDetailsActivity;
 import pt.up.fe.alpha.labtablet.activities.MainActivity;
 import pt.up.fe.alpha.labtablet.adapters.FavoriteListAdapter;
+import pt.up.fe.alpha.labtablet.async.AsyncFavoriteSetup;
+import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.utils.FileMgr;
 import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
@@ -98,6 +102,15 @@ public class ListFavoritesFragment extends Fragment {
             case R.id.action_new_dataset:
                 ((MainActivity)getActivity()).promptProjectCreation();
                 return true;
+
+            case R.id.action_import_dataset:
+                Toast.makeText(getActivity(), getString(R.string.file_select), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("application/zip");
+                startActivityForResult(intent, 1);
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -140,5 +153,28 @@ public class ListFavoritesFragment extends Fragment {
         rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != 1)
+            return;
+
+        new AsyncFavoriteSetup(new AsyncTaskHandler<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+            }
+
+            @Override
+            public void onFailure(Exception error) {
+
+            }
+
+            @Override
+            public void onProgressUpdate(int value) {
+
+            }
+        }).execute(getActivity(), data.getData());
     }
 }
