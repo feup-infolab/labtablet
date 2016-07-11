@@ -239,5 +239,17 @@
    "name":"Topic category",
    "tag":"",
    "value":""
+},{
+   "description":"Species scientific name according to existing taxonomic classifications.",
+   "descriptor":"REMOVE_",
+   "name":"Scientific Name",
+   "tag":"",
+   "value":""
+},{
+   "description":"The temporal coverage defines the time period covered by the content of the resource. This time period may be expressed as any of the following: an individual date, an interval of dates expressed through the starting date and end date of the interval, a mix of individual dates and intervals of dates.",
+   "descriptor":"REMOVE_",
+   "name":"Temporal Coverage",
+   "tag":"",
+   "value":""
 }
 ]

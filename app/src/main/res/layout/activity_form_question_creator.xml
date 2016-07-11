@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             card_view:cardCornerRadius="2dp"
             android:layout_margin="6dp"
-            android:elevation="6dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/ll_question_specify_text"
             >
@@ -72,7 +71,6 @@
             android:layout_height="wrap_content"
             card_view:cardCornerRadius="2dp"
             android:layout_margin="6dp"
-            android:elevation="6dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/ll_question_specify_type"
             android:visibility="gone"

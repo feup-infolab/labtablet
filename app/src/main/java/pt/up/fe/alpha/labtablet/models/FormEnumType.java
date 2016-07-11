@@ -5,5 +5,6 @@ package pt.up.fe.alpha.labtablet.models;
  */
 public enum  FormEnumType {
     FREE_TEXT, MULTIPLE_CHOICE,
-    NUMBER, RANGE, MULTI_INSTANCE_RESPONSE
+    NUMBER, RANGE,
+    MULTI_INSTANCE_RESPONSE, INSTRUCTION
 }

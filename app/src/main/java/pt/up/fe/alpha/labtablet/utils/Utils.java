@@ -23,12 +23,17 @@ import pt.up.fe.alpha.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.Form;
+import pt.up.fe.alpha.labtablet.models.SeaBioData.Data;
 
 public class Utils {
 
     //SEABIODATA
     public static final String TAG_SBD_USERNAME = "sbd_username";
-    public static final String TAG_SBD_CAMPAIGNS = "sbd_campaigns";
+    public static final String TAG_SBD_PASSWORD = "sbd_password";
+    public static final String SBD_ACTIVE_CAMPAIGN = "sbd_active_campaign";
+    public static final String TAG_SBD_URI = "sbd_uri";
+    public static final String SBD_USERS = "sbd_users";
+    public static final String TAG_SBD_PROCEDURES = "sbd_procedures";
 
     //Contextual tags that will make the associated descriptor to be suggested
     //when the context applies
@@ -84,6 +89,8 @@ public class Utils {
     public static final Type ARRAY_DENDRO_METADATA_RECORD = new TypeToken<ArrayList<DendroMetadataRecord>>() {
     }.getType();
     public static final Type ARRAY_FORM = new TypeToken<ArrayList<Form>>() {
+    }.getType();
+    public static final Type ARRAY_SBD_DATA = new TypeToken<ArrayList<Data>>() {
     }.getType();
 
     // ---- Activities Results ---------

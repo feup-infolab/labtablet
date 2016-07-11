@@ -51,7 +51,6 @@ public class MetadataListAdapter extends RecyclerView.Adapter<MetadataListAdapte
     public void onBindViewHolder(MetadataListVH holder, int position) {
         final Descriptor item = items.get(position);
 
-        holder.mDescriptorDate.setText(item.getDateModified());
         holder.mDescriptorValue.setText(item.getValue());
         holder.mDescriptorName.setText(item.getName());
         holder.mDescriptorType.setTag(item.getFilePath());
@@ -61,7 +60,6 @@ public class MetadataListAdapter extends RecyclerView.Adapter<MetadataListAdapte
             holder.mDescriptorType.setVisibility(View.VISIBLE);
             new AsyncImageLoader(holder.mDescriptorType, context, true).execute();
         } else {
-            //holder.mDescriptorType.setImageResource(R.drawable.ic_file);
             holder.mDescriptorType.setVisibility(View.GONE);
         }
     }
@@ -77,14 +75,12 @@ public class MetadataListAdapter extends RecyclerView.Adapter<MetadataListAdapte
         public final TextView mDescriptorName;
         public final TextView mDescriptorValue;
         public final ImageView mDescriptorType;
-        public final TextView mDescriptorDate;
         private final LinearLayout mItemDeleteView;
 
         public MetadataListVH(View rowView) {
             super(rowView);
             mDescriptorName = (TextView) rowView.findViewById(R.id.metadata_item_title);
             mDescriptorType = (ImageView) rowView.findViewById(R.id.metadata_item_type);
-            mDescriptorDate = (TextView) rowView.findViewById(R.id.metadata_item_date);
             mDescriptorValue = (TextView) rowView.findViewById(R.id.metadata_item_value);
             mItemDeleteView = (LinearLayout) rowView.findViewById(R.id.item_metadata_list_expanded_view);
 

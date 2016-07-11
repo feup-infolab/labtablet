@@ -147,7 +147,6 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 questionType = FormEnumType.FREE_TEXT;
                 viewQuestionRange.setVisibility(View.GONE);
                 viewQuestionVocabularies.setVisibility(View.GONE);
-
                 enableMandatoryView();
                 break;
             case 2:
@@ -286,6 +285,13 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                     }
                 });
                 break;
+            case 7:
+                questionType = FormEnumType.INSTRUCTION;
+                mandatory = false;
+                viewQuestionRange.setVisibility(View.GONE);
+                viewQuestionVocabularies.setVisibility(View.GONE);
+                enableSubmissionView();
+                break;
             default:
                 break;
         }
@@ -296,6 +302,9 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
 
     }
 
+    /**
+     * Shows the dialog to specify wheter the question is mandatory or not
+     */
     private void enableMandatoryView() {
         viewQuestionMandatory.setVisibility(View.VISIBLE);
         (findViewById(R.id.mandatory_no)).setEnabled(true);
@@ -305,6 +314,9 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
         (findViewById(R.id.mandatory_yes)).setOnClickListener(this);
     }
 
+    /**
+     * Shows the dialog to enable submission
+     */
     private void enableSubmissionView() {
         viewQuestionConclusion.setVisibility(View.VISIBLE);
         (findViewById(R.id.mandatory_no)).setEnabled(false);

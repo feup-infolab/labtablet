@@ -1,17 +1,14 @@
 package pt.up.fe.alpha.labtablet.fragments;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -158,13 +155,13 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
         }
 
         @Override
-        public void onBindViewHolder(FormInstanceVH holder, final int position) {
+        public void onBindViewHolder(final FormInstanceVH holder, final int position) {
 
             holder.rowText.setText(rows.get(position));
             holder.instanceDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    fq.getRows().remove(position);
+                    fq.getRows().remove(holder.getAdapterPosition());
                     mAdapter.notifyDataSetChanged();
                     Toast.makeText(getActivity(), getString(R.string.removed), Toast.LENGTH_SHORT).show();
                 }
@@ -174,7 +171,7 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
                 @Override
                 public void onClick(View view) {
                     String copiedRow = fq.getRows().get(position);
-                    fq.getRows().add(position+1, copiedRow);
+                    fq.getRows().add(copiedRow);
                     mAdapter.notifyDataSetChanged();
                     Toast.makeText(getActivity(), getString(R.string.copied), Toast.LENGTH_SHORT).show();
                 }

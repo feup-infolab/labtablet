@@ -18,7 +18,7 @@
     <color name="orange_button_stroke">#ff2c3b44</color>
     <color name="orange_button_solid_color">#ff384b55</color>
 
-    <!-- LABTABLET NATIVE -->
+    <!-- LABTABLET NATIVE-->
     <color name="primary">#007667</color>
     <color name="primary_dark">#005d4f</color>
     <color name="primary_translucent">#d7005d4f</color>

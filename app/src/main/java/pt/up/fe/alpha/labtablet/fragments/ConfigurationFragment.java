@@ -53,6 +53,8 @@ import pt.up.fe.alpha.labtablet.models.ChangelogItem;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.Dictionary;
+import pt.up.fe.alpha.labtablet.models.SeaBioData.Data;
+import pt.up.fe.alpha.labtablet.models.SeaBioData.EntityResponse;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
 public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<ArrayList<Descriptor>> {
@@ -64,19 +66,24 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
     private TextView tv_jpg_descriptor_description;
     private TextView tv_mp3_descriptor;
     private TextView tv_mp3_descriptor_description;
-    private Button bt_clear_association;
-    private Button bt_file;
+    private TextView tv_sbd_active_campaign;
+    private TextView tv_sbd_users;
+    private TextView tv_sbd_procedures;
 
     private EditText et_conf_username;
     private EditText et_conf_password;
     private EditText et_conf_address;
+
     private Button bt_save_dendro_confs;
     private Button bt_sbd_username;
+    private Button btPickCampaign;
+    private Button bt_file;
+    private Button btLoadUsers;
+    private Button btLoadProcedures;
 
-
-    private SharedPreferences.Editor editor;
     private SharedPreferences settings;
     private ArrayList<AssociationItem> mItems;
+    private String SBDToken;
 
     public ConfigurationFragment(){}
 
@@ -101,24 +108,10 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
             return rootView;
         }
 
-        editor = settings.edit();
-
         //configure views and buttons
         setupLayout(rootView);
         loadAssociations();
 
-        bt_clear_association.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().getSharedPreferences(getResources()
-                        .getString(R.string.app_name),Context.MODE_PRIVATE).edit()
-                        .remove("associations")
-                        .apply();
-
-                loadAssociations();
-                Toast.makeText(getActivity(), "Configuration successfully removed", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         bt_file = (Button) rootView.findViewById(R.id.bt_file_path);
         bt_file.setOnClickListener(new View.OnClickListener() {
@@ -155,23 +148,27 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         Button bt_mp3_edit = (Button) rootView.findViewById(R.id.bt_mp3_edit);
         bt_sbd_username = (Button) rootView.findViewById(R.id.bt_sbd_authenticate_user);
 
-        bt_clear_association = (Button) rootView.findViewById(R.id.bt_clear_associations);
         bt_file = (Button) rootView.findViewById(R.id.bt_file_path);
         bt_save_dendro_confs = (Button) rootView.findViewById(R.id.dendro_configurations_save);
+        btPickCampaign = (Button) rootView.findViewById(R.id.bt_sbd_pick_campaign);
+        btLoadUsers = (Button) rootView.findViewById(R.id.bt_sbd_get_users);
+        btLoadProcedures = (Button) rootView.findViewById(R.id.bt_sbd_get_procedures);
 
         et_conf_username = (EditText) rootView.findViewById(R.id.dendro_configurations_username);
         et_conf_address = (EditText) rootView.findViewById(R.id.dendro_configurations_address);
         et_conf_password = (EditText) rootView.findViewById(R.id.dendro_configurations_password);
 
+        tv_sbd_active_campaign = (TextView) rootView.findViewById(R.id.sbd_active_campaign);
         tv_jpg_descriptor = (TextView) rootView.findViewById(R.id.jpg_extension_descriptor);
         tv_jpg_descriptor_description = (TextView) rootView.findViewById(R.id.jpg_extension_description);
+        tv_sbd_procedures = (TextView) rootView.findViewById(R.id.tv_sbd_procedures);
 
         tv_kml_descriptor = (TextView) rootView.findViewById(R.id.kml_extension_descriptor);
         tv_kml_descriptor_description = (TextView) rootView.findViewById(R.id.kml_extension_description);
 
         tv_mp3_descriptor = (TextView) rootView.findViewById(R.id.mp3_extension_descriptor);
         tv_mp3_descriptor_description = (TextView) rootView.findViewById(R.id.mp3_extension_description);
-
+        tv_sbd_users = (TextView) rootView.findViewById(R.id.tv_sbd_users);
 
         rootView.findViewById(R.id.bt_feedback).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,6 +179,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                 startActivity(i);
             }
         });
+
         View.OnClickListener mClickListener = new View.OnClickListener() {
 
             String extension;
@@ -242,8 +240,25 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
             }
         }
 
+        //check for saved settings
         if (settings.contains(Utils.TAG_SBD_USERNAME)) {
             bt_sbd_username.setText(getString(R.string.update));
+        }
+
+        if (settings.contains(Utils.SBD_USERS)) {
+            btLoadUsers.setText(getString(R.string.update));
+            ArrayList<Data> items = new Gson().fromJson(settings.getString(Utils.SBD_USERS, ""), Utils.ARRAY_SBD_DATA);
+            String users = "";
+            for (Data item : items)
+                users += item.getName() + "\n";
+
+            tv_sbd_users.setText(users.substring(0, users.length()-1));
+        }
+
+        if (settings.contains(Utils.SBD_ACTIVE_CAMPAIGN)) {
+            Data campaign = new Gson().fromJson(settings.getString(Utils.SBD_ACTIVE_CAMPAIGN,""), Data.class);
+            tv_sbd_active_campaign.setText(campaign.getName());
+            tv_sbd_active_campaign.setVisibility(View.VISIBLE);
         }
 
         bt_save_dendro_confs.setOnClickListener(new View.OnClickListener() {
@@ -351,20 +366,14 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                     return;
                 }
 
-                String baseQuery = etURL.getText().toString() + "/signin?";
-                Uri builtUri = Uri.parse(baseQuery)
-                        .buildUpon()
-                        .build();
-
+                final String baseQuery = etURL.getText().toString();
                 bt_sbd_username.setText(getString(R.string.loading));
 
                 //Async request for token
-                final StringRequest req = new StringRequest(Request.Method.POST, builtUri.toString(),
+                final StringRequest req = new StringRequest(Request.Method.POST, baseQuery + "/signin?",
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                Toast.makeText(getActivity(), response,Toast.LENGTH_LONG).show();
-
                                 try {
                                     JSONObject responseObj = new JSONObject(response);
                                     if (!responseObj.get("status").equals("success")) {
@@ -374,14 +383,19 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                                     }
 
                                     String username = ((JSONObject)responseObj.get("data")).get("name").toString();
+                                    SBDToken =  ((JSONObject)responseObj.get("data")).get("token").toString();
 
                                     SharedPreferences.Editor editor = settings.edit();
                                     if (settings.contains(Utils.TAG_SBD_USERNAME)) {
                                         editor.remove(Utils.TAG_SBD_USERNAME);
                                     }
                                     editor.putString(Utils.TAG_SBD_USERNAME, username);
+                                    editor.putString(Utils.TAG_SBD_PASSWORD, etPassword.getText().toString());
+                                    editor.putString(Utils.TAG_SBD_URI, baseQuery);
                                     editor.apply();
+
                                     bt_sbd_username.setText(getString(android.R.string.ok));
+                                    bt_sbd_username.setEnabled(false);
 
                                 } catch (JSONException e) {
                                     bt_sbd_username.setText(getString(R.string.seabio_json_error));
@@ -453,6 +467,205 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                 }
             }
         });
+
+        btPickCampaign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btPickCampaign.setText(getString(R.string.loading));
+
+                if (!settings.contains(Utils.TAG_SBD_URI)) {
+                    Toast.makeText(getActivity(), "Please specify the credentials above and try again.", Toast.LENGTH_SHORT).show();
+                    btPickCampaign.setText(getString(R.string.sbd_pick_campaign));
+                    return;
+                }
+
+                String uri = settings.getString(Utils.TAG_SBD_URI, "");
+
+                if (null == SBDToken || uri.isEmpty() || SBDToken.isEmpty()) {
+                    Toast.makeText(getActivity(), "Please specify the credentials above and try again.", Toast.LENGTH_SHORT).show();
+                    btPickCampaign.setText(getString(R.string.sbd_pick_campaign));
+                    return;
+                }
+
+                StringRequest entryRequest = new StringRequest(uri + "/api/campaigns"  + "?token=" + SBDToken, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        showCampaignPickDialog(response);
+                        btPickCampaign.setText(getString(R.string.sbd_pick_campaign));
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.e("Error: ", error.getMessage());
+                        btPickCampaign.setText(getString(R.string.seabio_authenticate_error));
+                        btPickCampaign.setError("");
+                    }
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String,String> params = new HashMap<>();
+                        params.put("token", SBDToken);
+                        return params;
+                    }
+                };
+
+                LabTablet.getInstance().addToRequestQueue(entryRequest);
+
+            }
+        });
+
+        //Load registered users
+        btLoadUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btLoadUsers.setText(getString(R.string.loading));
+
+                if (!settings.contains(Utils.TAG_SBD_URI)) {
+                    Toast.makeText(getActivity(), "Please specify the credentials above and try again.", Toast.LENGTH_SHORT).show();
+                    btPickCampaign.setText(getString(R.string.sbd_pick_campaign));
+                    return;
+                }
+
+                String uri = settings.getString(Utils.TAG_SBD_URI, "");
+
+                if (null == SBDToken || uri.isEmpty() || SBDToken.isEmpty()) {
+                    Toast.makeText(getActivity(), "Please specify the credentials above and try again.", Toast.LENGTH_SHORT).show();
+                    btPickCampaign.setText(getString(R.string.sbd_pick_campaign));
+                    return;
+                }
+
+                StringRequest entryRequest = new StringRequest(uri + "/api/users"  + "?token=" + SBDToken, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        //Save results
+
+                        EntityResponse responseObj = new Gson().fromJson(response, EntityResponse.class);
+
+                        final ArrayList<Data> dataItems = responseObj.getData();
+                        String users = "";
+                        for (Data data : dataItems) {
+                            users += data.getName() + "\n";
+                        }
+
+                        if (users.length() > 0)
+                            users = users.substring(0, users.length()-1);
+
+                        settings.edit().putString(Utils.SBD_USERS, new Gson().toJson(dataItems)).apply();
+                        tv_sbd_users.setText(users);
+                        btLoadUsers.setText(getString(R.string.update));
+                        btPickCampaign.setText(getString(R.string.sbd_pick_campaign));
+                        Toast.makeText(getActivity(), getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.e("Error: ", error.getMessage());
+                        btPickCampaign.setText(getString(R.string.seabio_authenticate_error));
+                        btPickCampaign.setError("");
+                    }
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String,String> params = new HashMap<>();
+                        params.put("token", SBDToken);
+                        return params;
+                    }
+                };
+
+                LabTablet.getInstance().addToRequestQueue(entryRequest);
+            }
+        });
+
+        btLoadProcedures.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btLoadProcedures.setText(getString(R.string.loading));
+
+                if (!settings.contains(Utils.TAG_SBD_PROCEDURES)) {
+                    Toast.makeText(getActivity(), getString(R.string.authenticate_first), Toast.LENGTH_SHORT).show();
+                    btPickCampaign.setText(getString(R.string.sbd_pick_campaign));
+                    return;
+                }
+
+                String uri = settings.getString(Utils.TAG_SBD_URI, "");
+
+                if (null == SBDToken || uri.isEmpty() || SBDToken.isEmpty()) {
+                    Toast.makeText(getActivity(), getString(R.string.authenticate_first), Toast.LENGTH_SHORT).show();
+                    btPickCampaign.setText(getString(R.string.sbd_pick_campaign));
+                    return;
+                }
+
+                StringRequest entryRequest = new StringRequest(uri + "/api/users"  + "?token=" + SBDToken, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        //Save results
+
+                        EntityResponse responseObj = new Gson().fromJson(response, EntityResponse.class);
+
+                        final ArrayList<Data> dataItems = responseObj.getData();
+                        String users = "";
+                        for (Data data : dataItems) {
+                            users += data.getName() + "\n";
+                        }
+
+                        if (users.length() > 0)
+                            users = users.substring(0, users.length()-1);
+
+                        settings.edit().putString(Utils.TAG_SBD_PROCEDURES, new Gson().toJson(dataItems)).apply();
+                        tv_sbd_users.setText(users);
+                        btLoadUsers.setText(getString(R.string.update));
+                        btPickCampaign.setText(getString(R.string.sbd_pick_campaign));
+                        Toast.makeText(getActivity(), getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.e("Error: ", error.getMessage());
+                        btPickCampaign.setText(getString(R.string.seabio_authenticate_error));
+                        btPickCampaign.setError("");
+                    }
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String,String> params = new HashMap<>();
+                        params.put("token", SBDToken);
+                        return params;
+                    }
+                };
+
+                LabTablet.getInstance().addToRequestQueue(entryRequest);
+            }
+        });
+
+    }
+
+    private void showCampaignPickDialog(String response) {
+        //Show dialog to pick campaign
+        EntityResponse responseObj = new Gson().fromJson(response, EntityResponse.class);
+
+        final ArrayList<Data> dataItems = responseObj.getData();
+        final ArrayList<String> campaigns = new ArrayList<>();
+        for (Data data : dataItems) {
+            campaigns.add(data.getName());
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.sbd_select_campaign));
+        builder.setItems(campaigns.toArray(new String[campaigns.size()]), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                settings.edit().putString(Utils.SBD_ACTIVE_CAMPAIGN, new Gson().toJson(dataItems.get(which))).apply();
+                tv_sbd_active_campaign.setText(campaigns.get(which));
+                tv_sbd_active_campaign.setVisibility(View.VISIBLE);
+                Toast.makeText(getActivity(), getString(R.string.saved), Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.show();
+
+        Log.e("RS", responseObj.getData().get(0).getName());
     }
 
     /**
@@ -539,8 +752,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
 
         //They don't exist, create new ones
         if (!settings.contains("associations")) {
-            editor.putString("associations", new Gson().toJson(createBaseAssociations(), Utils.ARRAY_ASSOCIATION_ITEM));
-            editor.commit();
+            settings.edit().putString("associations", new Gson().toJson(createBaseAssociations(), Utils.ARRAY_ASSOCIATION_ITEM)).apply();
         }
         String associationsJson  = settings.getString("associations", "");
         mItems = new Gson().fromJson(associationsJson, Utils.ARRAY_ASSOCIATION_ITEM);

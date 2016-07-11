@@ -37,6 +37,7 @@
         <item>Closed Vocabulary</item> //MC{a,b,c}
         <item>Range</item> //MC{1-3}
         <item>Multi-row answer</item>
+        <item>Instructions</item>
     </string-array>
 
     <!-- Content Description -->
@@ -340,6 +341,19 @@
     <string name="seabio_json_error">Unable to parse response</string>
     <string name="authenticate">Authenticate credentials</string>
     <string name="update">Update</string>
+    <string name="sbd_user_setup">Exporting data to the SeaBioData repositories requires a set of credentials to be provided. This will authenticate your submissions.</string>
+    <string name="sbd_user_setup_header">SeaBioData credentials</string>
+    <string name="sbd_active_campaign_header">Active Campaign</string>
+    <string name="sbd_active_campaign">All your submissions will have an associated campaign. You can define it here (a set of valid credentials are required to list the available campaigns).</string>
+    <string name="sbd_pick_campaign">Select Campaign</string>
+    <string name="sbd_select_campaign">Select a campaign</string>
+    <string name="sbd_load_users">Get users</string>
+    <string name="sbd_users_header">Users</string>
+    <string name="sbd_users">This can help you choosing collaborators to associate whenever necessary</string>
+    <string name="sbd_procedures_header">Procedures</string>
+    <string name="sbd_procedures">These are the procedures identified by the campaign administrator. They can be used to ease the task of filling out the forms, where applicable. Should you wish to add a new procedure please contact the campaign administrator.</string>
+    <string name="authenticate_first">Please authenticate the credentials above and try again.</string>
+    <string name="sbd_load_procedures">Get procedures</string>
     <!-- /TTS sentences -->
 
 

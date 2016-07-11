@@ -1,15 +1,14 @@
 package pt.up.fe.alpha.labtablet.activities;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -41,7 +39,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.fragments.QuestionRowDialogFragment;
@@ -59,7 +56,6 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
     private LinearLayout table;
     private FloatingActionButton fab;
     private CoordinatorLayout coordinatorLayout;
-    private LinearLayout assistingLayout;
     private EditText focusedView;
 
     @Override
@@ -98,7 +94,7 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
             table.addView(v, layoutParams);
         }
 
-        assistingLayout = (LinearLayout) findViewById(R.id.assisting_layout);
+        LinearLayout assistingLayout = (LinearLayout) findViewById(R.id.assisting_layout);
         OnAssistRequestListener mListener = new OnAssistRequestListener();
         for (int i = 0; i < assistingLayout.getChildCount(); ++i) {
             if (!(assistingLayout.getChildAt(i) instanceof Button))
@@ -178,6 +174,11 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
                 baseView = inflater.inflate(R.layout.solver_item_text, null, false);
                 ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
                 ((TextView)baseView.findViewById(R.id.solver_question_text)).setText(fq.getValue());
+                break;
+            case INSTRUCTION:
+                baseView = inflater.inflate(R.layout.solver_item_text, null, false);
+                ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
+                ((TextView)baseView.findViewById(R.id.solver_question_text)).setVisibility(View.GONE);
                 break;
             case RANGE:
                 baseView = inflater.inflate(R.layout.solver_item_number, null, false);
@@ -320,6 +321,8 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
                 return;
             }
         }
+        //TOD: update row count indicator
+        this.onResume();
     }
 
     @Override
@@ -334,7 +337,7 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
     }
 
     @Override
-    public void onFocusChange(View view, boolean hasFocusjoao) {
+    public void onFocusChange(View view, boolean hasFocus) {
         Log.e("FOCUS", "FOCUS CHANGED TO " + view.getId());
     }
 
@@ -409,8 +412,9 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
             fab.hide();
             for (String s : fq.getAllowedValues()) {
                 View editView = View.inflate(FormSolverActivity.this, R.layout.row_repeatable_question, null);
-                EditText myEditText = (EditText) editView.findViewById(R.id.input_row);
-                myEditText.setHint(s);
+                //TextInputEditText myEditText = (TextInputEditText) editView.findViewById(R.id.input_row);
+                ((TextInputLayout) editView.findViewById(R.id.input_layout)).setHint(s);
+                //myEditText.setHint(s);
                 repeatableItems.addView(editView);
             }
             newRowButton.setText(android.R.string.ok);
@@ -503,7 +507,7 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
 
     /**
      * Get last known location as in http://stackoverflow.com/questions/20438627/getlastknownlocation-returns-null
-     * @return
+     * @return the last location known to the device
      */
     private Location getLastKnownLocation() {
         LocationManager mLocationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);

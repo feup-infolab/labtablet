@@ -84,48 +84,6 @@
             android:padding="5dp"
             />
 
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            >
-            <LinearLayout
-                android:id="@+id/gv_clear"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:columnCount="3"
-                android:rowCount="3">
-
-
-                <TextView
-                    android:id="@+id/configuration_instructions"
-                    android:fontFamily="sans-serif-thin"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="20dp"
-                    android:text="@string/configuration_header"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray"
-                    />
-                <Button
-                    android:id="@+id/bt_clear_associations"
-                    android:drawableStart="@drawable/ic_recycle"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/clear_associations"
-                    android:textAllCaps="true"
-                    />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
 
 
         <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -138,14 +96,13 @@
                 android:id="@+id/gl_gps"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/gv_clear"
                 android:orientation="vertical"
                 >
 
 
                 <TextView
                     android:id="@+id/conf_kml_title"
-                    android:textColor="@color/primary_dark"
+                    android:textColor="@color/list_background_pressed"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -181,21 +138,14 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     />
 
-                <View
-                    android:id="@+id/conf_kml_separator"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray"
-                    />
 
                 <Button
                     android:id="@+id/bt_kml_edit"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_width="fill_parent"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:text="@string/edit"
-                    android:textAllCaps="true"
                     />
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -217,7 +167,7 @@
 
                 <TextView
                     android:id="@+id/conf_jpeg_title"
-                    android:textColor="@color/primary_dark"
+                    android:textColor="@color/list_background_pressed"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -254,19 +204,13 @@
                     android:text=""
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     />
-                <View
-                    android:id="@+id/conf_jpeg_separator"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray"
-                    />
 
                 <Button
                     android:id="@+id/bt_jpg_edit"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_width="fill_parent"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:text="@string/edit"
                     android:textAllCaps="true"
                     />
@@ -289,7 +233,7 @@
 
                 <TextView
                     android:id="@+id/conf_mp3_title"
-                    android:textColor="@color/primary_dark"
+                    android:textColor="@color/list_background_pressed"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -327,19 +271,13 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     />
 
-                <View
-                    android:id="@+id/conf_mp3_separator"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray"
-                    />
 
                 <Button
                     android:id="@+id/bt_mp3_edit"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
-                    android:layout_width="fill_parent"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:text="Edit"
                     android:textAllCaps="true"
                     />
@@ -368,7 +306,7 @@
             android:layout_marginBottom="20dp">
 
             <LinearLayout
-                android:id="@+id/dictionary_setup_layout"
+                android:id="@+id/sbd_user_setup_layout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rl_mp3"
@@ -381,7 +319,7 @@
                     android:layout_width="fill_parent"
                     android:padding="10dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/dictionary_configurations_title"
+                    android:text="@string/sbd_user_setup_header"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     />
 
@@ -389,7 +327,7 @@
                     android:layout_width="fill_parent"
                     android:padding="10dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/dictionary_configurations_description"
+                    android:text="@string/sbd_user_setup"
                     />
 
                 <TextView
@@ -440,26 +378,190 @@
 
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/dictionary_configurations_load"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray"
-                    />
 
                 <Button
                     android:id="@+id/bt_sbd_authenticate_user"
                     android:text="@string/authenticate"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@android:style/Widget.Holo.Light.Button.Borderless.Small"
+                    android:layout_gravity="end"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                     android:textAllCaps="true"
                     />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:id="@+id/sbd_campaign_setup_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rl_mp3"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:textColor="@color/list_background_pressed"
+                    android:gravity="center"
+                    android:layout_width="fill_parent"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sbd_active_campaign_header"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sbd_active_campaign"
+                    />
+
+                <TextView
+                    android:id="@+id/sbd_active_campaign"
+                    android:visibility="gone"
+                    android:drawableStart="@drawable/ic_check"
+                    android:drawablePadding="10dp"
+                    android:layout_width="wrap_content"
+                    android:padding="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    />
+
+
+                <Button
+                    android:id="@+id/bt_sbd_pick_campaign"
+                    android:text="@string/sbd_pick_campaign"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                    android:textAllCaps="true"
+                    />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
+            >
+
+            <LinearLayout
+                android:id="@+id/sbd_users_setup_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rl_mp3"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:textColor="@color/list_background_pressed"
+                    android:gravity="center"
+                    android:layout_width="fill_parent"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sbd_users_header"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    />
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sbd_users"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_sbd_users"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    />
+
+                <Button
+                    android:id="@+id/bt_sbd_get_users"
+                    android:text="@string/sbd_load_users"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                    android:textAllCaps="true"
+                    />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
+            >
+
+            <LinearLayout
+                android:id="@+id/sbd_procedures_setup_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:textColor="@color/list_background_pressed"
+                    android:gravity="center"
+                    android:layout_width="fill_parent"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sbd_procedures_header"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    />
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sbd_procedures"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_sbd_procedures"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    />
+
+                <Button
+                    android:id="@+id/bt_sbd_get_procedures"
+                    android:text="@string/sbd_load_procedures"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                    android:textAllCaps="true"
+                    />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
 
         <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
