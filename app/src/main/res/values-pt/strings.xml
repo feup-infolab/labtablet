@@ -235,7 +235,7 @@
     <string name="tap_to_pick_descriptor">Tap here to choose a descriptor from the available set.</string>
     <string name="disabled_action">Action disabled by developer</string>
     <string name="location_disabled">O acesso à localização está desativado. POr favor ativar primeiro nas definições do dispositivo.</string>
-    <string name="title_home" />
+    <string name="title_home" >Início</string>
     <string name="title_list">Favorites</string>
     <string name="title_new_favorite">New Project</string>
     <string name="title_changelog">Updates</string>
@@ -351,11 +351,15 @@
     <string name="sbd_select_campaign">Select a campaign</string>
     <string name="sbd_load_users">Get users</string>
     <string name="sbd_users_header">Users</string>
-    <string name="sbd_users" />
+    <string name="sbd_users" >Esta é a lista de utilizadores registados para esta campanha. No preenchimento de formulários pode selecionar colaboradores a partir desta lista. Se algum utilizador estiver em falta, por favor contacte o gestor de campanha.</string>
     <string name="sbd_procedures_header">Procedures</string>
     <string name="sbd_procedures">These are the procedures identified by the campaign administrator. They can be used to ease the task of filling out the forms, where applicable. Should you wish to add a new procedure please contact the campaign administrator.</string>
     <string name="authenticate_first">Please authenticate the credentials above and try again.</string>
     <string name="sbd_load_procedures">Get procedures</string>
+    <string name="sbd_users_unavailable">The users list is not available. You can import it from the configurations menu.</string>
+    <string name="users_list">Collaborators</string>
+    <string name="specify_question_headers">Specify this questions header (variables to read from the user\'s input)</string>
+    <string name="context_cleared">Cleared context</string>
     <!-- /TTS sentences -->
 
     <string-array name="home_tips">

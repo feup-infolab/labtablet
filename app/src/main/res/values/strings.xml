@@ -354,6 +354,10 @@
     <string name="sbd_procedures">These are the procedures identified by the campaign administrator. They can be used to ease the task of filling out the forms, where applicable. Should you wish to add a new procedure please contact the campaign administrator.</string>
     <string name="authenticate_first">Please authenticate the credentials above and try again.</string>
     <string name="sbd_load_procedures">Get procedures</string>
+    <string name="sbd_users_unavailable">The users list is not available. You can import it from the configurations menu.</string>
+    <string name="users_list">Collaborators</string>
+    <string name="specify_question_headers">Specify this questions header (variables to read from the user\'s input)</string>
+    <string name="context_cleared">Cleared context</string>
     <!-- /TTS sentences -->
 
 

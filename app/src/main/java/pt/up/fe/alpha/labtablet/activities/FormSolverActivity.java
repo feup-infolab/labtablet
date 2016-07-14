@@ -1,13 +1,17 @@
 package pt.up.fe.alpha.labtablet.activities;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -42,15 +46,18 @@ import java.util.List;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.fragments.QuestionRowDialogFragment;
+import pt.up.fe.alpha.labtablet.models.Column;
 import pt.up.fe.alpha.labtablet.models.FormEnumType;
 import pt.up.fe.alpha.labtablet.models.FormInstance;
 import pt.up.fe.alpha.labtablet.models.FormQuestion;
+import pt.up.fe.alpha.labtablet.models.Row;
+import pt.up.fe.alpha.labtablet.models.SeaBioData.Data;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
 /**
  * Shows the view to solve a form's set of questions and collect available metrics
  */
-public class FormSolverActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener, View.OnFocusChangeListener {
+public class FormSolverActivity extends AppCompatActivity {
 
     private FormInstance targetForm;
     private LinearLayout table;
@@ -90,7 +97,6 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
         for (int i = 0; i < questionCount; ++i) {
             View v = getQuestionView(targetForm.getFormQuestions().get(i));
             v.setFocusable(true);
-            v.setOnTouchListener(this);
             table.addView(v, layoutParams);
         }
 
@@ -164,7 +170,11 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
         });
     }
 
-
+    /**
+     * Builds up a customized view depending on the question type
+     * @param fq question to generate the view for
+     * @return the generated view with the bound interaction handlers
+     */
     private View getQuestionView(final FormQuestion fq) {
         LayoutInflater inflater = LayoutInflater.from(FormSolverActivity.this);
         final View baseView;
@@ -178,7 +188,7 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
             case INSTRUCTION:
                 baseView = inflater.inflate(R.layout.solver_item_text, null, false);
                 ((TextView)baseView.findViewById(R.id.solver_question_body)).setText(fq.getQuestion());
-                ((TextView)baseView.findViewById(R.id.solver_question_text)).setVisibility(View.GONE);
+                baseView.findViewById(R.id.solver_question_text).setVisibility(View.GONE);
                 break;
             case RANGE:
                 baseView = inflater.inflate(R.layout.solver_item_number, null, false);
@@ -321,24 +331,8 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
                 return;
             }
         }
-        //TOD: update row count indicator
+        //TODO: update row count indicator
         this.onResume();
-    }
-
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        Log.e("FOCUS", "");
-        return false;
-    }
-
-    @Override
-    public void onClick(View view) {
-        Toast.makeText(this, "TOUCHÉ", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onFocusChange(View view, boolean hasFocus) {
-        Log.e("FOCUS", "FOCUS CHANGED TO " + view.getId());
     }
 
     /**
@@ -360,12 +354,12 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
             //Extract values from children
             LinearLayout rowsView = (LinearLayout) rootView.findViewById(R.id.repeatable_items);
 
-            String row = "";
+            ArrayList<String> row = new ArrayList<>();
             for (int i = 0; i < rowsView.getChildCount(); ++i) {
                 EditText et = (EditText) rowsView.getChildAt(i).findViewById(R.id.input_row);
-                row += et.getText().toString() + getString(R.string.row_sepparator);
+                row.add(et.getText().toString());
             }
-            fq.addNewRow(row);
+            fq.addRow(row);
             TextView tvCount = (TextView) rootView.findViewById(R.id.question_items_count);
 
             tvCount.setText(fq.getRows().size() + " items");
@@ -386,8 +380,8 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
     }
 
     /**
-     * Displays a dialog containing the dorm question that is passed as an argument
-     * @param fq qeustion to extract the values from
+     * Displays a dialog containing the form question that is passed as an argument
+     * @param fq question to extract the values from
      */
     void showDialog(FormQuestion fq) {
         // Create the fragment and show it as a dialog.
@@ -395,6 +389,9 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
         newFragment.show(getSupportFragmentManager(), "rows_dialog");
     }
 
+    /**
+     * Used to help filling in a row through the existing columns
+     */
     private class onRowAddedListener implements View.OnClickListener {
         private View rootView;
         private FormQuestion fq;
@@ -410,11 +407,47 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
             final Button newRowButton = (Button) rootView.findViewById(R.id.question_add_response_instance);
 
             fab.hide();
-            for (String s : fq.getAllowedValues()) {
-                View editView = View.inflate(FormSolverActivity.this, R.layout.row_repeatable_question, null);
-                //TextInputEditText myEditText = (TextInputEditText) editView.findViewById(R.id.input_row);
-                ((TextInputLayout) editView.findViewById(R.id.input_layout)).setHint(s);
-                //myEditText.setHint(s);
+            for (final Column column : fq.getColumns()) {
+                final View editView = View.inflate(FormSolverActivity.this, R.layout.row_repeatable_question, null);
+                ((TextInputLayout) editView.findViewById(R.id.input_layout)).setHint(column.getTitle());
+                editView.findViewById(R.id.input_row).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(final View view, boolean hasFocus) {
+                        if (!hasFocus)
+                            return;
+                        if (column.getContext().isEmpty())
+                            return;
+
+                        //TODO handle context here
+
+                        if (!column.getContext().equals("boolean"))
+                            return;
+
+                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which){
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        if (view instanceof TextInputEditText)
+                                            ((TextInputEditText) view).setText(getString(android.R.string.yes));
+                                        Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
+                                        break;
+
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        ((TextInputEditText) view).setText(getString(android.R.string.no));
+                                        Toast.makeText(getApplicationContext(), "NO", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        };
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(FormSolverActivity.this);
+                        builder.setMessage(fq.getQuestion()).setPositiveButton(getString(android.R.string.yes), dialogClickListener)
+                                .setNegativeButton(getString(android.R.string.no), dialogClickListener).show();
+
+                    }
+                });
+
                 repeatableItems.addView(editView);
             }
             newRowButton.setText(android.R.string.ok);
@@ -431,7 +464,7 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
         public void onClick(View view) {
 
             //find active/focused view
-            ArrayList<EditText> focusableViews = getAllEditTexts(table);
+            ArrayList<EditText> focusableViews = getEditables(table);
             for (EditText et : focusableViews) {
                 if (et.isFocused())
                     focusedView = et;
@@ -457,10 +490,28 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
                     focusedView.setText(focusedView.getText() + " " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
                     break;
 
-                case R.id.assist_temperature:
-                    break;
+                case R.id.assist_users:
+                    SharedPreferences settings = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+                    if (!settings.contains(Utils.SBD_USERS)) {
+                        Toast.makeText(FormSolverActivity.this, getString(R.string.sbd_users_unavailable), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                case R.id.assist_dictionary:
+                    ArrayList<Data> users = new Gson().fromJson(settings.getString(Utils.SBD_USERS, ""), Utils.ARRAY_SBD_DATA);
+                    final ArrayList<String> usersString = new ArrayList<>();
+                    for (Data data : users) {
+                        usersString.add(data.getName());
+                    }
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(FormSolverActivity.this);
+                    builder.setTitle(getString(R.string.sbd_select_campaign));
+                    builder.setItems(usersString.toArray(new String[usersString.size()]), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            focusedView.setText(focusedView.getText() + " " + usersString.get(which));
+                        }
+                    });
+                    builder.show();
                     break;
             }
 
@@ -479,16 +530,15 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
     private void dispatchSnackBar(String message) {
         Snackbar snackbar = Snackbar
                 .make(coordinatorLayout, message, Snackbar.LENGTH_LONG);
-
         snackbar.show();
     }
 
     /**
      * Gets all editTexts associated with the viewgroup
      * @param rootView rootView to extract the views from
-     * @return an array of avtive EditTexts
+     * @return an array of active EditTexts
      */
-    private ArrayList<EditText> getAllEditTexts(ViewGroup rootView) {
+    private ArrayList<EditText> getEditables(ViewGroup rootView) {
         ArrayList<EditText> outputs = new ArrayList<>();
 
         for (int i = 0; i < rootView.getChildCount(); i++)
@@ -498,7 +548,7 @@ public class FormSolverActivity extends AppCompatActivity implements View.OnTouc
                 outputs.add((EditText) child);
             }
             else if(child instanceof ViewGroup) {
-                outputs.addAll(getAllEditTexts((ViewGroup)child));  // Recursive call.
+                outputs.addAll(getEditables((ViewGroup)child));  // Recursive call.
             }
         }
 

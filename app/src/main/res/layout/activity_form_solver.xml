@@ -59,28 +59,15 @@
                     android:layout_height="match_parent" />
 
                 <Button
-                    android:id="@+id/assist_dictionary"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="10dp"
-                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                    android:drawableEnd="@drawable/ab_box"
-                    android:drawablePadding="10dp"
-                    android:gravity="end|center_vertical"
-                    android:text="@string/dictionary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
-
-                <Button
-                    android:id="@+id/assist_temperature"
+                    android:id="@+id/assist_users"
                     android:textColor="@android:color/white"
                     android:layout_marginEnd="10dp"
                     android:layout_gravity="center_vertical"
                     style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                    android:drawableEnd="@drawable/ic_temperature_24dp"
+                    android:drawableEnd="@drawable/ab_validate"
                     android:drawablePadding="10dp"
                     android:gravity="end|center_vertical"
-                    android:text="@string/temperature"
+                    android:text="@string/users_list"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
 

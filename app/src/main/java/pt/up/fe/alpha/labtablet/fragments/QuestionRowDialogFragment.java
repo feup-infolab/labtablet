@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.activities.FormSolverActivity;
 import pt.up.fe.alpha.labtablet.models.FormQuestion;
+import pt.up.fe.alpha.labtablet.models.Row;
 import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
 
 /**
@@ -29,7 +30,7 @@ import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
  */
 public class QuestionRowDialogFragment extends DialogFragment implements OnItemClickListener {
     private FormQuestion fq;
-    private QuestionListAdapter mAdapter;
+    private QuestionRowListAdapter mAdapter;
     private RecyclerView rvItems;
     private ScrollView editView;
     private LinearLayout editRootView;
@@ -81,7 +82,7 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
         });
 
         rvItems = (RecyclerView) rootView.findViewById(R.id.question_items_list);
-        mAdapter = new QuestionListAdapter(fq.getRows(), this);
+        mAdapter = new QuestionRowListAdapter(fq.getRows(), this);
         rvItems.setAdapter(mAdapter);
         rvItems.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -98,26 +99,28 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
         rvItems.setVisibility(View.GONE);
         editView.setVisibility(View.VISIBLE);
 
-        final String[] values = fq.getRows().get(position).split(getString(R.string.row_sepparator));
-        for (int i = 0; i < values.length; ++i) {
+        ArrayList<ArrayList<String>> rows = fq.getRows();
+        for (int i = 0; i < fq.getColumns().size(); ++i) {
+            ArrayList<String> row = rows.get(position);
             View editView = View.inflate(getActivity(), R.layout.row_repeatable_question, null);
             TextInputLayout myEditText = (TextInputLayout) editView.findViewById(R.id.input_layout);
             myEditText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            myEditText.setHint(fq.getAllowedValues().get(i));
-            myEditText.getEditText().setText(values[i]);
+            myEditText.setHint(fq.getColumns().get(i).getTitle());
+            myEditText.getEditText().setText(row.get(i));
             editRootView.addView(editView);
         }
+
 
         btOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int viewCount = editRootView.getChildCount();
-                String mergedValues = "";
+
                 for (int i = 0; i < viewCount; ++i) {
                     TextInputLayout editText = (TextInputLayout) editRootView.getChildAt(i);
-                    mergedValues += editText.getEditText().getText().toString() + ";";
+                    fq.getRows().get(position).set(i, editText.getEditText().getText().toString());
                 }
-                fq.getRows().set(position, mergedValues);
+
                 Toast.makeText(getActivity(), getString(R.string.updated), Toast.LENGTH_SHORT).show();
                 onOkPressed();
             }
@@ -135,12 +138,13 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
         Toast.makeText(getActivity(), "DELETION NOT IMPLEMENTED HERE YET (QuestionRowDialogFramgment)", Toast.LENGTH_SHORT).show();
     }
 
-    private class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapter.FormInstanceVH> {
-        private final ArrayList<String> rows;
+
+    private class QuestionRowListAdapter extends RecyclerView.Adapter<QuestionRowListAdapter.FormInstanceVH> {
+        private final ArrayList<ArrayList<String>> rows;
         private OnItemClickListener listener;
 
 
-        public QuestionListAdapter(ArrayList<String> srcItems,
+        public QuestionRowListAdapter(ArrayList<ArrayList<String>> srcItems,
                                    OnItemClickListener clickListener) {
 
             this.rows = srcItems;
@@ -157,7 +161,7 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
         @Override
         public void onBindViewHolder(final FormInstanceVH holder, final int position) {
 
-            holder.rowText.setText(rows.get(position));
+            holder.rowText.setText(rows.get(position).toString());
             holder.instanceDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -170,7 +174,7 @@ public class QuestionRowDialogFragment extends DialogFragment implements OnItemC
             holder.instanceDuplicate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String copiedRow = fq.getRows().get(position);
+                    ArrayList<String> copiedRow = fq.getRows().get(position);
                     fq.getRows().add(copiedRow);
                     mAdapter.notifyDataSetChanged();
                     Toast.makeText(getActivity(), getString(R.string.copied), Toast.LENGTH_SHORT).show();

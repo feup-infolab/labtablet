@@ -7,11 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.itextpdf.text.pdf.StringUtils;
+
 import java.util.ArrayList;
 
 import pt.up.fe.alpha.R;
+import pt.up.fe.alpha.labtablet.models.Column;
 import pt.up.fe.alpha.labtablet.models.FormEnumType;
 import pt.up.fe.alpha.labtablet.models.FormQuestion;
+import pt.up.fe.alpha.labtablet.models.Row;
 
 /**
  * Adapter to manage info about each form, in a similar way as it is done
@@ -41,9 +45,14 @@ public class QuestionItemListAdapter extends RecyclerView.Adapter<QuestionItemLi
         FormQuestion item = items.get(i);
         holder.mFormItemQuestion.setText(item.getQuestion());
         holder.mFormItemType.setText(item.getType().toString());
-        if (item.getType().equals(FormEnumType.MULTIPLE_CHOICE) ||
-                item.getType().equals(FormEnumType.MULTI_INSTANCE_RESPONSE)) {
+        if (item.getType().equals(FormEnumType.MULTIPLE_CHOICE)) {
             holder.mFormItemAllowedValues.setText(item.getAllowedValues().toString());
+        } else if (item.getType().equals(FormEnumType.MULTI_INSTANCE_RESPONSE)) {
+            String columnsOutput = "";
+            for (Column column : item.getColumns()) {
+                columnsOutput += column.toString() + ", ";
+            }
+            holder.mFormItemAllowedValues.setText(columnsOutput);
         } else {
             holder.mFormItemAllowedValues.setVisibility(View.GONE);
         }

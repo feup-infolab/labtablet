@@ -59,13 +59,11 @@ public class ListFormFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                //transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out);
                 FormViewFragment formDetail = new FormViewFragment();
                 Bundle args = new Bundle();
                 args.putString("form", new Gson().toJson(items.get(position)));
                 formDetail.setArguments(args);
                 transaction.replace(R.id.frame_container, formDetail);
-                //transaction.addToBackStack(null);
                 transaction.commit();
             }
 

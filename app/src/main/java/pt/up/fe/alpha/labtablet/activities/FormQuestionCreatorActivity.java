@@ -3,7 +3,9 @@ package pt.up.fe.alpha.labtablet.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import pt.up.fe.alpha.R;
+import pt.up.fe.alpha.labtablet.models.Column;
 import pt.up.fe.alpha.labtablet.models.FormEnumType;
 import pt.up.fe.alpha.labtablet.models.FormQuestion;
 import pt.up.fe.alpha.labtablet.utils.Utils;
@@ -35,10 +39,13 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
 
     private String questionBody;
     private ArrayList<String> allowedValues;
+    private ArrayList<Column> columns;
+
     private FormEnumType questionType;
     private int from;
     private int to;
     private boolean mandatory;
+    private String context = "";
 
     //Layouts for visibility handling
     private CardView viewQuestionType;
@@ -50,13 +57,14 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
 
     //adapter for the closed vocabulary question
     private ArrayAdapter<String> mAdapter;
+    private ArrayAdapter<Column> mColumnAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_form_question_creator);
-        allowedValues = new ArrayList<>();
 
         if (getActionBar() != null) {
             getActionBar().setTitle(getString(R.string.create_form_question_head));
@@ -153,10 +161,10 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 questionType = FormEnumType.NUMBER;
                 viewQuestionRange.setVisibility(View.GONE);
                 viewQuestionVocabularies.setVisibility(View.GONE);
-
                 enableMandatoryView();
                 break;
             case 3:
+                //Boolean responses
                 questionType = FormEnumType.MULTIPLE_CHOICE;
                 viewQuestionRange.setVisibility(View.GONE);
                 viewQuestionVocabularies.setVisibility(View.GONE);
@@ -168,122 +176,15 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                 break;
             case 4:
                 questionType = FormEnumType.MULTIPLE_CHOICE;
-                viewQuestionVocabularies.setVisibility(View.VISIBLE);
-                (findViewById(R.id.question_et_add_word)).setEnabled(true);
-                (findViewById(R.id.question_add_word)).setEnabled(true);
-
-                ListView lv_allowed_word = (ListView) findViewById(R.id.list_allowed_vocabulary);
-                allowedValues = new ArrayList<>();
-                mAdapter = new ArrayAdapter<>(this,
-                        android.R.layout.simple_list_item_1, allowedValues);
-                lv_allowed_word.setAdapter(mAdapter);
-
-                (findViewById(R.id.question_add_word)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        EditText etWord = (EditText) findViewById(R.id.question_et_add_word);
-                        if (etWord.getText().toString().equals("")) {
-                            etWord.setError(getString(R.string.required));
-                            return;
-                        }
-
-                        allowedValues.add(etWord.getText().toString());
-                        etWord.setText("");
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-
-                (findViewById(R.id.question_vocabulary_submit)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (allowedValues.isEmpty()) {
-                            Toast.makeText(FormQuestionCreatorActivity.this, "At least two options should be added.", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        (findViewById(R.id.question_add_word)).setEnabled(false);
-                        (findViewById(R.id.question_et_add_word)).setEnabled(false);
-
-                        questionType = FormEnumType.MULTIPLE_CHOICE;
-                        enableMandatoryView();
-                    }
-                });
+                setupMultipleChoiceItem();
                 break;
             case 5:
                 questionType = FormEnumType.RANGE;
-                viewQuestionRange.setVisibility(View.VISIBLE);
-                (findViewById(R.id.question_specify_range_submit)).setEnabled(true);
-
-                (findViewById(R.id.question_specify_range_submit)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        EditText etFrom = (EditText) findViewById(R.id.question_range_from);
-                        EditText etTo = (EditText) findViewById(R.id.question_range_to);
-
-                        if(etFrom.getText().toString().equals("") ||
-                                etFrom.getText().toString().equals("")) {
-                            Toast.makeText(FormQuestionCreatorActivity.this, "The range fields must be specified", Toast.LENGTH_SHORT);
-                            return;
-                        }
-
-                        from = Integer.parseInt(etFrom.getText().toString());
-                        to = Integer.parseInt(etTo.getText().toString());
-                        allowedValues = new ArrayList<>();
-                        allowedValues.add("" +from);
-                        allowedValues.add("" +to);
-                        questionType = FormEnumType.RANGE;
-
-                        if( from >= to) {
-                            Toast.makeText(FormQuestionCreatorActivity.this, "a -> A,", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        (findViewById(R.id.question_specify_range_submit)).setEnabled(false);
-                        enableMandatoryView();
-                    }
-                });
+                setupRangedItem();
                 break;
             case 6:
                 questionType = FormEnumType.MULTI_INSTANCE_RESPONSE;
-                ((TextView)findViewById(R.id.closed_vocabulary_title)).setText("Specify this questions header (variables to read from the user's input)");
-
-                viewQuestionVocabularies.setVisibility(View.VISIBLE);
-                (findViewById(R.id.question_et_add_word)).setEnabled(true);
-                (findViewById(R.id.question_add_word)).setEnabled(true);
-
-                ListView lv_header_words = (ListView) findViewById(R.id.list_allowed_vocabulary);
-                allowedValues = new ArrayList<>();
-                mAdapter = new ArrayAdapter<>(this,
-                        android.R.layout.simple_list_item_1, allowedValues);
-                lv_header_words.setAdapter(mAdapter);
-
-                (findViewById(R.id.question_add_word)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        EditText etWord = (EditText) findViewById(R.id.question_et_add_word);
-                        if (etWord.getText().toString().equals("")) {
-                            etWord.setError(getString(R.string.required));
-                            return;
-                        }
-
-                        allowedValues.add(etWord.getText().toString());
-                        etWord.setText("");
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-
-                (findViewById(R.id.question_vocabulary_submit)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (allowedValues.isEmpty()) {
-                            Toast.makeText(FormQuestionCreatorActivity.this, "At least two options should be added.", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        (findViewById(R.id.question_add_word)).setEnabled(false);
-                        (findViewById(R.id.question_et_add_word)).setEnabled(false);
-
-                        questionType = FormEnumType.MULTI_INSTANCE_RESPONSE;
-                        enableMandatoryView();
-                    }
-                });
+                setupMultiRowItem();
                 break;
             case 7:
                 questionType = FormEnumType.INSTRUCTION;
@@ -295,6 +196,160 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
             default:
                 break;
         }
+    }
+
+    /**
+     * Build up a field with limited numeric answer. User can specify the lower and upper bound.
+     * The interface will show them and restrict the accepted values to this interval
+     */
+    private void setupRangedItem() {
+        viewQuestionRange.setVisibility(View.VISIBLE);
+        (findViewById(R.id.question_specify_range_submit)).setEnabled(true);
+
+        (findViewById(R.id.question_specify_range_submit)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText etFrom = (EditText) findViewById(R.id.question_range_from);
+                EditText etTo = (EditText) findViewById(R.id.question_range_to);
+
+                if(etFrom.getText().toString().equals("") ||
+                        etFrom.getText().toString().equals("")) {
+                    Toast.makeText(FormQuestionCreatorActivity.this, "The range fields must be specified", Toast.LENGTH_SHORT);
+                    return;
+                }
+
+                from = Integer.parseInt(etFrom.getText().toString());
+                to = Integer.parseInt(etTo.getText().toString());
+                allowedValues = new ArrayList<>();
+                allowedValues.add("" +from);
+                allowedValues.add("" +to);
+                questionType = FormEnumType.RANGE;
+
+                if( from >= to) {
+                    Toast.makeText(FormQuestionCreatorActivity.this, "a -> A,", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                (findViewById(R.id.question_specify_range_submit)).setEnabled(false);
+                enableMandatoryView();
+            }
+        });
+    }
+
+    /**
+     * Builds up a question with controlled vocabulary/multiple choice
+     * the end interface will ask the user to pick one of the options
+     */
+    private void setupMultipleChoiceItem() {
+        viewQuestionVocabularies.setVisibility(View.VISIBLE);
+        (findViewById(R.id.question_et_add_word)).setEnabled(true);
+        (findViewById(R.id.question_add_word)).setEnabled(true);
+        (findViewById(R.id.question_boolean)).setVisibility(View.GONE);
+
+        ListView lv_allowed_word = (ListView) findViewById(R.id.list_allowed_vocabulary);
+        allowedValues = new ArrayList<>();
+
+        mAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, allowedValues);
+        lv_allowed_word.setAdapter(mAdapter);
+
+        (findViewById(R.id.question_add_word)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText etWord = (EditText) findViewById(R.id.question_et_add_word);
+                if (etWord.getText().toString().equals("")) {
+                    etWord.setError(getString(R.string.required));
+                    return;
+                }
+                allowedValues.add(etWord.getText().toString());
+                etWord.setText("");
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
+        (findViewById(R.id.question_vocabulary_submit)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (allowedValues.isEmpty()) {
+                    Toast.makeText(FormQuestionCreatorActivity.this, "At least two options should be added.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                (findViewById(R.id.question_add_word)).setEnabled(false);
+                (findViewById(R.id.question_et_add_word)).setEnabled(false);
+
+                questionType = FormEnumType.MULTIPLE_CHOICE;
+                enableMandatoryView();
+            }
+        });
+    }
+
+    /**
+     * Builds up an item with several rows associated (as in an spreadsheet)
+     * The interface will expand and add an editable field for each column and the user
+     * fills in these fields. In the end these are converted into a row and added back to the item
+     */
+    private void setupMultiRowItem() {
+        ((TextView)findViewById(R.id.closed_vocabulary_title)).setText(getString(R.string.specify_question_headers));
+
+        viewQuestionVocabularies.setVisibility(View.VISIBLE);
+        (findViewById(R.id.question_et_add_word)).setEnabled(true);
+        (findViewById(R.id.question_add_word)).setEnabled(true);
+
+        ListView lv_header_words = (ListView) findViewById(R.id.list_allowed_vocabulary);
+
+        columns = new ArrayList<>();
+        mColumnAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, columns);
+        lv_header_words.setAdapter(mColumnAdapter);
+
+        ((ImageButton) findViewById(R.id.question_boolean)).setColorFilter(ContextCompat.getColor(FormQuestionCreatorActivity.this, R.color.card_shadow), PorterDuff.Mode.SRC_ATOP);
+        (findViewById(R.id.question_boolean)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (context.isEmpty()) {
+                    ((ImageButton) findViewById(R.id.question_boolean)).setColorFilter(ContextCompat.getColor(FormQuestionCreatorActivity.this, R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                    //TODO: show dialog to pick context from dictionaries
+                    context = "boolean";
+                }
+                else {
+                    context = "";
+                    Toast.makeText(FormQuestionCreatorActivity.this, getString(R.string.context_cleared), Toast.LENGTH_SHORT).show();
+                    ((ImageButton) findViewById(R.id.question_boolean)).setColorFilter(ContextCompat.getColor(FormQuestionCreatorActivity.this, R.color.card_shadow), PorterDuff.Mode.SRC_ATOP);
+                }
+            }
+        });
+
+        (findViewById(R.id.question_add_word)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText etWord = (EditText) findViewById(R.id.question_et_add_word);
+                if (etWord.getText().toString().equals("")) {
+                    etWord.setError(getString(R.string.required));
+                    return;
+                }
+
+                Column column = new Column(etWord.getText().toString(), context);
+                columns.add(column);
+                etWord.setText("");
+                context = "";
+                ((ImageButton) findViewById(R.id.question_boolean)).setColorFilter(ContextCompat.getColor(FormQuestionCreatorActivity.this, R.color.card_shadow), PorterDuff.Mode.SRC_ATOP);
+                mColumnAdapter.notifyDataSetChanged();
+            }
+        });
+
+        (findViewById(R.id.question_vocabulary_submit)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (columns.isEmpty()) {
+                    Toast.makeText(FormQuestionCreatorActivity.this, "At least two options should be added.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                (findViewById(R.id.question_add_word)).setEnabled(false);
+                (findViewById(R.id.question_et_add_word)).setEnabled(false);
+
+                questionType = FormEnumType.MULTI_INSTANCE_RESPONSE;
+                enableMandatoryView();
+            }
+        });
     }
 
     @Override
@@ -328,7 +383,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
 
                 EditText etDuration = (EditText) findViewById(R.id.question_expected_duration);
 
-                if (!questionType.equals(FormEnumType.MULTI_INSTANCE_RESPONSE))
+                if (questionType.equals(FormEnumType.MULTIPLE_CHOICE))
                     allowedValues.add(0, getString(R.string.pick_from_spinner));
 
                 FormQuestion fq = new FormQuestion(questionType, questionBody, allowedValues);
@@ -338,6 +393,7 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
                     fq.setDuration(0);
                 }
 
+                fq.setColumns(columns);
                 fq.setMandatory(mandatory);
 
                 Intent returnIntent = new Intent();
