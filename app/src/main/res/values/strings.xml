@@ -362,6 +362,10 @@
     <string name="vocabularies_not_loaded">The available vocabularies were not loaded. You can do it in the configurations menu.</string>
     <string name="dialog_pick_context_title">Select an option for the context to provide</string>
     <string name="sbd_username_missing_export">To export your records you need to provide your credentials in the configuration menu. Please do so, and try again afterwards.</string>
+    <string name="sbd_attr_header">SeaBioData resources</string>
+    <string name="sbd_attrs">SeaBioData resources are necessary for specific, controlled vocabularies across the application. They are pre-configured in the SeaBioData repository by a campaign administrator and then imported into this application.</string>
+    <string name="sbd_load_attrs">Import</string>
+    <string name="sbd_dorms_exported_successfully">The records were successfuly exported to the device\'s storage.</string>
     <!-- /TTS sentences -->
 
 

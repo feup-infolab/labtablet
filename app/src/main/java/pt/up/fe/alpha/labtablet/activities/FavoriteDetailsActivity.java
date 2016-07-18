@@ -42,9 +42,11 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import pt.up.fe.alpha.R;
@@ -476,13 +478,33 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
             return;
         }
 
-        FormExportItem exportItem = new FormExportItem(currentItem.getLinkedForms(), settings.getString(Utils.TAG_SBD_USERNAME, ""));
-        File path = getApplication().getFilesDir();
-        FileOutputStream stream = new FileOutputStream(new File(path, new Date().toString() + ".json"));
+        HashMap<String, ArrayList<FormInstance>> groupedInstances = new HashMap<>();
+        for (FormInstance fi : currentItem.getLinkedForms()) {
+            if (groupedInstances.containsKey(fi.getParent())) {
+                groupedInstances.get(fi.getParent()).add(fi);
+                continue;
+            }
 
-        stream.write(new Gson().toJson(exportItem).getBytes());
-        stream.close();
+            ArrayList<FormInstance> newInstances = new ArrayList<>();
+            newInstances.add(fi);
+            groupedInstances.put(fi.getParent(), newInstances);
+        }
+
+
+        for (String key : groupedInstances.keySet()) {
+            FormExportItem exportItem = new FormExportItem(groupedInstances.get(key), settings.getString(Utils.TAG_SBD_USERNAME, ""));
+            File file = new File(Environment.getExternalStorageDirectory() + File.separator + key + "_" + new Date().toString() + ".json");
+
+            if(file.createNewFile()) {
+                OutputStream fo = new FileOutputStream(file);
+                fo.write(new Gson().toJson(exportItem).getBytes());
+                fo.close();
+            }
+        }
+
+        Toast.makeText(getApplicationContext(), getString(R.string.sbd_dorms_exported_successfully), Toast.LENGTH_SHORT).show();
     }
+
 
     /**
      * Checks the dendro setup entries and launches the upload preparation

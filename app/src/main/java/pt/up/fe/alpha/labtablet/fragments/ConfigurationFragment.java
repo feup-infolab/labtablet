@@ -29,11 +29,14 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,10 +48,12 @@ import pt.up.fe.alpha.labtablet.application.LabTablet;
 import pt.up.fe.alpha.labtablet.async.AsyncAuthenticator;
 import pt.up.fe.alpha.labtablet.async.AsyncProfileLoader;
 import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.alpha.labtablet.db_handlers.FormMgr;
 import pt.up.fe.alpha.labtablet.models.AssociationItem;
 import pt.up.fe.alpha.labtablet.models.ChangelogItem;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
+import pt.up.fe.alpha.labtablet.models.Form;
 import pt.up.fe.alpha.labtablet.models.SeaBioData.Data;
 import pt.up.fe.alpha.labtablet.models.SeaBioData.EntityResponse;
 import pt.up.fe.alpha.labtablet.utils.Utils;
@@ -175,10 +180,37 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         mRootView.findViewById(R.id.bt_feedback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 String url = "https://docs.google.com/forms/d/1JSUS-yidh6SQUyV4SmubDdPr9WIqay0PCbWDutpFkIc/viewform";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
+                */
+                try {
+                    InputStream is = getActivity().getAssets().open("base_forms.json");
+
+                    // We guarantee that the available method returns the total
+                    // size of the asset...  of course, this does mean that a single
+                    // asset can't be more than 2 gigs.
+                    int size = is.available();
+
+                    // Read the entire asset into a local byte buffer.
+                    byte[] buffer = new byte[size];
+                    is.read(buffer);
+                    is.close();
+
+                    // Convert the buffer into a string.
+                    String text = new String(buffer);
+
+                    // Finally stick the string into the text view.
+                    ArrayList<Form> baseForms = new Gson().fromJson(text, Utils.ARRAY_FORM);
+                    FormMgr.overwriteBaseFormsEntry(getActivity(), baseForms);
+                    Toast.makeText(getActivity(), "OK :)", Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    // Should never happen!
+                    Toast.makeText(getActivity(), "Unable to load resources: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -659,7 +691,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
      */
     private void dispatchAttributesLoader() {
         btLoadCampaignAttributesLoader.setText(getString(R.string.loading));
-
+        tv_sbd_users.setText("");
         if (!settings.contains(Utils.TAG_SBD_URI)) {
             Toast.makeText(getActivity(), "Please specify the credentials above and try again.", Toast.LENGTH_SHORT).show();
             btPickCampaign.setText(getString(R.string.sbd_pick_campaign));
@@ -683,9 +715,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                 public void onResponse(String response) {
                     //Save results
 
-
                     HashMap<String, ArrayList<Data>> vocabularies;
-
                     if (!settings.contains("vocabularies") && settings.getString("vocabularies", "").isEmpty()) {
                         vocabularies = new HashMap<>();
                     } else {
@@ -693,27 +723,32 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
                         settings.edit().remove("vocabularies").apply();
                     }
 
+
                     EntityResponse responseObj = new Gson().fromJson(response, EntityResponse.class);
                     vocabularies.put(attr, responseObj.getData());
 
                     tv_sbd_users.setText(tv_sbd_users.getText().toString() + "\n" + attr + " [Ok]");
                     btLoadCampaignAttributesLoader.setText(getString(R.string.update));
-                    btPickCampaign.setText(getString(R.string.sbd_pick_campaign));
 
-                    if (!vocabularies.containsKey("boolean")) {
-                        //We want this option to be available as well
-                        final Data itemTrue = new Data("true");
-                        final Data itemFalse = new Data("false");
-                        vocabularies.put("boolean", new ArrayList<Data>() {{
-                            add(itemTrue);
-                            add(itemFalse);
-                        }});
-                    }
+                    //hardcoded items (blame Inês)
+                    final Data itemTrue = new Data("true");
+                    final Data itemFalse = new Data("false");
+                    ArrayList<Data> items = new ArrayList<>();
+                    items.add(itemFalse);
+                    items.add(itemTrue);
+                    vocabularies.put("boolean", items);
 
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.remove("vocabularies");
-                    editor.putString("vocabularies", new Gson().toJson(vocabularies));
-                    editor.apply();
+
+                    //We want this option to be available as well
+                    ArrayList<Data> procItems = new ArrayList<>();
+                    final Data itemProcedure = new Data("Smith-McIntyre 0.1m2");
+                    procItems.add(itemProcedure);
+                    vocabularies.put("procedures", procItems);
+
+                    SharedPreferences mSettings = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor mEditor = mSettings.edit();
+                    mEditor.putString("vocabularies", new Gson().toJson(vocabularies));
+                    mEditor.apply();
                     Toast.makeText(getActivity(), getString(R.string.saved), Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {

@@ -317,8 +317,8 @@
     <string name="text_placeholder">Text Placeholder</string>
     <string name="no_description">Não foi dada nenhuma descrição (clicar aqui para editar)</string>
     <string name="form_instance_list_header">Formulários preenchidos</string>
-    <string name="action_new_row">New row</string>
-    <string name="no_rows">There are no items.\\nAdd new ones by pressing the button below</string>
+    <string name="action_new_row">Nova linha</string>
+    <string name="no_rows">Ainda não há registos.\\nPode adicionar novos registos em baixo.</string>
     <string name="existing_rows">Linhas registadas</string>
     <string name="updated">Atualizado com sucesso</string>
     <string name="copied">Duplicado com sucesso</string>
@@ -330,10 +330,10 @@
     <string name="row_sepparator">;</string>
     <string name="temperature">Temperature</string>
     <string name="form_solver_title">Filling a form</string>
-    <string name="unable_get_location">Unable to get a location</string>
-    <string name="dictionary_configurations_title">Dictionary Configuration</string>
+    <string name="unable_get_location">Impossível obter uma localização</string>
+    <string name="dictionary_configurations_title">Configuração de dicionários</string>
     <string name="dictionary_configurations_description">Dictionaries are sets of frequently used terms that can assist you when filling out some descriptions throughout the project. They can be, for instance, a list of your collaborators\' full names, or a list of species that are frequently seen.</string>
-    <string name="dictionary_configurations_load">Load file</string>
+    <string name="dictionary_configurations_load">Carregar ficheiro</string>
     <string name="loaded_entries_header">Entradas carregadas:\n</string>
     <string name="seabio_authenticate_error">Unable to authenticate. Try again?</string>
     <string name="seabio_error_dictionary">Error loading data. Try again?</string>
@@ -355,15 +355,19 @@
     <string name="sbd_procedures_header">Procedures</string>
     <string name="sbd_procedures">These are the procedures identified by the campaign administrator. They can be used to ease the task of filling out the forms, where applicable. Should you wish to add a new procedure please contact the campaign administrator.</string>
     <string name="authenticate_first">Please authenticate the credentials above and try again.</string>
-    <string name="sbd_load_procedures">Get procedures</string>
-    <string name="sbd_users_unavailable">The users list is not available. You can import it from the configurations menu.</string>
+    <string name="sbd_load_procedures">Obter procedimentos</string>
+    <string name="sbd_users_unavailable">A lista de utilizadores não está disponível, pode caregá-la a partir do menu de configurações.</string>
     <string name="users_list">Collaborators</string>
     <string name="specify_question_headers">Specify this questions header (variables to read from the user\'s input)</string>
-    <string name="context_cleared">Cleared context</string>
-    <string name="sbd_stations_header">Stations</string>
-    <string name="vocabularies_not_loaded">The available vocabularies were not loaded. You can do it in the configurations menu.</string>
-    <string name="dialog_pick_context_title">Select an option for the context to provide</string>
-    <string name="sbd_username_missing_export">To export your records you need to provide your credentials in the configuration menu. Please do so, and try again afterwards.</string>
+    <string name="context_cleared">Contexto removido</string>
+    <string name="sbd_stations_header">Estações</string>
+    <string name="vocabularies_not_loaded">Os vocabulários ainda não foram carregados. Pode corrigir a situação no menu de configurações.</string>
+    <string name="dialog_pick_context_title">Selecione uma opção</string>
+    <string name="sbd_username_missing_export">Para exportar os registos deve primeiro fornecer e validar as suas credenciais da campanha. Pode fazê-lo no menu de configurações.</string>
+    <string name="sbd_attr_header">Recursos SeaBioData</string>
+    <string name="sbd_attrs">Os recursos do repositório SeaBioData devem ser carregados para apoiar o preenchimento de campos onde existam vocaulários disponíveis. Estes recursos são configurados por administradores de campanha, no processo de planeamento de expedições.</string>
+    <string name="sbd_load_attrs">Importar</string>
+    <string name="sbd_dorms_exported_successfully">Os registos foram exportados com sucesso para o armazenamento local.</string>
     <!-- /TTS sentences -->
 
     <string-array name="home_tips">
