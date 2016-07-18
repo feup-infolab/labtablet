@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -29,6 +31,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -42,6 +45,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import pt.up.fe.alpha.R;
@@ -418,32 +422,38 @@ public class FormSolverActivity extends AppCompatActivity {
                         if (column.getContext().isEmpty())
                             return;
 
-                        //TODO handle context here
+                        //handle context here
 
-                        if (!column.getContext().equals("boolean"))
+                        SharedPreferences settings = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+                        if (!settings.contains("vocabularies")) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.vocabularies_not_loaded), Toast.LENGTH_SHORT).show();
                             return;
+                        }
 
-                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        HashMap<String, ArrayList<Data>> vocabularies  = new Gson().fromJson(settings.getString("vocabularies", ""), Utils.HASH_SBD_DATA);
+
+                        if (!vocabularies.keySet().contains(column.getContext())) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.vocabularies_not_loaded), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        ArrayList<Data> dataItems = vocabularies.get(column.getContext());
+                        ArrayList<String> dataItemsString = new ArrayList<>();
+                        for (Data item : dataItems) {
+                            dataItemsString.add(item.getName());
+                        }
+
+                        final CharSequence options[] = dataItemsString.toArray(new String[dataItemsString.size()]);
+
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(FormSolverActivity.this);
+                        builder.setTitle(getString(R.string.dialog_pick_context_title));
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                switch (which){
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        if (view instanceof TextInputEditText)
-                                            ((TextInputEditText) view).setText(getString(android.R.string.yes));
-                                        Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
-                                        break;
-
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        ((TextInputEditText) view).setText(getString(android.R.string.no));
-                                        Toast.makeText(getApplicationContext(), "NO", Toast.LENGTH_SHORT).show();
-                                        break;
-                                }
+                                ((TextInputEditText) view).setText(options[which]);
                             }
-                        };
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(FormSolverActivity.this);
-                        builder.setMessage(fq.getQuestion()).setPositiveButton(getString(android.R.string.yes), dialogClickListener)
-                                .setNegativeButton(getString(android.R.string.no), dialogClickListener).show();
+                        });
+                        builder.show();
 
                     }
                 });

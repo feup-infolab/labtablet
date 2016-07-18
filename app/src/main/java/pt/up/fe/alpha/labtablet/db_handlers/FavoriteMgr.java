@@ -48,7 +48,6 @@ public class FavoriteMgr {
      */
     public static FavoriteItem getFavorite(Context context, String favoriteName) {
 
-
         SharedPreferences settings = context.getSharedPreferences(
                 context.getResources().getString(R.string.app_name),
                 Context.MODE_PRIVATE);

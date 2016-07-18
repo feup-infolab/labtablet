@@ -18,6 +18,7 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -25,6 +26,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,7 +40,11 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import pt.up.fe.alpha.R;
@@ -55,6 +61,7 @@ import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.models.Form;
 import pt.up.fe.alpha.labtablet.models.FormInstance;
 import pt.up.fe.alpha.labtablet.models.ProgressUpdateItem;
+import pt.up.fe.alpha.labtablet.models.SeaBioData.FormExportItem;
 import pt.up.fe.alpha.labtablet.utils.FileMgr;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
@@ -381,24 +388,30 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                 finish();
                 break;
             case R.id.action_favorite_upload:
-                SharedPreferences settings = getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
-                if (!settings.contains(Utils.DENDRO_CONFS_ENTRY)) {
-                    new AlertDialog.Builder(this)
-                            .setTitle(getResources().getString(R.string.dendro_confs_not_found_title))
-                            .setMessage(getResources().getString(R.string.dendro_confs_not_found_message))
-                            .setCancelable(false)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .setIcon(getResources().getDrawable(R.drawable.ab_cross))
-                            .show();
-                    return super.onOptionsItemSelected(item);
-                }
 
-                Intent mIntent = new Intent(this, SubmissionValidationActivity.class);
-                mIntent.putExtra("favorite_name", favoriteName);
-                startActivityForResult(mIntent, Utils.SUBMISSION_VALIDATION);
+                final String options[] = {"SeaBioData", "Dendro"};
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(FavoriteDetailsActivity.this);
+                builder.setTitle(getString(R.string.dialog_pick_context_title));
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        switch (options[which]) {
+                            case "SeaBioData":
+                                try {
+                                    dispatchSBDExport();
+                                } catch (IOException e) {
+                                    Log.e("SBD", e.getMessage());
+                                }
+                                break;
+
+                            case "Dendro":
+                                dispatchDendroUpload();
+
+                        }
+                    }
+                });
+                builder.show();
 
                 break;
             case R.id.action_favorite_delete:
@@ -448,6 +461,51 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Generates the necessary files for the forms upload to the SeaBioData repository
+     */
+    private void dispatchSBDExport() throws IOException {
+
+
+        SharedPreferences settings = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+
+        if (!settings.contains(Utils.TAG_SBD_USERNAME)) {
+            Toast.makeText(this, getString(R.string.sbd_username_missing_export), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        FormExportItem exportItem = new FormExportItem(currentItem.getLinkedForms(), settings.getString(Utils.TAG_SBD_USERNAME, ""));
+        File path = getApplication().getFilesDir();
+        FileOutputStream stream = new FileOutputStream(new File(path, new Date().toString() + ".json"));
+
+        stream.write(new Gson().toJson(exportItem).getBytes());
+        stream.close();
+    }
+
+    /**
+     * Checks the dendro setup entries and launches the upload preparation
+     * activity if they are correct
+     */
+    private void dispatchDendroUpload() {
+        SharedPreferences settings = getSharedPreferences(getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
+        if (!settings.contains(Utils.DENDRO_CONFS_ENTRY)) {
+            new AlertDialog.Builder(FavoriteDetailsActivity.this)
+                    .setTitle(getResources().getString(R.string.dendro_confs_not_found_title))
+                    .setMessage(getResources().getString(R.string.dendro_confs_not_found_message))
+                    .setCancelable(false)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setIcon(getResources().getDrawable(R.drawable.ab_cross))
+                    .show();
+        }
+
+        Intent mIntent = new Intent(this, SubmissionValidationActivity.class);
+        mIntent.putExtra("favorite_name", favoriteName);
+        startActivityForResult(mIntent, Utils.SUBMISSION_VALIDATION);
     }
 
     @Override

@@ -13,7 +13,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.models.AssociationItem;
@@ -77,6 +79,8 @@ public class Utils {
     public static final int ITEM_PREVIEW = 10;
     public static final int DATA_ITEM_CHANGED = 1;
     public static final int METADATA_ITEM_CHANGED = 0;
+
+    public static final Type HASH_SBD_DATA = new TypeToken<HashMap<String, ArrayList<Data>>>(){}.getType();
 
     public static final Type ARRAY_ASSOCIATION_ITEM = new TypeToken<ArrayList<AssociationItem>>() {
     }.getType();

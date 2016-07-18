@@ -358,6 +358,10 @@
     <string name="users_list">Collaborators</string>
     <string name="specify_question_headers">Specify this questions header (variables to read from the user\'s input)</string>
     <string name="context_cleared">Cleared context</string>
+    <string name="sbd_stations_header">Stations</string>
+    <string name="vocabularies_not_loaded">The available vocabularies were not loaded. You can do it in the configurations menu.</string>
+    <string name="dialog_pick_context_title">Select an option for the context to provide</string>
+    <string name="sbd_username_missing_export">To export your records you need to provide your credentials in the configuration menu. Please do so, and try again afterwards.</string>
     <!-- /TTS sentences -->
 
 

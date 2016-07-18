@@ -29,7 +29,6 @@ import pt.up.fe.alpha.labtablet.activities.ItemPreviewActivity;
 import pt.up.fe.alpha.labtablet.adapters.DataListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.FormListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.MetadataListAdapter;
-import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.models.DataItem;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;

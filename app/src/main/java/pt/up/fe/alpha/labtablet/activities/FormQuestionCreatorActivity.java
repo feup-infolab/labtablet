@@ -2,10 +2,13 @@ package pt.up.fe.alpha.labtablet.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,11 +26,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.models.Column;
 import pt.up.fe.alpha.labtablet.models.FormEnumType;
 import pt.up.fe.alpha.labtablet.models.FormQuestion;
+import pt.up.fe.alpha.labtablet.models.SeaBioData.Data;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
 
@@ -306,9 +311,30 @@ public class FormQuestionCreatorActivity extends Activity implements AdapterView
             @Override
             public void onClick(View view) {
                 if (context.isEmpty()) {
-                    ((ImageButton) findViewById(R.id.question_boolean)).setColorFilter(ContextCompat.getColor(FormQuestionCreatorActivity.this, R.color.primary), PorterDuff.Mode.SRC_ATOP);
-                    //TODO: show dialog to pick context from dictionaries
-                    context = "boolean";
+
+                    //show dialog to pick context from dictionaries
+                    SharedPreferences settings = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+                    if (!settings.contains("vocabularies")) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.vocabularies_not_loaded), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    HashMap<String, ArrayList<Data>> vocabularies  = new Gson().fromJson(settings.getString("vocabularies", ""), Utils.HASH_SBD_DATA);
+
+                    final CharSequence options[] = vocabularies.keySet().toArray(new String[vocabularies.keySet().size()]);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(FormQuestionCreatorActivity.this);
+                    builder.setTitle(getString(R.string.dialog_pick_context_title));
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ((ImageButton) findViewById(R.id.question_boolean)).setColorFilter(ContextCompat.getColor(FormQuestionCreatorActivity.this, R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                            context = "" + options[which];
+                        }
+                    });
+                    builder.show();
+
+
                 }
                 else {
                     context = "";
