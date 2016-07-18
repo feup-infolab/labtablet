@@ -65,4 +65,60 @@
   }],
   "parent": "",
   "timestamp": ""
+}, {
+  "descriptionSet": true,
+  "formDescription": "Formulário  para registo de CTDs",
+  "formName": "CTD",
+  "formQuestions": [{
+    "columns": [{
+      "context": "procedures",
+      "title": "Procedure"
+    }, {
+      "context": "stations",
+      "title": "Station"
+    }, {
+      "context": "",
+      "title": "Sample"
+    }, {
+      "context": "",
+      "title": "Timestamp"
+    }, {
+      "context": "",
+      "title": "Latitude [°N]"
+    }, {
+      "context": "",
+      "title": "Longitude [°E]"
+    }, {
+      "context": "",
+      "title": "Initial Depth [m]"
+    }, {
+      "context": "",
+      "title": "Time Interval [s]"
+    }, {
+      "context": "",
+      "title": "Comments"
+    }],
+    "duration": 0,
+    "mandatory": true,
+    "question": "REGISTOS",
+    "rows": [],
+    "type": "MULTI_INSTANCE_RESPONSE",
+    "value": ""
+  }, {
+    "duration": 0,
+    "mandatory": false,
+    "question": "CTD stands for conductivity, temperature, and depth, and refers to a package of electronic instruments that measure these properties. A CTD Rosette is lowered into the water to measure the salinity, temperature, depth and concentration of particles in the water column.",
+    "rows": [],
+    "type": "INSTRUCTION",
+    "value": ""
+  }, {
+    "duration": 0,
+    "mandatory": false,
+    "question": "A CTD or Sonde is an oceanography instrument used to determine the conductivity, temperature, and depth of the ocean. The CTD may be incorporated into an array of Niskin bottles referred to as a carousel or rosette.",
+    "rows": [],
+    "type": "INSTRUCTION",
+    "value": ""
+  }],
+  "parent": "",
+  "timestamp": ""
 }]

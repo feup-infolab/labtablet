@@ -50,7 +50,7 @@ public class LabTablet extends Application {
         mInstance = this;
 
         // The following line triggers the initialization of ACRA
-        //ACRA.init(this);
+        ACRA.init(this);
     }
 
 
