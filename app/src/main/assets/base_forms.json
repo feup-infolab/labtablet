@@ -107,7 +107,7 @@
   }, {
     "duration": 0,
     "mandatory": false,
-    "question": "CTD stands for conductivity, temperature, and depth, and refers to a package of electronic instruments that measure these properties. A CTD Rosette is lowered into the water to measure the salinity, temperature, depth and concentration of particles in the water column.",
+    "question": "CTD stands for conductivity, temperature, and depth, and refers to a package of electronic instruments that measure these properties.",
     "rows": [],
     "type": "INSTRUCTION",
     "value": ""

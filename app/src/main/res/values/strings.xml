@@ -366,6 +366,12 @@
     <string name="sbd_attrs">SeaBioData resources are necessary for specific, controlled vocabularies across the application. They are pre-configured in the SeaBioData repository by a campaign administrator and then imported into this application.</string>
     <string name="sbd_load_attrs">Import</string>
     <string name="sbd_dorms_exported_successfully">The records were successfuly exported to the device\'s storage.</string>
+    <string name="procedures_list">Procedures</string>
+    <string name="sbd_select_procedures">Pick a procedure</string>
+    <string name="sbd_select_users">Pick a user</string>
+    <string name="sbd_select_station">Pick a station</string>
+    <string name="stations_list">Stations</string>
+    <string name="form_solver_subtitle">Use the buttons bellow to assist you with the form</string>
     <!-- /TTS sentences -->
 
 

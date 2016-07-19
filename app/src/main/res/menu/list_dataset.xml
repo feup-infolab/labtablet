@@ -9,6 +9,7 @@
 
     <item
         android:id="@+id/action_import_dataset"
+        android:visible="false"
         android:icon="@android:drawable/radiobutton_off_background"
         android:title="@string/import_dataset"
         app:showAsAction="always"

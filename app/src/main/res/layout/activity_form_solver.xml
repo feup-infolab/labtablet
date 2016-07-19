@@ -37,8 +37,6 @@
                     android:textColor="@android:color/white"
                     android:layout_gravity="center_vertical"
                     style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                    android:drawableEnd="@drawable/ic_place_white_24dp"
-                    android:drawablePadding="10dp"
                     android:layout_marginEnd="10dp"
                     android:gravity="end|center_vertical"
                     android:text="@string/position"
@@ -48,11 +46,8 @@
                 <Button
                     android:id="@+id/assist_date"
                     android:textColor="@android:color/white"
-                    android:layout_marginEnd="10dp"
                     android:layout_gravity="center_vertical"
                     style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                    android:drawableEnd="@drawable/ic_date_range_white_24dp"
-                    android:drawablePadding="10dp"
                     android:gravity="end|center_vertical"
                     android:text="@string/date"
                     android:layout_width="wrap_content"
@@ -64,10 +59,30 @@
                     android:layout_marginEnd="10dp"
                     android:layout_gravity="center_vertical"
                     style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                    android:drawableEnd="@drawable/ab_validate"
-                    android:drawablePadding="10dp"
                     android:gravity="end|center_vertical"
                     android:text="@string/users_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/assist_procedures"
+                    android:textColor="@android:color/white"
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="center_vertical"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:gravity="end|center_vertical"
+                    android:text="@string/procedures_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/assist_stations"
+                    android:textColor="@android:color/white"
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="center_vertical"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:gravity="end|center_vertical"
+                    android:text="@string/stations_list"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
 

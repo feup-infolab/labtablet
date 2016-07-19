@@ -89,7 +89,7 @@ public class FormSolverActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(targetForm.getParent());
-            getSupportActionBar().setSubtitle("Use the buttons bellow to assist you with the form");
+            getSupportActionBar().setSubtitle(getString(R.string.form_solver_subtitle));
         }
 
         int questionCount = targetForm.getFormQuestions().size();
@@ -485,6 +485,9 @@ public class FormSolverActivity extends AppCompatActivity {
                 return;
             }
 
+            SharedPreferences settings = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+            HashMap<String, ArrayList<Data>> vocabularies = new HashMap<>();
+
             switch (view.getId()) {
                 case R.id.assist_position:
                     Location location = getLastKnownLocation();
@@ -497,31 +500,83 @@ public class FormSolverActivity extends AppCompatActivity {
                     break;
 
                 case R.id.assist_date:
-                    focusedView.setText(focusedView.getText() + " " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+                    focusedView.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
                     break;
 
-                case R.id.assist_users:
-                    SharedPreferences settings = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
-                    if (!settings.contains(Utils.SBD_USERS)) {
+                case R.id.assist_procedures:
+
+                    vocabularies = new HashMap<>();
+                    if (!settings.contains("vocabularies") && settings.getString("vocabularies", "").isEmpty()) {
                         Toast.makeText(FormSolverActivity.this, getString(R.string.sbd_users_unavailable), Toast.LENGTH_SHORT).show();
-                        return;
+                    } else {
+                        vocabularies = new Gson().fromJson(settings.getString("vocabularies", ""), Utils.HASH_SBD_DATA);
                     }
 
-                    ArrayList<Data> users = new Gson().fromJson(settings.getString(Utils.SBD_USERS, ""), Utils.ARRAY_SBD_DATA);
+                    ArrayList<Data> procedures = vocabularies.get("procedures");
+                    final ArrayList<String> proceduresString = new ArrayList<>();
+                    for (Data data : procedures) {
+                        proceduresString.add(data.getName());
+                    }
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(FormSolverActivity.this);
+                    builder.setTitle(getString(R.string.sbd_select_procedures));
+                    builder.setItems(proceduresString.toArray(new String[proceduresString.size()]), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            focusedView.setText(focusedView.getText() + " " + proceduresString.get(which));
+                        }
+                    });
+                    builder.show();
+                    break;
+
+                case R.id.assist_users :
+                    vocabularies = new HashMap<>();
+                    if (!settings.contains("vocabularies") && settings.getString("vocabularies", "").isEmpty()) {
+                        Toast.makeText(FormSolverActivity.this, getString(R.string.sbd_users_unavailable), Toast.LENGTH_SHORT).show();
+                    } else {
+                        vocabularies = new Gson().fromJson(settings.getString("vocabularies", ""), Utils.HASH_SBD_DATA);
+                    }
+
+                    ArrayList<Data> users = vocabularies.get("users");
                     final ArrayList<String> usersString = new ArrayList<>();
                     for (Data data : users) {
                         usersString.add(data.getName());
                     }
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(FormSolverActivity.this);
-                    builder.setTitle(getString(R.string.sbd_select_campaign));
-                    builder.setItems(usersString.toArray(new String[usersString.size()]), new DialogInterface.OnClickListener() {
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(FormSolverActivity.this);
+                    mBuilder.setTitle(getString(R.string.sbd_select_users));
+                    mBuilder.setItems(usersString.toArray(new String[usersString.size()]), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             focusedView.setText(focusedView.getText() + " " + usersString.get(which));
                         }
                     });
-                    builder.show();
+                    mBuilder.show();
+                    break;
+
+                case R.id.assist_stations:
+                    vocabularies = new HashMap<>();
+                    if (!settings.contains("vocabularies") && settings.getString("vocabularies", "").isEmpty()) {
+                        Toast.makeText(FormSolverActivity.this, getString(R.string.sbd_users_unavailable), Toast.LENGTH_SHORT).show();
+                    } else {
+                        vocabularies = new Gson().fromJson(settings.getString("vocabularies", ""), Utils.HASH_SBD_DATA);
+                    }
+
+                    ArrayList<Data> stations = vocabularies.get("stations");
+                    final ArrayList<String> stationsString = new ArrayList<>();
+                    for (Data data : stations) {
+                        stationsString.add(data.getName());
+                    }
+
+                    AlertDialog.Builder stationsBuilder = new AlertDialog.Builder(FormSolverActivity.this);
+                    stationsBuilder.setTitle(getString(R.string.sbd_select_station));
+                    stationsBuilder.setItems(stationsString.toArray(new String[stationsString.size()]), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            focusedView.setText(focusedView.getText() + " " + stationsString.get(which));
+                        }
+                    });
+                    stationsBuilder.show();
                     break;
             }
 
