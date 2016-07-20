@@ -119,8 +119,8 @@
     <orderEntry type="library" exported="" name="support-v13-24.0.0" level="project" />
     <orderEntry type="library" exported="" name="httpcore-4.3.2" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-24.0.0" level="project" />
-    <orderEntry type="library" exported="" name="jdom-2.0.2" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-24.0.0" level="project" />
+    <orderEntry type="library" exported="" name="jdom-2.0.2" level="project" />
     <orderEntry type="library" exported="" name="support-v4-24.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-24.0.0" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-24.0.0" level="project" />

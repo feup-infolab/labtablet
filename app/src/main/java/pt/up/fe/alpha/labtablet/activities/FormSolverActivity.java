@@ -50,6 +50,7 @@ import java.util.List;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.fragments.QuestionRowDialogFragment;
+import pt.up.fe.alpha.labtablet.models.AssociationItem;
 import pt.up.fe.alpha.labtablet.models.Column;
 import pt.up.fe.alpha.labtablet.models.FormEnumType;
 import pt.up.fe.alpha.labtablet.models.FormInstance;
