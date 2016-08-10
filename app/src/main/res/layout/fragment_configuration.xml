@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    tools:context=".labtablet.fragments.ConfigurationFragment"
+    tools:context=".seabiotablet.fragments.ConfigurationFragment"
     >
 
     <LinearLayout
@@ -352,7 +352,7 @@
                         android:textColor="@android:color/black"
                         android:layout_height="wrap_content"
                         android:drawableStart="@android:drawable/ic_menu_directions"
-                        android:text="http://sensorix.inescporto.pt:3000"
+                        android:text="http://seabiotix.inesctec.pt:3000"
                         android:inputType="textUri"
                         />
 
@@ -363,7 +363,6 @@
                         android:layout_height="wrap_content"
                         android:drawableStart="@android:drawable/ic_menu_myplaces"
                         android:hint="Username"
-                        android:text="admin"
                         />
 
                     <EditText
@@ -373,7 +372,6 @@
                         android:layout_height="wrap_content"
                         android:hint="Password"
                         android:inputType="textPassword"
-                        android:text="seabiodata_inesc"
                         />
 
                 </LinearLayout>

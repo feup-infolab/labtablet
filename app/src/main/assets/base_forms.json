@@ -1,122 +1,117 @@
 [{
   "descriptionSet": true,
-  "formDescription": "Formulário para campanha bentónica. Exclusivamente para efeitos de demonstração. ",
-  "formName": "Benthos",
+  "formDescription": "Formulário de registo de IKMT",
+  "formName": "IKMT",
   "formQuestions": [{
     "columns": [{
       "context": "procedures",
-      "title": "Procedure"
+      "title": "Procedure",
+      "text": "Midwater Trawl Net"
     }, {
       "context": "stations",
       "title": "Station"
     }, {
       "context": "",
       "title": "Sample"
+    },{
+      "context": "",
+      "title": "Latitude [°N] Start"
+    },{
+      "context": "",
+      "title": "Longitude [°E] Start"
+    },{
+      "context": "",
+      "title": "Latitude [°N] End"
+    },{
+      "context": "",
+      "title": "Longitude [°E] End"
     }, {
       "context": "",
-      "title": "Timestamp"
+      "title": "Date/Time"
     }, {
       "context": "",
-      "title": "Latitude [°N]"
+      "title": "Time start Procedure"
     }, {
       "context": "",
-      "title": "Longitude [°E]"
+      "title": "Time end Procedure"
     }, {
       "context": "",
-      "title": "Depth [m]"
-    }, {
-      "context": "boolean",
-      "title": "Molecular Analysis Sample"
-    }, {
-      "context": "boolean",
-      "title": "Polychaeta"
-    }, {
-      "context": "boolean",
-      "title": "Crustacea"
-    }, {
-      "context": "boolean",
-      "title": "Bivalbia"
-    }, {
-      "context": "boolean",
-      "title": "Gastropoda"
-    }, {
-      "context": "boolean",
-      "title": "Echinodermata"
-    }, {
-      "context": "boolean",
-      "title": "Remaining Sediment "
+      "title": "Cable release start"
     }, {
       "context": "",
-      "title": "Comments"
-    }],
-    "duration": 0,
-    "mandatory": true,
-    "question": "Registos",
-    "rows": [],
-    "type": "MULTI_INSTANCE_RESPONSE",
-    "value": ""
-  }, {
-    "duration": 0,
-    "mandatory": false,
-    "question": "Benthos is the community of organisms that live on, in, or near the seabed, also known as the benthic zone. This community lives in or near marine sedimentary environments, from tidal pools along the foreshore, out to the continental shelf, and then down to the abyssal depths.Benthos is the community of organisms that live on, in, or near the seabed, also known as the benthic zone. This community lives in or near marine sedimentary environments, from tidal pools along the foreshore, out to the continental shelf, and then down to the abyssal depths.",
-    "rows": [],
-    "type": "INSTRUCTION",
-    "value": ""
-  }],
-  "parent": "",
-  "timestamp": ""
-}, {
-  "descriptionSet": true,
-  "formDescription": "Formulário  para registo de CTDs",
-  "formName": "CTD",
-  "formQuestions": [{
-    "columns": [{
-      "context": "procedures",
-      "title": "Procedure"
-    }, {
-      "context": "stations",
-      "title": "Station"
+      "title": "Cable release end"
+    },{
+      "context": "",
+      "title": "Depth net start"
     }, {
       "context": "",
-      "title": "Sample"
-    }, {
+      "title": "Depth net end"
+    },{
       "context": "",
-      "title": "Timestamp"
-    }, {
+      "title": "Depth bottom start"
+    },{
       "context": "",
-      "title": "Latitude [°N]"
-    }, {
+      "title": "Depth bottom end"
+    },{
       "context": "",
-      "title": "Longitude [°E]"
-    }, {
+      "title": "Time start Drag"
+    },{
       "context": "",
-      "title": "Initial Depth [m]"
-    }, {
+      "title": "Time end Drag"
+    },{
       "context": "",
-      "title": "Time Interval [s]"
-    }, {
+      "title": "Latitude start Drag"
+    },{
       "context": "",
-      "title": "Comments"
+      "title": "Longitude start Drag"
+    },{
+      "context": "",
+      "title": "Latitude end Drag"
+    },{
+      "context": "",
+      "title": "Longitude end Drag"
+    },{
+      "context": "",
+      "title": "Cable release Drag start"
+    },{
+      "context": "",
+      "title": "Cable release Drag end"
+    },{
+      "context": "",
+      "title": "Depth Net Drag start"
+    },{
+      "context": "",
+      "title": "Depth Net Drag end"
+    },{
+      "context": "",
+      "title": "Depth Bottom Drag start"
+    },{
+      "context": "",
+      "title": "Depth Bottom Drag end"
+    },{
+      "context": "",
+      "title": "Observations"
+    },{
+      "context": "",
+      "title": "Total Caught"
+    },{
+      "context": "",
+      "title": "Fishes"
+    },{
+      "context": "",
+      "title": "Cephalopods"
+    },{
+      "context": "",
+      "title": "Crustaceans"
+    },{
+      "context": "",
+      "title": "Jellyfishes and others"
     }],
     "duration": 0,
     "mandatory": true,
     "question": "REGISTOS",
     "rows": [],
     "type": "MULTI_INSTANCE_RESPONSE",
-    "value": ""
-  }, {
-    "duration": 0,
-    "mandatory": false,
-    "question": "CTD stands for conductivity, temperature, and depth, and refers to a package of electronic instruments that measure these properties.",
-    "rows": [],
-    "type": "INSTRUCTION",
-    "value": ""
-  }, {
-    "duration": 0,
-    "mandatory": false,
-    "question": "A CTD or Sonde is an oceanography instrument used to determine the conductivity, temperature, and depth of the ocean. The CTD may be incorporated into an array of Niskin bottles referred to as a carousel or rosette.",
-    "rows": [],
-    "type": "INSTRUCTION",
     "value": ""
   }],
   "parent": "",

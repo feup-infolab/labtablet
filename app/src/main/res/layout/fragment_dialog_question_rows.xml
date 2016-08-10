@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     >
@@ -10,18 +11,18 @@
         style="@style/TextAppearance.AppCompat.Large"
         android:padding="4dp"
         android:text="@string/existing_rows"
-        android:layout_width="match_parent"
+        android:layout_width="500dp"
         android:layout_height="wrap_content" />
 
     <ScrollView
         android:id="@+id/fragment_dialog_edit_view"
         android:visibility="visible"
-        android:layout_width="match_parent"
+        android:layout_width="500dp"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="500dp"
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.RecyclerView

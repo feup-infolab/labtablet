@@ -78,7 +78,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_border_color_white_24dp"
         android:layout_margin="20dp"
-        app:layout_behavior="pt.up.fe.alpha.labtablet.adapters.ScrollingFABBehavior"
+        app:layout_behavior="pt.up.fe.alpha.seabiotablet.adapters.ScrollingFABBehavior"
         android:layout_gravity="end|bottom"
         />
 

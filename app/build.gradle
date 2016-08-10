@@ -17,11 +17,11 @@ android {
         exclude 'META-INF/LGPL2.1'
     }
     defaultConfig {
-        applicationId "pt.up.fe.alpha.labtablet"
+        applicationId "pt.up.fe.alpha.seabiotablet"
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 9
-        versionName "0.1"
+        versionCode 12
+        versionName "0.1.1"
     }
     buildTypes {
         release {

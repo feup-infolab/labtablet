@@ -22,14 +22,14 @@
     substitute for the full length canonical Activity name in screen view hit. In order to
     specify an alternate screen name use an <screenName> element, with the name attribute
     specifying the canonical name, and the value the alias to use instead. -->
-    <screenName name="pt.up.fe.alpha.labtablet.activities.MainActivity">My Activity</screenName>
-    <screenName name="pt.up.fe.alpha.labtablet.activities.FieldModeActivity">Field Mode</screenName>
-    <screenName name="pt.up.fe.alpha.labtablet.activities.FingerPaintActivity">Handwriting</screenName>
-    <screenName name="pt.up.fe.alpha.labtablet.activities.FormQuestionCreatorActivity">Question Creator</screenName>
-    <screenName name="pt.up.fe.alpha.labtablet.activities.SubmissionValidationActivity">Submission validation</screenName>
-    <screenName name="pt.up.fe.alpha.labtablet.activities.DescriptorPickerActivity">Pick descriptor</screenName>
-    <screenName name="pt.up.fe.alpha.labtablet.activities.FormSolverActivity">Solve form</screenName>
-    <screenName name="pt.up.fe.alpha.labtablet.fragments.ConfigurationFragment">Configurations</screenName>
-    <screenName name="pt.up.fe.alpha.labtablet.fragments.SubmissionStep4">Upload fragment</screenName>
+    <screenName name="pt.up.fe.alpha.seabiotablet.activities.MainActivity">My Activity</screenName>
+    <screenName name="pt.up.fe.alpha.seabiotablet.activities.FieldModeActivity">Field Mode</screenName>
+    <screenName name="pt.up.fe.alpha.seabiotablet.activities.FingerPaintActivity">Handwriting</screenName>
+    <screenName name="pt.up.fe.alpha.seabiotablet.activities.FormQuestionCreatorActivity">Question Creator</screenName>
+    <screenName name="pt.up.fe.alpha.seabiotablet.activities.SubmissionValidationActivity">Submission validation</screenName>
+    <screenName name="pt.up.fe.alpha.seabiotablet.activities.DescriptorPickerActivity">Pick descriptor</screenName>
+    <screenName name="pt.up.fe.alpha.seabiotablet.activities.FormSolverActivity">Solve form</screenName>
+    <screenName name="pt.up.fe.alpha.seabiotablet.fragments.ConfigurationFragment">Configurations</screenName>
+    <screenName name="pt.up.fe.alpha.seabiotablet.fragments.SubmissionStep4">Upload fragment</screenName>
 
 </resources>

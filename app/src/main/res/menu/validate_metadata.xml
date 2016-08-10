@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".labtablet.activities.ValidateMetadataActivity">
+    tools:context=".seabiotablet.activities.ValidateMetadataActivity">
     <item android:id="@+id/action_metadata_cancel"
         android:title="@string/action_cancel"
         android:orderInCategory="100"

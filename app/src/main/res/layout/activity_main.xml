@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/fragment_navigation_drawer"
-        android:name="pt.up.fe.alpha.labtablet.fragments.DrawerFragment"
+        android:name="pt.up.fe.alpha.seabiotablet.fragments.DrawerFragment"
         android:layout_width="@dimen/nav_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"

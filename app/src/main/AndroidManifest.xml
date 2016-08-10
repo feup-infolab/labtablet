@@ -24,7 +24,7 @@
         android:icon="@drawable/ic_launcher_sbd"
         android:label="@string/app_name"
         android:theme="@style/AppBaseTheme"
-        android:name=".labtablet.application.LabTablet"
+        android:name=".seabiotablet.application.SeaBioTablet"
         android:versionCode="16"
         android:versionName="Tango"
         >
@@ -35,7 +35,7 @@
             android:process=":acra" />
 
         <activity
-            android:name=".labtablet.activities.MainActivity"
+            android:name=".seabiotablet.activities.MainActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
@@ -47,57 +47,57 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".labtablet.activities.FavoriteDetailsActivity"
+            android:name=".seabiotablet.activities.FavoriteDetailsActivity"
             android:theme="@style/AppBaseTheme"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_favorite_detail">
         </activity>
 
         <activity
-            android:name=".labtablet.activities.DescriptorPickerActivity"
+            android:name=".seabiotablet.activities.DescriptorPickerActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_descriptor_picker" >
         </activity>
         <activity
-            android:name=".labtablet.activities.FieldModeActivity"
+            android:name=".seabiotablet.activities.FieldModeActivity"
             android:label="@string/title_activity_field_mode"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".labtablet.activities.FingerPaintActivity"
+            android:name=".seabiotablet.activities.FingerPaintActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_finger_paint" >
         </activity>
         <activity
-            android:name=".labtablet.activities.ValidateMetadataActivity"
+            android:name=".seabiotablet.activities.ValidateMetadataActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_validate_metadata"
-            android:parentActivityName=".labtablet.activities.FieldModeActivity"
+            android:parentActivityName=".seabiotablet.activities.FieldModeActivity"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".labtablet.activities.FieldModeActivity" />
+                android:value=".seabiotablet.activities.FieldModeActivity" />
         </activity>
         <activity
-            android:name=".labtablet.activities.SubmissionValidationActivity"
+            android:name=".seabiotablet.activities.SubmissionValidationActivity"
             android:label="@string/title_activity_submission_validation"
             android:screenOrientation="portrait"
             >
         </activity>
         <activity
-            android:name=".labtablet.activities.FormQuestionCreatorActivity"
+            android:name=".seabiotablet.activities.FormQuestionCreatorActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_form_question_creator"
             >
         </activity>
         <activity
-            android:name=".labtablet.activities.FormSolverActivity"
+            android:name=".seabiotablet.activities.FormSolverActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_form_question_creator"
             >
         </activity>
         <activity
-            android:name=".labtablet.activities.ItemPreviewActivity"
+            android:name=".seabiotablet.activities.ItemPreviewActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_item_preview"
             >

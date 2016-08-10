@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">LabTablet</string>
+    <string name="app_name">SeaBioTablet</string>
     <string name="search_hint">Pesquisa</string>
     <string name="form_ok">OK</string>
     <string name="new_dataset_item">Criar favorito</string>
