@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
 
     <TextView
@@ -22,6 +23,6 @@
         tools:listitem="@layout/item_form_instance"
         android:id="@+id/form_instances_list"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="500dp"
         />
 </LinearLayout>

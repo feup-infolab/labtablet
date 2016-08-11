@@ -1,12 +1,11 @@
 [{
   "descriptionSet": true,
-  "formDescription": "Formulário de registo de IKMT",
-  "formName": "IKMT",
+  "formDescription": "Formulário de registo de IKMT3",
+  "formName": "IKMT3",
   "formQuestions": [{
     "columns": [{
       "context": "procedures",
-      "title": "Procedure",
-      "text": "Midwater Trawl Net"
+      "title": "Procedure"
     }, {
       "context": "stations",
       "title": "Station"
@@ -15,101 +14,144 @@
       "title": "Sample"
     },{
       "context": "",
-      "title": "Latitude [°N] Start"
+      "title": "Latitude [°N]"
     },{
       "context": "",
-      "title": "Longitude [°E] Start"
+      "title": "Longitude [°E]"
     },{
-      "context": "",
-      "title": "Latitude [°N] End"
-    },{
-      "context": "",
-      "title": "Longitude [°E] End"
-    }, {
       "context": "",
       "title": "Date/Time"
     }, {
-      "context": "",
-      "title": "Time start Procedure"
+      "context": "netOperations",
+      "title": "Net Operation"
     }, {
       "context": "",
-      "title": "Time end Procedure"
+      "title": "Cable Released"
     }, {
       "context": "",
-      "title": "Cable release start"
+      "title": "Net Depth"
     }, {
       "context": "",
-      "title": "Cable release end"
-    },{
-      "context": "",
-      "title": "Depth net start"
-    }, {
-      "context": "",
-      "title": "Depth net end"
-    },{
-      "context": "",
-      "title": "Depth bottom start"
-    },{
-      "context": "",
-      "title": "Depth bottom end"
-    },{
-      "context": "",
-      "title": "Time start Drag"
-    },{
-      "context": "",
-      "title": "Time end Drag"
-    },{
-      "context": "",
-      "title": "Latitude start Drag"
-    },{
-      "context": "",
-      "title": "Longitude start Drag"
-    },{
-      "context": "",
-      "title": "Latitude end Drag"
-    },{
-      "context": "",
-      "title": "Longitude end Drag"
-    },{
-      "context": "",
-      "title": "Cable release Drag start"
-    },{
-      "context": "",
-      "title": "Cable release Drag end"
-    },{
-      "context": "",
-      "title": "Depth Net Drag start"
-    },{
-      "context": "",
-      "title": "Depth Net Drag end"
-    },{
-      "context": "",
-      "title": "Depth Bottom Drag start"
-    },{
-      "context": "",
-      "title": "Depth Bottom Drag end"
-    },{
-      "context": "",
-      "title": "Observations"
+      "title": "Bottom Depth"
     },{
       "context": "",
       "title": "Total Caught"
-    },{
+    }, {
       "context": "",
-      "title": "Fishes"
-    },{
-      "context": "",
-      "title": "Cephalopods"
-    },{
-      "context": "",
-      "title": "Crustaceans"
-    },{
-      "context": "",
-      "title": "Jellyfishes and others"
+      "title": "Additional Comment"
     }],
     "duration": 0,
     "mandatory": true,
     "question": "REGISTOS",
+    "rows": [],
+    "type": "MULTI_INSTANCE_RESPONSE",
+    "value": ""
+  }],
+  "parent": "",
+  "timestamp": ""
+},{
+  "descriptionSet": true,
+  "formDescription": "Formulário de registo de Rosette CTD",
+  "formName": "Rosette-CTD",
+  "formQuestions": [{
+    "columns": [{
+      "context": "procedures",
+      "title": "Procedure"
+    }, {
+      "context": "stations",
+      "title": "Station"
+    }, {
+      "context": "",
+      "title": "Sample"
+    },{
+      "context": "",
+      "title": "Latitude [°N]"
+    },{
+      "context": "",
+      "title": "Longitude [°E]"
+    },{
+      "context": "",
+      "title": "Date/Time"
+    },{
+      "context": "",
+      "title": "bottle number"
+    }, {
+      "context": "",
+      "title": "depth openned"
+    }, {
+      "context": "boolean",
+      "title": "dsl"
+    }, {
+      "context": "boolean",
+      "title": "bottom"
+    }, {
+      "context": "",
+      "title": "Additional comments"
+    }],
+    "duration": 0,
+    "mandatory": true,
+    "question": "REGISTOS",
+    "rows": [],
+    "type": "MULTI_INSTANCE_RESPONSE",
+    "value": ""
+  }],
+  "parent": "",
+  "timestamp": ""
+},{
+  "descriptionSet": true,
+  "formDescription": "Formulário de registo de Bongo 60",
+  "formName": "Bongo-60",
+  "formQuestions": [{
+    "columns": [{
+      "context": "procedures",
+      "title": "Procedure"
+    }, {
+      "context": "stations",
+      "title": "Station"
+    }, {
+      "context": "",
+      "title": "Sample"
+    },{
+      "context": "",
+      "title": "Latitude [°N]"
+    },{
+      "context": "",
+      "title": "Longitude [°E]"
+    }],
+    "duration": 0,
+    "mandatory": true,
+    "question": "Cabeçalho",
+    "rows": [],
+    "type": "MULTI_INSTANCE_RESPONSE",
+    "value": ""
+  },{
+    "columns": [{
+    "context": "",
+    "title": "Start [Count]"
+    },{
+      "context": "",
+      "title": "End [Count]"
+    },{
+      "context": "",
+      "title": "Sink [Quantity]"
+    },{
+      "context": "",
+      "title": "Arise [Quantity]"
+    }],
+    "duration": 0,
+    "mandatory": true,
+    "question": "Flowmeter Left",
+    "rows": [],
+    "type": "MULTI_INSTANCE_RESPONSE",
+    "value": ""
+    },{
+    "columns": [{
+      "context": "",
+      "title": "Trawling Depth"
+    }],
+    "duration": 0,
+    "mandatory": true,
+    "question": "Trawling Depth",
     "rows": [],
     "type": "MULTI_INSTANCE_RESPONSE",
     "value": ""

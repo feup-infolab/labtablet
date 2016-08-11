@@ -18,6 +18,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:gravity="center_vertical"
         android:text="example"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        />
 
 </RelativeLayout>

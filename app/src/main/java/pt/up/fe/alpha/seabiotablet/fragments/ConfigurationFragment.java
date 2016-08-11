@@ -737,9 +737,25 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
 
                     //We want this option to be available as well
                     ArrayList<Data> procItems = new ArrayList<>();
-                    final Data itemProcedure = new Data("Smith-McIntyre 0.1m2");
+                    final Data itemProcedure = new Data("Bongo 60");
+                    final Data itemProcedure2 = new Data("IKMT");
+                    final Data itemProcedure3 = new Data("Rosette");
                     procItems.add(itemProcedure);
+                    procItems.add(itemProcedure2);
+                    procItems.add(itemProcedure3);
                     vocabularies.put("procedures", procItems);
+
+                    //We want this option to be available as well!!
+                    ArrayList<Data> netOperations = new ArrayList<>();
+                    final Data itemNetOp = new Data("procedure start");
+                    final Data itemNetOp2 = new Data("procedure end");
+                    final Data itemNetOp3 = new Data("net drag start");
+                    final Data itemNetOp4 = new Data("net drag end");
+                    netOperations.add(itemNetOp);
+                    netOperations.add(itemNetOp2);
+                    netOperations.add(itemNetOp3);
+                    netOperations.add(itemNetOp4);
+                    vocabularies.put("netOperations", netOperations);
 
                     SharedPreferences mSettings = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
                     SharedPreferences.Editor mEditor = mSettings.edit();
