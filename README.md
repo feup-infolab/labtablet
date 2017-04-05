@@ -1,3 +1,6 @@
+
+![labtablet UI](https://raw.githubusercontent.com/feup-infolab/labtablet/master/labtablet.png "LabTablet UI")
+
 # README #
 
 This README summarizes the LabTablet purpose and features. This repository holds the code and features developed after the first iteration (from February 2014 until July 2014).
