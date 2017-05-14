@@ -374,6 +374,7 @@
     <string name="sbd_select_station">Selecione uma estação</string>
     <string name="stations_list">Estações</string>
     <string name="form_solver_subtitle">Pode usar os botões em baixo para facilitar o preenchimento.</string>
+    <string name="bt_load_default">Perfil exemplo</string>
     <!-- /TTS sentences -->
 
     <string-array name="home_tips">

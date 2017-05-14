@@ -18,7 +18,7 @@
     <color name="orange_button_stroke">#ff2c3b44</color>
     <color name="orange_button_solid_color">#ff384b55</color>
 
-    <!-- LABTABLET NATIVE
+    <!-- LABTABLET NATIVE -->
     <color name="primary">#007667</color>
     <color name="primary_dark">#005d4f</color>
     <color name="primary_translucent">#d7005d4f</color>
@@ -27,9 +27,9 @@
         <color name="fab_color">#FF5722</color>
     <color name="fab_color_pressed">#a83b1c</color>
     <color name="fab_color_ripple">#a83b1c</color>
-    -->
 
-    <!-- SEABIODATA  -->
+
+    <!-- SEABIODATA
     <color name="primary">#0675b7</color>
     <color name="primary_dark">#005689</color>
     <color name="primary_translucent">#0675b7</color>
@@ -38,7 +38,7 @@
     <color name="fab_color">#aad400</color>
     <color name="fab_color_pressed">#7c9b00</color>
     <color name="fab_color_ripple">#445400</color>
-
+    -->
 
     <color name="text_primary">#212121</color>
     <color name="text_blue_grey_darker">#ff202c34</color>

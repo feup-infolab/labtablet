@@ -75,6 +75,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
     private EditText et_conf_address;
 
     private Button bt_save_dendro_confs;
+    private Button bt_default_profile;
     private Button bt_sbd_username;
     private Button btPickCampaign;
     private Button bt_file;
@@ -128,17 +129,15 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
             }
         });
 
-        bt_file.setOnLongClickListener(new View.OnLongClickListener() {
+        bt_default_profile.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-
+            public void onClick(View v) {
                 try {
                     InputStream stream = getActivity().getAssets().open("base_profile.json");
                     new AsyncProfileLoader(ConfigurationFragment.this).execute(stream);
                 } catch (IOException e) {
                     Log.e("IO", "READING ASSETS " +  e.toString());
                 }
-                return true;
             }
         });
 
@@ -156,6 +155,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         bt_sbd_username = (Button) mRootView.findViewById(R.id.bt_sbd_authenticate_user);
 
         bt_file = (Button) mRootView.findViewById(R.id.bt_file_path);
+        bt_default_profile = (Button) mRootView.findViewById(R.id.bt_default_profile);
         bt_save_dendro_confs = (Button) mRootView.findViewById(R.id.dendro_configurations_save);
         btPickCampaign = (Button) mRootView.findViewById(R.id.bt_sbd_pick_campaign);
         btLoadCampaignAttributesLoader = (Button) mRootView.findViewById(R.id.bt_sbd_get_users);
@@ -435,7 +435,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         editor.putString(Utils.BASE_DESCRIPTORS_ENTRY, new Gson().toJson(
                 result, Utils.ARRAY_DESCRIPTORS));
         editor.apply();
-        bt_file.setText(getResources().getString(R.string.edit));
+        //bt_file.setText(getResources().getString(R.string.edit));
         progress.dismiss();
 
         ChangelogItem log = new ChangelogItem();
@@ -443,7 +443,7 @@ public class ConfigurationFragment extends Fragment implements AsyncTaskHandler<
         log.setDate(Utils.getDate());
         log.setTitle(getResources().getString(R.string.log_loaded));
         ChangelogManager.addLog(log, getActivity());
-        Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.success), Toast.LENGTH_SHORT).show();
     }
 
     @Override
