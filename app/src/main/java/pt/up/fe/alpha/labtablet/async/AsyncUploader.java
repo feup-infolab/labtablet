@@ -23,11 +23,16 @@ import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -92,8 +97,11 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             return null;
         }
 
-        HttpClient httpclient;
-        HttpPost httppost;
+        URL url;
+        HttpURLConnection conn;
+
+                //HttpClient httpclient;
+        //HttpPost httppost;
 
         destUri = destUri.replace(" ", "%20");
 
@@ -148,13 +156,14 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             }
 
             publishProgress(new ProgressUpdateItem(25, mContext.getString(R.string.upload_progress_uploading)));
-            httpclient = new DefaultHttpClient();
-            httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+
+            //httpclient = new DefaultHttpClient();
+            //httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
 
-            httppost = new HttpPost(destUri + "?restore");
+            /*httppost = new HttpPost(destUri + "?restore");
             Log.d("[AsyncUploader] URI", destUri.replace(" ", "%20") + "?restore");
-            httppost.setHeader("Cookie", "connect.sid=" + cookie);
+            httppost.setHeader("Cookie", "connect.sid=" + cookie);*/
             File file = new File(to);
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -166,15 +175,38 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             Log.d("[AsyncUploader]Path", file.getAbsolutePath());
 
             long totalSize = file.length();
-            LabTabletUploadEntity mEntity = new LabTabletUploadEntity(builder.build(), totalSize);
+
+
+            /*LabTabletUploadEntity mEntity = new LabTabletUploadEntity(builder.build(), totalSize);
 
             httppost.setEntity(mEntity);
-            Log.d("[AsyncUploader]POST", "" + httppost.getRequestLine());
+            Log.d("[AsyncUploader]POST", "" + httppost.getRequestLine()); */
 
             try {
-                HttpResponse httpResponse = httpclient.execute(httppost);
-                HttpEntity resEntity = httpResponse.getEntity();
-                DendroResponse response = new Gson().fromJson(EntityUtils.toString(resEntity), DendroResponse.class);
+                url = new URL(destUri + "?restore");
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                Log.d("[AsyncUploader] URI", destUri.replace(" ", "%20") + "?restore");
+                conn.setRequestProperty("Cookie", "connect.sid=" + cookie);
+                conn.setDoOutput(true);
+                OutputStream os = conn.getOutputStream();
+                os.write(builder.build().toString().getBytes());
+                os.flush();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+                String output;
+                StringBuilder resp = new StringBuilder();
+                while ((output = br.readLine()) != null) {
+                    resp.append(output);
+                    resp.append('\r');
+                }
+                String mes = resp.toString();
+                conn.disconnect();
+
+                /*HttpResponse httpResponse = httpclient.execute(httppost);
+                HttpEntity resEntity = httpResponse.getEntity();*/
+                DendroResponse response = new Gson().fromJson(mes, DendroResponse.class);
 
                 if (response.result.equals(Utils.DENDRO_RESPONSE_ERROR)) {
                     error = new Exception(response.result +
@@ -223,20 +255,45 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 70, mContext.getString(R.string.upload_progress_sending_metadata)));
 
         try {
-            httpclient = new DefaultHttpClient();
+            url = new URL(destUri + "?update_metadata");
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            conn.setRequestProperty("Accept","application/json");
+            conn.setRequestProperty("Cookie", "connect.sid=" + cookie);
+            conn.setDoOutput(true);
+
+            /*httpclient = new DefaultHttpClient();
             httppost = new HttpPost(destUri + "?update_metadata");
             httppost.setHeader("Accept", "application/json");
             httppost.setHeader("Content-Type", "application/json");
-            httppost.setHeader("Cookie", "connect.sid=" + cookie);
-            StringEntity se = new StringEntity(new Gson().toJson(
-                    metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD), HTTP.UTF_8);
-            Log.e("metadata", new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD));
-            httppost.setEntity(se);
+            httppost.setHeader("Cookie", "connect.sid=" + cookie);*/
 
-            HttpResponse resp = httpclient.execute(httppost);
-            HttpEntity ent = resp.getEntity();
-            DendroResponse metadataResponse = new Gson().fromJson(
-                    EntityUtils.toString(ent), DendroResponse.class);
+            String g = new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD);
+
+            OutputStream os = conn.getOutputStream();
+            os.write(g.getBytes());
+            os.flush();
+
+            //StringEntity se = new StringEntity(new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD), HTTP.UTF_8);
+            Log.e("metadata", new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD));
+            //httppost.setEntity(se);
+
+            //HttpResponse resp = httpclient.execute(httppost);
+            //HttpEntity ent = resp.getEntity();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+            String output;
+            StringBuilder response = new StringBuilder();
+            while ((output = br.readLine()) != null) {
+                response.append(output);
+                response.append('\r');
+            }
+            String mes = response.toString();
+            conn.disconnect();
+
+            DendroResponse metadataResponse = new Gson().fromJson(mes, DendroResponse.class);
             if (metadataResponse.result.equals(Utils.DENDRO_RESPONSE_ERROR) ||
                     metadataResponse.result.equals(Utils.DENDRO_RESPONSE_ERROR_2)) {
                 error = new Exception(metadataResponse.result + ": " + metadataResponse.message);
@@ -271,22 +328,49 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             }
 
             try {
-                httpclient = new DefaultHttpClient();
+                String destPath = destUri + File.separator + dataItem.getResourceName() + "?update_metadata";
+                String dest = destPath.replace(" ", "%20");
+                url = new URL(dest);
+
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                conn.setRequestProperty("Accept","application/json");
+                conn.setRequestProperty("Cookie", "connect.sid=" + cookie);
+                conn.setDoOutput(true);
+
+                /*httpclient = new DefaultHttpClient();
                 String destPath = destUri + File.separator + dataItem.getResourceName() + "?update_metadata";
                 httppost = new HttpPost(destPath.replace(" ", "%20"));
                 httppost.setHeader("Accept", "application/json");
                 httppost.setHeader("Content-Type", "application/json");
-                httppost.setHeader("Cookie", "connect.sid=" + cookie);
+                httppost.setHeader("Cookie", "connect.sid=" + cookie);*/
 
-                StringEntity se = new StringEntity(new Gson().toJson(
-                        metadataRecords, Utils.ARRAY_DENDRO_DESCRIPTORS), HTTP.UTF_8);
+                String g = new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_DESCRIPTORS);
 
-                httppost.setEntity(se);
+                //StringEntity se = new StringEntity(new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_DESCRIPTORS), HTTP.UTF_8);
 
-                HttpResponse resp = httpclient.execute(httppost);
-                HttpEntity ent = resp.getEntity();
-                DendroResponse metadataResponse = new Gson().fromJson(
-                        EntityUtils.toString(ent), DendroResponse.class);
+                //httppost.setEntity(se);
+
+                /*HttpResponse resp = httpclient.execute(httppost);
+                HttpEntity ent = resp.getEntity();*/
+
+                OutputStream os = conn.getOutputStream();
+                os.write(g.getBytes());
+                os.flush();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+                String output;
+                StringBuilder response = new StringBuilder();
+                while ((output = br.readLine()) != null) {
+                    response.append(output);
+                    response.append('\r');
+                }
+                String mes = response.toString();
+                conn.disconnect();
+
+                DendroResponse metadataResponse = new Gson().fromJson(mes, DendroResponse.class);
                 if (metadataResponse.result.equals(Utils.DENDRO_RESPONSE_ERROR) ||
                         metadataResponse.result.equals(Utils.DENDRO_RESPONSE_ERROR_2)) {
                     error = new Exception(metadataResponse.result + ": " + metadataResponse.message);

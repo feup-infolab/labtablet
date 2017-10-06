@@ -16,7 +16,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 
 import pt.up.fe.alpha.R;
@@ -61,9 +65,11 @@ public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, Arra
         String destUri = conf.getAddress();
 
 
-        HttpResponse response;
+
+
+        /*HttpResponse response;
         HttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet();
+        HttpGet request = new HttpGet();*/
         //"http://172.30.29.127:3000/project/" + dirName + "?ls"
 
         Log.i("getDendroDirs", destUri + "/project/" + params[0] + "?ls");
@@ -72,18 +78,38 @@ public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, Arra
 
         try {
             String cookie = DendroAPI.authenticate(mContext);
+
+            URL url = new URL(requestString);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Cookie", "connect.sid=" + cookie);
+            conn.setRequestProperty("Accept","application/json");
+
+
+            /*
             request.setURI(new URI(requestString));
             request.setHeader("Accept", "application/json");
             request.setHeader("Cookie", "connect.sid=" + cookie);
 
             response = client.execute(request);
+            */
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
 
             if (response == null) {
                 Log.e("checkIfDirExists", "Failed");
                 return dendroFolderItems;
             }
 
-            String result = EntityUtils.toString(response.getEntity());
+            String result = response.toString();
             JsonParser parser = new JsonParser();
             JsonArray obj = parser.parse(result).getAsJsonArray();
 

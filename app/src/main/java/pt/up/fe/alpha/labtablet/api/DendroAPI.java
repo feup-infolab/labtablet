@@ -40,6 +40,8 @@ public class DendroAPI {
         conn.setRequestProperty("Accept","application/json");
         conn.setDoOutput(true);
 
+        System.out.println(conn.getRequestProperties().toString());
+
         JSONObject json = new JSONObject();
         json.put("username", conf.getUsername());
         json.put("password", conf.getPassword());
@@ -76,6 +78,6 @@ public class DendroAPI {
             }
         }
 
-        return msCookieManager.getCookieStore().getCookies().get(0).getValue();
+        return msCookieManager.getCookieStore().getCookies().get(0).toString();
     }
 }
