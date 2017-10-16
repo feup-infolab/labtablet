@@ -187,8 +187,9 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 Log.d("[AsyncUploader] URI", destUri.replace(" ", "%20") + "?restore");
-                conn.setRequestProperty("Cookie", "connect.sid=" + cookie);
+                conn.setRequestProperty("Cookie", cookie);
                 conn.setDoOutput(true);
+
                 OutputStream os = conn.getOutputStream();
                 os.write(builder.build().toString().getBytes());
                 os.flush();
@@ -260,7 +261,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
             conn.setRequestProperty("Accept","application/json");
-            conn.setRequestProperty("Cookie", "connect.sid=" + cookie);
+            conn.setRequestProperty("Cookie", cookie);
             conn.setDoOutput(true);
 
             /*httpclient = new DefaultHttpClient();
@@ -336,7 +337,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
                 conn.setRequestProperty("Accept","application/json");
-                conn.setRequestProperty("Cookie", "connect.sid=" + cookie);
+                conn.setRequestProperty("Cookie", cookie);
                 conn.setDoOutput(true);
 
                 /*httpclient = new DefaultHttpClient();

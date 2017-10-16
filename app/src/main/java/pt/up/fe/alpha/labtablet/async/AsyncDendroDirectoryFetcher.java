@@ -83,8 +83,9 @@ public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, Arra
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setRequestProperty("Cookie", "connect.sid=" + cookie);
+            conn.setRequestProperty("Cookie", cookie);
             conn.setRequestProperty("Accept","application/json");
+            conn.setDoInput(true);
 
 
             /*
