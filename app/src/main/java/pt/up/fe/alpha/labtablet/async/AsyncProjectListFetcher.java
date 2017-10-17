@@ -48,8 +48,6 @@ public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, Project
 
             DendroConfiguration conf = FileMgr.getDendroConf(mContext);
 
-            System.out.println(cookie);
-
             URL url = new URL(conf.getAddress() + "/projects/my");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -75,7 +73,6 @@ public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, Project
                 response.append(inputLine);
             }
             in.close();
-            System.out.println(response.toString());
 
             /*HttpResponse resp = httpclient.execute(httpget);
             HttpEntity ent = resp.getEntity();*/
