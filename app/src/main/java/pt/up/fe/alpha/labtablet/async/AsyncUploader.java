@@ -183,7 +183,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             Log.d("[AsyncUploader]POST", "" + httppost.getRequestLine()); */
 
             try {
-                url = new URL(destUri + "?restore");
+                url = new URL(destUri.replace(" ", "%20") + "?restore");
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 Log.d("[AsyncUploader] URI", destUri.replace(" ", "%20") + "?restore");
@@ -194,7 +194,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 os.write(builder.build().toString().getBytes());
                 os.flush();
 
-                BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
                 String output;
                 StringBuilder resp = new StringBuilder();
