@@ -76,10 +76,13 @@ public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, Project
 
             /*HttpResponse resp = httpclient.execute(httpget);
             HttpEntity ent = resp.getEntity();*/
-            return new Gson().fromJson(response.toString(), ProjectListResponse.class);
+
+            ProjectListResponse r = new Gson().fromJson(response.toString(), ProjectListResponse.class);
+
+            return r;
 
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.err.println(e.toString());
             error = e;
             return null;
         }

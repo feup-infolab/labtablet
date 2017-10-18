@@ -2,11 +2,11 @@
 package pt.up.fe.alpha.labtablet.models.Dendro.Ontologies;
 
 public class Ddr {
-    private String handle;
-    private String rootFolder;
-    private String fileExtension;
+    private Object handle;
+    private Object rootFolder;
+    private Object fileExtension;
 
-    public String getFileExtension() {
+    public Object getFileExtension() {
         return this.fileExtension;
     }
 
@@ -14,7 +14,7 @@ public class Ddr {
         this.fileExtension = fileExtension;
     }
 
-    public String getHandle() {
+    public Object getHandle() {
         return this.handle;
     }
 
@@ -22,7 +22,7 @@ public class Ddr {
         this.handle = handle;
     }
 
-    public String getRootFolder() {
+    public Object getRootFolder() {
         return this.rootFolder;
     }
 

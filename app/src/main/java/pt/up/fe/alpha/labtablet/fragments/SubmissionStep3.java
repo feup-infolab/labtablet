@@ -245,7 +245,7 @@ public class SubmissionStep3 extends Fragment {
                 CharSequence values[] = new CharSequence[result.getProjects().size()];
 
                 for (int i = 0; i < result.getProjects().size(); ++i) {
-                    values[i] = result.getProjects().get(i).getDcterms().getTitle();
+                    values[i] = (String)result.getProjects().get(i).getDcterms().getTitle();
                 }
 
                 if (getActivity() == null) {
@@ -257,7 +257,7 @@ public class SubmissionStep3 extends Fragment {
                 builder.setItems(values, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        projectName = availableProjects.get(which).getDdr().getHandle();
+                        projectName = (String)availableProjects.get(which).getDdr().getHandle();
                         SubmissionValidationActivity.setProjectName(projectName);
                         refreshFoldersList();
                     }

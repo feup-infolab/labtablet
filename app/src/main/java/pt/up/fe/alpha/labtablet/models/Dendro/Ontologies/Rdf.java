@@ -2,13 +2,13 @@
 package pt.up.fe.alpha.labtablet.models.Dendro.Ontologies;
 
 public class Rdf {
-    private String type;
+    private Object type;
 
-    public String getType() {
+    public Object getType() {
         return this.type;
     }
 
-    public void setType(String type) {
+    public void setType(Object type) {
         this.type = type;
     }
 }

@@ -47,8 +47,8 @@ public class DendroFolderAdapter extends ArrayAdapter<DendroFolderItem> {
         // fill data
         ViewHolder holder = (ViewHolder) rowView.getTag();
         final DendroFolderItem item = items.get(position);
-        holder.mFolderName.setText(item.getNie().getTitle());
-        holder.mFolderDate.setText(item.getDcterms().getModified());
+        holder.mFolderName.setText((String)item.getNie().getTitle());
+        holder.mFolderDate.setText((String)item.getDcterms().getModified());
         holder.mFolderUri.setText(item.getUri());
 
         if (item.getDdr().getFileExtension().equals("folder")) {
