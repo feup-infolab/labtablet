@@ -25,6 +25,9 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +36,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -106,7 +110,15 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         destUri = destUri.replace(" ", "%20");
 
         //upload files (if any)
-        String from = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/" + favoriteName;
+        String fileF = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/" + favoriteName;
+        String from = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/data";//"/" + favoriteName;
+
+        boolean success = (new File(from)).mkdirs();
+        if (!success) {
+            return null;
+        }
+
+        copyFileOrDirectory(fileF, from);
 
         //AUTHENTICATE USER
         publishProgress(new ProgressUpdateItem(10, mContext.getResources().getString(R.string.upload_progress_authenticating)));
@@ -154,6 +166,22 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 error = new Exception("Failed to create zip file");
                 return null;
             }
+
+            File dst = new File(from);
+
+            if (dst.exists()) {
+                String deleteCmd = "rm -r " + from;
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    runtime.exec(deleteCmd);
+                } catch (IOException e) { }
+            }
+
+            /*String[] children = dst.list();
+            for (int i = 0; i < children.length; i++)
+            {
+                new File(dst, children[i]).delete();
+            }*/
 
             publishProgress(new ProgressUpdateItem(25, mContext.getString(R.string.upload_progress_uploading)));
 
@@ -220,6 +248,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                             mContext.getResources().getString(R.string.upload_progress_deleting_temp_files),
                             Toast.LENGTH_SHORT).show();
                 }
+
             } catch (Exception e) {
                 Log.e("POST", e.getMessage());
                 error = e;
@@ -385,6 +414,55 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
         publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
         return null;
+    }
+
+    private void copyFileOrDirectory(String srcDir, String dstDir) {
+
+        try {
+            File src = new File(srcDir);
+            File dst = new File(dstDir, src.getName());
+
+            if (src.isDirectory()) {
+
+                String files[] = src.list();
+                int filesLength = files.length;
+                for (int i = 0; i < filesLength; i++) {
+                    String src1 = (new File(src, files[i]).getPath());
+                    String dst1 = dst.getPath();
+                    copyFileOrDirectory(src1, dst1);
+
+                }
+            } else {
+                copyFile(src, dst);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void copyFile(File sourceFile, File destFile) throws IOException {
+        if (!destFile.getParentFile().exists())
+            destFile.getParentFile().mkdirs();
+
+        if (!destFile.exists()) {
+            destFile.createNewFile();
+        }
+
+        FileChannel source = null;
+        FileChannel destination = null;
+
+        try {
+            source = new FileInputStream(sourceFile).getChannel();
+            destination = new FileOutputStream(destFile).getChannel();
+            destination.transferFrom(source, 0, source.size());
+        } finally {
+            if (source != null) {
+                source.close();
+            }
+            if (destination != null) {
+                destination.close();
+            }
+        }
     }
 
     @Override
