@@ -53,6 +53,7 @@ public class SubmissionStep3 extends Fragment {
     private ArrayList<Project> availableProjects;
 
     private String path;
+    private String selectedFolderUri;
 
     public SubmissionStep3() {
         this.path = "/data";
@@ -119,6 +120,7 @@ public class SubmissionStep3 extends Fragment {
                     path += "/" + item.getNie().getTitle();
 
                     //items.get((Integer) view.getTag()).getNie().getTitle();
+                    selectedFolderUri = item.getUri();
                     selectFolder.setVisibility(View.VISIBLE);
                     selectFolder.setEnabled(true);
                     refreshFoldersList();
@@ -144,7 +146,15 @@ public class SubmissionStep3 extends Fragment {
 
     private void refreshFoldersList() {
         initDirectoryFetcher();
-        mDirectoryFetcher.execute(projectName + path, getActivity());
+        if(selectedFolderUri == null)
+        {
+            mDirectoryFetcher.execute("/project/" + projectName + path, getActivity());
+        }
+        else
+        {
+            mDirectoryFetcher.execute(selectedFolderUri, getActivity());
+        }
+        //mDirectoryFetcher.execute(projectName + path, getActivity());
     }
 
     @Override
@@ -153,6 +163,7 @@ public class SubmissionStep3 extends Fragment {
         savedInstanceState.putString("favorite_name", getArguments().getString("favorite_name"));
         savedInstanceState.putString("project_name", projectName);
         savedInstanceState.putString("path", path);
+        savedInstanceState.putString("selectedFolderUri", selectedFolderUri);
     }
 
     @Override

@@ -72,8 +72,10 @@ public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, Arra
         HttpGet request = new HttpGet();*/
         //"http://172.30.29.127:3000/project/" + dirName + "?ls"
 
-        Log.i("getDendroDirs", destUri + "/project/" + params[0] + "?ls");
-        String requestString = destUri + "/project/" + params[0] + "?ls";
+        //Log.i("getDendroDirs", destUri + "/project/" + params[0] + "?ls");
+        //String requestString = destUri + "/project/" + params[0] + "?ls";
+        Log.i("getDendroDirs", destUri + params[0] + "?ls");
+        String requestString = destUri + params[0] + "?ls";
         requestString = requestString.replace(" ", "%20");
 
         try {
