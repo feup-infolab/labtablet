@@ -18,6 +18,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -26,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.activities.SubmissionValidationActivity;
@@ -37,6 +41,7 @@ import pt.up.fe.alpha.labtablet.async.AsyncProjectListFetcher;
 import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroFolderItem;
+import pt.up.fe.alpha.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.alpha.labtablet.models.Dendro.Project;
 import pt.up.fe.alpha.labtablet.models.Dendro.ProjectListResponse;
 import pt.up.fe.alpha.labtablet.utils.FileMgr;
@@ -231,7 +236,37 @@ public class SubmissionStep3 extends Fragment {
                 //JsonObject descriptors = obj.getJSONObject("descriptors");
                 try {
                     JSONObject reader = new JSONObject(result);
-                    JSONArray descriptors = reader.getJSONArray("descriptors");
+                    String descriptors = reader.getJSONArray("descriptors").toString();
+
+                    JsonParser parser = new JsonParser();
+                    JsonArray descriptorsArray = parser.parse(descriptors).getAsJsonArray();
+
+                    ArrayList<DendroMetadataRecord> dendroItemMetadataRecords = new ArrayList<DendroMetadataRecord>();
+                    /*dendroItemMetadataRecords = new Gson().fromJson(
+                            descriptorsArray,
+                            Utils.ARRAY_DENDRO_METADATA_RECORD);*/
+
+                    for(Iterator<JsonElement> it = descriptorsArray.iterator(); it.hasNext(); )
+                    {
+                        JsonElement elem = it.next();
+                        JsonObject obj = elem.getAsJsonObject();
+
+                        //String lolada = obj.get("value").getAsString();
+                        JsonElement lolada = obj.get("value");
+
+                        DendroMetadataRecord metadataRecord = new Gson().fromJson(
+                                elem,
+                                DendroMetadataRecord.class
+                        );
+
+                        dendroItemMetadataRecords.add(metadataRecord);
+                    }
+
+//                    ArrayList<DendroMetadataRecord> dendroItemMetadataRecords = new Gson().fromJson(
+//                            descriptorsArray,
+//                            Utils.ARRAY_DENDRO_METADATA_RECORD);
+                    //ARRAY_DENDRO_METADATA_RECORD
+
                     refreshFoldersList();
                 } catch (JSONException e) {
                     e.printStackTrace();
