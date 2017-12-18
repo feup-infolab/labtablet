@@ -14,6 +14,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -24,6 +25,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,6 +39,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -195,10 +198,17 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             File file = new File(to);
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            String fileMD5 = Utils.getMD5EncryptedString(file.toString());
 
             FileBody fileBody = new FileBody(file);
+            //builder.addPart("files[]", fileBody);
+            //builder.addTextBody("filename", favoriteName + ".zip");
+
+            //builder.addPart("file", fileBody);
+            //builder.addBinaryBody("files", file);
             builder.addPart("files[]", fileBody);
             builder.addTextBody("filename", favoriteName + ".zip");
+            builder.addTextBody("md5_checksum", fileMD5);
 
             Log.d("[AsyncUploader]Path", file.getAbsolutePath());
 
@@ -218,7 +228,19 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 conn.setRequestProperty("Cookie", cookie);
                 conn.setDoOutput(true);
 
-                OutputStream os = conn.getOutputStream();
+                /*conn.setRequestProperty("Connection", "Keep-Alive");
+                conn.setRequestProperty("Content-Type",
+                        "multipart/form-data;");*/
+
+                conn.setRequestProperty("Accept", "application/json");
+                conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
+                conn.setRequestProperty("Connection", "close");
+                conn.setRequestProperty("Content-Type",
+                        "multipart/form-data; boundary=--------------------------122869462475904859705487");
+
+                //OutputStream os = conn.getOutputStream();
+                OutputStream os = new DataOutputStream(conn.getOutputStream());
+                //os.write(builder.build().toString().getBytes());
                 os.write(builder.build().toString().getBytes());
                 os.flush();
 

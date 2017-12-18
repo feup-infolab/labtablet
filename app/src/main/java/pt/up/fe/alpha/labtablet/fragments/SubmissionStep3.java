@@ -69,7 +69,6 @@ public class SubmissionStep3 extends Fragment {
 
     private String path;
     private String selectedResourceUri;
-    private String itemMetadata;
 
     public SubmissionStep3() {
         this.path = "/data";
@@ -120,7 +119,8 @@ public class SubmissionStep3 extends Fragment {
                 }
 
                 DendroConfiguration conf = FileMgr.getDendroConf(getActivity());
-                String selection = conf.getAddress() + "/project/" + projectName + path;
+                //String selection = conf.getAddress() + "/project/" + projectName + path;
+                String selection = conf.getAddress() + selectedResourceUri;
                 Toast.makeText(getActivity(), getResources().getString(R.string.selected_folder), Toast.LENGTH_SHORT).show();
                 SubmissionValidationActivity.setDestUri(selection);
                 mHandler.nextStep(3);
@@ -231,10 +231,6 @@ public class SubmissionStep3 extends Fragment {
                 {
                     return;
                 }
-                itemMetadata = result;
-                //JsonParser parser = new JsonParser();
-                //JsonObject obj = parser.parse(result).getAsJsonObject();
-                //JsonObject descriptors = obj.getJSONObject("descriptors");
                 try {
                     JSONObject reader = new JSONObject(result);
                     String descriptors = reader.getJSONArray("descriptors").toString();
@@ -243,9 +239,6 @@ public class SubmissionStep3 extends Fragment {
                     JsonArray descriptorsArray = parser.parse(descriptors).getAsJsonArray();
 
                     ArrayList<DendroMetadataRecord> dendroItemMetadataRecords = new ArrayList<DendroMetadataRecord>();
-                    /*dendroItemMetadataRecords = new Gson().fromJson(
-                            descriptorsArray,
-                            Utils.ARRAY_DENDRO_METADATA_RECORD);*/
 
                     for(Iterator<JsonElement> it = descriptorsArray.iterator(); it.hasNext(); )
                     {
@@ -255,7 +248,7 @@ public class SubmissionStep3 extends Fragment {
                         //String lolada = obj.get("value").getAsString();
                         String currentValue = "";
                         String currentDescriptorUri = obj.get("uri").getAsString();
-                        //TODO obj.get("uri") and update selectedResourceUri with its value
+                        //TODO change this into a constant
                         if(currentDescriptorUri.equals("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#isLogicalPartOf"))
                         {
                             currentValue = obj.get("value").getAsString();
@@ -268,11 +261,6 @@ public class SubmissionStep3 extends Fragment {
 
                         dendroItemMetadataRecords.add(metadataRecord);
                     }
-
-//                    ArrayList<DendroMetadataRecord> dendroItemMetadataRecords = new Gson().fromJson(
-//                            descriptorsArray,
-//                            Utils.ARRAY_DENDRO_METADATA_RECORD);
-                    //ARRAY_DENDRO_METADATA_RECORD
                     refreshFoldersList();
                 } catch (JSONException e) {
                     e.printStackTrace();

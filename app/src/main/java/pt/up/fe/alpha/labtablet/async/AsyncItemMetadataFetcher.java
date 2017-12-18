@@ -87,14 +87,7 @@ public class AsyncItemMetadataFetcher extends AsyncTask<Object, String, String> 
 
             String result = response.toString();
             JsonParser parser = new JsonParser();
-            //JsonArray obj = parser.parse(result).getAsJsonArray();
             JsonObject obj = parser.parse(result).getAsJsonObject();
-
-            /*resultOfRequest = new Gson().fromJson(
-                    obj,
-                    Utils.ARRAY_DIRECTORY_LISTING);*/
-
-            //return resultOfRequest;
             return obj.toString();
 
         } catch (Exception e) {
