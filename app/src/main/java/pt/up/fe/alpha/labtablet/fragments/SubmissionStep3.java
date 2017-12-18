@@ -42,6 +42,7 @@ import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroMetadataRecord;
+import pt.up.fe.alpha.labtablet.models.Dendro.Ontologies.Nie;
 import pt.up.fe.alpha.labtablet.models.Dendro.Project;
 import pt.up.fe.alpha.labtablet.models.Dendro.ProjectListResponse;
 import pt.up.fe.alpha.labtablet.utils.FileMgr;
@@ -209,7 +210,7 @@ public class SubmissionStep3 extends Fragment {
                 path = path.substring(0, path.lastIndexOf('/'));
                 //TODO a request to get the parent of the folder
                 //selectedResourceUri = (String)folders.get(0).getNie().getIsLogicalPartOf();
-                initItemMetadataFetcher();
+                getParentUri();
                 mItemMetadataFetcher.execute(selectedResourceUri, getActivity());
                 /*selectedResourceUri = itemMetadata;
                 refreshFoldersList();*/
@@ -221,7 +222,7 @@ public class SubmissionStep3 extends Fragment {
     }
 
 
-    private void initItemMetadataFetcher()
+    private void getParentUri()
     {
         mItemMetadataFetcher = new AsyncItemMetadataFetcher(new AsyncTaskHandler<String>() {
             @Override
@@ -252,8 +253,14 @@ public class SubmissionStep3 extends Fragment {
                         JsonObject obj = elem.getAsJsonObject();
 
                         //String lolada = obj.get("value").getAsString();
-                        JsonElement lolada = obj.get("value");
-
+                        String currentValue = "";
+                        String currentDescriptorUri = obj.get("uri").getAsString();
+                        //TODO obj.get("uri") and update selectedResourceUri with its value
+                        if(currentDescriptorUri.equals("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#isLogicalPartOf"))
+                        {
+                            currentValue = obj.get("value").getAsString();
+                            selectedResourceUri = currentValue;
+                        }
                         DendroMetadataRecord metadataRecord = new Gson().fromJson(
                                 elem,
                                 DendroMetadataRecord.class
@@ -266,7 +273,6 @@ public class SubmissionStep3 extends Fragment {
 //                            descriptorsArray,
 //                            Utils.ARRAY_DENDRO_METADATA_RECORD);
                     //ARRAY_DENDRO_METADATA_RECORD
-
                     refreshFoldersList();
                 } catch (JSONException e) {
                     e.printStackTrace();
