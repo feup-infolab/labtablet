@@ -56,6 +56,7 @@ import pt.up.fe.alpha.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 import pt.up.fe.alpha.labtablet.utils.Zipper;
 
+import static com.itextpdf.text.Utilities.readFileToString;
 import static pt.up.fe.alpha.labtablet.utils.CSVHandler.generateCSV;
 
 public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
@@ -195,20 +196,24 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             /*httppost = new HttpPost(destUri + "?restore");
             Log.d("[AsyncUploader] URI", destUri.replace(" ", "%20") + "?restore");
             httppost.setHeader("Cookie", "connect.sid=" + cookie);*/
+            String boundry = "--------------------------122869462475904859705487";
             File file = new File(to);
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-            String fileMD5 = Utils.getMD5EncryptedString(file.toString());
+            builder.setBoundary(boundry);
+            String fileContent, fileMD5 = "";
+            try {
+                fileContent = readFileToString(file);
+                fileMD5 = Utils.getMD5EncryptedString(fileContent);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             FileBody fileBody = new FileBody(file);
-            //builder.addPart("files[]", fileBody);
+            //builder.addBinaryBody("file", file);
+            builder.addPart(favoriteName + ".zip", fileBody);
             //builder.addTextBody("filename", favoriteName + ".zip");
-
-            //builder.addPart("file", fileBody);
-            //builder.addBinaryBody("files", file);
-            builder.addPart("files[]", fileBody);
-            builder.addTextBody("filename", favoriteName + ".zip");
-            builder.addTextBody("md5_checksum", fileMD5);
+            //builder.addTextBody("md5_checksum", fileMD5);
 
             Log.d("[AsyncUploader]Path", file.getAbsolutePath());
 
@@ -227,21 +232,23 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 Log.d("[AsyncUploader] URI", destUri.replace(" ", "%20") + "?restore");
                 conn.setRequestProperty("Cookie", cookie);
                 conn.setDoOutput(true);
+                conn.addRequestProperty("md5_checksum", fileMD5);
 
                 /*conn.setRequestProperty("Connection", "Keep-Alive");
                 conn.setRequestProperty("Content-Type",
                         "multipart/form-data;");*/
 
-                conn.setRequestProperty("Accept", "application/json");
-                conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
-                conn.setRequestProperty("Connection", "close");
-                conn.setRequestProperty("Content-Type",
-                        "multipart/form-data; boundary=--------------------------122869462475904859705487");
+                conn.setRequestProperty("accept", "application/json");
+                conn.setRequestProperty("accept-encoding", "gzip, deflate");
+                conn.setRequestProperty("connection", "close");
+                conn.setRequestProperty("content-type",
+                        "multipart/form-data; boundary=" + boundry);
 
                 //OutputStream os = conn.getOutputStream();
                 OutputStream os = new DataOutputStream(conn.getOutputStream());
                 //os.write(builder.build().toString().getBytes());
-                os.write(builder.build().toString().getBytes());
+                builder.build().writeTo(os);
+                //os.write(builder.build().toString().getBytes());
                 os.flush();
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
