@@ -110,15 +110,12 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         destUri = destUri.replace(" ", "%20");
 
         //upload files (if any)
-        String fileF = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/" + favoriteName;
-        String from = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/data";//"/" + favoriteName;
+        String from = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/" + favoriteName;
 
         boolean success = (new File(from)).mkdirs();
         if (!success) {
             return null;
         }
-
-        copyFileOrDirectory(fileF, from);
 
         //AUTHENTICATE USER
         publishProgress(new ProgressUpdateItem(10, mContext.getResources().getString(R.string.upload_progress_authenticating)));
@@ -167,16 +164,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 return null;
             }
 
-            File dst = new File(from);
-
-            if (dst.exists()) {
-                String deleteCmd = "rm -r " + from;
-                Runtime runtime = Runtime.getRuntime();
-                try {
-                    runtime.exec(deleteCmd);
-                } catch (IOException e) { }
-            }
-
             /*String[] children = dst.list();
             for (int i = 0; i < children.length; i++)
             {
@@ -202,9 +189,6 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
             Log.d("[AsyncUploader]Path", file.getAbsolutePath());
 
-            long totalSize = file.length();
-
-
             /*LabTabletUploadEntity mEntity = new LabTabletUploadEntity(builder.build(), totalSize);
 
             httppost.setEntity(mEntity);
@@ -219,7 +203,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 conn.setDoOutput(true);
 
                 OutputStream os = conn.getOutputStream();
-                os.write(builder.build().toString().getBytes());
+                builder.build().writeTo(os); //TODO ganged
                 os.flush();
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
