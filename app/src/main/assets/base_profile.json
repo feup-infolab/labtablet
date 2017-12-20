@@ -129,7 +129,7 @@
    },
    {
       "description":"An INSPIRE thematic category from the controlled list.",
-      "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#keywordINSPIRE",
+      "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#keywordINSPIRE",
       "name":"Keyword INSPIRE",
       "tag":"",
       "value":"",
@@ -137,105 +137,105 @@
    },
    {
       "description":"The bounding box shall be expressed with westbound and eastbound longitudes, and southbound and northbound latitudes in decimal degrees, with a precision of at least two decimals. For a matter of simplification in GeoCoMaS the bouding box should be included in the resources coordinate reference system of the resource if unique. Values should be whitespace or comma separated (e.g.: -31.27 -6.19 42.15 30.14)",
-      "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#geographicBoundBox",
+      "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#geographicBoundBox",
       "name":"Geographic Bound Box",
       "tag":"position",
       "value":""
    },
    {
       "description":"Character string namespace uniquely identifying the context of the identifier code (for example, the data owner. For GeoCoMaS the namespace is the directory name uniquely identifying the resource.",
-      "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#identifierNameSpace",
+      "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#identifierNameSpace",
       "name":"Identifier namespace",
       "tag":"",
       "value":""
    },
    {
       "description":"An INSPIRE thematic category from the controlled list.",
-      "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#keywordINSPIRE",
+      "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#keywordINSPIRE",
       "name":"Keyword INSPIRE",
       "tag":"",
       "value":""
    },{
    "description":"The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search. The value domain of this metadata element is free text.",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#keywordValue",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#keywordValue",
    "name":"Keyword value",
    "tag":"",
    "value":""
 },{
    "description":"This is a statement on process history and/or overall quality of the spatial data set. Where appropriate it may include a statement whether the data set has been validated or quality assured, whether it is the official version (if multiple versions exist), and whether it has legal validity. The value domain of this metadata element is free text.",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#lineage",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#lineage",
    "name":"Lineage",
    "tag":"",
    "value":""
 },{
    "description":"The value domain of this metadata element is a character string, commonly expressed as uniform resource locator (URL).",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#linkage",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#linkage",
    "name":"Linkage",
    "tag":"",
    "value":""
 },{
    "description":"The date which specifies when the metadata record was created or updated. This date shall be expressed in conformity with ISO 8601 (e.g.: Date  2011-05-02).",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#metadataDate",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#metadataDate",
    "name":"Metadata date",
    "tag":"",
    "value":""
 },{
    "description":"This is the language in which the metadata elements are expressed. The value domain of this metadata element is limited to the official languages of the Community expressed in conformity with ISO 639-2.",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#metadataLanguage",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#metadataLanguage",
    "name":"Metadata language",
    "tag":"",
    "value":""
 },{
    "description":"The name of the organization in free text",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#organizationName",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#organizationName",
    "name":"Organization name",
    "tag":"",
    "value":""
 },{
    "description":"This is a brief narrative summary of the content of the resource. The value domain of this metadata element is free text.",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#resourceAbstract",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#resourceAbstract",
    "name":"Resource abstract",
    "tag":"",
    "value":""
 },{
    "description":"The language(s) used within the resource. The value domain of this metadata element is limited to the languages defined in ISO 639-2.",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#resourceLanguage",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#resourceLanguage",
    "name":"Resource language",
    "tag":"",
    "value":""
 },{
    "description":"This a characteristic, and often unique, name by which the resource is known. The value domain of this metadata element is free text.",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#resourceTitle",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#resourceTitle",
    "name":"Resource title",
    "tag":"",
    "value":""
 },{
    "description":"This is the description of the organisation responsible for the establishment, management, maintenance and destribution of the resource",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#responsibleParty",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#responsibleParty",
    "name":"Responsible party",
    "tag":"",
    "value":""
 },{
    "description":"Spatial resolution refers to the level of detail of the data set. It shall be expressed as a set of zero to many resolution distances (typically for gridded data and imagery-derived products) or equivalent scales (typically for maps or map-derived products).",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#spatialResolution",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#spatialResolution",
    "name":"Spatial resolution",
    "tag":"",
    "value":""
 },{
    "description":"Mandatory if resolution distance field is used to describe to resource.",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#spatialResolutionUnitMeasure",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#spatialResolutionUnitMeasure",
    "name":"Spatial resolution unit measure",
    "tag":"",
    "value":""
 },{
    "description":"The temporal extent defines the time period covered by the content of the resource. This time period may be expressed as any of the following: an individual date, an interval of dates expressed through the starting date and end date of the interval, a mix of individual dates and intervals of dates.",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#temporalExtent",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#temporalExtent",
    "name":"Temporal extent",
    "tag":"",
    "value":""
 },{
    "description":"The topic category is a high-level classification scheme to assist in the grouping and topic-based search of available spatial data resources.",
-   "descriptor":"http://dendro.fe.up.pt/ontology/INSPIRE/0.1#topicCategory",
+   "descriptor":"http://dendro.fe.up.pt/ontology/BIODIV/0.1#topicCategory",
    "name":"Topic category",
    "tag":"",
    "value":""
