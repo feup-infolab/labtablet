@@ -1,12 +1,17 @@
 package pt.up.fe.alpha.labtablet.async;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -23,6 +28,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -35,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,11 +50,13 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.api.DendroAPI;
 import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.models.DataItem;
+import pt.up.fe.alpha.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroMetadataRecord;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
@@ -63,6 +73,14 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
     //input, remove, output
     private final AsyncCustomTaskHandler<Void> mHandler;
     private Exception error;
+    AsyncItemMetadataFetcher mItemMetadataFetcher;
+    ArrayList<DataItem> dataDescriptionItems;
+    String destUri;
+    JsonArray childrenURIs;
+    String cookie;
+    Context mContext;
+    String baseUrl;
+    String baseResourceUri;
 
     public AsyncUploader(AsyncCustomTaskHandler<Void> mHandler) {
         this.mHandler = mHandler;
@@ -82,9 +100,10 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
     @Override
     protected Void doInBackground(Object... params) {
+        /*
         String destUri;
         String cookie;
-        Context mContext;
+        Context mContext;*/
         String favoriteName;
 
         if (params[0] instanceof String
@@ -94,6 +113,16 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             favoriteName = (String) params[0];
             destUri = (String) params[2];
             mContext = (Context) params[3];
+
+            SharedPreferences settings = mContext.getSharedPreferences(mContext.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
+            if (!settings.contains(Utils.DENDRO_CONFS_ENTRY)) {
+                error = new Exception("Dendro configurations were not found");
+                return null;
+            }
+
+            DendroConfiguration conf = new Gson().fromJson(settings.getString(Utils.DENDRO_CONFS_ENTRY, ""), DendroConfiguration.class);
+            baseUrl = conf.getAddress();
+            baseResourceUri = destUri.replaceFirst(baseUrl, "");
 
             if (destUri.equals("")) {
                 error = new Exception("Target Uri not defined!");
@@ -370,14 +399,17 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
         //check if there are any file-dependant descriptions
         //if so, upload them
-        ArrayList<DataItem> dataDescriptionItems =
-                item.getDataItems();
+        //TODO this is commented for debug purposes
+        /*ArrayList<DataItem> dataDescriptionItems =
+                item.getDataItems();*/
 
+        dataDescriptionItems = item.getDataItems();
         if (dataDescriptionItems == null) {
             return null;
         }
 
-        for (DataItem dataItem : dataDescriptionItems) {
+        //TODO this is going into the postExecute method
+        /*for (DataItem dataItem : dataDescriptionItems) {
 
             metadataRecords = new ArrayList<>();
             for (Descriptor desc : dataItem.getFileLevelMetadata()) {
@@ -398,22 +430,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 conn.setRequestProperty("Cookie", cookie);
                 conn.setDoOutput(true);
 
-                /*httpclient = new DefaultHttpClient();
-                String destPath = destUri + File.separator + dataItem.getResourceName() + "?update_metadata";
-                httppost = new HttpPost(destPath.replace(" ", "%20"));
-                httppost.setHeader("Accept", "application/json");
-                httppost.setHeader("Content-Type", "application/json");
-                httppost.setHeader("Cookie", "connect.sid=" + cookie);*/
-
                 String g = new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_DESCRIPTORS);
-
-                //StringEntity se = new StringEntity(new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_DESCRIPTORS), HTTP.UTF_8);
-
-                //httppost.setEntity(se);
-
-                /*HttpResponse resp = httpclient.execute(httppost);
-                HttpEntity ent = resp.getEntity();*/
-
                 OutputStream os = conn.getOutputStream();
                 os.write(g.getBytes());
                 os.flush();
@@ -442,7 +459,8 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         }
 
         publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
-        return null;
+        return null;*/
+        return  null;
     }
 
     private void copyFileOrDirectory(String srcDir, String dstDir) {
@@ -496,13 +514,197 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        super.onPostExecute(result);
+        //TODO this is the previous code that was here
+        /*super.onPostExecute(result);
         if (error != null) {
             mHandler.onFailure(error);
         } else {
             mHandler.onSuccess(null);
-        }
+        }*/
+
+        //getChildrenUris();
+        //mItemMetadataFetcher.execute(destUri);
+        //updateChildrenMetadata(dataDescriptionItems);
+        //mItemMetadataFetcher.execute(destUri);
+        getChildrenUris();
+        mItemMetadataFetcher.execute(baseResourceUri, mContext);
+
+        //publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
     }
+
+
+    public void getChildrenUris()
+    {
+        mItemMetadataFetcher = new AsyncItemMetadataFetcher(new AsyncTaskHandler<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject reader = new JSONObject(result);
+                    String descriptors = reader.getJSONArray("descriptors").toString();
+                    JsonParser parser = new JsonParser();
+                    JsonArray descriptorsArray = parser.parse(descriptors).getAsJsonArray();
+                    for(Iterator<JsonElement> it = descriptorsArray.iterator(); it.hasNext(); )
+                    {
+                        JsonElement elem = it.next();
+                        JsonObject obj = elem.getAsJsonObject();
+                        String currentValue = "";
+                        String currentDescriptorUri = obj.get("uri").getAsString();
+                        //TODO change this into a constant
+                        if(currentDescriptorUri.equals("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#hasLogicalPart"))
+                        {
+                            //currentValue = obj.get("value").getAsString();
+                            try {
+                                childrenURIs = obj.get("value").getAsJsonArray();
+                                for(JsonElement childUri : childrenURIs)
+                                {
+                                    getChildInfo();
+                                    mItemMetadataFetcher.execute(childUri.toString(), mContext);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                currentValue = obj.get("value").getAsString();
+                                childrenURIs = new JsonArray();
+                                childrenURIs.add(currentValue);
+                                getChildInfo();
+                                mItemMetadataFetcher.execute(currentValue, mContext);
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception error) {
+                Log.e("getChildrenUris", error.getMessage());
+            }
+
+            @Override
+            public void onProgressUpdate(int value) {
+
+            }
+        });
+    }
+
+    public void getChildInfo()
+    {
+        mItemMetadataFetcher = new AsyncItemMetadataFetcher(new AsyncTaskHandler<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JsonArray mapperTitleAndUri = new JsonArray();
+                    JSONObject reader = new JSONObject(result);
+                    String currentChildUri = reader.getJSONArray("uri").toString();
+                    String descriptors = reader.getJSONArray("descriptors").toString();
+                    JsonParser parser = new JsonParser();
+                    JsonArray descriptorsArray = parser.parse(descriptors).getAsJsonArray();
+                    /*for(Iterator<JsonElement> it = descriptorsArray.iterator(); it.hasNext(); )
+                    {
+                        JsonElement elem = it.next();
+                        JsonObject obj = elem.getAsJsonObject();
+                        String currentValue = "";
+                        String currentDescriptorUri = obj.get("uri").getAsString();
+                        //TODO change this into a constant
+                        if(currentDescriptorUri.equals("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#hasLogicalPart"))
+                        {
+                            currentValue = obj.get("value").getAsString();
+                            childrenURIs = currentValue;
+                        }
+                    }*/
+
+                    for(Iterator<JsonElement> it = descriptorsArray.iterator(); it.hasNext(); )
+                    {
+                        JsonElement elem = it.next();
+                        JsonObject obj = elem.getAsJsonObject();
+                        String currentTitle = "";
+                        String currentDescriptorUri = obj.get("uri").getAsString();
+                        //TODO change this into a constant
+                        if(currentDescriptorUri.equals("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#title"))
+                        {
+                            currentTitle = obj.get("value").getAsString();
+                            JsonObject mapperObject = new JsonObject();
+                            mapperObject.addProperty(currentTitle, currentChildUri);
+                            mapperTitleAndUri.add(mapperObject);
+                        }
+                    }
+
+                    if(childrenURIs.size() >= mapperTitleAndUri.size())
+                    {
+                        updateChildrenMetadata(mapperTitleAndUri);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception error) {
+                Log.e("getChildInfo", error.getMessage());
+            }
+
+            @Override
+            public void onProgressUpdate(int value) {
+
+            }
+        });
+    }
+
+    public void updateChildrenMetadata(JsonArray mapperTitleAndUri)
+    {
+        URL url;
+        HttpURLConnection conn;
+        for (DataItem dataItem : dataDescriptionItems) {
+
+            ArrayList<DendroMetadataRecord> metadataRecords = new ArrayList<>();
+            for (Descriptor desc : dataItem.getFileLevelMetadata()) {
+                metadataRecords.add(
+                        new DendroMetadataRecord(desc.getDescriptor(), desc.getValue())
+                );
+            }
+
+            try {
+                //String destPath = destUri + File.separator + dataItem.getResourceName() + "?update_metadata";
+                String destPath = baseUrl + mapperTitleAndUri.toString() + "?update_metadata";
+                String dest = destPath.replace(" ", "%20");
+                url = new URL(dest);
+
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                conn.setRequestProperty("Accept","application/json");
+                conn.setRequestProperty("Cookie", cookie);
+                conn.setDoOutput(true);
+
+                String g = new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_DESCRIPTORS);
+                OutputStream os = conn.getOutputStream();
+                os.write(g.getBytes());
+                os.flush();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+                String output;
+                StringBuilder response = new StringBuilder();
+                while ((output = br.readLine()) != null) {
+                    response.append(output);
+                    response.append('\r');
+                }
+                String mes = response.toString();
+                conn.disconnect();
+
+                DendroResponse metadataResponse = new Gson().fromJson(mes, DendroResponse.class);
+                if (metadataResponse.result.equals(Utils.DENDRO_RESPONSE_ERROR) ||
+                        metadataResponse.result.equals(Utils.DENDRO_RESPONSE_ERROR_2)) {
+                    error = new Exception(metadataResponse.result + ": " + metadataResponse.message);
+                    //return null;
+                }
+            } catch (Exception e) {
+                error = e;
+                //return null;
+            }
+        }
+    };
 
     public class DendroResponse {
         public String result;
