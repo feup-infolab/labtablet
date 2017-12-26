@@ -594,9 +594,10 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             @Override
             public void onSuccess(String result) {
                 try {
-                    JsonArray mapperTitleAndUri = new JsonArray();
+                    //JsonArray mapperTitleAndUri = new JsonArray();
+                    JsonObject mapperObject = new JsonObject();
                     JSONObject reader = new JSONObject(result);
-                    String currentChildUri = reader.getJSONArray("uri").toString();
+                    String currentChildUri = reader.get("uri").toString();
                     String descriptors = reader.getJSONArray("descriptors").toString();
                     JsonParser parser = new JsonParser();
                     JsonArray descriptorsArray = parser.parse(descriptors).getAsJsonArray();
@@ -624,15 +625,20 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                         if(currentDescriptorUri.equals("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#title"))
                         {
                             currentTitle = obj.get("value").getAsString();
-                            JsonObject mapperObject = new JsonObject();
+                            //JsonObject mapperObject = new JsonObject();
                             mapperObject.addProperty(currentTitle, currentChildUri);
-                            mapperTitleAndUri.add(mapperObject);
+                            //mapperTitleAndUri.add(mapperObject);
                         }
                     }
 
+                    /*
                     if(childrenURIs.size() >= mapperTitleAndUri.size())
                     {
                         updateChildrenMetadata(mapperTitleAndUri);
+                    }*/
+                    if(childrenURIs.size() >= mapperObject.size())
+                    {
+                        updateChildrenMetadata(mapperObject);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -651,7 +657,8 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         });
     }
 
-    public void updateChildrenMetadata(JsonArray mapperTitleAndUri)
+    //public void updateChildrenMetadata(JsonArray mapperTitleAndUri)
+    public void updateChildrenMetadata(JsonObject mapperTitleAndUri)
     {
         URL url;
         HttpURLConnection conn;
@@ -666,7 +673,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
             try {
                 //String destPath = destUri + File.separator + dataItem.getResourceName() + "?update_metadata";
-                String destPath = baseUrl + mapperTitleAndUri.toString() + "?update_metadata";
+                String destPath = baseUrl + mapperTitleAndUri.get(dataItem.getResourceName()) + "?update_metadata";
                 String dest = destPath.replace(" ", "%20");
                 url = new URL(dest);
 
