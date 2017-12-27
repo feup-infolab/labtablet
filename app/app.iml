@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":app" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="labtablet" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":app" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
@@ -49,13 +49,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/debug/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/assets" type="java-test-resource" />
@@ -63,6 +56,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testDebug/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/assets" type="java-resource" />
@@ -70,13 +70,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/assets" type="java-test-resource" />
@@ -84,6 +77,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/shaders" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/build-info" />
@@ -118,18 +118,18 @@
     <orderEntry type="library" name="com.android.support:design-24.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-annotations:24.0.0@jar" level="project" />
     <orderEntry type="library" name="com.android.support:animated-vector-drawable-24.0.0" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documents/InfoLab/labtablet/app/libs/opencsv-3.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.support:recyclerview-v7-24.0.0" level="project" />
     <orderEntry type="library" name="ch.acra:acra-4.8.2" level="project" />
+    <orderEntry type="library" name="__local_aars__:/home/bruno/Documentos/InfoLab/labtablet/app/libs/pocketsphinx-android-5prealpha-nolib.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="__local_aars__:/home/bruno/Documentos/InfoLab/labtablet/app/libs/itextpdf-5.5.3.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.squareup.okhttp:okhttp:2.5.0@jar" level="project" />
+    <orderEntry type="library" name="__local_aars__:/home/bruno/Documentos/InfoLab/labtablet/app/libs/httpmime-4.3.4.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.squareup.okio:okio:1.6.0@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-v4-24.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-vector-drawable-24.0.0" level="project" />
     <orderEntry type="library" name="org.apache.httpcomponents:httpclient-android:4.3.5.1@jar" level="project" />
     <orderEntry type="library" name="org.jdom:jdom:2.0.2@jar" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documents/InfoLab/labtablet/app/libs/httpmime-4.3.4.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documents/InfoLab/labtablet/app/libs/pocketsphinx-android-5prealpha-nolib.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documents/InfoLab/labtablet/app/libs/itextpdf-5.5.3.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="__local_aars__:/home/bruno/Documentos/InfoLab/labtablet/app/libs/opencsv-3.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-v13-24.0.0" level="project" />
     <orderEntry type="library" name="eu.the4thfloor.volley:com.android.volley:2015.05.28@jar" level="project" />
     <orderEntry type="library" name="com.android.support:appcompat-v7-24.0.0" level="project" />

@@ -155,7 +155,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                     case "data":
                         Toast.makeText(FavoriteDetailsActivity.this, "Choose the file", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.setType("file/*");
+                        intent.setType("*/*");
                         startActivityForResult(intent, Utils.PICK_FILE_INTENT);
                         break;
                     case "forms":
