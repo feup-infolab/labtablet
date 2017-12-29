@@ -67,6 +67,7 @@ public class Zipper {
                         .substring(basePathLength);
                 FileInputStream fi = new FileInputStream(unmodifiedFilePath);
                 origin = new BufferedInputStream(fi, BUFFER);
+                relativePath = relativePath.replaceFirst("/", "");
                 ZipEntry entry = new ZipEntry(relativePath);
                 out.putNextEntry(entry);
                 int count;

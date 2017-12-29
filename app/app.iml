@@ -98,7 +98,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-support" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaPrecompile" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/prebuild" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/reload-dex" />
@@ -118,22 +117,22 @@
     <orderEntry type="library" name="com.android.support:design-24.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-annotations:24.0.0@jar" level="project" />
     <orderEntry type="library" name="com.android.support:animated-vector-drawable-24.0.0" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documents/InfoLab/labtablet/app/libs/opencsv-3.1.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="__local_aars__:/Users/nelsonpereira/Desktop/infolaRepos/labtabletRepo/labtablet/app/libs/opencsv-3.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.support:recyclerview-v7-24.0.0" level="project" />
     <orderEntry type="library" name="ch.acra:acra-4.8.2" level="project" />
     <orderEntry type="library" name="com.squareup.okhttp:okhttp:2.5.0@jar" level="project" />
+    <orderEntry type="library" name="__local_aars__:/Users/nelsonpereira/Desktop/infolaRepos/labtabletRepo/labtablet/app/libs/httpmime-4.3.4.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.squareup.okio:okio:1.6.0@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-v4-24.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-vector-drawable-24.0.0" level="project" />
     <orderEntry type="library" name="org.apache.httpcomponents:httpclient-android:4.3.5.1@jar" level="project" />
     <orderEntry type="library" name="org.jdom:jdom:2.0.2@jar" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documents/InfoLab/labtablet/app/libs/httpmime-4.3.4.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documents/InfoLab/labtablet/app/libs/pocketsphinx-android-5prealpha-nolib.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documents/InfoLab/labtablet/app/libs/itextpdf-5.5.3.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="__local_aars__:/Users/nelsonpereira/Desktop/infolaRepos/labtabletRepo/labtablet/app/libs/pocketsphinx-android-5prealpha-nolib.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-v13-24.0.0" level="project" />
     <orderEntry type="library" name="eu.the4thfloor.volley:com.android.volley:2015.05.28@jar" level="project" />
     <orderEntry type="library" name="com.android.support:appcompat-v7-24.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:cardview-v7-24.0.0" level="project" />
+    <orderEntry type="library" name="__local_aars__:/Users/nelsonpereira/Desktop/infolaRepos/labtabletRepo/labtablet/app/libs/itextpdf-5.5.3.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.2@jar" level="project" />
     <orderEntry type="library" name="org.apache.http.legacy-android-24" level="project" />
   </component>

@@ -7,10 +7,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -92,53 +88,20 @@ public class AsyncPackageCreator extends AsyncTask<Object, ProgressUpdateItem, V
         String from = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/" + favoriteName;
         String to = Environment.getExternalStorageDirectory() + "/" + favoriteName + ".zip";
 
-        JSONArray dendroStyleRecords = new JSONArray();
+        ArrayList<DendroMetadataRecord> dendroStyleRecords = new ArrayList<>();
         ArrayList<Descriptor> descriptors = item.getMetadataItems();
 
         for (Descriptor desc : descriptors) {
-            JSONObject j = new JSONObject();
-            try {
-                j.put("uri", desc.getDescriptor());
-                j.put("value", desc.getValue());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
 
-            dendroStyleRecords.put(j);
+            dendroStyleRecords.add(
+                    new DendroMetadataRecord(desc.getDescriptor(), desc.getValue()));
         }
 
-        Descriptor title = new Descriptor();
-        title.setDescriptor("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#title");
-        title.setValue(favoriteName);
-
-        JSONObject j = new JSONObject();
         try {
-            j.put("uri", title.getDescriptor());
-            j.put("value", title.getValue());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        dendroStyleRecords.put(j);
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("resource", "");
-            json.put("metadata", dendroStyleRecords);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        String jsonFinal = json.toString().replace("\\/", "/");
-
-        try {
-            /*File metadataRecord = new File(from, "metadata.json");
+            File metadataRecord = new File(from, "metadata.json");
+            String metadata = new Gson().toJson(dendroStyleRecords);
             FileOutputStream stream = new FileOutputStream(metadataRecord);
             stream.write(metadata.getBytes());
-            stream.close();*/
-            File metadataRecord = new File(from, "metadata.json");
-            FileOutputStream stream = new FileOutputStream(metadataRecord);
-            stream.write(jsonFinal.getBytes());
             stream.close();
 
             DataItem dataItem = new DataItem();
