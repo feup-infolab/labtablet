@@ -144,9 +144,17 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                     return;
 
                 String activeTabName = "" + activeTab.getText();
+                Intent myIntent;
                 switch (activeTabName) {
                     case "metadata":
-                        Intent myIntent = new Intent(FavoriteDetailsActivity.this, DescriptorPickerActivity.class);
+                        myIntent = new Intent(FavoriteDetailsActivity.this, DescriptorPickerActivity.class);
+                        myIntent.putExtra("file_extension", "");
+                        myIntent.putExtra("favoriteName", favoriteName);
+                        myIntent.putExtra("returnMode", Utils.DESCRIPTOR_DEFINE);
+                        startActivityForResult(myIntent, Utils.DESCRIPTOR_DEFINE);
+                        break;
+                    case "sync":
+                        myIntent = new Intent(FavoriteDetailsActivity.this, DescriptorPickerActivity.class);
                         myIntent.putExtra("file_extension", "");
                         myIntent.putExtra("favoriteName", favoriteName);
                         myIntent.putExtra("returnMode", Utils.DESCRIPTOR_DEFINE);
@@ -544,6 +552,9 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
             case "metadata":
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_border_color_white_24dp));
                 break;
+            case "sync":
+                fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_border_color_white_24dp));
+                break;
             case "data":
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_attachment_white_24dp));
                 break;
@@ -603,10 +614,23 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         currentItem = FavoriteMgr.getFavorite(this, currentItem.getTitle());
+        currentItem.setSyncItems(CreateFakeSyncItems());
         adapter.addFragment(FavoriteViewFragment.newInstance("metadata", currentItem.getMetadataItems()), "metadata");
         adapter.addFragment(FavoriteViewFragment.newInstance("data", currentItem.getDataItems()), "data");
         adapter.addFragment(FavoriteViewFragment.newInstance("forms", currentItem.getLinkedForms()), "forms");
+        adapter.addFragment(FavoriteViewFragment.newInstance("sync", currentItem.getSyncItems()), "sync");
         viewPager.setAdapter(adapter);
+    }
+
+    private ArrayList<Descriptor> CreateFakeSyncItems(){
+        ArrayList<Descriptor> res = new ArrayList<Descriptor>();
+
+        String name = "Project1", descriptor = "ola2", value = "2017/12/29", tag = "ola4";
+
+        Descriptor d = new Descriptor(name, descriptor, value, tag);
+
+        res.add(d);
+        return res;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

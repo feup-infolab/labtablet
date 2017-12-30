@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -43,6 +44,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     private String mCurrentTag;
     private ArrayList<DataItem> dataItems;
     private ArrayList<Descriptor> metadataItems;
+    private ArrayList<Descriptor> syncItems;
     private HashMap<String, ArrayList<FormInstance>> groupedForms;
     private View rootView;
 
@@ -50,6 +52,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
     private DataListAdapter dataListAdapter;
     private MetadataListAdapter metadataListAdapter;
+    private MetadataListAdapter syncListAdapter;
 
     public FavoriteViewFragment() {
         // Required empty public constructor
@@ -58,6 +61,10 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     public void notifyItemsChanged(FavoriteItem item) {
 
         switch (mCurrentTag) {
+            case "sync":
+                syncItems = item.getSyncItems();
+                bindSyncView(syncItems);
+                break;
             case "metadata":
                 metadataItems = item.getMetadataItems();
                 bindMetaDataView(metadataItems);
@@ -71,6 +78,17 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 bindFormsView(groupedForms);
                 break;
         }
+    }
+
+    private ArrayList<Descriptor> CreateFakeSyncItems(){
+        ArrayList<Descriptor> res = new ArrayList<Descriptor>();
+
+        String name = "Project1", descriptor = "ola2", value = "2017/12/29", tag = "ola4";
+
+        Descriptor d = new Descriptor(name, descriptor, value, tag);
+
+        res.add(d);
+        return res;
     }
 
     public static FavoriteViewFragment newInstance(String tag, Object item) {
@@ -108,6 +126,11 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
             case "metadata":
                 metadataItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<Descriptor>>(){}.getType());
                 bindMetaDataView(metadataItems);
+                break;
+
+            case "sync":
+                syncItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<Descriptor>>(){}.getType());
+                bindSyncView(syncItems);
                 break;
 
             case "forms":
@@ -161,6 +184,20 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    private void bindSyncView(ArrayList<Descriptor> items) {
+        if (syncItems.isEmpty()) {
+            rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
+            return;
+        }
+        rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
+
+        syncListAdapter = new MetadataListAdapter(items, this, getActivity());
+        itemList.setAdapter(syncListAdapter);
+        itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
     /**
      * Attaches a list of form instances for a particular favorite (if any) or an appropriate view otherwise
      * @param items existing form items
@@ -201,6 +238,18 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         Intent intent = new Intent(getActivity(), ItemPreviewActivity.class);
 
         switch (mCurrentTag) {
+            case "sync":
+                final String options[] = {"Mockdata", "B2Share"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Synchronize");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                    }
+                });
+                builder.show();
+                break;
             case "metadata":
                 intent.putExtra("metadata_item",
                         new Gson().toJson(metadataItems.get(position)));
@@ -270,6 +319,13 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                     metadataItems.remove(position);
                     metadataListAdapter.notifyItemRemoved(position);
                     ((FavoriteDetailsActivity) getActivity()).notifyMetadataItemRemoved(metadataItems);
+                }
+                break;
+            case "sync":
+                if (position <= syncItems.size()) {
+                    syncItems.remove(position);
+                    syncListAdapter.notifyItemRemoved(position);
+                    ((FavoriteDetailsActivity) getActivity()).notifyMetadataItemRemoved(syncItems);
                 }
                 break;
             case "data":

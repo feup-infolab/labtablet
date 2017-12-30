@@ -14,6 +14,7 @@ public class FavoriteItem {
     private String date_modified;
     private ArrayList<DataItem> dataItems;
     private ArrayList<Descriptor> metadataItems;
+    private ArrayList<Descriptor> syncItems;
 
     private ArrayList<Descriptor> metadataRecommendations;
     private ArrayList<FormInstance> linkedForms;
@@ -49,6 +50,14 @@ public class FavoriteItem {
 
     public void setMetadataItems(ArrayList<Descriptor> metadataItems) {
         this.metadataItems = metadataItems;
+    }
+
+    public ArrayList<Descriptor> getSyncItems() {
+        return syncItems;
+    }
+
+    public void setSyncItems(ArrayList<Descriptor> metadataItems) {
+        this.syncItems = metadataItems;
     }
 
     public String getTitle() {
