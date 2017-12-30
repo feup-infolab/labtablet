@@ -49,13 +49,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/debug/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/assets" type="java-test-resource" />
@@ -63,6 +56,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/assets" type="java-resource" />
@@ -115,21 +115,21 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 24 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="__local_aars__:/Users/joaorocha/Desktop/Dendro/labtablet/app/libs/httpmime-4.3.4.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.support:design-24.0.0" level="project" />
+    <orderEntry type="library" name="__local_aars__:/Users/joaorocha/Desktop/Dendro/labtablet/app/libs/opencsv-3.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-annotations:24.0.0@jar" level="project" />
     <orderEntry type="library" name="com.android.support:animated-vector-drawable-24.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:recyclerview-v7-24.0.0" level="project" />
     <orderEntry type="library" name="ch.acra:acra-4.8.2" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documentos/InfoLab/labtablet/app/libs/pocketsphinx-android-5prealpha-nolib.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documentos/InfoLab/labtablet/app/libs/itextpdf-5.5.3.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.squareup.okhttp:okhttp:2.5.0@jar" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documentos/InfoLab/labtablet/app/libs/httpmime-4.3.4.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.squareup.okio:okio:1.6.0@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-v4-24.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-vector-drawable-24.0.0" level="project" />
     <orderEntry type="library" name="org.apache.httpcomponents:httpclient-android:4.3.5.1@jar" level="project" />
+    <orderEntry type="library" name="__local_aars__:/Users/joaorocha/Desktop/Dendro/labtablet/app/libs/pocketsphinx-android-5prealpha-nolib.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="org.jdom:jdom:2.0.2@jar" level="project" />
-    <orderEntry type="library" name="__local_aars__:/home/bruno/Documentos/InfoLab/labtablet/app/libs/opencsv-3.1.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="__local_aars__:/Users/joaorocha/Desktop/Dendro/labtablet/app/libs/itextpdf-5.5.3.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-v13-24.0.0" level="project" />
     <orderEntry type="library" name="eu.the4thfloor.volley:com.android.volley:2015.05.28@jar" level="project" />
     <orderEntry type="library" name="com.android.support:appcompat-v7-24.0.0" level="project" />

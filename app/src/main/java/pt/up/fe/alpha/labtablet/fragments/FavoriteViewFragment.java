@@ -28,9 +28,11 @@ import pt.up.fe.alpha.labtablet.activities.FavoriteDetailsActivity;
 import pt.up.fe.alpha.labtablet.activities.FormSolverActivity;
 import pt.up.fe.alpha.labtablet.activities.ItemPreviewActivity;
 import pt.up.fe.alpha.labtablet.adapters.DataListAdapter;
+import pt.up.fe.alpha.labtablet.adapters.DendroSyncListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.FormListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.MetadataListAdapter;
 import pt.up.fe.alpha.labtablet.models.DataItem;
+import pt.up.fe.alpha.labtablet.models.Dendro.Sync;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.models.FormInstance;
@@ -39,12 +41,11 @@ import pt.up.fe.alpha.labtablet.utils.Utils;
 
 public class FavoriteViewFragment extends Fragment implements OnItemClickListener {
 
-
     private RecyclerView itemList;
     private String mCurrentTag;
     private ArrayList<DataItem> dataItems;
     private ArrayList<Descriptor> metadataItems;
-    private ArrayList<Descriptor> syncItems;
+    private ArrayList<Sync> syncItems;
     private HashMap<String, ArrayList<FormInstance>> groupedForms;
     private View rootView;
 
@@ -52,7 +53,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
     private DataListAdapter dataListAdapter;
     private MetadataListAdapter metadataListAdapter;
-    private MetadataListAdapter syncListAdapter;
+    private DendroSyncListAdapter syncListAdapter;
 
     public FavoriteViewFragment() {
         // Required empty public constructor
@@ -78,17 +79,6 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 bindFormsView(groupedForms);
                 break;
         }
-    }
-
-    private ArrayList<Descriptor> CreateFakeSyncItems(){
-        ArrayList<Descriptor> res = new ArrayList<Descriptor>();
-
-        String name = "Project1", descriptor = "ola2", value = "2017/12/29", tag = "ola4";
-
-        Descriptor d = new Descriptor(name, descriptor, value, tag);
-
-        res.add(d);
-        return res;
     }
 
     public static FavoriteViewFragment newInstance(String tag, Object item) {
@@ -129,7 +119,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 break;
 
             case "sync":
-                syncItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<Descriptor>>(){}.getType());
+                syncItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<Sync>>(){}.getType());
                 bindSyncView(syncItems);
                 break;
 
@@ -184,7 +174,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void bindSyncView(ArrayList<Descriptor> items) {
+    private void bindSyncView(ArrayList<Sync> items) {
         if (syncItems.isEmpty()) {
             rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
             rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
@@ -193,7 +183,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
 
-        syncListAdapter = new MetadataListAdapter(items, this, getActivity());
+        syncListAdapter = new DendroSyncListAdapter(items, this, getActivity());
         itemList.setAdapter(syncListAdapter);
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -239,7 +229,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
         switch (mCurrentTag) {
             case "sync":
-                final String options[] = {"Mockdata", "B2Share"};
+                final String options[] = {"RDM Repository @ INESC TEC", "B2Share"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Synchronize");
                 builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -321,6 +311,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                     ((FavoriteDetailsActivity) getActivity()).notifyMetadataItemRemoved(metadataItems);
                 }
                 break;
+            /* TODO
             case "sync":
                 if (position <= syncItems.size()) {
                     syncItems.remove(position);
@@ -328,6 +319,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                     ((FavoriteDetailsActivity) getActivity()).notifyMetadataItemRemoved(syncItems);
                 }
                 break;
+                */
             case "data":
                 if (position <= dataItems.size()) {
                     dataItems.remove(position);

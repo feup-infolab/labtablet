@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:foreground="?android:attr/selectableItemBackground">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/sync_item_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_alignBottom="@+id/sync_item_date"
+                android:layout_alignParentStart="true"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/image_placeholder"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_file" />
+
+            <TextView
+                android:id="@+id/sync_item_uri"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/sync_item_title"
+                android:layout_toEndOf="@+id/sync_item_ok"
+                android:ellipsize="start"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:text="@string/text_placeholder"
+                android:textColor="@color/list_background_pressed"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/sync_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/sync_item_ok"
+                android:ellipsize="start"
+                android:padding="10dp"
+                android:paddingTop="0dp"
+                android:text="@string/text_placeholder"
+                android:textAppearance="@android:style/TextAppearance.Medium" />
+
+            <TextView
+                android:id="@+id/sync_item_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/sync_item_uri"
+                android:layout_toEndOf="@+id/sync_item_ok"
+                android:ellipsize="start"
+                android:padding="10dp"
+                android:paddingTop="0dp"
+                android:text="@string/text_placeholder"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:textColor="@color/primary"
+                android:textSize="10dp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/item_sync_list_expanded_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            >
+
+            <Button
+                android:id="@+id/action_sync_item_delete_cancel"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:textColor="@android:color/black"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="wrap_content"
+                android:text="@string/action_cancel"
+                />
+
+            <Button
+                android:id="@+id/action_sync_item_delete"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:textColor="@android:color/black"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="wrap_content"
+                android:text="@string/action_delete"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

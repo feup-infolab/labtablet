@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,7 @@ import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.db_handlers.FormMgr;
 import pt.up.fe.alpha.labtablet.fragments.FavoriteViewFragment;
 import pt.up.fe.alpha.labtablet.models.DataItem;
+import pt.up.fe.alpha.labtablet.models.Dendro.Sync;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.models.Form;
@@ -622,12 +624,26 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         viewPager.setAdapter(adapter);
     }
 
-    private ArrayList<Descriptor> CreateFakeSyncItems(){
-        ArrayList<Descriptor> res = new ArrayList<Descriptor>();
+    private ArrayList<Sync> CreateFakeSyncItems(){
+        ArrayList<Sync> res = new ArrayList<Sync>();
 
-        String name = "Project1", descriptor = "ola2", value = "2017/12/29", tag = "ola4";
+        String title = "Base Data";
+        String folderUri = "/r/folder/bccadc68-f8bc-419d-b924-f0b55b06e876";
 
-        Descriptor d = new Descriptor(name, descriptor, value, tag);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 2017);
+        cal.set(Calendar.MONTH, Calendar.NOVEMBER);
+        cal.set(Calendar.DAY_OF_MONTH, 6);
+        Date dateRepresentation = cal.getTime();
+
+        boolean syncOK  = true;
+
+        Sync d = new Sync(
+                title,
+                folderUri,
+                dateRepresentation,
+                syncOK
+        );
 
         res.add(d);
         return res;
