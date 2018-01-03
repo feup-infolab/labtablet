@@ -144,15 +144,17 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
         //upload files (if any)
         String fileF = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/" + favoriteName;
-        String from = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/data";//"/" + favoriteName;
+        //TODO NELSON
+        //String from = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/data";//"/" + favoriteName;
+        String dataFolder = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/data";//"/" + favoriteName;
 
 
-        boolean success = (new File(from)).mkdirs();
+        boolean success = (new File(dataFolder)).mkdirs();
         if (!success) {
             return null;
         }
 
-        copyFileOrDirectory(fileF, from);
+        copyFileOrDirectory(fileF, dataFolder);
 
         //AUTHENTICATE USER
         publishProgress(new ProgressUpdateItem(10, mContext.getResources().getString(R.string.upload_progress_authenticating)));
@@ -188,16 +190,16 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
         //if there are any files to upload, zip them
         publishProgress(new ProgressUpdateItem(20, mContext.getResources().getString(R.string.upload_progress_creating_package)));
-        if (new File(from).listFiles().length > 0) {
+        if (new File(dataFolder).listFiles().length > 0) {
             Zipper mZipper = new Zipper();
             String to = Environment.getExternalStorageDirectory() + "/" + favoriteName + ".zip";
             //TODO NELSON
-            String realFrom = from + "/" + favoriteName;
+            String from = dataFolder + "/" + favoriteName;
             //TODO NELSON
-            Log.i("ZIP_FROM", realFrom);
+            Log.i("ZIP_FROM", from);
             Log.i("ZIP_TO", to);
             //TODO NELSON
-            Boolean result = mZipper.zipFileAtPath(realFrom, to, mContext);
+            Boolean result = mZipper.zipFileAtPath(from, to, mContext);
 
             if (!result) {
                 Log.e("ZIP", "Failed to create zip file");
@@ -205,10 +207,10 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 return null;
             }
 
-            File dst = new File(from);
+            File dst = new File(dataFolder);
 
             if (dst.exists()) {
-                String deleteCmd = "rm -r " + from;
+                String deleteCmd = "rm -r " + dataFolder;
                 Runtime runtime = Runtime.getRuntime();
                 try {
                     runtime.exec(deleteCmd);
