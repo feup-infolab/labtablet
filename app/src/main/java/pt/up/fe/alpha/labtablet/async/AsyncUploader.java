@@ -146,6 +146,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         String fileF = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/" + favoriteName;
         String from = Environment.getExternalStorageDirectory() + "/" + mContext.getResources().getString(R.string.app_name) + "/data";//"/" + favoriteName;
 
+
         boolean success = (new File(from)).mkdirs();
         if (!success) {
             return null;
@@ -190,9 +191,13 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         if (new File(from).listFiles().length > 0) {
             Zipper mZipper = new Zipper();
             String to = Environment.getExternalStorageDirectory() + "/" + favoriteName + ".zip";
-            Log.i("ZIP_FROM", from);
+            //TODO NELSON
+            String realFrom = from + "/" + favoriteName;
+            //TODO NELSON
+            Log.i("ZIP_FROM", realFrom);
             Log.i("ZIP_TO", to);
-            Boolean result = mZipper.zipFileAtPath(from, to, mContext);
+            //TODO NELSON
+            Boolean result = mZipper.zipFileAtPath(realFrom, to, mContext);
 
             if (!result) {
                 Log.e("ZIP", "Failed to create zip file");
