@@ -403,10 +403,11 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         /*ArrayList<DataItem> dataDescriptionItems =
                 item.getDataItems();*/
 
+        /*
         dataDescriptionItems = item.getDataItems();
         if (dataDescriptionItems == null) {
             return null;
-        }
+        }*/
 
         //TODO this is going into the postExecute method
         /*for (DataItem dataItem : dataDescriptionItems) {
@@ -460,6 +461,7 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
         publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
         return null;*/
+        publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
         return  null;
     }
 
@@ -514,22 +516,24 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        //TODO this is the previous code that was here
-        /*super.onPostExecute(result);
+        super.onPostExecute(result);
         if (error != null) {
             mHandler.onFailure(error);
         } else {
             mHandler.onSuccess(null);
-        }*/
+        }
 
         //getChildrenUris();
         //mItemMetadataFetcher.execute(destUri);
         //updateChildrenMetadata(dataDescriptionItems);
         //mItemMetadataFetcher.execute(destUri);
+
+        /*
         getChildrenUris();
         mItemMetadataFetcher.execute(baseResourceUri, mContext);
+        */
 
-        //publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
+        publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
     }
 
 
