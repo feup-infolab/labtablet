@@ -45,6 +45,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
@@ -333,6 +334,17 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             return null;
         }
 
+        //TODO LS HERE
+        //TODO NELSON here we have to ls into meta folder in dendro then try to map the names of the children and their uris, then set the uris in the decriptor.value fields bellow
+        String metaFolderUri;
+        /*try {
+            metaFolderInfo = getChildUriByName(destUri, "meta");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        metaFolderUri = getChildUriByName(destUri, "meta");
+        //TODO NELSON BUILD get children info
+        //TODO after that build function that given the descriptor.getValue() returns the uri
         for (Descriptor descriptor : descriptors) {
             if (descriptor.hasFile()) {
                 metadataRecords.add(new DendroMetadataRecord(
@@ -543,6 +555,71 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
     }
 
+
+    public String getChildUriByName(String destUri, String childNameToLook) {
+        URL url;
+        HttpURLConnection conn;
+        String result = "";
+        String childUri = "";
+
+        try {
+            url = new URL(destUri + "?ls&title=" + childNameToLook);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Cookie", cookie);
+            conn.setRequestProperty("Accept","application/json");
+            conn.setDoInput(true);
+                /*
+            request.setURI(new URI(requestString));
+            request.setHeader("Accept", "application/json");
+            request.setHeader("Cookie", "connect.sid=" + cookie);
+
+            response = client.execute(request);
+            */
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            result = response.toString();
+            JsonParser parser = new JsonParser();
+            try{
+                JsonArray objArray = parser.parse(result).getAsJsonArray();
+                Iterator<JsonElement> it = objArray.iterator();
+                JsonElement elem = it.next();
+                JsonObject obj = elem.getAsJsonObject();
+                childUri = obj.get("uri").getAsString();
+            }
+            catch (Exception e)
+            {
+                JsonObject obj = parser.parse(result).getAsJsonObject();
+                childUri = obj.get("uri").getAsString();
+            }
+
+        /*
+        dendroFolderItems = new Gson().fromJson(
+                obj,
+                Utils.ARRAY_DIRECTORY_LISTING);
+
+        return dendroFolderItems;*/
+
+            return childUri;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    };
 
     public void getChildrenUris()
     {
