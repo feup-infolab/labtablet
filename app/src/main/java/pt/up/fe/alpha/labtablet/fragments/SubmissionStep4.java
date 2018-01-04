@@ -106,10 +106,18 @@ public class SubmissionStep4 extends Fragment {
                         if (getActivity() == null) {
                             return;
                         }
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
                         Log.e("Submission", "Failed " + error.getMessage());
+                        //OLD CODE
+                        /*tv_progress_status.setText(error.getMessage());
+                        btStartUpload.setText(getResources().getString(R.string.retry));
+                        btStartUpload.setEnabled(true);
+                        */
+                        //NEW CODE
                         tv_progress_status.setText(error.getMessage());
                         btStartUpload.setText(getResources().getString(R.string.retry));
                         btStartUpload.setEnabled(true);
+                        getActivity().finish();
                     }
 
                     @Override
