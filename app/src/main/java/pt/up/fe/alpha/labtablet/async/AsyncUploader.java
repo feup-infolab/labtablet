@@ -333,19 +333,14 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             error = new Exception("No metadata found!");
             return null;
         }
-
-        //TODO LS HERE
-        //TODO NELSON here we have to ls into meta folder in dendro then try to map the names of the children and their uris, then set the uris in the decriptor.value fields bellow
-        String metaFolderUri;
-        /*try {
-            metaFolderInfo = getChildUriByName(destUri, "meta");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        String metaFolderUri = null;
         metaFolderUri = getChildUriByName(destUri, "meta");
-        //TODO NELSON BUILD get children info
-        //TODO after that build function that given the descriptor.getValue() returns the uri
-        //TODO error handling here
+        if(metaFolderUri == null)
+        {
+            String errorMessage = "ERROR: Could not find 'meta' folder for the restored folder";
+            error = new Exception(errorMessage);
+            return null;
+        }
         JsonObject mapperObject = lsFolder(baseUrl + metaFolderUri);
         for (Descriptor descriptor : descriptors) {
             if (descriptor.hasFile()) {
@@ -356,8 +351,18 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                                 + File.separator + descriptor.getValue()
                 ));*/
                 //TODO error handling here too
+                String fileUri = null;
+                fileUri = mapperObject.get(descriptor.getValue()).getAsString();
+                if(fileUri == null)
+                {
+                    String errorMessage = "ERROR: Could not find uri for file with name: " + descriptor.getValue();
+                    error = new Exception(errorMessage);
+                    return null;
+
+                }
+                String fullFileUrlInDendro = baseUrl + fileUri;
                 metadataRecords.add(new DendroMetadataRecord(
-                        descriptor.getDescriptor(), baseUrl + mapperObject.get(descriptor.getValue()).getAsString()
+                        descriptor.getDescriptor(), fullFileUrlInDendro
                 ));
             } else {
                 metadataRecords.add(new DendroMetadataRecord(descriptor.getDescriptor(), descriptor.getValue()));
