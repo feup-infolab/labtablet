@@ -345,12 +345,19 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         metaFolderUri = getChildUriByName(destUri, "meta");
         //TODO NELSON BUILD get children info
         //TODO after that build function that given the descriptor.getValue() returns the uri
+        //TODO error handling here
+        JsonObject mapperObject = lsFolder(baseUrl + metaFolderUri);
         for (Descriptor descriptor : descriptors) {
             if (descriptor.hasFile()) {
-                metadataRecords.add(new DendroMetadataRecord(
+                //old code here
+                /*metadataRecords.add(new DendroMetadataRecord(
                         descriptor.getDescriptor(),
                         destUri + File.separator + "meta"
                                 + File.separator + descriptor.getValue()
+                ));*/
+                //TODO error handling here too
+                metadataRecords.add(new DendroMetadataRecord(
+                        descriptor.getDescriptor(), baseUrl + mapperObject.get(descriptor.getValue()).getAsString()
                 ));
             } else {
                 metadataRecords.add(new DendroMetadataRecord(descriptor.getDescriptor(), descriptor.getValue()));
@@ -555,6 +562,71 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
         publishProgress(new ProgressUpdateItem(100, mContext.getString(R.string.finished)));
     }
 
+
+    public JsonObject lsFolder(String destUri)
+    {
+        URL url;
+        HttpURLConnection conn;
+        String result = "";
+        JsonObject mapperObject = new JsonObject();
+
+        try {
+            url = new URL(destUri + "?ls");
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Cookie", cookie);
+            conn.setRequestProperty("Accept","application/json");
+            conn.setDoInput(true);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            result = response.toString();
+            JsonParser parser = new JsonParser();
+            try{
+                JsonArray objArray = parser.parse(result).getAsJsonArray();
+                /*Iterator<JsonElement> it = objArray.iterator();
+                JsonElement elem = it.next();
+                JsonObject obj = elem.getAsJsonObject();
+                String currentChildUri = obj.get("uri").getAsString();
+                */
+                for(Iterator<JsonElement> it = objArray.iterator(); it.hasNext(); )
+                {
+                    JsonElement elem = it.next();
+                    JsonObject obj = elem.getAsJsonObject();
+                    String currentChildUri = obj.get("uri").getAsString();
+                    JsonElement nieElement = obj.get("nie");
+                    String currentTitle = nieElement.getAsJsonObject().get("title").getAsString();
+                    mapperObject.addProperty(currentTitle, currentChildUri);
+                }
+                return mapperObject;
+            }
+            catch (Exception e)
+            {
+                JsonObject obj = parser.parse(result).getAsJsonObject();
+                String currentChildUri = obj.get("uri").getAsString();
+                JsonElement nieElement = obj.get("nie");
+                String currentTitle = nieElement.getAsJsonObject().get("title").getAsString();
+                mapperObject.addProperty(currentTitle, currentChildUri);
+                return mapperObject;
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public String getChildUriByName(String destUri, String childNameToLook) {
         URL url;
