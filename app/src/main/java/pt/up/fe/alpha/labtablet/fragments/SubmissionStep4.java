@@ -27,7 +27,8 @@ import pt.up.fe.alpha.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.alpha.labtablet.async.AsyncCustomTaskHandler;
 import pt.up.fe.alpha.labtablet.async.AsyncUploader;
 import pt.up.fe.alpha.labtablet.database.AppDatabase;
-import pt.up.fe.alpha.labtablet.database.entities.RestoredFolder;
+import pt.up.fe.alpha.labtablet.database.DatabaseManager;
+import pt.up.fe.alpha.labtablet.models.Dendro.Sync;
 import pt.up.fe.alpha.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
@@ -108,18 +109,20 @@ public class SubmissionStep4 extends Fragment {
 
                         //TODO HERE SAVE THE destUri as a restoredFolder in the Labtablet database
                         //AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(), AppDatabase.class, "LabTabletDB").build();
-                        AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(), AppDatabase.class, "LabTabletDB").allowMainThreadQueries().build();
-                        RestoredFolder restoredFolder = new RestoredFolder();
-                        restoredFolder.setUri(destUri);
-                        restoredFolder.setTitle(favoriteName);
-                        TimeZone tz = TimeZone.getTimeZone("UTC");
-                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-                        df.setTimeZone(tz);
-                        String nowAsISO = df.format(new Date());
-                        restoredFolder.setRestoredAtDate(nowAsISO);
-                        db.restoredFolderDao().insert(restoredFolder);
+                        //TODO SINGLETON db
+                        AppDatabase db = AppDatabase.getDatabase(getActivity().getApplicationContext());
+                        Sync syncedFolder = new Sync(favoriteName, destUri, new Date().toString(), true);
+                        //restoredFolder.setUri(destUri);
+                        //restoredFolder.setTitle(favoriteName);
+                        //TimeZone tz = TimeZone.getTimeZone("UTC");
+                        //DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+                        //df.setTimeZone(tz);
+                        //String nowAsISO = df.format(new Date());
 
-                        List<RestoredFolder> listOfRestoredFolders = db.restoredFolderDao().getAll();
+                        syncedFolder.insertAsync();
+                        db.syncDao().insertAsync(syncedFolder, );
+
+                        List<Sync> listOfRestoredFolders = db.syncDao().getAll();
 
                         getActivity().finish();
                         Toast.makeText(getActivity(),

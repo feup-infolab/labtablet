@@ -2,36 +2,48 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "190d7febb08a1babbae4453497b1625f",
+    "identityHash": "09c2b688ff82f6f06e9b47ce9e281f58",
     "entities": [
       {
-        "tableName": "RestoredFolder",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `title` TEXT, `restored_at_date` TEXT, PRIMARY KEY(`uri`))",
+        "tableName": "Sync",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `folder_title` TEXT, `dendro_folder_uri` TEXT, `export_date` TEXT, `ok` INTEGER NOT NULL)",
         "fields": [
           {
-            "fieldPath": "uri",
-            "columnName": "uri",
-            "affinity": "TEXT",
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "title",
-            "columnName": "title",
+            "fieldPath": "folderTitle",
+            "columnName": "folder_title",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "restoredAtDate",
-            "columnName": "restored_at_date",
+            "fieldPath": "dendroFolderUri",
+            "columnName": "dendro_folder_uri",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "exportDate",
+            "columnName": "export_date",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ok",
+            "columnName": "ok",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "uri"
+            "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -39,7 +51,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"190d7febb08a1babbae4453497b1625f\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"09c2b688ff82f6f06e9b47ce9e281f58\")"
     ]
   }
 }

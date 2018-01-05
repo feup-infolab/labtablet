@@ -641,7 +641,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         Sync d = new Sync(
                 title,
                 folderUri,
-                dateRepresentation,
+                dateRepresentation.toString(),
                 syncOK
         );
 
