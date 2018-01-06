@@ -26,18 +26,30 @@ public class Sync {
     @ColumnInfo(name = "folder_title")
     private String folderTitle;
 
+    @ColumnInfo(name = "dendro_instance_uri")
+    private String dendroInstanceUri;
+
     @ColumnInfo(name = "dendro_folder_uri")
     private String dendroFolderUri;
 
     @ColumnInfo(name = "export_date")
-    private String exportDate;
+    private Date exportDate;
 
     @ColumnInfo(name = "ok")
     private boolean ok;
 
-    public Sync(String folderTitle, String dendroFolderUri, String exportDate, boolean ok) {
+    public String getDendroInstanceUri() {
+        return dendroInstanceUri;
+    }
+
+    public void setDendroInstanceUri(String dendroInstanceUri) {
+        this.dendroInstanceUri = dendroInstanceUri;
+    }
+
+    public Sync(String folderTitle, String dendroInstanceUri, String dendroFolderUri, Date exportDate, boolean ok) {
         this.folderTitle = folderTitle;
         this.dendroFolderUri = dendroFolderUri;
+        this.dendroInstanceUri = dendroInstanceUri;
         this.exportDate = exportDate;
         this.ok = ok;
     }
@@ -62,11 +74,11 @@ public class Sync {
         this.dendroFolderUri = dendroFolderUri;
     }
 
-    public String getExportDate() {
+    public Date getExportDate() {
         return exportDate;
     }
 
-    public void setExportDate(String exportDate) {
+    public void setExportDate(Date exportDate) {
         this.exportDate = exportDate;
     }
 

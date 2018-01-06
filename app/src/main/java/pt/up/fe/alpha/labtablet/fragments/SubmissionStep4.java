@@ -41,6 +41,7 @@ public class SubmissionStep4 extends Fragment {
 
     private String favoriteName;
     private String projectName;
+    private String destInstanceAddress;
     private String destUri;
 
     private AsyncUploader mUploadTask;
@@ -75,10 +76,12 @@ public class SubmissionStep4 extends Fragment {
             favoriteName = getArguments().getString("favorite_name");
             projectName = getArguments().getString("project_name");
             destUri = SubmissionValidationActivity.getDestUri();
+            destInstanceAddress = SubmissionValidationActivity.getDestUri();
         } else {
             favoriteName = savedInstanceState.getString("favorite_name");
             projectName = savedInstanceState.getString("project_name");
             destUri = SubmissionValidationActivity.getDestUri();
+            destInstanceAddress = SubmissionValidationActivity.getDestUri();
         }
 
         btStartUpload.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +114,7 @@ public class SubmissionStep4 extends Fragment {
                         //AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(), AppDatabase.class, "LabTabletDB").build();
                         //TODO SINGLETON db
                         AppDatabase db = AppDatabase.getDatabase(getActivity().getApplicationContext());
-                        Sync syncedFolder = new Sync(favoriteName, destUri, new Date().toString(), true);
+                        Sync syncedFolder = new Sync(favoriteName, destInstanceAddress, destUri, new Date(), true);
                         //restoredFolder.setUri(destUri);
                         //restoredFolder.setTitle(favoriteName);
                         //TimeZone tz = TimeZone.getTimeZone("UTC");
@@ -120,7 +123,7 @@ public class SubmissionStep4 extends Fragment {
                         //String nowAsISO = df.format(new Date());
 
                         syncedFolder.insertAsync();
-                        db.syncDao().insertAsync(syncedFolder, );
+                        //db.syncDao().insertAsync(syncedFolder, );
 
                         List<Sync> listOfRestoredFolders = db.syncDao().getAll();
 

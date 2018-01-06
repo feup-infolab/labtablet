@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -53,10 +54,12 @@ public class DendroSyncListAdapter extends RecyclerView.Adapter<DendroSyncListAd
     @Override
     public void onBindViewHolder(SyncListVH holder, int position) {
         final Sync item = items.get(position);
-
-        holder.mExportDate.setText(item.getExportDate().toString());
+        
+        Date date = item.getExportDate();
+        holder.mExportDate.setText(date.toLocaleString());
         holder.mFolderTitle.setText(item.getFolderTitle());
         holder.mDendroTargetFolderUri.setText(item.getDendroFolderUri());
+        holder.mDendroTargetAddress.setText(item.getDendroInstanceUri());
         holder.mSyncOK.setTag(item.isOk());
 
         if(item.isOk())
@@ -75,6 +78,7 @@ public class DendroSyncListAdapter extends RecyclerView.Adapter<DendroSyncListAd
 
         public final TextView mFolderTitle;
         public final TextView mDendroTargetFolderUri;
+        public final TextView mDendroTargetAddress;
         public final ImageView mSyncOK;
         public final TextView mExportDate;
         private final LinearLayout mItemDeleteView;
@@ -83,6 +87,7 @@ public class DendroSyncListAdapter extends RecyclerView.Adapter<DendroSyncListAd
             super(rowView);
             mFolderTitle = (TextView) rowView.findViewById(R.id.sync_item_title);
             mDendroTargetFolderUri = (TextView) rowView.findViewById(R.id.sync_item_uri);
+            mDendroTargetAddress = (TextView) rowView.findViewById(R.id.sync_item_address);
             mSyncOK = (ImageView) rowView.findViewById(R.id.sync_item_ok);
             mExportDate = (TextView) rowView.findViewById(R.id.sync_item_date);
             mItemDeleteView = (LinearLayout) rowView.findViewById(R.id.item_metadata_list_expanded_view);

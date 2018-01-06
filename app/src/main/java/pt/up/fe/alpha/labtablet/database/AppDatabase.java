@@ -3,12 +3,14 @@ package pt.up.fe.alpha.labtablet.database;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import pt.up.fe.alpha.labtablet.database.daos.SyncDao;
 import pt.up.fe.alpha.labtablet.models.Dendro.Sync;
 
 @Database(entities = {Sync.class}, version = 1)
+@TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase{
     private static AppDatabase INSTANCE;
 

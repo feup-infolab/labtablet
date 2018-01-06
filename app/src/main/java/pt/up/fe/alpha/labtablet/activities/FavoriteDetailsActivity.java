@@ -628,6 +628,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         ArrayList<Sync> res = new ArrayList<Sync>();
 
         String title = "Base Data";
+        String dendroInstanceAddress = "http://dendro-prd.fe.up.pt:3007";
         String folderUri = "/r/folder/bccadc68-f8bc-419d-b924-f0b55b06e876";
 
         Calendar cal = Calendar.getInstance();
@@ -640,9 +641,10 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
 
         Sync d = new Sync(
                 title,
+                dendroInstanceAddress,
                 folderUri,
-                dateRepresentation.toString(),
-                syncOK
+                dateRepresentation,
+                true
         );
 
         res.add(d);

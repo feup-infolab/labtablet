@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "09c2b688ff82f6f06e9b47ce9e281f58",
+    "identityHash": "17da96b72a12e38620896c7f9284655e",
     "entities": [
       {
         "tableName": "Sync",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `folder_title` TEXT, `dendro_folder_uri` TEXT, `export_date` TEXT, `ok` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `folder_title` TEXT, `dendro_instance_uri` TEXT, `dendro_folder_uri` TEXT, `export_date` INTEGER, `ok` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -21,6 +21,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "dendroInstanceUri",
+            "columnName": "dendro_instance_uri",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "dendroFolderUri",
             "columnName": "dendro_folder_uri",
             "affinity": "TEXT",
@@ -29,7 +35,7 @@
           {
             "fieldPath": "exportDate",
             "columnName": "export_date",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -51,7 +57,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"09c2b688ff82f6f06e9b47ce9e281f58\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"17da96b72a12e38620896c7f9284655e\")"
     ]
   }
 }
