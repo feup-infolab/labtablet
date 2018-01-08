@@ -109,7 +109,7 @@ public class SubmissionStep4 extends Fragment {
                         returnIntent.putExtra("favoriteName", getArguments().getString("favorite_name"));
                         getActivity().setResult(Utils.SUBMISSION_VALIDATION, returnIntent);
                         AppDatabase db = AppDatabase.getDatabase(getActivity().getApplicationContext());
-                        Sync syncedFolder = new Sync(favoriteName, destInstanceAddress, destUri, new Date(), true);
+                        Sync syncedFolder = new Sync(favoriteName, destInstanceAddress, destUri, new Date(), false);
                         Boolean resultOfInsert = syncedFolder.insertSync(db);
                         //List<Sync> listOfRestoredFolders = Sync.getAllSync(db);
                         getActivity().finish();

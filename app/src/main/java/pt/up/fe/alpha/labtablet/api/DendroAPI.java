@@ -178,49 +178,4 @@ public class DendroAPI {
 
         return resultAsJsonArray;
     }
-
-    /*public static String getExportBookmarks(Context context) {
-        URL url;
-        HttpURLConnection conn;
-        String result = "";
-
-        String cookie = null;
-        try {
-            cookie = authenticate(context);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        try {
-            DendroConfiguration conf = FileMgr.getDendroConf(context);
-            url = new URL(conf.getAddress() + "/external_repositories/my");
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Cookie", cookie);
-            conn.setRequestProperty("Accept","application/json");
-            conn.setDoInput(true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            result = response.toString();
-
-            return result;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }*/
 }

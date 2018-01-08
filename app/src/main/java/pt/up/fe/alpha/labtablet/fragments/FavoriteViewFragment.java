@@ -236,9 +236,8 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
             case "sync":
                 //TODO NELSON this.syncItems.get(position) -> gives the sync object that was tapped by the user
                 Sync syncToExport = this.syncItems.get(position);
-                //TODO HERE DO AN HTTP REQUEST TO GET THE BOOKMARKS
                 //TODO THEN DO AN HTTP REQUEST TO EXPORT TO THE SELECTED BOOKMARK
-                JsonArray bookmarkResultAsJsonArray = DendroAPI.getExportBookmarks(getContext());
+                final JsonArray bookmarkResultAsJsonArray = DendroAPI.getExportBookmarks(getContext());
                 //final String options[] = {"RDM Repository @ INESC TEC", "B2Share"};
                 String[] options = new String[bookmarkResultAsJsonArray.size()];
                 int i = 0;
@@ -257,6 +256,11 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
                         // of the selected item
+                        System.out.println(which);
+                        JsonElement element = bookmarkResultAsJsonArray.get(which);
+                        JsonObject obj = new JsonObject();
+                        obj.add("repository", element);
+                        System.out.println("Debug");
                     }
                 });
                 builder.show();
