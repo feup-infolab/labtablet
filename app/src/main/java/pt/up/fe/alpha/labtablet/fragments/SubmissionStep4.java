@@ -109,24 +109,10 @@ public class SubmissionStep4 extends Fragment {
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("favoriteName", getArguments().getString("favorite_name"));
                         getActivity().setResult(Utils.SUBMISSION_VALIDATION, returnIntent);
-
-                        //TODO HERE SAVE THE destUri as a restoredFolder in the Labtablet database
-                        //AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(), AppDatabase.class, "LabTabletDB").build();
-                        //TODO SINGLETON db
                         AppDatabase db = AppDatabase.getDatabase(getActivity().getApplicationContext());
                         Sync syncedFolder = new Sync(favoriteName, destInstanceAddress, destUri, new Date(), true);
-                        //restoredFolder.setUri(destUri);
-                        //restoredFolder.setTitle(favoriteName);
-                        //TimeZone tz = TimeZone.getTimeZone("UTC");
-                        //DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-                        //df.setTimeZone(tz);
-                        //String nowAsISO = df.format(new Date());
-
-                        syncedFolder.insertAsync();
-                        //db.syncDao().insertAsync(syncedFolder, );
-
-                        List<Sync> listOfRestoredFolders = db.syncDao().getAll();
-
+                        Boolean resultOfInsert = syncedFolder.insertSync(db);
+                        //List<Sync> listOfRestoredFolders = Sync.getAllSync(db);
                         getActivity().finish();
                         Toast.makeText(getActivity(),
                                 getResources().getString(R.string.uploaded_successfully), Toast.LENGTH_LONG).show();

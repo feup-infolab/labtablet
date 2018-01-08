@@ -47,6 +47,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,6 +56,7 @@ import pt.up.fe.alpha.labtablet.async.AsyncCustomTaskHandler;
 import pt.up.fe.alpha.labtablet.async.AsyncFileImporter;
 import pt.up.fe.alpha.labtablet.async.AsyncPackageCreator;
 import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.alpha.labtablet.database.AppDatabase;
 import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.db_handlers.FormMgr;
 import pt.up.fe.alpha.labtablet.fragments.FavoriteViewFragment;
@@ -616,7 +618,8 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         currentItem = FavoriteMgr.getFavorite(this, currentItem.getTitle());
-        currentItem.setSyncItems(CreateFakeSyncItems());
+        //currentItem.setSyncItems(CreateFakeSyncItems());
+        currentItem.setSyncItems(getSyncsWithDendro());
         adapter.addFragment(FavoriteViewFragment.newInstance("metadata", currentItem.getMetadataItems()), "metadata");
         adapter.addFragment(FavoriteViewFragment.newInstance("data", currentItem.getDataItems()), "data");
         adapter.addFragment(FavoriteViewFragment.newInstance("forms", currentItem.getLinkedForms()), "forms");
@@ -648,6 +651,23 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         );
 
         res.add(d);
+        return res;
+    }
+
+    private ArrayList<Sync> getSyncsWithDendro()
+    {
+        ArrayList<Sync> res = new ArrayList<Sync>();
+        List<Sync> syncs = Sync.getAllSync(AppDatabase.getDatabase(getApplicationContext()));
+
+        for (int i = 0; i < syncs.size(); i++)
+        {
+            Sync sync =  syncs.get(i);
+            /*Date date = sync.getExportDate();
+            Calendar cal = new GregorianCalendar();
+            cal.setTime(date);
+            Date dateRepresentation = cal.getTime();*/
+            res.add(sync);
+        }
         return res;
     }
 
