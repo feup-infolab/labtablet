@@ -148,6 +148,7 @@ public class DendroAPI {
             }
         }
 
+        @Override
         protected void onPostExecute(String results)
         {
             super.onPostExecute(results);
@@ -177,5 +178,87 @@ public class DendroAPI {
         }
 
         return resultAsJsonArray;
+    }
+
+    public static String exportToRepository(Context context, String folderUri, JsonObject object)
+    {
+        String result = null;
+        try {
+            result = new ExportToRepositoryTask(context, folderUri, object).execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return result;
+        }
+        return result;
+    }
+
+    private static class ExportToRepositoryTask extends AsyncTask<Void, Void, String>{
+        private Context context;
+        private String folderUri;
+        private JsonObject object;
+
+        public ExportToRepositoryTask(Context context, String folderUri, JsonObject object) {
+            this.context = context;
+            this.folderUri = folderUri;
+            this.object = object;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            DendroConfiguration conf = FileMgr.getDendroConf(context);
+            String result = null;
+
+            String cookie = null;
+            try {
+                cookie = authenticate(context);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            URL url = null;
+            try {
+                //TODO change this because folderUri in this case is already with the baseUrl from dendro
+                url = new URL(folderUri + "?export_to_repository");
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                conn.setRequestProperty("Accept","application/json");
+                conn.setRequestProperty("Cookie", cookie);
+                conn.setDoOutput(true);
+
+                System.out.println(conn.getRequestProperties().toString());
+
+                OutputStream os = conn.getOutputStream();
+                String g = new Gson().toJson(object);
+                os.write(g.getBytes());
+                //os.write(object.toString().getBytes());
+                //os.write(object.getAsString().getBytes());
+                os.flush();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+                String output;
+                StringBuilder response = new StringBuilder();
+                while ((output = br.readLine()) != null) {
+                    response.append(output);
+                    response.append('\r');
+                }
+                result = response.toString();
+                conn.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("DEBUG ERROR: " + e.getMessage());
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String results)
+        {
+            super.onPostExecute(results);
+        }
     }
 }

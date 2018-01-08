@@ -235,7 +235,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         switch (mCurrentTag) {
             case "sync":
                 //TODO NELSON this.syncItems.get(position) -> gives the sync object that was tapped by the user
-                Sync syncToExport = this.syncItems.get(position);
+                final Sync syncToExport = this.syncItems.get(position);
                 //TODO THEN DO AN HTTP REQUEST TO EXPORT TO THE SELECTED BOOKMARK
                 final JsonArray bookmarkResultAsJsonArray = DendroAPI.getExportBookmarks(getContext());
                 //final String options[] = {"RDM Repository @ INESC TEC", "B2Share"};
@@ -259,8 +259,11 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                         System.out.println(which);
                         JsonElement element = bookmarkResultAsJsonArray.get(which);
                         JsonObject obj = new JsonObject();
+                        //obj.add("repository", element);
                         obj.add("repository", element);
+                        String result = DendroAPI.exportToRepository(getContext(), syncToExport.getDendroFolderUri(), obj);
                         System.out.println("Debug");
+
                     }
                 });
                 builder.show();
