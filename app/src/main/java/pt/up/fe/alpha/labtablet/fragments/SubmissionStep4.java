@@ -27,7 +27,6 @@ import pt.up.fe.alpha.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.alpha.labtablet.async.AsyncCustomTaskHandler;
 import pt.up.fe.alpha.labtablet.async.AsyncUploader;
 import pt.up.fe.alpha.labtablet.database.AppDatabase;
-import pt.up.fe.alpha.labtablet.database.DatabaseManager;
 import pt.up.fe.alpha.labtablet.models.Dendro.Sync;
 import pt.up.fe.alpha.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.alpha.labtablet.utils.Utils;

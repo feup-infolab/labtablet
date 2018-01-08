@@ -1,24 +1,36 @@
 package pt.up.fe.alpha.labtablet.api;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import pt.up.fe.alpha.labtablet.async.AsyncUploader;
+import pt.up.fe.alpha.labtablet.database.AppDatabase;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroConfiguration;
+import pt.up.fe.alpha.labtablet.models.Dendro.Sync;
 import pt.up.fe.alpha.labtablet.utils.FileMgr;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
@@ -80,4 +92,135 @@ public class DendroAPI {
 
         return msCookieManager.getCookieStore().getCookies().get(0).toString();
     }
+
+
+    private static class GetBookmarksTask extends AsyncTask<Void, Void, String>
+    {
+        private Context context;
+        GetBookmarksTask(Context context)
+        {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            URL url;
+            HttpURLConnection conn;
+            String result = "";
+
+            String cookie = null;
+            try {
+                cookie = authenticate(context);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            try {
+                DendroConfiguration conf = FileMgr.getDendroConf(context);
+                url = new URL(conf.getAddress() + "/external_repositories/my");
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Cookie", cookie);
+                conn.setRequestProperty("Accept","application/json");
+                conn.setDoInput(true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                result = response.toString();
+
+                return result;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String results)
+        {
+            super.onPostExecute(results);
+        }
+    }
+
+    public static JsonArray getExportBookmarks(Context context)
+    {
+        String result = null;
+        JsonArray resultAsJsonArray = null;
+        try {
+            result = new GetBookmarksTask(context).execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return resultAsJsonArray;
+        }
+
+        JsonParser parser = new JsonParser();
+        try{
+            JsonArray objArray = parser.parse(result).getAsJsonArray();
+            resultAsJsonArray = objArray;
+        }
+        catch (Exception e)
+        {
+            JsonObject obj = parser.parse(result).getAsJsonObject();
+            resultAsJsonArray.add(obj);
+        }
+
+        return resultAsJsonArray;
+    }
+
+    /*public static String getExportBookmarks(Context context) {
+        URL url;
+        HttpURLConnection conn;
+        String result = "";
+
+        String cookie = null;
+        try {
+            cookie = authenticate(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            DendroConfiguration conf = FileMgr.getDendroConf(context);
+            url = new URL(conf.getAddress() + "/external_repositories/my");
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Cookie", cookie);
+            conn.setRequestProperty("Accept","application/json");
+            conn.setDoInput(true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            result = response.toString();
+
+            return result;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }*/
 }

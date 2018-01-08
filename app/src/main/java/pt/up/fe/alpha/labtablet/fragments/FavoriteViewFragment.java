@@ -17,11 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.activities.FavoriteDetailsActivity;
@@ -31,6 +35,7 @@ import pt.up.fe.alpha.labtablet.adapters.DataListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.DendroSyncListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.FormListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.MetadataListAdapter;
+import pt.up.fe.alpha.labtablet.api.DendroAPI;
 import pt.up.fe.alpha.labtablet.models.DataItem;
 import pt.up.fe.alpha.labtablet.models.Dendro.Sync;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
@@ -229,7 +234,23 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
         switch (mCurrentTag) {
             case "sync":
-                final String options[] = {"RDM Repository @ INESC TEC", "B2Share"};
+                //TODO NELSON this.syncItems.get(position) -> gives the sync object that was tapped by the user
+                Sync syncToExport = this.syncItems.get(position);
+                //TODO HERE DO AN HTTP REQUEST TO GET THE BOOKMARKS
+                //TODO THEN DO AN HTTP REQUEST TO EXPORT TO THE SELECTED BOOKMARK
+                JsonArray bookmarkResultAsJsonArray = DendroAPI.getExportBookmarks(getContext());
+                //final String options[] = {"RDM Repository @ INESC TEC", "B2Share"};
+                String[] options = new String[bookmarkResultAsJsonArray.size()];
+                int i = 0;
+                for(Iterator<JsonElement> it = bookmarkResultAsJsonArray.iterator(); it.hasNext(); )
+                {
+                    JsonElement elem = it.next();
+                    JsonObject obj = elem.getAsJsonObject();
+                    JsonElement dctermsElement = obj.get("dcterms");
+                    String currentTitle = dctermsElement.getAsJsonObject().get("title").getAsString();
+                    options[i] = currentTitle;
+                    ++i;
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Synchronize");
                 builder.setItems(options, new DialogInterface.OnClickListener() {

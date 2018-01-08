@@ -659,13 +659,9 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         ArrayList<Sync> res = new ArrayList<Sync>();
         List<Sync> syncs = Sync.getAllSync(AppDatabase.getDatabase(getApplicationContext()));
 
-        for (int i = 0; i < syncs.size(); i++)
+        for (int i = 0; i < syncs.size(); ++i)
         {
             Sync sync =  syncs.get(i);
-            /*Date date = sync.getExportDate();
-            Calendar cal = new GregorianCalendar();
-            cal.setTime(date);
-            Date dateRepresentation = cal.getTime();*/
             res.add(sync);
         }
         return res;
