@@ -127,6 +127,24 @@ public class Sync {
         }
     }
 
+    public boolean updateSync(AppDatabase db)
+    {
+        Boolean result = false;
+        try {
+            result = new UpdateTask(db).execute(this).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public void updateAsync(AppDatabase db)
+    {
+        new UpdateTask(db).execute(this);
+    }
+
     public boolean deleteSync(AppDatabase db)
     {
         try {
@@ -146,6 +164,27 @@ public class Sync {
         new DeleteTask(db).execute(this);
     }
 
+
+
+    private static class UpdateTask extends AsyncTask<Sync, Void, Boolean>
+    {
+        private AppDatabase db;
+        UpdateTask(AppDatabase db)
+        {
+            this.db = db;
+        }
+
+        @Override
+        protected Boolean doInBackground(Sync... syncs) {
+            db.syncDao().updateRestoredFolder(syncs[0]);
+            return true;
+        }
+
+        protected void onPostExecute(Boolean result)
+        {
+            super.onPostExecute(result);
+        }
+    }
 
     private static class DeleteTask extends AsyncTask<Sync, Void, Boolean>
     {

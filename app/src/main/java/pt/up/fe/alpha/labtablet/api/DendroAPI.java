@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.CookieManager;
@@ -187,7 +188,7 @@ public class DendroAPI {
             result = new ExportToRepositoryTask(context, folderUri, object).execute().get();
         } catch (Exception e) {
             e.printStackTrace();
-            return result;
+            result = e.getMessage();
         }
         return result;
     }
@@ -213,7 +214,7 @@ public class DendroAPI {
                 cookie = authenticate(context);
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
+                return e.getMessage();
             }
 
             URL url = null;
@@ -237,6 +238,23 @@ public class DendroAPI {
                 //os.write(object.getAsString().getBytes());
                 os.flush();
 
+                InputStream error = conn.getErrorStream();
+
+                if(error != null)
+                {
+                    BufferedReader br = new BufferedReader(new InputStreamReader((error)));
+
+                    String output;
+                    StringBuilder response = new StringBuilder();
+                    while ((output = br.readLine()) != null) {
+                        response.append(output);
+                        response.append('\r');
+                    }
+                    result = response.toString();
+                    conn.disconnect();
+                    return result;
+                }
+
                 BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
                 String output;
@@ -247,9 +265,10 @@ public class DendroAPI {
                 }
                 result = response.toString();
                 conn.disconnect();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("DEBUG ERROR: " + e.getMessage());
+                result = e.getMessage();
             }
 
             return result;
