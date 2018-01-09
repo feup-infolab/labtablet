@@ -250,6 +250,9 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         if (data == null)
             return;
 
+        //TODO NELSON THIS IS VERY UGLY CODE BUT SEEMS TO BE UPDATING THE SYNC LIST
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
 
         Bundle extras = data.getExtras();
         switch (requestCode) {
