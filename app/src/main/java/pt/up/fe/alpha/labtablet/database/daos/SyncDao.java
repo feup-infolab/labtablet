@@ -22,6 +22,9 @@ public interface SyncDao {
     @Query("SELECT * FROM Sync")
     List<Sync> getAll();
 
+    @Query("SELECT * FROM Sync WHERE folder_title LIKE :folderTitle")
+    List<Sync> getAllWithFolderTitle(String folderTitle);
+
     @Query("SELECT * FROM Sync WHERE dendro_folder_uri LIKE :folderUri LIMIT 1")
     Sync getByUri(String folderUri);
 

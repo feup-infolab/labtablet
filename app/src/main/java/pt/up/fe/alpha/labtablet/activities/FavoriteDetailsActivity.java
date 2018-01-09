@@ -619,7 +619,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         currentItem = FavoriteMgr.getFavorite(this, currentItem.getTitle());
         //currentItem.setSyncItems(CreateFakeSyncItems());
-        currentItem.setSyncItems(getSyncsWithDendro());
+        currentItem.setSyncItems(getSyncsWithDendro(currentItem.getTitle()));
         adapter.addFragment(FavoriteViewFragment.newInstance("metadata", currentItem.getMetadataItems()), "metadata");
         adapter.addFragment(FavoriteViewFragment.newInstance("data", currentItem.getDataItems()), "data");
         adapter.addFragment(FavoriteViewFragment.newInstance("forms", currentItem.getLinkedForms()), "forms");
@@ -654,10 +654,11 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
         return res;
     }
 
-    private ArrayList<Sync> getSyncsWithDendro()
+    private ArrayList<Sync> getSyncsWithDendro(String labtabletProjectTitle)
     {
         ArrayList<Sync> res = new ArrayList<Sync>();
-        List<Sync> syncs = Sync.getAllSync(AppDatabase.getDatabase(getApplicationContext()));
+        //List<Sync> syncs = Sync.getAllSync(AppDatabase.getDatabase(getApplicationContext()));
+        List<Sync> syncs = Sync.getAllWithTitleSync(AppDatabase.getDatabase(getApplicationContext()), labtabletProjectTitle);
 
         for (int i = 0; i < syncs.size(); ++i)
         {

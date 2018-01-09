@@ -1,6 +1,7 @@
 package pt.up.fe.alpha.labtablet.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -67,6 +69,42 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
     public FavoriteViewFragment() {
         // Required empty public constructor
+    }
+
+
+    public void exportToRepository(Sync syncToExport, JsonObject obj)
+    {
+
+        //ProgressDialog dialog = ProgressDialog.show(this.getActivity(), "Loading...", "Please wait...", true);
+        ProgressDialog dialog = ProgressDialog.show(getActivity(), "Exporting...", "Please wait...", true);
+        dialog.setCancelable(false);
+        dialog.setIndeterminate(true);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.show();
+        //TODO NELSON METER AQUI ALGO A INDICAR QUE UM PEDIDO ESTÁ A SER EXECUTADO????
+        String response = DendroAPI.exportToRepository(getContext(), syncToExport.getDendroFolderUri(), obj);
+        Gson gson = new Gson();
+        JsonObject responseObject = gson.fromJson(response, JsonObject.class);
+        String result = responseObject.get("result").getAsString();
+        //A Success case -> {"result":"OK","message":"Folder newLabtabletProject successfully exported from Dendro<br/><br/><a href='http://hdl.handle.net/0000/03e1c58a88414e68869373cd9b226d4f'>Click to see your published dataset</a>"}
+        //An Error case -> {"result":"error","message":"Folder /r/folder/deb3f036-c5e2-4299-8cc1-d667f262aa39 has no title or creator! Please set these properties (from the dcterms metadata schema) and try the exporting process again."}
+        if(result.equals("OK"))
+        {
+            Toast.makeText(getContext(), "Dataset exported successfully", Toast.LENGTH_LONG).show();
+            //Sets the "ok" status for the sync object to true and saves it in the database
+            syncToExport.setOk(true);
+            syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
+        }
+        else
+        {
+            String errorMsg = responseObject.get("message").getAsString();
+            Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+            //Sets the "ok" status for the sync object to false and saves it in the database
+            syncToExport.setOk(false);
+            syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
+        }
+        dialog.dismiss();
+        getActivity().finish();
     }
 
     public void notifyItemsChanged(FavoriteItem item) {
@@ -236,10 +274,16 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     @Override
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(getActivity(), ItemPreviewActivity.class);
+        Boolean syncOperation = false;
+        final Sync syncToExport = this.syncItems.get(position);
+        final JsonObject repositoryObj = new JsonObject();
 
         switch (mCurrentTag) {
             case "sync":
-                final Sync syncToExport = this.syncItems.get(position);
+                syncOperation = true;
+                //syncToExport = this.syncItems.get(position);
+                intent.putExtra("sync_item",
+                        new Gson().toJson(syncToExport));
                 final JsonArray bookmarkResultAsJsonArray = DendroAPI.getExportBookmarks(getContext());
                 //final String options[] = {"RDM Repository @ INESC TEC", "B2Share"};
                 String[] options = new String[bookmarkResultAsJsonArray.size()];
@@ -260,10 +304,13 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                         // The 'which' argument contains the index position
                         // of the selected item
                         JsonElement element = bookmarkResultAsJsonArray.get(which);
-                        JsonObject obj = new JsonObject();
-                        obj.add("repository", element);
+                        //obj = new JsonObject();
+                        repositoryObj.add("repository", element);
+                        //dialog.dismiss();
+                        dialog.cancel();
+                        exportToRepository(syncToExport, repositoryObj);
                         //TODO NELSON METER AQUI ALGO A INDICAR QUE UM PEDIDO ESTÁ A SER EXECUTADO????
-                        String response = DendroAPI.exportToRepository(getContext(), syncToExport.getDendroFolderUri(), obj);
+                        /*String response = DendroAPI.exportToRepository(getContext(), syncToExport.getDendroFolderUri(), obj);
                         Gson gson = new Gson();
                         JsonObject responseObject = gson.fromJson(response, JsonObject.class);
                         String result = responseObject.get("result").getAsString();
@@ -284,7 +331,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                             syncToExport.setOk(false);
                             syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
                         }
-                        getActivity().finish();
+                        getActivity().finish();*/
                     }
                 });
                 builder.show();
@@ -341,8 +388,11 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 return;
         }
 
-        intent.putExtra("position", position);
-        getActivity().startActivityForResult(intent, Utils.ITEM_PREVIEW);
+        if(!syncOperation)
+        {
+            intent.putExtra("position", position);
+            getActivity().startActivityForResult(intent, Utils.ITEM_PREVIEW);
+        }
     }
 
     @Override

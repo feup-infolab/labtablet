@@ -127,6 +127,21 @@ public class Sync {
         }
     }
 
+    public static List<Sync> getAllWithTitleSync(AppDatabase db, String folderTitle)
+    {
+
+        try {
+            List<Sync> results = new GetAllWithTitleTask(db).execute(folderTitle).get();
+            return results;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public boolean updateSync(AppDatabase db)
     {
         Boolean result = false;
@@ -217,6 +232,26 @@ public class Sync {
         @Override
         protected List<Sync> doInBackground(Void... params) {
             List<Sync> listOfRestoredFolders = db.syncDao().getAll();
+            return listOfRestoredFolders;
+        }
+
+        protected void onPostExecute(List<Sync> results)
+        {
+            super.onPostExecute(results);
+        }
+    }
+
+    private static class GetAllWithTitleTask extends AsyncTask<String, Void, List<Sync>>
+    {
+        private AppDatabase db;
+        GetAllWithTitleTask(AppDatabase db)
+        {
+            this.db = db;
+        }
+
+        @Override
+        protected List<Sync> doInBackground(String... params) {
+            List<Sync> listOfRestoredFolders = db.syncDao().getAllWithFolderTitle(params[0]);
             return listOfRestoredFolders;
         }
 
