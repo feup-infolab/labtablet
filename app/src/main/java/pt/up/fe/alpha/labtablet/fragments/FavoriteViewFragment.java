@@ -275,11 +275,12 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(getActivity(), ItemPreviewActivity.class);
         Boolean syncOperation = false;
-        final Sync syncToExport = this.syncItems.get(position);
+        //final Sync syncToExport = this.syncItems.get(position);
         final JsonObject repositoryObj = new JsonObject();
 
         switch (mCurrentTag) {
             case "sync":
+                final Sync syncToExport = this.syncItems.get(position);
                 syncOperation = true;
                 //syncToExport = this.syncItems.get(position);
                 intent.putExtra("sync_item",

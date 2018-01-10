@@ -414,6 +414,24 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
             os.write(g.getBytes());
             os.flush();
 
+            //TODO Handle errors here
+            InputStream errorStream = conn.getErrorStream();
+            if(errorStream != null)
+            {
+                BufferedReader br = new BufferedReader(new InputStreamReader((errorStream)));
+
+                String output;
+                StringBuilder response = new StringBuilder();
+                while ((output = br.readLine()) != null) {
+                    response.append(output);
+                    response.append('\r');
+                }
+                String result = response.toString();
+                conn.disconnect();
+                error = new Exception(result);
+                return null;
+            }
+
             //StringEntity se = new StringEntity(new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD), HTTP.UTF_8);
             Log.e("metadata", new Gson().toJson(metadataRecords, Utils.ARRAY_DENDRO_METADATA_RECORD));
             //httppost.setEntity(se);
