@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.system.ErrnoException;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -287,6 +288,25 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
                 builder.build().writeTo(os);
                 //os.write(builder.build().toString().getBytes());
                 os.flush();
+
+                InputStream errorStream = conn.getErrorStream();
+
+                if(errorStream != null)
+                {
+                    BufferedReader br = new BufferedReader(new InputStreamReader((errorStream)));
+
+                    String output;
+                    StringBuilder response = new StringBuilder();
+                    while ((output = br.readLine()) != null) {
+                        response.append(output);
+                        response.append('\r');
+                    }
+
+
+                    error = new Exception(response.toString());
+                    conn.disconnect();
+                    return null;
+                }
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
