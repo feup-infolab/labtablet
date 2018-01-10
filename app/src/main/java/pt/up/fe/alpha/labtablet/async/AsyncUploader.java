@@ -153,7 +153,23 @@ public class AsyncUploader extends AsyncTask<Object, ProgressUpdateItem, Void> {
 
         boolean success = (new File(dataFolder)).mkdirs();
         if (!success) {
-            return null;
+            //TODO delete folder and try to mkdirs again
+            String deleteCmd = "rm -r " + dataFolder;
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec(deleteCmd);
+                success = (new File(dataFolder)).mkdirs();
+                if(!success)
+                {
+                    error = new Exception("Could not create dataFolder");
+                    return null;
+                }
+            } catch (IOException e) {
+                error = e;
+                return null;
+            }
+
+            //return null;
         }
 
         copyFileOrDirectory(fileF, dataFolder);
