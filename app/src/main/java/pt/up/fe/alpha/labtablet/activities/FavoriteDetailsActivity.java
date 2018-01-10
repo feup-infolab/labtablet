@@ -448,7 +448,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                         .show();
                 break;
 
-            case R.id.action_favorite_zip:
+            /*case R.id.action_favorite_zip:
                 final ProgressDialog dialog = ProgressDialog.show(this,
                         getString(R.string.upload_progress_creating_package),
                         getString(R.string.wait_queue_processing), false);
@@ -474,7 +474,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                         dialog.setMessage(progress.getMessage());
                     }
                 }).execute(favoriteName, this);
-                break;
+                break;*/
         }
 
         return super.onOptionsItemSelected(item);

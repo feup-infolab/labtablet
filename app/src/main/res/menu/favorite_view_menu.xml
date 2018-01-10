@@ -10,12 +10,12 @@
         app:showAsAction="ifRoom"
         android:title="@string/action_upload" />
 
-    <item
+    <!--<item
         android:id="@+id/action_favorite_zip"
         android:icon="@drawable/ab_zip"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
-        android:title="@string/action_zip" />
+        android:title="@string/action_zip" />-->
 
     <item
         android:id="@+id/action_favorite_delete"
