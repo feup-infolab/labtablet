@@ -2,6 +2,7 @@ package pt.up.fe.alpha.labtablet.fragments;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.arch.persistence.room.PrimaryKey;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +12,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -51,6 +54,8 @@ import pt.up.fe.alpha.labtablet.models.FormInstance;
 import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
 public class FavoriteViewFragment extends Fragment implements OnItemClickListener {
 
     private RecyclerView itemList;
@@ -60,6 +65,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     private ArrayList<Sync> syncItems;
     private HashMap<String, ArrayList<FormInstance>> groupedForms;
     private View rootView;
+    private View spinnerView;
 
     private AlertDialog alertDialog;
 
@@ -67,44 +73,113 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     private MetadataListAdapter metadataListAdapter;
     private DendroSyncListAdapter syncListAdapter;
 
+    private ProgressBar progressBar;
+
     public FavoriteViewFragment() {
         // Required empty public constructor
     }
 
 
-    public void exportToRepository(Sync syncToExport, JsonObject obj)
+    public void exportToRepository(final Sync syncToExport, final JsonObject obj)
     {
+        final String[] options = {"Yes", "No"};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        String bookmarkTitle = obj.get("repository").getAsJsonObject().get("dcterms").getAsJsonObject().get("title").getAsString();
+        builder.setTitle("Are you sure you want to export to " + bookmarkTitle + " ?");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // The 'which' argument contains the index position
+                // of the selected item
+                dialog.dismiss();
+                if(which == 0)
+                {
+                    //exports the dataset
+                    /*String response = DendroAPI.exportToRepository(getContext(), syncToExport.getDendroFolderUri(), obj);
+                    Gson gson = new Gson();
+                    JsonObject responseObject = gson.fromJson(response, JsonObject.class);
+                    String result = responseObject.get("result").getAsString();
+                    //A Success case -> {"result":"OK","message":"Folder newLabtabletProject successfully exported from Dendro<br/><br/><a href='http://hdl.handle.net/0000/03e1c58a88414e68869373cd9b226d4f'>Click to see your published dataset</a>"}
+                    //An Error case -> {"result":"error","message":"Folder /r/folder/deb3f036-c5e2-4299-8cc1-d667f262aa39 has no title or creator! Please set these properties (from the dcterms metadata schema) and try the exporting process again."}
+                    if(result.equals("OK"))
+                    {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getContext(), "Dataset exported successfully", Toast.LENGTH_LONG).show();
+                        //Sets the "ok" status for the sync object to true and saves it in the database
+                        syncToExport.setOk(true);
+                        syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
+                    }
+                    else
+                    {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        String errorMsg = responseObject.get("message").getAsString();
+                        Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                        //Sets the "ok" status for the sync object to false and saves it in the database
+                        syncToExport.setOk(false);
+                        syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
+                    }*/
 
-        //ProgressDialog dialog = ProgressDialog.show(this.getActivity(), "Loading...", "Please wait...", true);
-        ProgressDialog dialog = ProgressDialog.show(getActivity(), "Exporting...", "Please wait...", true);
-        dialog.setCancelable(false);
-        dialog.setIndeterminate(true);
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.show();
-        //TODO NELSON METER AQUI ALGO A INDICAR QUE UM PEDIDO ESTÁ A SER EXECUTADO????
-        String response = DendroAPI.exportToRepository(getContext(), syncToExport.getDendroFolderUri(), obj);
-        Gson gson = new Gson();
-        JsonObject responseObject = gson.fromJson(response, JsonObject.class);
-        String result = responseObject.get("result").getAsString();
-        //A Success case -> {"result":"OK","message":"Folder newLabtabletProject successfully exported from Dendro<br/><br/><a href='http://hdl.handle.net/0000/03e1c58a88414e68869373cd9b226d4f'>Click to see your published dataset</a>"}
-        //An Error case -> {"result":"error","message":"Folder /r/folder/deb3f036-c5e2-4299-8cc1-d667f262aa39 has no title or creator! Please set these properties (from the dcterms metadata schema) and try the exporting process again."}
-        if(result.equals("OK"))
-        {
-            Toast.makeText(getContext(), "Dataset exported successfully", Toast.LENGTH_LONG).show();
-            //Sets the "ok" status for the sync object to true and saves it in the database
-            syncToExport.setOk(true);
-            syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
-        }
-        else
-        {
-            String errorMsg = responseObject.get("message").getAsString();
-            Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
-            //Sets the "ok" status for the sync object to false and saves it in the database
-            syncToExport.setOk(false);
-            syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
-        }
-        dialog.dismiss();
-        getActivity().finish();
+                    final String[] responseMessage = new String[1];
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBar = (ProgressBar) spinnerView.findViewById(R.id.pb_export_repository);
+                            progressBar.setVisibility(View.VISIBLE);
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            String response = DendroAPI.exportToRepository(getContext(), syncToExport.getDendroFolderUri(), obj);
+                            Gson gson = new Gson();
+                            JsonObject responseObject = gson.fromJson(response, JsonObject.class);
+                            String result = responseObject.get("result").getAsString();
+                            //A Success case -> {"result":"OK","message":"Folder newLabtabletProject successfully exported from Dendro<br/><br/><a href='http://hdl.handle.net/0000/03e1c58a88414e68869373cd9b226d4f'>Click to see your published dataset</a>"}
+                            //An Error case -> {"result":"error","message":"Folder /r/folder/deb3f036-c5e2-4299-8cc1-d667f262aa39 has no title or creator! Please set these properties (from the dcterms metadata schema) and try the exporting process again."}
+                            if(result.equals("OK"))
+                            {
+                                //Toast.makeText(getContext(), "Dataset exported successfully", Toast.LENGTH_LONG).show();
+                                responseMessage[0] = "Dataset exported successfully";
+                                //Sets the "ok" status for the sync object to true and saves it in the database
+                                syncToExport.setOk(true);
+                                syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
+                            }
+                            else
+                            {
+                                //String errorMsg = responseObject.get("message").getAsString();
+                                //Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                                //Sets the "ok" status for the sync object to false and saves it in the database
+                                responseMessage[0] = responseObject.get("message").getAsString();
+                                syncToExport.setOk(false);
+                                syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
+                            }
+                        }
+                    });
+                    t.start();
+
+                    try {
+                        t.join();
+                        if(responseMessage != null && responseMessage[0] != null)
+                        {
+                            progressBar.setVisibility(View.GONE);
+                            //getActivity().finish();
+                            Toast.makeText(getContext(), responseMessage[0], Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            progressBar.setVisibility(View.GONE);
+                            //getActivity().finish();
+                            Toast.makeText(getContext(), "Unexpected error exporting to repository", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        progressBar.setVisibility(View.GONE);
+                        //getActivity().finish();
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+        builder.show();
     }
 
     public void notifyItemsChanged(FavoriteItem item) {
@@ -144,6 +219,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
 
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_generic_list, container, false);
+        spinnerView = inflater.inflate(R.layout.export_to_repository_spinner, container, false);
 
         Bundle args = getArguments();
         if (!args.containsKey("current_tag")) {
@@ -305,34 +381,9 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                         // The 'which' argument contains the index position
                         // of the selected item
                         JsonElement element = bookmarkResultAsJsonArray.get(which);
-                        //obj = new JsonObject();
                         repositoryObj.add("repository", element);
-                        //dialog.dismiss();
                         dialog.cancel();
                         exportToRepository(syncToExport, repositoryObj);
-                        //TODO NELSON METER AQUI ALGO A INDICAR QUE UM PEDIDO ESTÁ A SER EXECUTADO????
-                        /*String response = DendroAPI.exportToRepository(getContext(), syncToExport.getDendroFolderUri(), obj);
-                        Gson gson = new Gson();
-                        JsonObject responseObject = gson.fromJson(response, JsonObject.class);
-                        String result = responseObject.get("result").getAsString();
-                        //A Success case -> {"result":"OK","message":"Folder newLabtabletProject successfully exported from Dendro<br/><br/><a href='http://hdl.handle.net/0000/03e1c58a88414e68869373cd9b226d4f'>Click to see your published dataset</a>"}
-                        //An Error case -> {"result":"error","message":"Folder /r/folder/deb3f036-c5e2-4299-8cc1-d667f262aa39 has no title or creator! Please set these properties (from the dcterms metadata schema) and try the exporting process again."}
-                        if(result.equals("OK"))
-                        {
-                            Toast.makeText(getContext(), "Dataset exported successfully", Toast.LENGTH_LONG).show();
-                            //Sets the "ok" status for the sync object to true and saves it in the database
-                            syncToExport.setOk(true);
-                            syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
-                        }
-                        else
-                        {
-                            String errorMsg = responseObject.get("message").getAsString();
-                            Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
-                            //Sets the "ok" status for the sync object to false and saves it in the database
-                            syncToExport.setOk(false);
-                            syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
-                        }
-                        getActivity().finish();*/
                     }
                 });
                 builder.show();
