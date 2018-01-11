@@ -51,7 +51,8 @@ public class DendroFolderAdapter extends ArrayAdapter<DendroFolderItem> {
         holder.mFolderDate.setText((String)item.getDcterms().getModified());
         holder.mFolderUri.setText(item.getUri());
 
-        if (item.getDdr().getFileExtension().equals("folder")) {
+        //if (item.getDdr().getFileExtension().equals("folder")) {
+        if (item.getRdf().getType().toString().contains("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Folder")) {
             holder.mFolderType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_folder));
         } else {
             holder.mFolderType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_file));
