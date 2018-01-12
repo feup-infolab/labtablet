@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ProgressBar android:id="@+id/pb_export_repository"
-    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-    android:layout_width="250dp"
-    android:layout_height="100dp"
-    android:indeterminate="true"
-    android:visibility="invisible"
-    android:layout_gravity="center"
-    android:layout_centerInParent="true"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ProgressBar android:id="@+id/pb_export_repository"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:indeterminate="true"
+        android:visibility="visible"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        xmlns:android="http://schemas.android.com/apk/res/android" />
+</RelativeLayout>

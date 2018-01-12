@@ -193,6 +193,78 @@ public class DendroAPI {
         return result;
     }
 
+
+    public static String exportToRepositorySync(final Context context, final String folderUri, final JsonObject object)
+    {
+        String result;
+        DendroConfiguration conf = FileMgr.getDendroConf(context);
+
+        String cookie = null;
+        try {
+            cookie = authenticate(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = e.getMessage();
+            return result;
+        }
+
+        URL url = null;
+        try {
+            //TODO change this because folderUri in this case is already with the baseUrl from dendro
+            url = new URL(folderUri + "?export_to_repository");
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            conn.setRequestProperty("Accept","application/json");
+            conn.setRequestProperty("Cookie", cookie);
+            conn.setDoOutput(true);
+
+            System.out.println(conn.getRequestProperties().toString());
+
+            OutputStream os = conn.getOutputStream();
+            String g = new Gson().toJson(object);
+            os.write(g.getBytes());
+            //os.write(object.toString().getBytes());
+            //os.write(object.getAsString().getBytes());
+            os.flush();
+
+            InputStream error = conn.getErrorStream();
+
+            if(error != null)
+            {
+                BufferedReader br = new BufferedReader(new InputStreamReader((error)));
+
+                String output;
+                StringBuilder response = new StringBuilder();
+                while ((output = br.readLine()) != null) {
+                    response.append(output);
+                    response.append('\r');
+                }
+                result = response.toString();
+                conn.disconnect();
+                return result;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+            String output;
+            StringBuilder response = new StringBuilder();
+            while ((output = br.readLine()) != null) {
+                response.append(output);
+                response.append('\r');
+            }
+            result = response.toString();
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("DEBUG ERROR: " + e.getMessage());
+            result = e.getMessage();
+        }
+        return result;
+    }
+
+
     private static class ExportToRepositoryTask extends AsyncTask<Void, Void, String>{
         private Context context;
         private String folderUri;
