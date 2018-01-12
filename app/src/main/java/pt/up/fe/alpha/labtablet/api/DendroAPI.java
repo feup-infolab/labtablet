@@ -181,7 +181,7 @@ public class DendroAPI {
         return resultAsJsonArray;
     }
 
-    public static String exportToRepository(Context context, String folderUri, JsonObject object)
+    public static String executeExportToRepositoryTaskSync(Context context, String folderUri, JsonObject object)
     {
         String result = null;
         try {
@@ -194,7 +194,7 @@ public class DendroAPI {
     }
 
 
-    public static String exportToRepositorySync(final Context context, final String folderUri, final JsonObject object)
+    public static String exportToRepositoryRequest(final Context context, final String folderUri, final JsonObject object)
     {
         String result;
         DendroConfiguration conf = FileMgr.getDendroConf(context);

@@ -99,7 +99,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        response[0] = DendroAPI.exportToRepositorySync(getActivity(), syncToExport.getDendroFolderUri(), obj);
+                        response[0] = DendroAPI.exportToRepositoryRequest(getActivity(), syncToExport.getDendroFolderUri(), obj);
                         rootView.post(new Runnable() {
                             @Override
                             public void run() {
@@ -126,105 +126,13 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                                     //progressBarView.setVisibility(View.INVISIBLE);
                                 }
                                 rootView.removeView(progressBarView);
+                                getActivity().finish();
                             }
                         });
                     }
                 }).start();
-
-                /*Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        rootView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                rootView.addView(progressBarView);
-                                Toast.makeText(getContext(), "Exporting...", Toast.LENGTH_LONG).show();
-                                Toast.makeText(getContext(), "Exporting...", Toast.LENGTH_LONG).show();
-                                response[0] = DendroAPI.exportToRepositorySync(getActivity(), syncToExport.getDendroFolderUri(), obj);
-                                Gson gson = new Gson();
-                                JsonObject responseObject = gson.fromJson(response[0], JsonObject.class);
-                                String result = responseObject.get("result").getAsString();
-                                //A Success case -> {"result":"OK","message":"Folder newLabtabletProject successfully exported from Dendro<br/><br/><a href='http://hdl.handle.net/0000/03e1c58a88414e68869373cd9b226d4f'>Click to see your published dataset</a>"}
-                                //An Error case -> {"result":"error","message":"Folder /r/folder/deb3f036-c5e2-4299-8cc1-d667f262aa39 has no title or creator! Please set these properties (from the dcterms metadata schema) and try the exporting process again."}
-                                if(result.equals("OK"))
-                                {
-                                    Toast.makeText(getActivity(), "Dataset exported successfully", Toast.LENGTH_LONG).show();
-                                    //Sets the "ok" status for the sync object to true and saves it in the database
-                                    syncToExport.setOk(true);
-                                    syncToExport.updateSync(AppDatabase.getDatabase(getActivity()));
-                                    //progressBarView.setVisibility(View.INVISIBLE);
-                                }
-                                else
-                                {
-                                    String errorMsg = responseObject.get("message").getAsString();
-                                    Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG).show();
-                                    //Sets the "ok" status for the sync object to false and saves it in the database
-                                    syncToExport.setOk(false);
-                                    syncToExport.updateSync(AppDatabase.getDatabase(getActivity()));
-                                    //progressBarView.setVisibility(View.INVISIBLE);
-                                }
-                            }
-                        });
-                    }
-                });
-                t.start();
-                try {
-                    t.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
             }
         });
-        /*builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //rootView.addView(progressBarView);
-                //Toast.makeText(getContext(), "CHOSE YES!", Toast.LENGTH_LONG).show();
-                dialogInterface.cancel();
-                Toast.makeText(getActivity(), "Exporting...", Toast.LENGTH_LONG).show();
-                final String[] response = new String[1];
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //response[0] = DendroAPI.exportToRepository(getActivity(), syncToExport.getDendroFolderUri(), obj);
-                        response[0] = DendroAPI.exportToRepositorySync(getActivity(), syncToExport.getDendroFolderUri(), obj);
-                    }
-                });
-                t.start();
-                try {
-                    Toast.makeText(getActivity(), "Exporting...", Toast.LENGTH_LONG).show();
-                    t.join();
-                    Gson gson = new Gson();
-                    JsonObject responseObject = gson.fromJson(response[0], JsonObject.class);
-                    String result = responseObject.get("result").getAsString();
-                    //A Success case -> {"result":"OK","message":"Folder newLabtabletProject successfully exported from Dendro<br/><br/><a href='http://hdl.handle.net/0000/03e1c58a88414e68869373cd9b226d4f'>Click to see your published dataset</a>"}
-                    //An Error case -> {"result":"error","message":"Folder /r/folder/deb3f036-c5e2-4299-8cc1-d667f262aa39 has no title or creator! Please set these properties (from the dcterms metadata schema) and try the exporting process again."}
-                    if(result.equals("OK"))
-                    {
-                        Toast.makeText(getActivity(), "Dataset exported successfully", Toast.LENGTH_LONG).show();
-                        //Sets the "ok" status for the sync object to true and saves it in the database
-                        syncToExport.setOk(true);
-                        syncToExport.updateSync(AppDatabase.getDatabase(getActivity()));
-                        progressBarView.setVisibility(View.INVISIBLE);
-                    }
-                    else
-                    {
-                        String errorMsg = responseObject.get("message").getAsString();
-                        Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG).show();
-                        //Sets the "ok" status for the sync object to false and saves it in the database
-                        syncToExport.setOk(false);
-                        syncToExport.updateSync(AppDatabase.getDatabase(getActivity()));
-                        //progressBarView.setVisibility(View.INVISIBLE);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    //Sets the "ok" status for the sync object to false and saves it in the database
-                    syncToExport.setOk(false);
-                    syncToExport.updateSync(AppDatabase.getDatabase(getActivity()));
-                }
-            }
-        });*/
 
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
@@ -232,44 +140,6 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 Toast.makeText(getContext(), "CHOSE NO!", Toast.LENGTH_LONG).show();
             }
         });
-
-        /*builder.setItems(options, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // The 'which' argument contains the index position
-                // of the selected item
-                dialog.dismiss();
-                if(which == 0)
-                {
-                    //rootView.addView(progressBarView);
-                    //rootView.setVisibility(View.GONE);
-                    //rootView.setVisibility(View.VISIBLE);
-                    Toast.makeText(getContext(), "Exporting...", Toast.LENGTH_LONG).show();
-
-                    String response = DendroAPI.exportToRepository(getContext(), syncToExport.getDendroFolderUri(), obj);
-                    Gson gson = new Gson();
-                    JsonObject responseObject = gson.fromJson(response, JsonObject.class);
-                    String result = responseObject.get("result").getAsString();
-                    //A Success case -> {"result":"OK","message":"Folder newLabtabletProject successfully exported from Dendro<br/><br/><a href='http://hdl.handle.net/0000/03e1c58a88414e68869373cd9b226d4f'>Click to see your published dataset</a>"}
-                    //An Error case -> {"result":"error","message":"Folder /r/folder/deb3f036-c5e2-4299-8cc1-d667f262aa39 has no title or creator! Please set these properties (from the dcterms metadata schema) and try the exporting process again."}
-                    if(result.equals("OK"))
-                    {
-                        Toast.makeText(getContext(), "Dataset exported successfully", Toast.LENGTH_LONG).show();
-                        //Sets the "ok" status for the sync object to true and saves it in the database
-                        syncToExport.setOk(true);
-                        syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
-                    }
-                    else
-                    {
-                        String errorMsg = responseObject.get("message").getAsString();
-                        Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
-                        //Sets the "ok" status for the sync object to false and saves it in the database
-                        syncToExport.setOk(false);
-                        syncToExport.updateSync(AppDatabase.getDatabase(getContext()));
-                    }
-                }
-            }
-        });
-        */
         builder.show();
     }
 
