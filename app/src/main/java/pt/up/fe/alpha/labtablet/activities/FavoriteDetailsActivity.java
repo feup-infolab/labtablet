@@ -158,6 +158,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                         startActivityForResult(myIntent, Utils.DESCRIPTOR_DEFINE);
                         break;
                     case "sync":
+                        fab.setVisibility(View.INVISIBLE);
                         myIntent = new Intent(FavoriteDetailsActivity.this, DescriptorPickerActivity.class);
                         myIntent.putExtra("file_extension", "");
                         myIntent.putExtra("favoriteName", favoriteName);
@@ -227,7 +228,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
     @Override
     public void onResume() {
         super.onResume();
-
         if (favoriteName != null) {
             currentItem = FavoriteMgr.getFavorite(FavoriteDetailsActivity.this, favoriteName);
             mToolbar.setSubtitle(currentItem.getDescription());
@@ -554,13 +554,15 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
             return;
 
         String activeTabName = "" + activeTab.getText();
-
+        fab.setVisibility(View.VISIBLE);
         switch (activeTabName) {
             case "metadata":
+
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_border_color_white_24dp));
                 break;
             case "sync":
-                fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_border_color_white_24dp));
+                fab.setVisibility(View.INVISIBLE);
+                //fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_border_color_white_24dp));
                 break;
             case "data":
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_attachment_white_24dp));

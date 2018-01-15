@@ -95,7 +95,13 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
             public void onClick(DialogInterface dialogInterface, int i) {
                 final String[] response = new String[1];
                 Toast.makeText(getContext(), "Exporting...", Toast.LENGTH_LONG).show();
-                rootView.addView(progressBarView);
+                try{
+                    rootView.addView(progressBarView);
+                }
+                catch (Exception e)
+                {
+                    Log.e("UI", "progressBarView already added to rootView");
+                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -114,7 +120,9 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                                     //Sets the "ok" status for the sync object to true and saves it in the database
                                     syncToExport.setOk(true);
                                     syncToExport.updateSync(AppDatabase.getDatabase(getActivity()));
-                                    //progressBarView.setVisibility(View.INVISIBLE);
+                                    //HERE UPDATE THE SYNC VIEW
+                                    updateSyncsUI(syncToExport.getFolderTitle());
+                                    rootView.removeView(progressBarView);
                                 }
                                 else
                                 {
@@ -124,8 +132,8 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                                     syncToExport.setOk(false);
                                     syncToExport.updateSync(AppDatabase.getDatabase(getActivity()));
                                     //progressBarView.setVisibility(View.INVISIBLE);
+                                    rootView.removeView(progressBarView);
                                 }
-                                rootView.removeView(progressBarView);
                                 getActivity().finish();
                             }
                         });
@@ -137,10 +145,16 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(getContext(), "CHOSE NO!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), "CHOSE NO!", Toast.LENGTH_LONG).show();
             }
         });
         builder.show();
+    }
+
+    public void updateSyncsUI(String favouriteName)
+    {
+        ArrayList<Sync> syncs = (ArrayList<Sync>) Sync.getAllWithTitleSync(AppDatabase.getDatabase(getActivity()), favouriteName);
+        bindSyncView(syncs);
     }
 
     public void notifyItemsChanged(FavoriteItem item) {
@@ -179,7 +193,7 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_generic_list, container, false);
+        //rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_generic_list, container, false);
         progressBarView = (RelativeLayout) inflater.inflate(R.layout.export_to_repository_spinner, container, false);
 
         Bundle args = getArguments();
@@ -188,9 +202,20 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
             return rootView;
         }
 
-        itemList = (RecyclerView) rootView.findViewById(R.id.list);
+        //itemList = (RecyclerView) rootView.findViewById(R.id.list);
 
         mCurrentTag = args.getString("current_tag");
+
+        if(mCurrentTag.equals("sync"))
+        {
+            rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_sync_list, container, false);
+        }
+        else
+        {
+            rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_generic_list, container, false);
+        }
+
+        itemList = (RecyclerView) rootView.findViewById(R.id.list);
         assert mCurrentTag != null;
         switch (mCurrentTag) {
             case "data":

@@ -18,11 +18,15 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
 import pt.up.fe.alpha.R;
+import pt.up.fe.alpha.labtablet.activities.FavoriteDetailsActivity;
+import pt.up.fe.alpha.labtablet.activities.ItemPreviewActivity;
+import pt.up.fe.alpha.labtablet.activities.MainActivity;
 import pt.up.fe.alpha.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.alpha.labtablet.async.AsyncCustomTaskHandler;
 import pt.up.fe.alpha.labtablet.async.AsyncUploader;
@@ -111,10 +115,11 @@ public class SubmissionStep4 extends Fragment {
                         AppDatabase db = AppDatabase.getDatabase(getActivity().getApplicationContext());
                         Sync syncedFolder = new Sync(favoriteName, destInstanceAddress, destUri, new Date(), false);
                         Boolean resultOfInsert = syncedFolder.insertSync(db);
-                        //List<Sync> listOfRestoredFolders = Sync.getAllSync(db);
                         getActivity().finish();
                         Toast.makeText(getActivity(),
                                 getResources().getString(R.string.uploaded_successfully), Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        getActivity().startActivity(intent);
                     }
 
                     @Override
