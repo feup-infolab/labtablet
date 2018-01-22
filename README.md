@@ -1,8 +1,3 @@
-
-### Available at playstore ### 
-
-<a href='https://play.google.com/store/apps/details?id=pt.up.fe.beta.labtablet&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
-
 ![labtablet UI](https://raw.githubusercontent.com/feup-infolab/labtablet/master/labtablet.png "LabTablet UI")
 
 # README #
@@ -32,3 +27,8 @@ Some libraries are needed to handle specific features of the LabTablet interface
 If you want to contact me (the developer), please feel free to do so through the email ricardo.amorim3@gmail.com.
 
 * LabTablet was developed together with other relevant Information Systems projects at the Faculdade de Engenharia da Universidade do Porto. To know more about our environment and projects, follow [this link.](http://dendro.fe.up.pt/)
+
+
+### Available at playstore ### 
+
+<a href='https://play.google.com/store/apps/details?id=pt.up.fe.beta.labtablet&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
