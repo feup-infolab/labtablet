@@ -1,7 +1,7 @@
 
 ### Available at playstore ### 
 
-[link](https://play.google.com/store/apps/details?id=pt.up.fe.beta.labtablet);
+[link](https://play.google.com/store/apps/details?id=pt.up.fe.beta.labtablet)
 
 ![labtablet UI](https://raw.githubusercontent.com/feup-infolab/labtablet/master/labtablet.png "LabTablet UI")
 
