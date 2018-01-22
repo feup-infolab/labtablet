@@ -1,6 +1,7 @@
 package pt.up.fe.alpha.labtablet.fragments;
 
 import android.app.Fragment;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,10 +16,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+
 import pt.up.fe.alpha.R;
+import pt.up.fe.alpha.labtablet.activities.FavoriteDetailsActivity;
+import pt.up.fe.alpha.labtablet.activities.ItemPreviewActivity;
+import pt.up.fe.alpha.labtablet.activities.MainActivity;
 import pt.up.fe.alpha.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.alpha.labtablet.async.AsyncCustomTaskHandler;
 import pt.up.fe.alpha.labtablet.async.AsyncUploader;
+import pt.up.fe.alpha.labtablet.database.AppDatabase;
+import pt.up.fe.alpha.labtablet.models.Dendro.Sync;
 import pt.up.fe.alpha.labtablet.models.ProgressUpdateItem;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
@@ -31,6 +44,7 @@ public class SubmissionStep4 extends Fragment {
 
     private String favoriteName;
     private String projectName;
+    private String destInstanceAddress;
     private String destUri;
 
     private AsyncUploader mUploadTask;
@@ -65,10 +79,12 @@ public class SubmissionStep4 extends Fragment {
             favoriteName = getArguments().getString("favorite_name");
             projectName = getArguments().getString("project_name");
             destUri = SubmissionValidationActivity.getDestUri();
+            destInstanceAddress = SubmissionValidationActivity.getDestUri();
         } else {
             favoriteName = savedInstanceState.getString("favorite_name");
             projectName = savedInstanceState.getString("project_name");
             destUri = SubmissionValidationActivity.getDestUri();
+            destInstanceAddress = SubmissionValidationActivity.getDestUri();
         }
 
         btStartUpload.setOnClickListener(new View.OnClickListener() {
@@ -96,9 +112,14 @@ public class SubmissionStep4 extends Fragment {
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("favoriteName", getArguments().getString("favorite_name"));
                         getActivity().setResult(Utils.SUBMISSION_VALIDATION, returnIntent);
+                        AppDatabase db = AppDatabase.getDatabase(getActivity().getApplicationContext());
+                        Sync syncedFolder = new Sync(favoriteName, destInstanceAddress, destUri, new Date(), false);
+                        Boolean resultOfInsert = syncedFolder.insertSync(db);
                         getActivity().finish();
                         Toast.makeText(getActivity(),
                                 getResources().getString(R.string.uploaded_successfully), Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        getActivity().startActivity(intent);
                     }
 
                     @Override
@@ -106,10 +127,18 @@ public class SubmissionStep4 extends Fragment {
                         if (getActivity() == null) {
                             return;
                         }
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
                         Log.e("Submission", "Failed " + error.getMessage());
+                        //OLD CODE
+                        /*tv_progress_status.setText(error.getMessage());
+                        btStartUpload.setText(getResources().getString(R.string.retry));
+                        btStartUpload.setEnabled(true);
+                        */
+                        //NEW CODE
                         tv_progress_status.setText(error.getMessage());
                         btStartUpload.setText(getResources().getString(R.string.retry));
                         btStartUpload.setEnabled(true);
+                        getActivity().finish();
                     }
 
                     @Override

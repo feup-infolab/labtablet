@@ -8,18 +8,14 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -29,28 +25,24 @@ import pt.up.fe.alpha.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroFolderItem;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
-/**
- * Loads the directory structure from the repository
- */
-public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, ArrayList<DendroFolderItem>> {
-    //input, remove, output
-    private final AsyncTaskHandler<ArrayList<DendroFolderItem>> mHandler;
+// params, progress, result
+public class AsyncItemMetadataFetcher extends AsyncTask<Object, String, String> {
+    private final AsyncTaskHandler<String> mHandler;
     private Exception error;
 
-    public AsyncDendroDirectoryFetcher(AsyncTaskHandler<ArrayList<DendroFolderItem>> mHandler) {
+    public AsyncItemMetadataFetcher(AsyncTaskHandler<String> mHandler) {
         this.mHandler = mHandler;
     }
 
     @Override
-    protected ArrayList<DendroFolderItem> doInBackground(Object... params) {
-
-        ArrayList<DendroFolderItem> dendroFolderItems = new ArrayList<>();
+    protected String doInBackground(Object... params) {
+        String resultOfRequest = "";
         if (params[0] == null || params[1] == null) {
             error = new Exception("Params for this asynctaks were not provided");
-            return dendroFolderItems;
+            return resultOfRequest;
         } else if (!(params[0] instanceof String || params[1] instanceof Activity)) {
             error = new Exception("Was expecting a String and Context, received" + params[0].getClass() + " and " + params[1].getClass());
-            return dendroFolderItems;
+            return resultOfRequest;
         }
 
         Context mContext = (Context) params[1];
@@ -58,24 +50,14 @@ public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, Arra
         SharedPreferences settings = mContext.getSharedPreferences(mContext.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
         if (!settings.contains(Utils.DENDRO_CONFS_ENTRY)) {
             error = new Exception("Dendro configurations were not found");
-            return dendroFolderItems;
+            return resultOfRequest;
         }
 
         DendroConfiguration conf = new Gson().fromJson(settings.getString(Utils.DENDRO_CONFS_ENTRY, ""), DendroConfiguration.class);
         String destUri = conf.getAddress();
 
-
-
-
-        /*HttpResponse response;
-        HttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet();*/
-        //"http://172.30.29.127:3000/project/" + dirName + "?ls"
-
-        //Log.i("getDendroDirs", destUri + "/project/" + params[0] + "?ls");
-        //String requestString = destUri + "/project/" + params[0] + "?ls";
-        Log.i("getDendroDirs", destUri + params[0] + "?ls");
-        String requestString = destUri + params[0] + "?ls";
+        Log.i("getDendroItemMetadata", destUri + params[0] + "?metadata");
+        String requestString = destUri + params[0] + "?metadata";
         requestString = requestString.replace(" ", "%20");
 
         try {
@@ -89,15 +71,6 @@ public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, Arra
             conn.setRequestProperty("Accept","application/json");
             conn.setDoInput(true);
 
-
-            /*
-            request.setURI(new URI(requestString));
-            request.setHeader("Accept", "application/json");
-            request.setHeader("Cookie", "connect.sid=" + cookie);
-
-            response = client.execute(request);
-            */
-
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();
@@ -108,28 +81,23 @@ public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, Arra
             in.close();
 
             if (response == null) {
-                Log.e("checkIfDirExists", "Failed");
-                return dendroFolderItems;
+                Log.e("getDendroItemMetadata", "Failed");
+                return resultOfRequest;
             }
 
             String result = response.toString();
             JsonParser parser = new JsonParser();
-            JsonArray obj = parser.parse(result).getAsJsonArray();
-
-            dendroFolderItems = new Gson().fromJson(
-                    obj,
-                    Utils.ARRAY_DIRECTORY_LISTING);
-
-            return dendroFolderItems;
+            JsonObject obj = parser.parse(result).getAsJsonObject();
+            return obj.toString();
 
         } catch (Exception e) {
             error = e;
-            return new ArrayList<>();
+            return resultOfRequest;
         }
     }
 
     @Override
-    protected void onPostExecute(ArrayList<DendroFolderItem> result) {
+    protected void onPostExecute(String result) {
         super.onPostExecute(result);
         if (error != null) {
             mHandler.onFailure(error);
@@ -138,9 +106,9 @@ public class AsyncDendroDirectoryFetcher extends AsyncTask<Object, Integer, Arra
         }
     }
 
-    @Override
-    protected void onProgressUpdate(Integer... values) {
+    /*@Override
+    protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
-        mHandler.onProgressUpdate(values[0]);
-    }
+        mHandler.onProgressUpdate(values);
+    }*/
 }

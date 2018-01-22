@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.async.AsyncFavoriteSetup;
 import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.alpha.labtablet.database.AppDatabase;
 import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.fragments.ConfigurationFragment;
 import pt.up.fe.alpha.labtablet.fragments.DrawerFragment;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AppDatabase.getDatabase(getApplicationContext());
 
         //create base folder
         final File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),

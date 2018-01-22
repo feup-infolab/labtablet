@@ -45,7 +45,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,10 +56,12 @@ import pt.up.fe.alpha.labtablet.async.AsyncCustomTaskHandler;
 import pt.up.fe.alpha.labtablet.async.AsyncFileImporter;
 import pt.up.fe.alpha.labtablet.async.AsyncPackageCreator;
 import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
+import pt.up.fe.alpha.labtablet.database.AppDatabase;
 import pt.up.fe.alpha.labtablet.db_handlers.FavoriteMgr;
 import pt.up.fe.alpha.labtablet.db_handlers.FormMgr;
 import pt.up.fe.alpha.labtablet.fragments.FavoriteViewFragment;
 import pt.up.fe.alpha.labtablet.models.DataItem;
+import pt.up.fe.alpha.labtablet.models.Dendro.Sync;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.models.Form;
@@ -144,9 +148,18 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                     return;
 
                 String activeTabName = "" + activeTab.getText();
+                Intent myIntent;
                 switch (activeTabName) {
                     case "metadata":
-                        Intent myIntent = new Intent(FavoriteDetailsActivity.this, DescriptorPickerActivity.class);
+                        myIntent = new Intent(FavoriteDetailsActivity.this, DescriptorPickerActivity.class);
+                        myIntent.putExtra("file_extension", "");
+                        myIntent.putExtra("favoriteName", favoriteName);
+                        myIntent.putExtra("returnMode", Utils.DESCRIPTOR_DEFINE);
+                        startActivityForResult(myIntent, Utils.DESCRIPTOR_DEFINE);
+                        break;
+                    case "sync":
+                        fab.setVisibility(View.INVISIBLE);
+                        myIntent = new Intent(FavoriteDetailsActivity.this, DescriptorPickerActivity.class);
                         myIntent.putExtra("file_extension", "");
                         myIntent.putExtra("favoriteName", favoriteName);
                         myIntent.putExtra("returnMode", Utils.DESCRIPTOR_DEFINE);
@@ -155,7 +168,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                     case "data":
                         Toast.makeText(FavoriteDetailsActivity.this, "Choose the file", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.setType("file/*");
+                        intent.setType("*/*");
                         startActivityForResult(intent, Utils.PICK_FILE_INTENT);
                         break;
                     case "forms":
@@ -215,7 +228,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
     @Override
     public void onResume() {
         super.onResume();
-
         if (favoriteName != null) {
             currentItem = FavoriteMgr.getFavorite(FavoriteDetailsActivity.this, favoriteName);
             mToolbar.setSubtitle(currentItem.getDescription());
@@ -235,9 +247,12 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //TODO NELSON THIS IS VERY UGLY CODE BUT SEEMS TO BE UPDATING THE SYNC LIST
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
         if (data == null)
             return;
-
 
         Bundle extras = data.getExtras();
         switch (requestCode) {
@@ -433,7 +448,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                         .show();
                 break;
 
-            case R.id.action_favorite_zip:
+            /*case R.id.action_favorite_zip:
                 final ProgressDialog dialog = ProgressDialog.show(this,
                         getString(R.string.upload_progress_creating_package),
                         getString(R.string.wait_queue_processing), false);
@@ -459,7 +474,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                         dialog.setMessage(progress.getMessage());
                     }
                 }).execute(favoriteName, this);
-                break;
+                break;*/
         }
 
         return super.onOptionsItemSelected(item);
@@ -539,10 +554,15 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
             return;
 
         String activeTabName = "" + activeTab.getText();
-
+        fab.setVisibility(View.VISIBLE);
         switch (activeTabName) {
             case "metadata":
+
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_border_color_white_24dp));
+                break;
+            case "sync":
+                fab.setVisibility(View.INVISIBLE);
+                //fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_border_color_white_24dp));
                 break;
             case "data":
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_attachment_white_24dp));
@@ -603,10 +623,54 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         currentItem = FavoriteMgr.getFavorite(this, currentItem.getTitle());
+        //currentItem.setSyncItems(CreateFakeSyncItems());
+        currentItem.setSyncItems(getSyncsWithDendro(currentItem.getTitle()));
         adapter.addFragment(FavoriteViewFragment.newInstance("metadata", currentItem.getMetadataItems()), "metadata");
         adapter.addFragment(FavoriteViewFragment.newInstance("data", currentItem.getDataItems()), "data");
         adapter.addFragment(FavoriteViewFragment.newInstance("forms", currentItem.getLinkedForms()), "forms");
+        adapter.addFragment(FavoriteViewFragment.newInstance("sync", currentItem.getSyncItems()), "sync");
         viewPager.setAdapter(adapter);
+    }
+
+    private ArrayList<Sync> CreateFakeSyncItems(){
+        ArrayList<Sync> res = new ArrayList<Sync>();
+
+        String title = "Base Data";
+        String dendroInstanceAddress = "http://dendro-prd.fe.up.pt:3007";
+        String folderUri = "/r/folder/bccadc68-f8bc-419d-b924-f0b55b06e876";
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 2017);
+        cal.set(Calendar.MONTH, Calendar.NOVEMBER);
+        cal.set(Calendar.DAY_OF_MONTH, 6);
+        Date dateRepresentation = cal.getTime();
+
+        boolean syncOK  = true;
+
+        Sync d = new Sync(
+                title,
+                dendroInstanceAddress,
+                folderUri,
+                dateRepresentation,
+                true
+        );
+
+        res.add(d);
+        return res;
+    }
+
+    private ArrayList<Sync> getSyncsWithDendro(String labtabletProjectTitle)
+    {
+        ArrayList<Sync> res = new ArrayList<Sync>();
+        //List<Sync> syncs = Sync.getAllSync(AppDatabase.getDatabase(getApplicationContext()));
+        List<Sync> syncs = Sync.getAllWithTitleSync(AppDatabase.getDatabase(getApplicationContext()), labtabletProjectTitle);
+
+        for (int i = 0; i < syncs.size(); ++i)
+        {
+            Sync sync =  syncs.get(i);
+            res.add(sync);
+        }
+        return res;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

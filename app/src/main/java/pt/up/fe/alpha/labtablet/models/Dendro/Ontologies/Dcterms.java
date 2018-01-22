@@ -2,13 +2,13 @@
 package pt.up.fe.alpha.labtablet.models.Dendro.Ontologies;
 
 public class Dcterms {
-    private String creator;
-    private String description;
-    private String subject;
-    private String title;
-    private String modified;
+    private Object creator;
+    private Object description;
+    private Object subject;
+    private Object title;
+    private Object modified;
 
-    public String getModified() {
+    public Object getModified() {
         return this.modified;
     }
 
@@ -16,7 +16,7 @@ public class Dcterms {
         this.modified = modified;
     }
 
-    public String getCreator() {
+    public Object getCreator() {
         return this.creator;
     }
 
@@ -24,7 +24,7 @@ public class Dcterms {
         this.creator = creator;
     }
 
-    public String getDescription() {
+    public Object getDescription() {
         return this.description;
     }
 
@@ -32,7 +32,7 @@ public class Dcterms {
         this.description = description;
     }
 
-    public String getSubject() {
+    public Object getSubject() {
         return this.subject;
     }
 
@@ -40,7 +40,7 @@ public class Dcterms {
         this.subject = subject;
     }
 
-    public String getTitle() {
+    public Object getTitle() {
         return this.title;
     }
 

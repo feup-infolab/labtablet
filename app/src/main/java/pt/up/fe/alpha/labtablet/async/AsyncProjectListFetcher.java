@@ -12,6 +12,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import pt.up.fe.alpha.labtablet.api.DendroAPI;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.alpha.labtablet.models.Dendro.ProjectListResponse;
@@ -41,16 +47,42 @@ public class AsyncProjectListFetcher extends AsyncTask<Context, Integer, Project
             String cookie = DendroAPI.authenticate(mContext);
 
             DendroConfiguration conf = FileMgr.getDendroConf(mContext);
-            HttpClient httpclient = new DefaultHttpClient();
+
+            URL url = new URL(conf.getAddress() + "/projects/my");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept","application/json");
+            conn.setRequestProperty("Cookie",  cookie);
+            conn.setDoInput(true);
+
+
+
+            /*HttpClient httpclient = new DefaultHttpClient();
             HttpGet httpget = new HttpGet(conf.getAddress() + "/projects/my");
             httpget.setHeader("Accept", "application/json");
-            httpget.setHeader("Cookie", "connect.sid=" + cookie);
+            httpget.setHeader("Cookie", "connect.sid=" + cookie);*/
 
-            HttpResponse resp = httpclient.execute(httpget);
-            HttpEntity ent = resp.getEntity();
-            return new Gson().fromJson(EntityUtils.toString(ent), ProjectListResponse.class);
+            System.out.println(conn.getResponseCode() + ": " + conn.getResponseMessage());
+
+
+            BufferedReader in = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            /*HttpResponse resp = httpclient.execute(httpget);
+            HttpEntity ent = resp.getEntity();*/
+
+            ProjectListResponse r = new Gson().fromJson(response.toString(), ProjectListResponse.class);
+
+            return r;
 
         } catch (Exception e) {
+            System.err.println(e.toString());
             error = e;
             return null;
         }

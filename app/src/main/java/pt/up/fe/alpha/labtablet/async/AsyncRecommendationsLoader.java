@@ -12,6 +12,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import pt.up.fe.alpha.R;
@@ -62,15 +66,35 @@ public class AsyncRecommendationsLoader extends AsyncTask<Object, Integer, Array
             String cookie = DendroAPI.authenticate(mContext);
 
             DendroConfiguration conf = FileMgr.getDendroConf(mContext);
-            DefaultHttpClient httpclient = new DefaultHttpClient();
+
+            URL url = new URL(conf.getAddress() + "/project/" + projectName + "?metadata_recommendations");
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Cookie", cookie);
+            conn.setRequestProperty("Accept","application/json");
+            conn.setDoInput(true);
+
+
+            /*DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpGet httpget = new HttpGet(conf.getAddress() + "/project/" + projectName + "?metadata_recommendations");
             httpget.setHeader("Accept", "application/json");
             httpget.setHeader("Cookie", "connect.sid=" + cookie);
 
             HttpResponse resp = httpclient.execute(httpget);
-            HttpEntity ent = resp.getEntity();
+            HttpEntity ent = resp.getEntity();*/
 
-            JSONObject respObject = new JSONObject(EntityUtils.toString(ent));
+
+            BufferedReader in = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            JSONObject respObject = new JSONObject(response.toString());
             ArrayList<DendroDescriptor> recommendedDendroDescriptors =
                     new Gson().fromJson(respObject.get("descriptors").toString(), Utils.ARRAY_DENDRO_DESCRIPTORS);
 

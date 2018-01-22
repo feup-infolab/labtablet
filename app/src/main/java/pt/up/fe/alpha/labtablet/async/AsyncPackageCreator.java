@@ -92,6 +92,7 @@ public class AsyncPackageCreator extends AsyncTask<Object, ProgressUpdateItem, V
         ArrayList<Descriptor> descriptors = item.getMetadataItems();
 
         for (Descriptor desc : descriptors) {
+
             dendroStyleRecords.add(
                     new DendroMetadataRecord(desc.getDescriptor(), desc.getValue()));
         }

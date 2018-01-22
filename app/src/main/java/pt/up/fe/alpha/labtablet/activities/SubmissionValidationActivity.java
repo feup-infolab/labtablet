@@ -31,6 +31,7 @@ public class SubmissionValidationActivity extends AppCompatActivity implements S
     private static String favoriteName;
     private static String projectName;
     private static String destUri;
+    private static String destInstanceAddress;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -52,6 +53,14 @@ public class SubmissionValidationActivity extends AppCompatActivity implements S
 
     public static void setDestUri(String uri) {
         destUri = uri;
+    }
+
+    public static String getDestInstanceAddress() {
+        return destInstanceAddress;
+    }
+
+    public static void setDestInstanceAddress(String destInstanceAddress) {
+        SubmissionValidationActivity.destInstanceAddress = destInstanceAddress;
     }
 
     @Override

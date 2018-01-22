@@ -47,11 +47,12 @@ public class DendroFolderAdapter extends ArrayAdapter<DendroFolderItem> {
         // fill data
         ViewHolder holder = (ViewHolder) rowView.getTag();
         final DendroFolderItem item = items.get(position);
-        holder.mFolderName.setText(item.getNie().getTitle());
-        holder.mFolderDate.setText(item.getDcterms().getModified());
+        holder.mFolderName.setText((String)item.getNie().getTitle());
+        holder.mFolderDate.setText((String)item.getDcterms().getModified());
         holder.mFolderUri.setText(item.getUri());
 
-        if (item.getDdr().getFileExtension().equals("folder")) {
+        //if (item.getDdr().getFileExtension().equals("folder")) {
+        if (item.getRdf().getType().toString().contains("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Folder")) {
             holder.mFolderType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_folder));
         } else {
             holder.mFolderType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_file));

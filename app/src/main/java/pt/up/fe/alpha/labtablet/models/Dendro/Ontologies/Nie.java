@@ -3,8 +3,8 @@ package pt.up.fe.alpha.labtablet.models.Dendro.Ontologies;
 
 public class Nie {
     private Object hasLogicalPart;
-    private String isLogicalPartOf;
-    private String title;
+    private Object isLogicalPartOf;
+    private Object title;
 
     public Object getHasLogicalPart() {
         return this.hasLogicalPart;
@@ -14,7 +14,7 @@ public class Nie {
         this.hasLogicalPart = hasLogicalPart;
     }
 
-    public String getIsLogicalPartOf() {
+    public Object getIsLogicalPartOf() {
         return this.isLogicalPartOf;
     }
 
@@ -22,7 +22,7 @@ public class Nie {
         this.isLogicalPartOf = isLogicalPartOf;
     }
 
-    public String getTitle() {
+    public Object getTitle() {
         return this.title;
     }
 

@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import pt.up.fe.alpha.labtablet.models.Dendro.Sync;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
 public class FavoriteItem {
@@ -14,6 +15,7 @@ public class FavoriteItem {
     private String date_modified;
     private ArrayList<DataItem> dataItems;
     private ArrayList<Descriptor> metadataItems;
+    private ArrayList<Sync> syncItems;
 
     private ArrayList<Descriptor> metadataRecommendations;
     private ArrayList<FormInstance> linkedForms;
@@ -25,6 +27,7 @@ public class FavoriteItem {
         this.metadataItems = new ArrayList<>();
         this.linkedForms = new ArrayList<>();
         this.metadataRecommendations = new ArrayList<>();
+        this.syncItems = new ArrayList<>();
     }
 
     public void setMetadataRecommendations(ArrayList<Descriptor> metadataRecommendations) {
@@ -49,6 +52,14 @@ public class FavoriteItem {
 
     public void setMetadataItems(ArrayList<Descriptor> metadataItems) {
         this.metadataItems = metadataItems;
+    }
+
+    public ArrayList<Sync> getSyncItems() {
+        return syncItems;
+    }
+
+    public void setSyncItems(ArrayList<Sync> metadataItems) {
+        this.syncItems = metadataItems;
     }
 
     public String getTitle() {

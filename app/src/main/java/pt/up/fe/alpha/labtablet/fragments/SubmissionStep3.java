@@ -18,17 +18,31 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.activities.SubmissionValidationActivity;
 import pt.up.fe.alpha.labtablet.adapters.DendroFolderAdapter;
 import pt.up.fe.alpha.labtablet.api.SubmissionStepHandler;
 import pt.up.fe.alpha.labtablet.async.AsyncDendroDirectoryFetcher;
+import pt.up.fe.alpha.labtablet.async.AsyncItemMetadataFetcher;
 import pt.up.fe.alpha.labtablet.async.AsyncProjectListFetcher;
 import pt.up.fe.alpha.labtablet.async.AsyncTaskHandler;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroConfiguration;
 import pt.up.fe.alpha.labtablet.models.Dendro.DendroFolderItem;
+import pt.up.fe.alpha.labtablet.models.Dendro.DendroMetadataRecord;
+import pt.up.fe.alpha.labtablet.models.Dendro.Ontologies.Nie;
 import pt.up.fe.alpha.labtablet.models.Dendro.Project;
 import pt.up.fe.alpha.labtablet.models.Dendro.ProjectListResponse;
 import pt.up.fe.alpha.labtablet.utils.FileMgr;
@@ -49,10 +63,12 @@ public class SubmissionStep3 extends Fragment {
 
     private AsyncProjectListFetcher mProjectFetcher;
     private AsyncDendroDirectoryFetcher mDirectoryFetcher;
+    private AsyncItemMetadataFetcher mItemMetadataFetcher;
     private ArrayList<DendroFolderItem> folders;
     private ArrayList<Project> availableProjects;
 
     private String path;
+    private String selectedResourceUri;
 
     public SubmissionStep3() {
         this.path = "/data";
@@ -103,7 +119,8 @@ public class SubmissionStep3 extends Fragment {
                 }
 
                 DendroConfiguration conf = FileMgr.getDendroConf(getActivity());
-                String selection = conf.getAddress() + "/project/" + projectName + path;
+                //String selection = conf.getAddress() + "/project/" + projectName + path;
+                String selection = conf.getAddress() + selectedResourceUri;
                 Toast.makeText(getActivity(), getResources().getString(R.string.selected_folder), Toast.LENGTH_SHORT).show();
                 SubmissionValidationActivity.setDestUri(selection);
                 mHandler.nextStep(3);
@@ -119,6 +136,7 @@ public class SubmissionStep3 extends Fragment {
                     path += "/" + item.getNie().getTitle();
 
                     //items.get((Integer) view.getTag()).getNie().getTitle();
+                    selectedResourceUri = item.getUri();
                     selectFolder.setVisibility(View.VISIBLE);
                     selectFolder.setEnabled(true);
                     refreshFoldersList();
@@ -144,7 +162,15 @@ public class SubmissionStep3 extends Fragment {
 
     private void refreshFoldersList() {
         initDirectoryFetcher();
-        mDirectoryFetcher.execute(projectName + path, getActivity());
+        if(selectedResourceUri == null)
+        {
+            mDirectoryFetcher.execute("/project/" + projectName + path, getActivity());
+        }
+        else
+        {
+            mDirectoryFetcher.execute(selectedResourceUri, getActivity());
+        }
+        //mDirectoryFetcher.execute(projectName + path, getActivity());
     }
 
     @Override
@@ -153,6 +179,7 @@ public class SubmissionStep3 extends Fragment {
         savedInstanceState.putString("favorite_name", getArguments().getString("favorite_name"));
         savedInstanceState.putString("project_name", projectName);
         savedInstanceState.putString("path", path);
+        savedInstanceState.putString("selectedResourceUri", selectedResourceUri);
     }
 
     @Override
@@ -181,12 +208,80 @@ public class SubmissionStep3 extends Fragment {
             } else {
                 //remove a level from the path
                 path = path.substring(0, path.lastIndexOf('/'));
-                refreshFoldersList();
+                //TODO a request to get the parent of the folder
+                //selectedResourceUri = (String)folders.get(0).getNie().getIsLogicalPartOf();
+                getParentUri();
+                mItemMetadataFetcher.execute(selectedResourceUri, getActivity());
+                /*selectedResourceUri = itemMetadata;
+                refreshFoldersList();*/
             }
 
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+
+    private void getParentUri()
+    {
+        mItemMetadataFetcher = new AsyncItemMetadataFetcher(new AsyncTaskHandler<String>() {
+            @Override
+            public void onSuccess(String result) {
+                if(getActivity() == null)
+                {
+                    return;
+                }
+                try {
+                    JSONObject reader = new JSONObject(result);
+                    String descriptors = reader.getJSONArray("descriptors").toString();
+
+                    JsonParser parser = new JsonParser();
+                    JsonArray descriptorsArray = parser.parse(descriptors).getAsJsonArray();
+
+                    ArrayList<DendroMetadataRecord> dendroItemMetadataRecords = new ArrayList<DendroMetadataRecord>();
+
+                    for(Iterator<JsonElement> it = descriptorsArray.iterator(); it.hasNext(); )
+                    {
+                        JsonElement elem = it.next();
+                        JsonObject obj = elem.getAsJsonObject();
+
+                        //String lolada = obj.get("value").getAsString();
+                        String currentValue = "";
+                        String currentDescriptorUri = obj.get("uri").getAsString();
+                        //TODO change this into a constant
+                        if(currentDescriptorUri.equals("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#isLogicalPartOf"))
+                        {
+                            currentValue = obj.get("value").getAsString();
+                            selectedResourceUri = currentValue;
+                        }
+                        DendroMetadataRecord metadataRecord = new Gson().fromJson(
+                                elem,
+                                DendroMetadataRecord.class
+                        );
+
+                        dendroItemMetadataRecords.add(metadataRecord);
+                    }
+                    refreshFoldersList();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception error) {
+                if (getActivity() == null) {
+                    return;
+                }
+
+                Toast.makeText(getActivity(), "Unable to get item metadata", Toast.LENGTH_SHORT).show();
+                Log.e("getItemMetadata", error.getMessage());
+            }
+
+            @Override
+            public void onProgressUpdate(int value) {
+
+            }
+        });
     }
 
     private void initDirectoryFetcher() {
@@ -245,7 +340,7 @@ public class SubmissionStep3 extends Fragment {
                 CharSequence values[] = new CharSequence[result.getProjects().size()];
 
                 for (int i = 0; i < result.getProjects().size(); ++i) {
-                    values[i] = result.getProjects().get(i).getDcterms().getTitle();
+                    values[i] = (String)result.getProjects().get(i).getDcterms().getTitle();
                 }
 
                 if (getActivity() == null) {
@@ -257,7 +352,8 @@ public class SubmissionStep3 extends Fragment {
                 builder.setItems(values, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        projectName = availableProjects.get(which).getDdr().getHandle();
+                        projectName = (String)availableProjects.get(which).getDdr().getHandle();
+                        selectedResourceUri = (String)availableProjects.get(which).getUri();
                         SubmissionValidationActivity.setProjectName(projectName);
                         refreshFoldersList();
                     }

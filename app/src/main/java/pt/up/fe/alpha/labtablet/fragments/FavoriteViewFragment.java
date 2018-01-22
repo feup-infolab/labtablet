@@ -1,7 +1,12 @@
 package pt.up.fe.alpha.labtablet.fragments;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ReceiverCallNotAllowedException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -9,55 +14,156 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import pt.up.fe.alpha.R;
 import pt.up.fe.alpha.labtablet.activities.FavoriteDetailsActivity;
 import pt.up.fe.alpha.labtablet.activities.FormSolverActivity;
 import pt.up.fe.alpha.labtablet.activities.ItemPreviewActivity;
 import pt.up.fe.alpha.labtablet.adapters.DataListAdapter;
+import pt.up.fe.alpha.labtablet.adapters.DendroSyncListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.FormListAdapter;
 import pt.up.fe.alpha.labtablet.adapters.MetadataListAdapter;
+import pt.up.fe.alpha.labtablet.api.DendroAPI;
+import pt.up.fe.alpha.labtablet.database.AppDatabase;
 import pt.up.fe.alpha.labtablet.models.DataItem;
+import pt.up.fe.alpha.labtablet.models.Dendro.Sync;
 import pt.up.fe.alpha.labtablet.models.Descriptor;
 import pt.up.fe.alpha.labtablet.models.FavoriteItem;
 import pt.up.fe.alpha.labtablet.models.FormInstance;
 import pt.up.fe.alpha.labtablet.utils.OnItemClickListener;
 import pt.up.fe.alpha.labtablet.utils.Utils;
 
-public class FavoriteViewFragment extends Fragment implements OnItemClickListener {
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
+public class FavoriteViewFragment extends Fragment implements OnItemClickListener {
 
     private RecyclerView itemList;
     private String mCurrentTag;
     private ArrayList<DataItem> dataItems;
     private ArrayList<Descriptor> metadataItems;
+    private ArrayList<Sync> syncItems;
     private HashMap<String, ArrayList<FormInstance>> groupedForms;
-    private View rootView;
+    //private View rootView;
+    private RelativeLayout rootView;
+    private RelativeLayout progressBarView;
 
     private AlertDialog alertDialog;
 
     private DataListAdapter dataListAdapter;
     private MetadataListAdapter metadataListAdapter;
+    private DendroSyncListAdapter syncListAdapter;
 
     public FavoriteViewFragment() {
         // Required empty public constructor
     }
 
+
+    public void exportToRepository(final Sync syncToExport, final JsonObject obj)
+    {
+        final String[] options = {"Yes", "No"};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        String bookmarkTitle = obj.get("repository").getAsJsonObject().get("dcterms").getAsJsonObject().get("title").getAsString();
+        builder.setTitle("Are you sure you want to export to " + bookmarkTitle + " ?");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                final String[] response = new String[1];
+                Toast.makeText(getContext(), "Exporting...", Toast.LENGTH_LONG).show();
+                try{
+                    rootView.addView(progressBarView);
+                }
+                catch (Exception e)
+                {
+                    Log.e("UI", "progressBarView already added to rootView");
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        response[0] = DendroAPI.exportToRepositoryRequest(getActivity(), syncToExport.getDendroFolderUri(), obj);
+                        rootView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Gson gson = new Gson();
+                                JsonObject responseObject = gson.fromJson(response[0], JsonObject.class);
+                                String result = responseObject.get("result").getAsString();
+                                //A Success case -> {"result":"OK","message":"Folder newLabtabletProject successfully exported from Dendro<br/><br/><a href='http://hdl.handle.net/0000/03e1c58a88414e68869373cd9b226d4f'>Click to see your published dataset</a>"}
+                                //An Error case -> {"result":"error","message":"Folder /r/folder/deb3f036-c5e2-4299-8cc1-d667f262aa39 has no title or creator! Please set these properties (from the dcterms metadata schema) and try the exporting process again."}
+                                if(result.equals("OK"))
+                                {
+                                    Toast.makeText(getActivity(), "Dataset exported successfully", Toast.LENGTH_LONG).show();
+                                    //Sets the "ok" status for the sync object to true and saves it in the database
+                                    syncToExport.setOk(true);
+                                    syncToExport.updateSync(AppDatabase.getDatabase(getActivity()));
+                                    //HERE UPDATE THE SYNC VIEW
+                                    updateSyncsUI(syncToExport.getFolderTitle());
+                                    rootView.removeView(progressBarView);
+                                }
+                                else
+                                {
+                                    String errorMsg = responseObject.get("message").getAsString();
+                                    Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG).show();
+                                    //Sets the "ok" status for the sync object to false and saves it in the database
+                                    syncToExport.setOk(false);
+                                    syncToExport.updateSync(AppDatabase.getDatabase(getActivity()));
+                                    //progressBarView.setVisibility(View.INVISIBLE);
+                                    rootView.removeView(progressBarView);
+                                }
+                                getActivity().finish();
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Toast.makeText(getContext(), "CHOSE NO!", Toast.LENGTH_LONG).show();
+            }
+        });
+        builder.show();
+    }
+
+    public void updateSyncsUI(String favouriteName)
+    {
+        ArrayList<Sync> syncs = (ArrayList<Sync>) Sync.getAllWithTitleSync(AppDatabase.getDatabase(getActivity()), favouriteName);
+        bindSyncView(syncs);
+    }
+
     public void notifyItemsChanged(FavoriteItem item) {
 
         switch (mCurrentTag) {
+            case "sync":
+                syncItems = item.getSyncItems();
+                bindSyncView(syncItems);
+                break;
             case "metadata":
                 metadataItems = item.getMetadataItems();
                 bindMetaDataView(metadataItems);
@@ -87,7 +193,8 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_generic_list, container, false);
+        //rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_generic_list, container, false);
+        progressBarView = (RelativeLayout) inflater.inflate(R.layout.export_to_repository_spinner, container, false);
 
         Bundle args = getArguments();
         if (!args.containsKey("current_tag")) {
@@ -95,9 +202,20 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
             return rootView;
         }
 
-        itemList = (RecyclerView) rootView.findViewById(R.id.list);
+        //itemList = (RecyclerView) rootView.findViewById(R.id.list);
 
         mCurrentTag = args.getString("current_tag");
+
+        if(mCurrentTag.equals("sync"))
+        {
+            rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_sync_list, container, false);
+        }
+        else
+        {
+            rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_generic_list, container, false);
+        }
+
+        itemList = (RecyclerView) rootView.findViewById(R.id.list);
         assert mCurrentTag != null;
         switch (mCurrentTag) {
             case "data":
@@ -108,6 +226,11 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
             case "metadata":
                 metadataItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<Descriptor>>(){}.getType());
                 bindMetaDataView(metadataItems);
+                break;
+
+            case "sync":
+                syncItems = new Gson().fromJson(args.getString("items"), new TypeToken<ArrayList<Sync>>(){}.getType());
+                bindSyncView(syncItems);
                 break;
 
             case "forms":
@@ -161,6 +284,20 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
         itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    private void bindSyncView(ArrayList<Sync> items) {
+        if (syncItems.isEmpty()) {
+            rootView.findViewById(R.id.list_state).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.list).setVisibility(View.INVISIBLE);
+            return;
+        }
+        rootView.findViewById(R.id.list_state).setVisibility(View.INVISIBLE);
+        rootView.findViewById(R.id.list).setVisibility(View.VISIBLE);
+
+        syncListAdapter = new DendroSyncListAdapter(items, this, getActivity());
+        itemList.setAdapter(syncListAdapter);
+        itemList.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
     /**
      * Attaches a list of form instances for a particular favorite (if any) or an appropriate view otherwise
      * @param items existing form items
@@ -199,8 +336,44 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
     @Override
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(getActivity(), ItemPreviewActivity.class);
+        Boolean syncOperation = false;
+        //final Sync syncToExport = this.syncItems.get(position);
+        final JsonObject repositoryObj = new JsonObject();
 
         switch (mCurrentTag) {
+            case "sync":
+                final Sync syncToExport = this.syncItems.get(position);
+                syncOperation = true;
+                //syncToExport = this.syncItems.get(position);
+                intent.putExtra("sync_item",
+                        new Gson().toJson(syncToExport));
+                final JsonArray bookmarkResultAsJsonArray = DendroAPI.getExportBookmarks(getContext());
+                //final String options[] = {"RDM Repository @ INESC TEC", "B2Share"};
+                String[] options = new String[bookmarkResultAsJsonArray.size()];
+                int i = 0;
+                for(Iterator<JsonElement> it = bookmarkResultAsJsonArray.iterator(); it.hasNext(); )
+                {
+                    JsonElement elem = it.next();
+                    JsonObject obj = elem.getAsJsonObject();
+                    JsonElement dctermsElement = obj.get("dcterms");
+                    String currentTitle = dctermsElement.getAsJsonObject().get("title").getAsString();
+                    options[i] = currentTitle;
+                    ++i;
+                }
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Synchronize");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                        JsonElement element = bookmarkResultAsJsonArray.get(which);
+                        repositoryObj.add("repository", element);
+                        dialog.cancel();
+                        exportToRepository(syncToExport, repositoryObj);
+                    }
+                });
+                builder.show();
+                break;
             case "metadata":
                 intent.putExtra("metadata_item",
                         new Gson().toJson(metadataItems.get(position)));
@@ -253,8 +426,11 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 return;
         }
 
-        intent.putExtra("position", position);
-        getActivity().startActivityForResult(intent, Utils.ITEM_PREVIEW);
+        if(!syncOperation)
+        {
+            intent.putExtra("position", position);
+            getActivity().startActivityForResult(intent, Utils.ITEM_PREVIEW);
+        }
     }
 
     @Override
@@ -272,6 +448,15 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                     ((FavoriteDetailsActivity) getActivity()).notifyMetadataItemRemoved(metadataItems);
                 }
                 break;
+            /* TODO
+            case "sync":
+                if (position <= syncItems.size()) {
+                    syncItems.remove(position);
+                    syncListAdapter.notifyItemRemoved(position);
+                    ((FavoriteDetailsActivity) getActivity()).notifyMetadataItemRemoved(syncItems);
+                }
+                break;
+                */
             case "data":
                 if (position <= dataItems.size()) {
                     dataItems.remove(position);

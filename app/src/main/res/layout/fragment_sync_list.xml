@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/list_state"
         android:fontFamily="sans-serif-thin"
-        android:text="@string/no_items_yet"
+        android:text="There are no syncs yet. Export a project to Dendro first."
         android:layout_centerInParent="true"
         android:padding="25dp"
         android:textSize="20sp"
