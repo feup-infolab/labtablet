@@ -1,4 +1,6 @@
-<img alt='LabTablet UI' src='https://raw.githubusercontent.com/feup-infolab/labtablet/master/labtablet.png' width="600"/>
+<p align="center">
+  <img alt='LabTablet UI' src='https://raw.githubusercontent.com/feup-infolab/labtablet/master/labtablet.png' width="600"/>
+</p
 
 ### Now available at the Google Play Store!
 
