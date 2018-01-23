@@ -8,7 +8,7 @@
 <a href='https://play.google.com/store/apps/details?id=pt.up.fe.beta.labtablet&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200"/></a>
 </p
 
-# README #
+### README
 
 This README summarizes the LabTablet purpose and features. This repository holds the code and features developed after the first iteration (from February 2014 until July 2014).
 
