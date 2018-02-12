@@ -362,6 +362,8 @@ public class FavoriteViewFragment extends Fragment implements OnItemClickListene
                 }
                 final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Synchronize");
+                if(options.length == 0)
+                    builder.setMessage("No Bookmarks, please create one before Synchronize");
                 builder.setItems(options, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
