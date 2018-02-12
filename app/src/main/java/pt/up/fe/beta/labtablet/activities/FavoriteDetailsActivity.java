@@ -405,8 +405,8 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                 finish();
                 break;
             case R.id.action_favorite_upload:
-
-                final String options[] = {"SeaBioData", "Dendro"};
+                dispatchDendroUpload();
+                /*final String options[] = {"SeaBioData", "Dendro"};
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(FavoriteDetailsActivity.this);
                 builder.setTitle(getString(R.string.dialog_pick_context_title));
                 builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -429,7 +429,7 @@ public class FavoriteDetailsActivity extends AppCompatActivity implements TabLay
                     }
                 });
                 builder.show();
-
+                */
                 break;
             case R.id.action_favorite_delete:
                 //remove this favorite
