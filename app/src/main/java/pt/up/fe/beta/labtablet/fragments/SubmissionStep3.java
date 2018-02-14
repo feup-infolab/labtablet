@@ -198,10 +198,11 @@ public class SubmissionStep3 extends Fragment {
         if (item.getItemId() == R.id.action_dendro_search) {
             onSearchProjects();
         } else if (item.getItemId() == R.id.action_dendro_refresh) {
-            if (!path.equals("/data")) {
+            /*if (!path.equals("/data")) {
                 initDirectoryFetcher();
                 mDirectoryFetcher.execute(projectName + path, getActivity());
-            }
+            }*/
+            refreshFoldersList();
         } else if (item.getItemId() == R.id.action_dendro_go_up) {
             if (path.equals("/data")) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.already_in_root_folder), Toast.LENGTH_LONG).show();
