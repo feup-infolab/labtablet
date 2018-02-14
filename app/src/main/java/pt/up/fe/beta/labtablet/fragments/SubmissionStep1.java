@@ -175,6 +175,8 @@ public class SubmissionStep1 extends Fragment {
 
         if (item.getItemId() == R.id.action_dendro_instructions_confirm) {
             mHandler.nextStep(1);
+        }else if (item.getItemId() == 16908332 /*backButton*/){
+            getActivity().onBackPressed();
         }
         return super.onOptionsItemSelected(item);
 

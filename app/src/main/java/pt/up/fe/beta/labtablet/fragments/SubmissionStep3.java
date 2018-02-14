@@ -217,6 +217,8 @@ public class SubmissionStep3 extends Fragment {
                 refreshFoldersList();*/
             }
 
+        }else if (item.getItemId() == 16908332){
+            mHandler.nextStep(1);
         }
         return super.onOptionsItemSelected(item);
 
