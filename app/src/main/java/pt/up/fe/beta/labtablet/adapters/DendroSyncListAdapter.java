@@ -103,24 +103,26 @@ public class DendroSyncListAdapter extends RecyclerView.Adapter<DendroSyncListAd
 
         @Override
         public boolean onLongClick(View view) {
-            mItemDeleteView.animate();
-            mItemDeleteView.setVisibility(View.VISIBLE);
-            Button actionDelete = (Button) view.findViewById(R.id.action_metadata_item_delete);
-            Button actionCancel = (Button) view.findViewById(R.id.action_metadata_item_delete_cancel);
+            if(!(mItemDeleteView==null)){
+                mItemDeleteView.animate();
+                mItemDeleteView.setVisibility(View.VISIBLE);
+                Button actionDelete = (Button) view.findViewById(R.id.action_metadata_item_delete);
+                Button actionCancel = (Button) view.findViewById(R.id.action_metadata_item_delete_cancel);
 
-            actionCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mItemDeleteView.setVisibility(View.GONE);
-                }
-            });
+                actionCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mItemDeleteView.setVisibility(View.GONE);
+                    }
+                });
 
-            actionDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.onDeleteRequested(view, getPosition());
-                }
-            });
+                actionDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.onDeleteRequested(view, getPosition());
+                    }
+                });
+            }
             return true;
         }
     }
