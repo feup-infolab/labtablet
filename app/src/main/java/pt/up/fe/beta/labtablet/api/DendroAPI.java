@@ -181,6 +181,100 @@ public class DendroAPI {
         return resultAsJsonArray;
     }
 
+    private static class MkdirTask extends AsyncTask<Void, Void, String>
+    {
+        private Context context;
+        private String folderName;
+        private String parentFolderUri;
+
+        MkdirTask(Context context, String folderName, String parentFolderUri)
+        {
+            this.context = context;
+            this.folderName = folderName;
+            this.parentFolderUri = parentFolderUri;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            URL url;
+            HttpURLConnection conn;
+            String result = "";
+
+            String cookie = null;
+            try {
+                cookie = authenticate(context);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            try {
+                DendroConfiguration conf = FileMgr.getDendroConf(context);
+                url = new URL(conf.getAddress() + parentFolderUri + "?mkdir=" + folderName);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Cookie", cookie);
+                conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                conn.setRequestProperty("Accept","application/json");
+                conn.setDoOutput(true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                result = response.toString();
+
+                return result;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String results)
+        {
+            super.onPostExecute(results);
+        }
+    }
+
+    public static boolean Mkdir(Context context, String folderName, String parentFolderUri)
+    {
+        String result = null;
+        JsonObject json = null;
+        try {
+            result = new MkdirTask(context, folderName, parentFolderUri).execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        JsonParser parser = new JsonParser();
+        try{
+            JsonObject obj = parser.parse(result).getAsJsonObject();
+            json = obj;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+        if (json.get("result").getAsString().equals("ok"))
+            return true;
+        return false;
+    }
+
     public static String executeExportToRepositoryTaskSync(Context context, String folderUri, JsonObject object)
     {
         String result = null;

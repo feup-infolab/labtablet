@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +52,8 @@ import pt.up.fe.beta.labtablet.models.Dendro.ProjectListResponse;
 import pt.up.fe.beta.labtablet.utils.FileMgr;
 import pt.up.fe.beta.labtablet.utils.Utils;
 
+import static pt.up.fe.beta.labtablet.api.DendroAPI.Mkdir;
+
 
 public class SubmissionStep3 extends Fragment {
 
@@ -55,6 +61,7 @@ public class SubmissionStep3 extends Fragment {
     private static String projectName;
     private MenuItem actionRefresh;
     private MenuItem actionUp;
+    private MenuItem addFolder;
     private ListView dendroDirList;
     private DendroFolderAdapter mAdapter;
     private TextView tv_empty;
@@ -187,11 +194,14 @@ public class SubmissionStep3 extends Fragment {
         inflater.inflate(R.menu.submission_step3, menu);
         actionRefresh = menu.findItem(R.id.action_dendro_refresh);
         actionUp = menu.findItem(R.id.action_dendro_go_up);
+        addFolder = menu.findItem(R.id.action_dendro_addFolder);
         actionRefresh.setVisible(false);
         actionUp.setVisible(false);
+        addFolder.setVisible(false);
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -219,6 +229,32 @@ public class SubmissionStep3 extends Fragment {
 
         }else if (item.getItemId() == 16908332){
             mHandler.nextStep(1);
+        }else if (item.getItemId() == R.id.action_dendro_addFolder){
+            final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+            builder.setTitle("Add Folder");
+
+            final EditText input = new EditText(getContext());
+
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (Mkdir(getContext(), input.getText().toString(), selectedResourceUri))
+                        refreshFoldersList();
+                    else
+                        Toast.makeText(getActivity(), "Error creating Folder", Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
         }
         return super.onOptionsItemSelected(item);
 
@@ -305,6 +341,7 @@ public class SubmissionStep3 extends Fragment {
                 mAdapter.notifyDataSetChanged();
                 actionUp.setVisible(true);
                 actionRefresh.setVisible(true);
+                addFolder.setVisible(true);
                 dendroDirList.setVisibility(View.VISIBLE);
             }
 

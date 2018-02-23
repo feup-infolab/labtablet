@@ -18,4 +18,10 @@
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
      />
+    <item android:id="@+id/action_dendro_addFolder"
+        android:title="Add Folder"
+        android:icon="@drawable/ab_plus"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        />
 </menu>
