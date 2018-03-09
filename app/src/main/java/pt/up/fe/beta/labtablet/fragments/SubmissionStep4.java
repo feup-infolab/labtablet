@@ -72,7 +72,7 @@ public class SubmissionStep4 extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_submission_step4, container, false);
         btStartUpload = (Button) rootView.findViewById(R.id.submission_start_upload);
-        pbStatus = (ProgressBar) rootView.findViewById(R.id.pb_submission_loading);
+        //pbStatus = (ProgressBar) rootView.findViewById(R.id.pb_submission_loading);
         tv_progress_status = (TextView) rootView.findViewById(R.id.submission_status_message);
 
         if (savedInstanceState == null) {

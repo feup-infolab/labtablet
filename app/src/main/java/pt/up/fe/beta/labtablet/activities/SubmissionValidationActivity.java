@@ -37,7 +37,7 @@ public class SubmissionValidationActivity extends AppCompatActivity implements S
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private FloatingActionButton pb_submission_state;
+    //private FloatingActionButton pb_submission_state;
 
     public static String getProjectName() {
         return projectName;
@@ -85,7 +85,7 @@ public class SubmissionValidationActivity extends AppCompatActivity implements S
             getSupportActionBar().setHomeButtonEnabled(true);
 
         }
-        pb_submission_state = (FloatingActionButton) findViewById(R.id.pb_submission);
+        //pb_submission_state = (FloatingActionButton) findViewById(R.id.pb_submission);
 
         favoriteName = getIntent().getStringExtra("favorite_name");
 

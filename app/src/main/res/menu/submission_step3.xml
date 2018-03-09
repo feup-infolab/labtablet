@@ -1,27 +1,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_dendro_search"
-        android:title="@string/action_select_project"
-        android:icon="@drawable/ic_pick"
-        android:orderInCategory="100"
-        app:showAsAction="never"
-        />
-    <item android:id="@+id/action_dendro_go_up"
-        android:title="@string/goUp"
-        android:icon="@drawable/ab_go_up"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
-        />
-    <item android:id="@+id/action_dendro_refresh"
-        android:title="@string/refresh"
-        android:icon="@drawable/ab_reload"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
-     />
-    <item android:id="@+id/action_dendro_addFolder"
-        android:title="Add Folder"
+    <item
+        android:id="@+id/action_dendro_addFolder"
         android:icon="@drawable/ab_plus"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
-        />
+        android:orderInCategory="101"
+        android:title="Add Folder"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_dendro_go_up"
+        android:icon="@drawable/ab_go_up"
+        android:orderInCategory="103"
+        android:title="@string/goUp"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_dendro_refresh"
+        android:icon="@drawable/ab_reload"
+        android:orderInCategory="102"
+        android:title="@string/refresh"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_dendro_search"
+        android:icon="@drawable/ab_box"
+        android:orderInCategory="104"
+        android:title="@string/action_select_project"
+        app:showAsAction="always" />
+
 </menu>
