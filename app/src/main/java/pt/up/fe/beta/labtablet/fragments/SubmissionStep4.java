@@ -118,8 +118,11 @@ public class SubmissionStep4 extends Fragment {
                         getActivity().finish();
                         Toast.makeText(getActivity(),
                                 getResources().getString(R.string.uploaded_successfully), Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        getActivity().startActivity(intent);
+                        Intent intent = new Intent(getActivity(), FavoriteDetailsActivity.class);
+                        intent.putExtra("favorite_name", getArguments().getString("favorite_name"));
+                        startActivity(intent);
+                        //Intent intent = new Intent(getActivity(), MainActivity.class);
+                        //getActivity().startActivity(intent);
                     }
 
                     @Override

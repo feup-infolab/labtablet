@@ -373,6 +373,7 @@
     <string name="stations_list">Stations</string>
     <string name="form_solver_subtitle">Use the buttons bellow to assist you with the form</string>
     <string name="bt_load_default">Default profile</string>
+    <string name="addFolder">addFolder</string>
     <!-- /TTS sentences -->
 
 

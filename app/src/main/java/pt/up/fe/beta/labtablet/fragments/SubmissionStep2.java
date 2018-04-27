@@ -101,6 +101,9 @@ public class SubmissionStep2 extends Fragment implements OnItemClickListener {
         if (item.getItemId() == R.id.action_dendro_metadata_confirm) {
             mHandler.nextStep(2);
         }
+        else if (item.getItemId() == 16908332){
+            mHandler.nextStep(0);
+        }
         return super.onOptionsItemSelected(item);
 
     }

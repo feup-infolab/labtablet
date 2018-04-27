@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         tools:context=".labtablet.activities.SubmissionValidationActivity" />
 
-    <android.support.design.widget.FloatingActionButton
+    <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/pb_submission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,6 +32,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginTop="-80dp"
         android:layout_marginEnd="15dp"
-        />
+        />-->
 
 </LinearLayout>

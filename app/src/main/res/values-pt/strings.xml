@@ -36,7 +36,7 @@
     </string-array>
 
     <string-array name="descriptor_picker_items">
-        <item>Recpmendados</item>
+        <item>Recomendados</item>
         <item>Dendro</item>
         <item>Todos</item>
     </string-array>
