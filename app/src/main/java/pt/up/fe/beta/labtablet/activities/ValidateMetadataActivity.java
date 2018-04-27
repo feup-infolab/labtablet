@@ -111,35 +111,54 @@ public class ValidateMetadataActivity extends AppCompatActivity implements OnIte
                 }
             }
 
-            mProgressDialog = ProgressDialog.show(ValidateMetadataActivity.this,
-                    getResources().getString(R.string.wait_queue_processing_title),
-                    getResources().getString(R.string.wait_queue_processing), true);
-            mProgressDialog.show();
+            String[] options = {"Não", "Sim"};
 
-            for (Descriptor desc : unvalidatedQueue) {
-                fItem.addMetadataItem(desc);
-            }
+            final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setTitle("Pretende confirmar a captação dos Metadados");
+            builder.setItems(options, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    if(which == 0){
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("favorite", "cancelled");
+                        setResult(RESULT_OK, returnIntent);
+                        finish();
+                    }
+                    else if(which == 1){
+                        mProgressDialog = ProgressDialog.show(ValidateMetadataActivity.this,
+                                getResources().getString(R.string.wait_queue_processing_title),
+                                getResources().getString(R.string.wait_queue_processing), true);
+                        mProgressDialog.show();
 
-            new AsyncQueueProcessor(new AsyncTaskHandler<Void>() {
-                @Override
-                public void onSuccess(Void result) {
-                    mProgressDialog.dismiss();
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("favorite", new Gson().toJson(fItem));
-                    setResult(RESULT_OK, returnIntent);
-                    finish();
+                        for (Descriptor desc : unvalidatedQueue) {
+                            fItem.addMetadataItem(desc);
+                        }
+
+                        new AsyncQueueProcessor(new AsyncTaskHandler<Void>() {
+                            @Override
+                            public void onSuccess(Void result) {
+                                mProgressDialog.dismiss();
+                                Intent returnIntent = new Intent();
+                                returnIntent.putExtra("favorite", new Gson().toJson(fItem));
+                                setResult(RESULT_OK, returnIntent);
+                                finish();
+                            }
+
+                            @Override
+                            public void onFailure(Exception error) {
+                                mProgressDialog.dismiss();
+                            }
+
+                            @Override
+                            public void onProgressUpdate(int value) {
+                                mProgressDialog.setProgress(value);
+                            }
+                        }).execute(fItem, ValidateMetadataActivity.this, deletionQueue, conversionQueue);
+
+                    }
                 }
-
-                @Override
-                public void onFailure(Exception error) {
-                    mProgressDialog.dismiss();
-                }
-
-                @Override
-                public void onProgressUpdate(int value) {
-                    mProgressDialog.setProgress(value);
-                }
-            }).execute(fItem, ValidateMetadataActivity.this, deletionQueue, conversionQueue);
+            });
+            builder.show();
 
         } else if (item.getItemId() == R.id.action_metadata_cancel) {
             deletionQueue.clear();

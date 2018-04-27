@@ -558,11 +558,16 @@ public class FieldModeActivity extends AppCompatActivity implements SensorEventL
                 if (!data.getExtras().containsKey("favorite")) {
                     Toast.makeText(this, "No descriptors received", Toast.LENGTH_SHORT).show();
                     return;
-                }
+                } else if (data.getExtras().get("favorite").equals("cancelled")){
+                    Toast.makeText(this, "Recolha de Metadados cancelada", Toast.LENGTH_SHORT).show();
+                    finish();
+                    break;
+                } else {
 
-                Toast.makeText(this, getResources().getString(R.string.metadata_added_success), Toast.LENGTH_SHORT).show();
-                finish();
-                break;
+                    Toast.makeText(this, getResources().getString(R.string.metadata_added_success), Toast.LENGTH_SHORT).show();
+                    finish();
+                    break;
+                }
 
             case Utils.SOLVE_FORM:
                 if (data == null) {
